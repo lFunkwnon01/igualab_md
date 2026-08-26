@@ -1,0 +1,207 @@
+[0.0-4.0]  o con el que siempre se gestionan estas reuniones.
+[4.0-8.0]  En ese correo consultas arroba igual a punto or.
+[8.0-14.6]  Entonces, si esa función puede estar sincronizada con ese correo
+[14.6-20.2]  de consultas sería genial si funcionaría como una especie
+[20.2-26.5]  de Google Meet, donde hay invitados pre-establecidos.
+[26.5-29.6]  También puede ser un alternativo interesante.
+[29.6-33.3]  Pero ahí, bueno, supongo que eso lo van a conversar en interna
+[33.3-39.0]  para ver cómo se puede acarrizar de la mejor manera.
+[39.0-44.9]  OK, y otra pregunta más antes de pasar el siguiente,
+[44.9-46.9]  el siguiente persona si quieres preguntar algo,
+[46.9-52.6]  es que el bot, netamente, tiene que haber en español,
+[52.6-55.8]  porque había visto que ustedes también trabajan con comunidades
+[55.8-57.0]  por unos aquí en el progreso.
+[57.0-61.8]  Pero ya que tengo comunidades como la imárea, la llamanica,
+[61.8-67.2]  que el bot tenga la capacidad de poder haber en esas lenguajes.
+[67.2-72.9]  Sí, sería excelente que pudiéramos contar con eso.
+[72.9-76.4]  OK, no sé si es más tenido.
+[76.4-81.2]  Un uso Carlos, este disculpa me parece un excelente aporte
+[81.2-86.8]  lo que acabas de recordarnos en cuanto a lenguas originarias.
+[86.8-90.6]  Y además de eso, si es que pudiera estar por lo menos el idioma inglés,
+[90.6-94.0]  también sería genial porque nosotros tenemos mucho contacto
+[94.0-96.7]  con plataformas de habla inglesa, en Reino Unido,
+[96.7-99.6]  sobre todo, que tenemos bastantes contactos allá.
+[99.6-104.3]  Entonces, nos ayudaría mucho a tener un cierre hebrechas de idioma
+[104.3-110.6]  poder contar con esa facilidad para que lo tome en cuenta, por favor.
+[110.6-113.3]  OK, muchas gracias por la información.
+[113.3-116.6]  No sé si alguien más tenga algún tipo de pregunta.
+[116.6-118.6]  Sí, sí, acá tengo una pregunta.
+[118.6-124.4]  Así que a veces chatbot, que es que ellos tienen, a principios,
+[124.4-129.3]  tienen una visión de ser una página web o se proyectan
+[129.3-133.3]  una aplicación externa tipo WhatsApp o telegram.
+[133.3-137.9]  Como una aplicación externa, como un WhatsApp telegram.
+[137.9-140.0]  OK, bien.
+[140.0-144.3]  ¿Dónde es mi otra pregunta?
+[144.3-149.0]  Sí, a mí de intentos preguis o soluciones que han provadantes
+[149.0-152.6]  para abordar esta situación o han tenido algún resultado
+[152.6-155.4]  o previo, o sea, antes de algo que venmos a otro,
+[155.4-157.9]  han tentado alguna forma o que esta que no lo has diponozado
+[157.9-161.2]  para ir.
+[161.2-163.7]  No, no hemos usado algo similar.
+[163.7-170.0]  Lo único que teníamos son herramientas
+[171.0-173.8]  que nos ayudan a programar reuniones como call-in-line.
+[173.8-178.9]  Eso era lo más cercano, pero no sé cerca para la realidad,
+[178.9-180.7]  lo que estamos conversando ahora.
+[180.7-187.3]  Es la primera vez en realidad que vamos a promover algo como esto.
+[193.9-196.2]  OK, este...
+[196.2-201.2]  ¿Puedes repetirme qué es lo más surgente o lo más minorita
+[201.2-202.2]  durante las primeras semanas?
+[202.2-204.7]  ¿Está creando los propios tipos de lo que quieren?
+[204.7-205.7]  ¿Qué?
+[205.7-208.3]  ¿En orden de importancia más o menos que podría ser lo más
+[208.3-212.1]  importante ahorita para seguir avanzando?
+[212.1-214.2]  La edificación de prospectos.
+[214.2-220.5]  Eso me parece lo más importante, la solución más relevante
+[220.5-222.5]  que necesitamos por ese lado,
+[222.5-226.6]  poder encontrar prospectos que esto pueda de repente
+[226.6-233.0]  arrojar reportes de prospección con un click o con un botón
+[233.0-237.9]  que me permita mí como exportar reportes en PDF, por ejemplo.
+[237.9-243.0]  Entonces, simplemente se llenan algunos datos con la base
+[243.0-249.0]  que ya estamos conversando y si yo como usuario de la aplicación
+[249.0-253.2]  digamos, ya siento que he tenido la información más actualizada
+[253.2-258.8]  en momento, la puedo descargar en PDF y compartirla con mi equipo.
+[258.8-264.0]  La idea es que esta base de datos pueda alimentarse
+[264.0-268.5]  autonomamente primero, llenarla con la información de nosotros
+[268.5-272.2]  podemos proporcionar, pero como nosotros sabemos,
+[272.2-276.3]  los reportes de sostenibilidad que hablaba el principio se emiten
+[276.3-277.6]  cada año.
+[277.6-285.4]  Entonces, ahí tenemos un reto de cómo logramos añadir más
+[285.4-293.1]  información con una frecuencia anual para que pueda tenerse
+[293.1-297.4]  una analítica más fina y vigenta a lo largo del tiempo,
+[297.4-302.2]  porque si sólo lo llenamos con una cantidad única de
+[302.2-307.3]  información al 2026, el próximo año la aplicación
+[307.3-309.7]  quedaría automáticamente desfazada.
+[309.7-313.8]  Entonces, tenemos que ver la manera en la que esta aplicación
+[313.8-321.6]  pueda tener una duración del largo aliento, donde de alguna manera
+[321.6-327.7]  manual o no manual o sistematizada se pueda renovar información
+[327.7-332.6]  relevante para que siga funcionando la aplicación sin ningún problema.
+[332.6-334.7]  Esa me parece que es el principal reto.
+[334.7-340.3]  Es un asunto bastante comercial donde la projección tiene
+[340.3-347.0]  que ser nuestro principal meta, porque nosotros tenemos
+[347.0-349.8]  esfuerzos dedicados para otros asuntos de la organización,
+[349.8-353.2]  pero siempre hemos tenido complicaciones para la parte de
+[353.2-354.8]  projección comercial.
+[354.8-359.4]  Si bien llegan empresas a nosotros y eso no salaga,
+[359.4-364.5]  estamos recibiendo a empresas de manera muy orgánica.
+[364.5-368.8]  Entonces, lo que nosotros buscamos con esta iniciativa es
+[368.8-372.4]  dar la vuelta a la situación y ya nosotros comenzar a ser
+[372.4-377.6]  proactivos en buscar prospectos y no reactivos en recibirlos
+[377.6-378.8]  nada más.
+[378.8-382.1]  Entonces, me parece que por ahí va el principal reto.
+[382.1-386.4]  La función que acabamos de conversar hace un momento con
+[386.4-390.0]  relación a la programación de citas, cancelaciones que algo
+[390.0-393.6]  no calza en mis horarios, etcétera, es una función
+[393.6-398.6]  muy interesante, necesaria, pero es un complemento que eso
+[398.6-404.3]  viene luego de haberse logrado un contacto de
+[404.3-409.1]  projección y la parte de idiomas es transversal lo que
+[409.1-412.9]  comentó Carlos sobre los idiomas, es algo transversal al
+[412.9-415.1]  todo el uso de la aplicación.
+[415.1-419.2]  Entonces ahí me parece que tenemos un reto importante no
+[419.2-423.4]  sobre la parte perspectiva de la herramienta.
+[423.4-429.4]  Y como logramos que esto viva de la manera más autónoma
+[429.4-432.5]  posible con los límites que podamos encontrar en el
+[432.5-436.1]  camino, pero de la manera más autónoma posible que esta
+[436.1-441.9]  herramienta pueda seguir vigente, 2017, 28, 29, con una
+[441.9-445.6]  recarga de información o una búsqueda adicional de
+[445.6-449.7]  información en la web o algo.
+[449.7-456.7]  Entonces eso sería Luis.
+[456.7-458.1]  Muchas gracias.
+[458.1-460.2]  Entonces por parte del aspecto de energía con realidad
+[460.2-463.4]  tendremos total libertad para realizar.
+[463.4-469.7]  Mientras se lo está libertad.
+[469.7-474.8]  Yo creo que algunos no sé si alguien más tenga alguna
+[474.8-503.1]  valor.
+[503.1-514.1]  sería genial que pudiera haber ese soporte porque hay dos tipos de documentos que anualmente publican las empresas y que son de interés para nosotros.
+[514.1-523.1]  La primera que les he comentado es los reportes de sostenibilidad. Todas las empresas que tienen áreas de sostenibilidad tienen que emitir un reporte de sostenibilidad.
+[523.1-542.1]  Eso es un documento importantísimo. Ahí se han arrado anualmente el desarrollo de las actividades de planes de acción, de sostenibilidad de ese año en concreto, sus resultados, métricas, texto que compaña, cuadros, estadísticos, etcétera.
+[542.1-551.1]  Y eso es una primera herramienta, los reportes, pero también están las memorias de sostenibilidad.
+[551.1-563.1]  Y se me estaba pasando un poco eso porque no son exactamente la misma información la que encontramos en un reporte de sostenibilidad que la que encontramos en una memoria anual.
+[563.1-575.1]  Tienen parecidos sí, pero en realidad la memoria anual tiene información más estratégica a nivel financiero de las empresas y para que tengamos un conocimiento común.
+[575.1-592.1]  Solamente las empresas en Perú que están obligadas por la Iperuana a publicar sus memorias anuales financieras son aquellas empresas que al día de hoy están operando en la bolsa de valores.
+[592.1-609.1]  Es decir, todas las empresas que nosotros veamos en la bolsa de valores de Lima por dar un ejemplo, todas ellas definitivamente están emitiendo memorias anuales financieras, todas sin excepción porque es como una regla.
+[609.1-628.1]  Los reportes de sostenibilidad por su lado son documentos que no tienen vinculación con la bolsa de valores, pero sí tienen que ser elevados a auditores internacionales para que las matrices si pertenecieran a una transnacional.
+[628.1-641.1]  Por ejemplo, para que las matrices puedan validar que sus subsidiarias, sus rusales están cumpliendo la política corporativa de la matriz en su país de ubicación.
+[641.1-660.1]  Entonces, estos dos documentos son clave, uno de ellos que están siempre ubicados en la bolsa de valores, en la página de la bolsa de valores de Lima van a encontrar un apartado de acceso público a todas las memorias anuales de sus afiliados que cotizan en bolsa.
+[661.1-670.1]  Por parte del reporte de sostenibilidad, los repositorios están ubicados en sus propias página web de las empresas.
+[670.1-684.1]  Suele ser esa, los lugares de ubicación de los insumos que hemos conversado, uno en el repositorio de la bolsa de valores y el otro en cada página web de la empresa en cuestión.
+[690.1-713.1]  ¿Sería genial que estén unificados para que pueda haber una interpretación más sólida?
+[713.1-720.1]  ¡Genial gracias también!
+[743.1-767.1]  Por ejemplo, hay información en los reportes de sostenibilidad que tienen que responder a un estándar, como les decía, hay auditores internacionales que cada año verifican que el reporte de sostenibilidad que se está emitiendo tenga calidad y veracidad.
+[767.1-782.1]  Entonces, ahí, en esos reportes de sostenibilidad, nosotros tenemos la seguridad de que responde un estándar, este estándar suele ser el estándar grito.
+[782.1-794.1]  Entonces, el estándar grito tiene una serie de códigos de cumplimiento. Para medio ambiente, son una serie de códigos, para sociedad, es una serie de códigos, para economía o otra serie de códigos.
+[794.1-810.1]  Entonces, el grí lo analiza y lo verifica de esa manera. Nosotros deberíamos tener un punto de uso de la aplicación, donde nosotros podamos detectar las brechas en algunos códigos grí.
+[811.1-836.1]  Por ejemplo, en el código grí, 400, que está relacionado con temas laborales sociales, saber por ejemplo, yo escribo en el chatbot, según información de empresa tal de sector banca, me gustaría saber cuáles son sus métricas grí más menos robustas.
+[836.1-860.1]  Entonces, la chatbot analizará los datos y se va a dar cuenta de que hay un montón de códigos grí reportados, pero se va a dar cuenta de que de todo lo reportado, hay un código o dos códigos grí, que si bien han sido reportados, no tienen tanta sustancia como otros códigos donde si los reactores sí han llenado mucha información.
+[860.1-872.1]  Entonces, eso significa que donde han llenado mucha información es porque mucho que han hecho, donde hay poco que decir a respecto es porque se ha hecho poco, pero igual tienen la necesidad de reportar.
+[872.1-899.1]  Entonces, si nosotros logramos usar en la aplicación para saber cuál es esa poca participación de algún código, nosotros tendríamos una agibilidad bastante favorable, ¿no? Porque podríamos saber rápidamente cuál es el código que menos ha reportado y donde nosotros cómo igualar ya sabremos en la etapa de acercamiento de prospección.
+[899.1-928.1]  Así les miren, nosotros hemos hecho el trabajo de analizar su reporta de sostenibilidad y si bien han reportado una serie de códigos, nos hemos percatado de que el código tal no está tan explallado y quisiéramos nosotros ser la organización que les ayude a realizar acciones reportables de sostenibilidad para que puedan robustecer el reporte en la próxima
+[928.1-952.1]  en el próximo año que estén por empezar y en la parte de memorias anuales que data es importante en las memorias anuales suelen incluso transparentar que hechos sancionatorios están enfrentando las empresas en materia social, económica, ambiental y de gobernanza.
+[952.1-975.1]  Por ejemplo, si la empresa no, por ejemplo, la empresa puede tener trabajadoras, mujeres que han sido acosadas en sus puestos de trabajo y la empresa ha recibido una sanción por parte del ministerio de trabajo en ese ámbito.
+[975.1-990.1]  Entonces las empresas no pueden las que reportan las que emiten memorias anuales no pueden evitar transparentar eso en sus memorias es imposible porque estarían incurriendo una falta grave.
+[990.1-1019.1]  Entonces, aunque tú tengas una sanción por acoso y oestidamiento sexual laboral, así tú tengas una sanción por mal manejo en tu relación de sindicatos, el punto que te están sancionando económicamente o que no has llevado un proceso de consulta previa en una zona extractiva donde había una comunidad y tú como empresa fuiste más impositiva
+[1019.1-1041.1]  en publicarte en esa zona territorial y no cumpliste, también te cae una sanción económica. Entonces todas esas faltas que suponen este dinero, en este caso por sanciones, también están visibles en sus memorias anuales de todas las empresas que cotizan en bolsa.
+[1041.1-1067.1]  Entonces ese dato es importantísimo para cuando hablamos de memorias anuales porque cuando nosotros podamos analizar con el chatbot, nos va a poder salir, yo voy a poder solicitar de la empresa minera X, me gustaría saber cuáles son sus principales puntos débiles por sanciones económicas en su última memoria anual.
+[1067.1-1092.1]  Entonces el chatbot va a poder analizarlo y va a poder decirme esta empresa en la memoria anual figura que ha cometido o donde están incurrido asuntos de género, donde ha habido estigamiento, donde ha habido mala praxis en consulta previa o donde ha habido actos de corrupción, por ejemplo, con el sector público.
+[1092.1-1113.1]  Entonces esos montos son visibles, son cuantificables, entonces la empresa al próximo año lo que le interesa es o haber saldado esa sanción o también en paralelo haber puesto paños fríos sobre esas incidencias con planes de acción.
+[1113.1-1128.1]  Por ejemplo, si yo ya recibí una sanción en género por estigamiento y en este año de 2016 yo estoy comprometido a pagar al estado esa sanción económica, el próximo año de 2017, ¿qué es lo que tengo que reportar?
+[1128.1-1136.1]  No solamente debo reportar que yo he pagado la sanción, que eso es cumplimiento legal, no puedes escapar de eso.
+[1136.1-1153.1]  Pero cómo haces tu como empresa sancionada para quitarte esa mala reputación que acabas de subsanar con un pago económico pero que no se repara la reputación con el dinero, la reputación se repara con acciones.
+[1153.1-1163.1]  Entonces cómo están mejorando esa visibilidad de reputación post pago de la sanción.
+[1163.1-1181.1]  Entonces la empresa en su próxima memoria va a poder decir que se han tomado acciones proactivas para evitar que sigan ocurriendo incidencias de sociales, ambientales, económicas o de bobernanza.
+[1181.1-1200.1]  Entonces todo eso al nosotros poder saber lo vamos a analizar y vamos a poder decir en el equipo a mira empresa X del Centro Minero incumplió esto, entonces tienen un camino por reparar a nivel de reputación.
+[1200.1-1209.1]  No solo deben pagar la deuda, deben reparar su reputación y es ahí donde igualdad necesite entrar como un aliado estratégico.
+[1209.1-1221.1]  Habiendo les dicho a ellos la realidad que ellos mismos han publicado en nuestra perfección y decirles nosotros podemos ayudarles a reparar su reputación o a mejorar su reputación.
+[1221.1-1241.1]  Si no han incurrido nada malo y es un año regular sin sanciones de repente igual en la memoria no se puede ver cuál es el punto más débil, a pesar de que han cumplido todos sin incidencias sancionatorias, cuál es el punto más débil que los ponen rías lo de pronto de una incidencia.
+[1241.1-1254.1]  De repente tú estás haciendo todo para decirlo en términos ligero, todo está pasando con 11, basta con que tengas un descuido y algún punto vas a jalar en alguna materia.
+[1254.1-1269.1]  Entonces nosotros debemos tener esa finura a la hora de saber la data para poder advertirle a una empresa que quizás ahorita está bien pero el próximo año con un soplo un cae en una incidencia.
+[1269.1-1282.1]  Y nosotros debemos evitar que esa empresa incurra en una incidencia, prácticamente me parece que esa es la principal lógica de la memoria y del reporte.
+[1282.1-1293.1]  En cuanto a sus puntos débiles, reportados en ambos documentos y ver qué oportunidad de hacer camiento comercial tenemos nosotros como igual.
+[1294.1-1302.1]  Ok, sí, sí, entendemos la problemática y el desarrollo que sea.
+[1302.1-1313.1]  Te lo repito una vez más por si acaso para que me confirme, es usar los reportes de su trileta para alimentar la base de datos, procesar esa información con analítica,
+[1313.1-1322.1]  tener un chador con ella que no sonlable con el público, sino que sirva de apoyo analítico interno para que ustedes puedan consultarle cosas y decisiones rápidas,
+[1322.1-1331.1]  pero pasadas en esos datos y alimentar la ver cómo alimentar la base de datos cada año.
+[1331.1-1336.1]  Sí, por lo que entendimos.
+[1336.1-1341.1]  Bueno, alguien tiene una duda del equipo.
+[1342.1-1353.1]  Yo tenía una duda más, quería saber si es que ustedes ya tienen un boceto, un pediseño de cómo quisieran que se vea esa parte del chat,
+[1353.1-1364.1]  o cómo quisieran que se vea la parte de de gendimiento de citas, si es que el usuario quisiera hacerlo manualmente, tienen de algo en mente.
+[1365.1-1380.1]  No, la verdad que no tenemos nuestra identidad visual, como nuestro logo, colores, esos, pero no tenemos una propuesta de Lucas Light de la aplicación.
+[1381.1-1395.1]  Entonces, básicamente tenemos parte de libertad para poder mostrarle bocetos hasta que satisfecho con algunos, ¿sí que es entendido?
+[1395.1-1408.1]  Así es, y tengo un último punto que es sobre la exposición pública o la reputación que se puede alcanzar con este herramienta.
+[1408.1-1418.1]  Ya hemos conversado sobre la problemática, cómo se resolverían, las funciones en esta aplicación y todo,
+[1418.1-1437.1]  pero también me parece importantísimo que también miremos a futuros juntos como equipo, chicos, porque hay dos espacios de reconocimiento que tienen sus bases publicadas y cómo evaluan ese tipo de iniciativas, donde nosotros nos gustaría poder participar.
+[1437.1-1453.1]  Una de ellas es el premio Kunan, que probablemente ustedes ya conocen y que tiene diferentes modalidades de participación. Una de ellas está vinculada al desarrollo tecnológico de soluciones como la que estamos planificando en esta reunión.
+[1453.1-1475.1]  Y la otra, que también es importante, se llama democracia digital, son dos concursos por así decirlo distintos, cada uno tiene sus respectivas bases, sus diferentes cronogramas, pero en ambas a nosotros como igualar nos encantaría poder presentarnos con esta iniciativa,
+[1475.1-1487.1]  porque sabemos que tiene un uso importante para la población. A nivel informativo puede ser importante, si nosotros definimos roles, roles internos y roles externos.
+[1487.1-1506.1]  Un role externo puede ser una simple enarítica de datos para poder tener acceso rápido y conglomerado a los reportes y memorias que las empresas están emitiendo.
+[1506.1-1526.1]  Ese es el uso público para el rol público. Tú como en tu rol público, tú no puedes hacer prospectión ni nada de eso, sino simplemente lo utilizas para poder encontrar de manera reunida, unificada, la información que estamos conversando.
+[1526.1-1547.1]  Y ese fin público es muy importante, porque hay muchos profesionales en la materia de sostenibilidad de derechos humanos, etc., que invierten muchísimo tiempo en buscar esta información por separada de manera no sistematizada.
+[1547.1-1569.1]  Entonces, qué genial sería poder aterrizar un recurso o una aplicación como esta, que tenga funciones internas comerciales como que ya hemos conversado bastante profundidad hoy, pero también un uso público para que podamos tener esa posibilidad de posicionarlo en estos dos reconocimientos.
+[1569.1-1579.1]  Entonces, desafío una y en democracia digital ambas en Perú y bueno, obviamente tendríamos una fuerte exposición por eso.
+[1579.1-1596.1]  Entonces, no quería dejar pasar ese punto porque me parece importante no solamente alcanzar las metas internas que estamos predestableciendo, sino también dar una puerta a la sociedad que eso es lo que nos caracteriza a nosotros como organización.
+[1600.1-1605.1]  Entonces, agregamos la parte de roles por lo que entiendo.
+[1605.1-1614.1]  Sí, roles para roles. Tienes así, ¿me inventes solo dos roles o tal vez más roles?
+[1614.1-1622.1]  De momento, los dos grandes dimensiones son los roles públicos y el rol público y el rol interno.
+[1622.1-1647.1]  Si yo pudiera darle un poco más de análisis a esa definición de roles, les estaría comunicando, pero de momento es el rol interno es el prospector, el analista de comercial, digamos, de igualdad que va a prospectar y el rol externo o el rol público es el de un usuario que simplemente está buscando informar.
+[1648.1-1652.1]  Entonces, ya bueno, básicamente sí entendemos lo vería.
+[1652.1-1662.1]  Te vamos a presentar este dos, hay varias soluciones, tanto tipo una previlización también de el software como sería.
+[1662.1-1676.1]  Para eso quisiera agendar otra reunión, para ya una vez ya con lo conversado de ahora, con mi equipo nos vamos a encargar de trabajar y hacer un tipo un mockup de aplicativo.
+[1676.1-1685.1]  Así que lo que sí nos interesa es el día y la hora que está libre para coordinarnos ahí.
+[1685.1-1689.1]  Lo siento, para ver dos cada semana para ver como todos vamos.
+[1689.1-1702.1]  Claro, sería genial si es que pudiéramos tener una nueva reunión el día a viernes 28 en horarios de la mañana como en las 10, como hoy día.
+[1702.1-1710.1]  Sí, yo sí, yo sí puedo, algunos de mis analistas.
+[1710.1-1727.1]  Nosotros es un ambiente en un, vamos a tener un grupo basata y con un parano para coordinar el proyecto van a ir tu y yo y ahí vamos viendo el tema de las reuniones y las ascendas y ahí rotamos con los en las integrantes del equipo.
+[1727.1-1733.1]  Gracias, por mi parte no ayudas, aparte del equipo.
+[1757.1-1780.1]  En teoría, el PDF, los PDFs de reportes de sostenibilidad y de memoria anual no tienen un límite de acceso, porque son documentos públicos.
+[1781.1-1794.1]  O sea, ellos tienen información sensibles, sí, pero igual están obligados a reportar esas memorias anuales a la bolsa de valores y cualquier persona que está con acceso internet.
+[1794.1-1807.1]  Por ejemplo, cualquiera de nosotros desde nuestra libertad podemos ingresar al repositorio de la bolsa y descargarnos el PDF de las memorias anuales de la empresa que nos convenga.
+[1807.1-1814.1]  No hay un límite ahí.
+[1815.1-1842.1]  Yo voy a conseguir también las bases del desafío Kunan, voy a tratar de de char mano por ese lado, para que compartirles las bases concursables del desafío Kunan y también de democracia digital, para que lo podamos tener desde el inicio en conocimiento del grupo, para que así setamos cuáles son los criterios de evaluación que tienen estos dos funcursos.
+[1842.1-1849.1]  De manera que nuestro desarrollo pueda responder a esos criterios de evaluación desde el inicio.
+[1850.1-1869.1]  En acuerdo, porque si lo vemos al final, creo que podríamos correr riesgo de dilatar el proceso de creación por parchar el situación en este sello y creo que no es lo más eficiente, creo que deberíamos hacerlo en este etapa inicial.
+[1869.1-1877.1]  Estamos de acuerdo por ese lado.
+[1877.1-1882.1]  Sí, sí, sí, entendemos. ¿Hay alguna otra duda?
+[1882.1-1886.1]  De mi lado, todo está claro.
+[1886.1-1905.1]  Entonces, lo que sigue es presentarle el mocap de los requerimientos ya formalmente y una solución y ya vemos en la reunión que tan te gustó, que tan estuvo bueno para nuestra solución que te va.
+[1905.1-1934.1]  ¿Parte toda mi pregunta? ¿Una pregunta? Ahora que acabo de ver un punto, estamos hablando de documentación que se van a analizar y todo, pero una duda que me quedaba era ¿qué pasa si es que yo en el rol de analista comercial de la aplicación?
+[1934.1-1948.1]  Yo quisiera encontrar un contacto, por ejemplo, un gerente de sostenibilidad o un gerente financiero de determinada empresa que se va a prospectar.
+[1948.1-1963.1]  Es posible que se incorpora algún código o algo que nos permita jalar esa data directamente desde LinkedIn, se puede sincronizar con LinkedIn para encontrar esa información.
