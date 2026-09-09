@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Igualab Platform - Dashboard Principal</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#1f7a4d",
+                        "on-background": "#191c1c",
+                        "surface-container-low": "#f2f4f3",
+                        "secondary-fixed": "#84f6e6",
+                        "surface-tint": "#066c41",
+                        "on-secondary-container": "#007167",
+                        "on-primary-fixed-variant": "#00522f",
+                        "surface-container-high": "#e6e9e8",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eff1f0",
+                        "background": "#f8faf9",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#006038",
+                        "inverse-primary": "#82d8a3",
+                        "tertiary-fixed": "#ffdf9f",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#82d8a3",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#002110",
+                        "surface-variant": "#e1e3e2",
+                        "outline": "#6f7a71",
+                        "secondary-container": "#84f6e6",
+                        "on-primary-container": "#aeffca",
+                        "outline-variant": "#bec9bf",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-surface-variant": "#3f4941",
+                        "surface-container": "#eceeed",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffebc9",
+                        "surface-bright": "#f8faf9",
+                        "tertiary-fixed-dim": "#f8bd26",
+                        "on-tertiary-fixed": "#261a00",
+                        "surface": "#f8faf9",
+                        "surface-dim": "#d8dada",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#66d9ca",
+                        "tertiary": "#6b4f00",
+                        "inverse-surface": "#2e3131",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "surface-container-highest": "#e1e3e2",
+                        "primary-fixed": "#9ef5be",
+                        "on-surface": "#191c1c",
+                        "secondary": "#006a61",
+                        "tertiary-container": "#896600"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "sidebar-width": "260px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Ambient shadows and card styles */
+        .ambient-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .ambient-shadow-hover:hover {
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        
+        /* Subtle grid background for chart area */
+        .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, #e2e8e5 1px, transparent 1px),
+                linear-gradient(to bottom, #e2e8e5 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- SIDE NAV BAR -->
+<aside class="hidden md:flex flex-col w-[sidebar-width] h-screen fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant shadow-sm z-20">
+<!-- Brand / Header -->
+<div class="px-lg py-xl border-b border-surface-variant flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-primary filled">eco</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Igualab</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Sostenibilidad</p>
+</div>
+</div>
+<!-- Main Navigation -->
+<nav class="flex-1 overflow-y-auto py-lg px-sm">
+<ul class="space-y-sm">
+<!-- Active Item -->
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary font-bold border-r-4 border-primary bg-primary/5 transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined filled">dashboard</span>
+<span>Dashboard</span>
+</a>
+</li>
+<!-- Inactive Items -->
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span>Inteligencia AI</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span>Reportes</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Configuración</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Usuarios</span>
+</a>
+</li>
+</ul>
+<!-- CTA -->
+<div class="mt-xl px-sm">
+<button class="w-full flex items-center justify-center gap-sm bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md font-bold hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined filled text-lg">auto_awesome</span>
+                    Nueva Consulta AI
+                </button>
+</div>
+</nav>
+<!-- Footer Navigation -->
+<div class="border-t border-surface-variant p-lg space-y-sm">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Ayuda</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md">Cerrar Sesión</span>
+</a>
+</div>
+<!-- Role Selector Demo (Bottom Left corner) -->
+<div class="absolute bottom-4 left-4 right-4 p-md bg-surface-container-high rounded-lg border border-outline-variant shadow-sm text-xs text-on-surface-variant">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+<span class="font-bold">Modo Demo</span>
+</div>
+<select class="w-full bg-surface text-on-surface border border-outline-variant rounded px-2 py-1 text-xs">
+<option selected="" value="admin">Administrador</option>
+<option value="analyst">Analista ESG</option>
+<option value="viewer">Visualizador</option>
+</select>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<div class="flex-1 ml-0 md:ml-[sidebar-width] min-h-screen flex flex-col bg-background">
+<!-- TOP NAV BAR -->
+<header class="flex justify-between items-center w-full px-xl py-sm bg-surface-bright h-16 sticky top-0 z-10">
+<!-- Left: Brand (Mobile) & Search -->
+<div class="flex items-center gap-lg">
+<h2 class="md:hidden font-title-lg text-title-lg font-black text-primary">Igualab Platform</h2>
+<div class="hidden md:flex items-center bg-surface-container-low rounded-lg px-md py-xs border border-outline-variant focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface placeholder-on-surface-variant w-64" placeholder="Buscar empresas, reportes..." type="text"/>
+</div>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-sm"></div>
+<div class="flex items-center gap-sm cursor-pointer hover:opacity-80 transition-opacity">
+<div class="w-8 h-8 rounded-full bg-tertiary-container overflow-hidden">
+<img alt="Avatar de usuario" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate executive in a bright, modern office setting. The lighting is soft and flattering, creating a high-end corporate aesthetic suitable for a modern tech platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfO9HQGdWpF-Pz0NZKmKVq-CVAPzh1BjJ6wK-pEwkq86xwLPZjD0w0mQBQhi1jyO_0LwgJOymue3ddDamcuIi3rJraBqGcLD0n3mnpclfYxhhMxwQ9_3WnonK99sVdsKKNafA2lpeA7foe0uo6h4u9C9yUvzuP2koePHy6aqhyDkQgxJnVpFi7ZF4VLxRlXmhOtCyXpWbOWfJ3YQeWAUyGj19r1GJpOztZU8zSjkkYtnCC2I2w2wG_"/>
+</div>
+<span class="hidden lg:block font-label-md text-label-md text-on-surface-variant">Admin Profile</span>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_drop_down</span>
+</div>
+<button class="hidden lg:block text-error font-label-md text-label-md hover:underline ml-sm">
+                    Cerrar sesión
+                </button>
+</div>
+</header>
+<!-- DASHBOARD CANVAS -->
+<main class="flex-1 p-lg md:p-xl space-y-xl overflow-y-auto">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-background">Visión General</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Monitoreo de inteligencia de sostenibilidad y estado de la plataforma.</p>
+</div>
+<div class="flex gap-sm">
+<button class="flex items-center gap-sm px-md py-sm bg-surface rounded-lg border border-outline-variant text-on-surface text-label-md font-label-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        Últimos 30 días
+                    </button>
+<button class="flex items-center gap-sm px-md py-sm bg-primary text-on-primary rounded-lg text-label-md font-label-md font-bold hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                        Exportar
+                    </button>
+</div>
+</div>
+<!-- KPI GRID (4 Columns) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-variant p-lg ambient-shadow ambient-shadow-hover relative overflow-hidden group">
+<div class="flex justify-between items-start mb-md">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Empresas Monitoreadas</h3>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded">domain</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-background">124</span>
+<span class="font-label-sm text-label-sm text-primary flex items-center">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12%
+                        </span>
+</div>
+<!-- Decorative subtle sparkline representation -->
+<div class="absolute bottom-0 left-0 w-full h-1 bg-surface-variant">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-variant p-lg ambient-shadow ambient-shadow-hover relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Reportes Generados</h3>
+<span class="material-symbols-outlined text-secondary bg-secondary/10 p-1 rounded">description</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-background">856</span>
+<span class="font-label-sm text-label-sm text-primary flex items-center">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> 5%
+                        </span>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-surface-variant">
+<div class="h-full bg-secondary w-1/2"></div>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-variant p-lg ambient-shadow ambient-shadow-hover relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Alertas de Sostenibilidad</h3>
+<span class="material-symbols-outlined text-tertiary bg-tertiary-container p-1 rounded">warning</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-display-lg text-on-background">12</span>
+<span class="font-label-sm text-label-sm text-error flex items-center">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> 2 nuevas
+                        </span>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-surface-variant">
+<div class="h-full bg-tertiary w-1/4"></div>
+</div>
+</div>
+<!-- KPI 4 (AI Focus) -->
+<div class="bg-surface-container-lowest rounded-xl border border-secondary-fixed/50 p-lg shadow-[0_4px_20px_rgba(132,246,230,0.15)] relative overflow-hidden">
+<!-- Subtle AI Background glow -->
+<div class="absolute -right-10 -top-10 w-32 h-32 bg-secondary-fixed/20 rounded-full blur-2xl"></div>
+<div class="flex justify-between items-start mb-md relative z-10">
+<h3 class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-bold">Consultas IA</h3>
+<span class="material-symbols-outlined text-secondary bg-secondary/10 p-1 rounded filled">psychology</span>
+</div>
+<div class="flex items-baseline gap-sm relative z-10">
+<span class="font-display-lg text-display-lg text-on-background">3,492</span>
+<span class="font-label-sm text-label-sm text-primary flex items-center">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> 28%
+                        </span>
+</div>
+<div class="mt-sm text-xs text-on-surface-variant relative z-10">
+                        Promedio de respuesta: <strong class="text-on-background">1.2s</strong>
+</div>
+</div>
+</div>
+<!-- MAIN CHART & RECENT ACTIVITY BENTO GRID -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg h-auto lg:h-[500px]">
+<!-- Main Trend Chart (Spans 2 columns) -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl border border-surface-variant p-lg ambient-shadow flex flex-col">
+<div class="flex justify-between items-center mb-lg">
+<div>
+<h3 class="font-title-lg text-title-lg text-on-background">Tendencias ESG Consolidadas</h3>
+<p class="font-label-md text-label-md text-on-surface-variant">Puntaje promedio del sector minero y energético</p>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label-md text-label-md border border-primary/20">Ambiental</button>
+<button class="px-3 py-1 rounded-full bg-surface text-on-surface-variant font-label-md text-label-md border border-outline-variant hover:bg-surface-container-low">Social</button>
+<button class="px-3 py-1 rounded-full bg-surface text-on-surface-variant font-label-md text-label-md border border-outline-variant hover:bg-surface-container-low">Gobernanza</button>
+</div>
+</div>
+<!-- Chart Area (Placeholder for actual chart library) -->
+<div class="flex-1 bg-grid-pattern rounded-lg border border-surface-variant relative flex items-end p-4 gap-2">
+<!-- Y-Axis labels -->
+<div class="absolute left-2 top-2 bottom-6 flex flex-col justify-between text-[10px] text-outline font-medium">
+<span>100</span>
+<span>75</span>
+<span>50</span>
+<span>25</span>
+</div>
+<!-- Mock Line Chart Path (SVG) -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Trend Line 1 (Primary) -->
+<path d="M 10,80 Q 25,75 40,60 T 70,40 T 95,20" fill="none" stroke="#006038" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<!-- Area under curve -->
+<path d="M 10,100 L 10,80 Q 25,75 40,60 T 70,40 T 95,20 L 95,100 Z" fill="rgba(0,96,56,0.05)"></path>
+<!-- Trend Line 2 (Secondary - Dashed) -->
+<path d="M 10,90 Q 30,85 50,70 T 80,50 T 95,45" fill="none" stroke="#006a61" stroke-dasharray="4 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<!-- Data Points -->
+<circle cx="40" cy="60" fill="#006038" r="1.5"></circle>
+<circle cx="70" cy="40" fill="#006038" r="1.5"></circle>
+<circle cx="95" cy="20" fill="#006038" r="1.5"></circle>
+</svg>
+<!-- X-Axis labels -->
+<div class="absolute bottom-1 left-10 right-4 flex justify-between text-[10px] text-outline font-medium">
+<span>Ene</span>
+<span>Feb</span>
+<span>Mar</span>
+<span>Abr</span>
+<span>May</span>
+<span>Jun</span>
+</div>
+</div>
+</div>
+<!-- Recent Activity Table (Spans 1 column) -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-variant p-lg ambient-shadow flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-lg text-title-lg text-on-background">Últimas Actividades</h3>
+<button class="text-primary hover:text-primary-container p-1 rounded-full hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto pr-2 -mr-2">
+<div class="space-y-4">
+<!-- Activity Item 1 -->
+<div class="flex gap-md items-start group">
+<div class="w-8 h-8 rounded-full bg-secondary/10 text-secondary flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">psychology</span>
+</div>
+<div class="flex-1 border-b border-surface-variant pb-3 group-last:border-0">
+<p class="font-body-md text-body-md text-on-background font-medium">Análisis predictivo completado</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Reporte de emisiones Scope 3 - Minera Sur</p>
+<p class="text-[10px] text-outline mt-2">Hace 15 minutos</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex gap-md items-start group">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/30 text-tertiary flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+</div>
+<div class="flex-1 border-b border-surface-variant pb-3 group-last:border-0">
+<p class="font-body-md text-body-md text-on-background font-medium">Alerta de discrepancia</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Inconsistencia de datos hídricos en Q2</p>
+<p class="text-[10px] text-outline mt-2">Hace 2 horas</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex gap-md items-start group">
+<div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">add_circle</span>
+</div>
+<div class="flex-1 border-b border-surface-variant pb-3 group-last:border-0">
+<p class="font-body-md text-body-md text-on-background font-medium">Nueva empresa añadida</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">AgroExport S.A.C. agregada al portafolio</p>
+<p class="text-[10px] text-outline mt-2">Ayer, 14:30</p>
+</div>
+</div>
+<!-- Activity Item 4 -->
+<div class="flex gap-md items-start group">
+<div class="w-8 h-8 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+</div>
+<div class="flex-1 border-b border-surface-variant pb-3 group-last:border-0">
+<p class="font-body-md text-body-md text-on-background font-medium">Exportación masiva</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Dataset consolidado ESG 2023</p>
+<p class="text-[10px] text-outline mt-2">Ayer, 09:15</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 py-2 text-center text-primary font-label-md text-label-md hover:bg-primary/5 rounded-lg transition-colors">
+                        Ver todo el historial
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

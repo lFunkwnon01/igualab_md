@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestión de Usuarios - Igualab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#1f7a4d",
+                        "on-background": "#191c1c",
+                        "surface-container-low": "#f2f4f3",
+                        "secondary-fixed": "#84f6e6",
+                        "surface-tint": "#066c41",
+                        "on-secondary-container": "#007167",
+                        "on-primary-fixed-variant": "#00522f",
+                        "surface-container-high": "#e6e9e8",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eff1f0",
+                        "background": "#f8faf9",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#006038",
+                        "inverse-primary": "#82d8a3",
+                        "tertiary-fixed": "#ffdf9f",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#82d8a3",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#002110",
+                        "surface-variant": "#e1e3e2",
+                        "outline": "#6f7a71",
+                        "secondary-container": "#84f6e6",
+                        "on-primary-container": "#aeffca",
+                        "outline-variant": "#bec9bf",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-surface-variant": "#3f4941",
+                        "surface-container": "#eceeed",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffebc9",
+                        "surface-bright": "#f8faf9",
+                        "tertiary-fixed-dim": "#f8bd26",
+                        "on-tertiary-fixed": "#261a00",
+                        "surface": "#f8faf9",
+                        "surface-dim": "#d8dada",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#66d9ca",
+                        "tertiary": "#6b4f00",
+                        "inverse-surface": "#2e3131",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "surface-container-highest": "#e1e3e2",
+                        "primary-fixed": "#9ef5be",
+                        "on-surface": "#191c1c",
+                        "secondary": "#006a61",
+                        "tertiary-container": "#896600"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "sidebar-width": "260px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 w-[260px] bg-surface-container-lowest border-r border-outline-variant shadow-sm z-50">
+<!-- Header -->
+<div class="p-lg flex items-center gap-sm">
+<img alt="Logo de Igualab" class="w-10 h-10 rounded-full bg-surface-container-low" data-alt="A stylized, modern, abstract leaf or tree logo in deep forest green and vibrant teal, representing sustainability and growth, set against a pure white background. Minimalist corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAixf9KGrfWL8A6qXU6jKW8ieWoHoDM8ZL4dqqs5ACLKEnl90g2B60vn5GaTnmuYxel1xgMqtvpXXgjUV67pwTPZOcqvKW24PY41KsUXvB8STNaiLwBr8k_zu5RSsVCOhLvasrCI5CiJP7esS3iSHarOlyEwIs4rw_EZsO3ItqGrNWSX07p_cn5nZUB8ZIGuQB4v5GgcY4FS6vpo4j4-NUG4qCcUuro1k9_ObSKmLUtNMXE9sgh_JQ9"/>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">Igualab</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Sostenibilidad</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto px-sm py-md flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-outline">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-outline">psychology</span>
+<span class="font-body-md text-body-md">Inteligencia AI</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-outline">assessment</span>
+<span class="font-body-md text-body-md">Reportes</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-outline">settings</span>
+<span class="font-body-md text-body-md">Configuración</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-primary font-bold border-r-4 border-primary bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-primary fill">group</span>
+<span class="font-body-md text-body-md">Usuarios</span>
+</a>
+<!-- Superadmin specific items -->
+<div class="mt-xl mb-xs px-md">
+<span class="font-label-sm text-label-sm text-outline-variant uppercase">Administración</span>
+</div>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-outline">policy</span>
+<span class="font-body-md text-body-md">Auditoría</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-outline">database</span>
+<span class="font-body-md text-body-md">Actualización BD</span>
+</a>
+</div>
+<!-- Footer Actions -->
+<div class="p-md border-t border-outline-variant flex flex-col gap-xs">
+<button class="w-full flex items-center justify-center gap-xs bg-primary text-on-primary py-sm px-md rounded-full font-label-md text-label-md hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Nueva Consulta AI
+            </button>
+<div class="mt-sm flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-outline">help</span>
+<span class="font-body-md text-body-md">Ayuda</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-error hover:bg-error-container transition-colors duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md">Cerrar Sesión</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-0 md:ml-[260px] flex flex-col min-h-screen relative">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-xl py-sm h-16 bg-surface-bright sticky top-0 z-40">
+<div class="flex items-center gap-md">
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden p-xs rounded-full hover:bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-title-lg text-title-lg font-black text-primary hidden md:block">Igualab Platform</span>
+</div>
+<div class="flex-1 max-w-md mx-xl hidden md:flex items-center bg-surface-container-low rounded-full px-md py-xs border border-outline-variant focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<span class="material-symbols-outlined text-outline-variant mr-xs">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full font-body-md text-body-md text-on-surface placeholder:text-outline-variant" placeholder="Buscar usuarios, roles..." type="text"/>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-sm rounded-full hover:bg-surface-container-low text-on-surface-variant transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-xs cursor-pointer hover:opacity-70 transition-opacity ml-md">
+<img alt="Avatar de usuario" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a corporate executive, smiling slightly, wearing a dark suit against a bright, airy office background. Modern, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCymxzeiDkSxOry1PD3S885MJDgw5uoAp4Ppp-PdCQi3L56ebAyhs7sMLO0Oyu09MLw0J5WJ2LET1KBC97A7d7_dMAmAYZT4SxrO13TdSAsbDcyoGg5Tga3Ljgl8GkA_Jt4A4o7lAPg5-LajeIpcll8_SvuKwektn71pLbUgR0akY1LV_O5SX_QnIxlSc7IattYG5qagiYbK2IJs1H-lU05daeJS9opb-Ae9w9goApz89dGVjy7KQgH"/>
+<span class="font-label-md text-label-md text-on-surface-variant hidden sm:block">Superadmin</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px] hidden sm:block">expand_more</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-lg md:p-xl w-full max-w-container-max mx-auto">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-xl gap-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg md:font-headline-lg md:text-headline-lg text-on-surface">Gestión de Usuarios</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-xs">Administra los accesos y roles de la plataforma.</p>
+</div>
+<button class="flex items-center gap-xs bg-primary text-on-primary px-lg py-sm rounded-full font-label-md text-label-md font-semibold hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+                    Crear Usuario
+                </button>
+</div>
+<!-- Filters Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm mb-lg flex flex-col sm:flex-row gap-md items-center justify-between">
+<div class="flex flex-wrap gap-md w-full sm:w-auto">
+<div class="relative w-full sm:w-48">
+<select class="w-full appearance-none bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary pr-xl">
+<option value="">Todos los Roles</option>
+<option value="admin">Administrador</option>
+<option value="analista">Analista</option>
+<option value="visor">Visor</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 text-outline pointer-events-none">arrow_drop_down</span>
+</div>
+<div class="relative w-full sm:w-48">
+<select class="w-full appearance-none bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary pr-xl">
+<option value="">Todos los Estados</option>
+<option value="activo">Activo</option>
+<option value="inactivo">Inactivo</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 text-outline pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex gap-sm w-full sm:w-auto justify-end">
+<button class="text-primary font-label-md text-label-md hover:bg-surface-container-low px-sm py-xs rounded transition-colors">Limpiar Filtros</button>
+</div>
+</div>
+<!-- Data Table Container (Glassmorphism/Minimalist card) -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="py-sm px-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Usuario</th>
+<th class="py-sm px-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Correo</th>
+<th class="py-sm px-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Rol</th>
+<th class="py-sm px-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Estado</th>
+<th class="py-sm px-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors duration-150">
+<td class="py-md px-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold font-label-md">MR</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">María Rodriguez</span>
+</div>
+</td>
+<td class="py-md px-md font-body-md text-body-md text-on-surface-variant">mrodriguez@empresa.com</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">Administrador</span>
+</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center gap-xs px-sm py-xs rounded-full bg-primary/10 text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Activo
+                                    </span>
+</td>
+<td class="py-md px-md text-right">
+<div class="flex justify-end gap-xs">
+<button class="p-xs text-outline hover:text-primary hover:bg-surface-variant rounded transition-colors" title="Editar">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors" title="Dar de baja">
+<span class="material-symbols-outlined text-[20px]">person_off</span>
+</button>
+<button class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors" title="Revocar acceso">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors duration-150">
+<td class="py-md px-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold font-label-md">JC</div>
+<span class="font-body-md text-body-md font-medium text-on-surface">Juan Carlos Silva</span>
+</div>
+</td>
+<td class="py-md px-md font-body-md text-body-md text-on-surface-variant">jsilva@empresa.com</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm">Analista</span>
+</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center gap-xs px-sm py-xs rounded-full bg-primary/10 text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> Activo
+                                    </span>
+</td>
+<td class="py-md px-md text-right">
+<div class="flex justify-end gap-xs">
+<button class="p-xs text-outline hover:text-primary hover:bg-surface-variant rounded transition-colors" title="Editar">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors" title="Dar de baja">
+<span class="material-symbols-outlined text-[20px]">person_off</span>
+</button>
+<button class="p-xs text-outline hover:text-error hover:bg-error-container rounded transition-colors" title="Revocar acceso">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors duration-150 bg-surface/50">
+<td class="py-md px-md">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-variant text-outline flex items-center justify-center font-bold font-label-md">AL</div>
+<span class="font-body-md text-body-md font-medium text-outline">Ana López</span>
+</div>
+</td>
+<td class="py-md px-md font-body-md text-body-md text-outline">alopez@empresa.com</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-surface-variant text-outline font-label-sm text-label-sm opacity-70">Visor</span>
+</td>
+<td class="py-md px-md">
+<span class="inline-flex items-center gap-xs px-sm py-xs rounded-full bg-surface-variant text-outline font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Inactivo
+                                    </span>
+</td>
+<td class="py-md px-md text-right">
+<div class="flex justify-end gap-xs">
+<button class="p-xs text-outline hover:text-primary hover:bg-surface-variant rounded transition-colors" title="Editar">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-xs text-outline hover:text-primary hover:bg-surface-variant rounded transition-colors" title="Reactivar">
+<span class="material-symbols-outlined text-[20px]">settings_backup_restore</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="bg-surface-container-lowest border-t border-outline-variant p-sm px-md flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant">Mostrando 1 - 3 de 24 usuarios</span>
+<div class="flex items-center gap-xs">
+<button class="p-xs text-outline hover:bg-surface-container-low rounded disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-xs text-on-surface hover:bg-surface-container-low rounded">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

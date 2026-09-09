@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Buscar Contactos LinkedIn - Igualab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#1f7a4d",
+                        "on-background": "#191c1c",
+                        "surface-container-low": "#f2f4f3",
+                        "secondary-fixed": "#84f6e6",
+                        "surface-tint": "#066c41",
+                        "on-secondary-container": "#007167",
+                        "on-primary-fixed-variant": "#00522f",
+                        "surface-container-high": "#e6e9e8",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#eff1f0",
+                        "background": "#f8faf9",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#006038",
+                        "inverse-primary": "#82d8a3",
+                        "tertiary-fixed": "#ffdf9f",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#82d8a3",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#002110",
+                        "surface-variant": "#e1e3e2",
+                        "outline": "#6f7a71",
+                        "secondary-container": "#84f6e6",
+                        "on-primary-container": "#aeffca",
+                        "outline-variant": "#bec9bf",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-surface-variant": "#3f4941",
+                        "surface-container": "#eceeed",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffebc9",
+                        "surface-bright": "#f8faf9",
+                        "tertiary-fixed-dim": "#f8bd26",
+                        "on-tertiary-fixed": "#261a00",
+                        "surface": "#f8faf9",
+                        "surface-dim": "#d8dada",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#66d9ca",
+                        "tertiary": "#6b4f00",
+                        "inverse-surface": "#2e3131",
+                        "on-secondary-fixed": "#00201d",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "surface-container-highest": "#e1e3e2",
+                        "primary-fixed": "#9ef5be",
+                        "on-surface": "#191c1c",
+                        "secondary": "#006a61",
+                        "tertiary-container": "#896600"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "sidebar-width": "260px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-full overflow-hidden flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="w-[sidebar-width] h-screen fixed left-0 top-0 bg-surface-container-lowest shadow-sm flex flex-col h-full border-r border-outline-variant z-20">
+<!-- Brand / Header -->
+<div class="px-lg py-xl">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Igualab</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Sostenibilidad</p>
+</div>
+</div>
+<button class="mt-xl w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md rounded-lg flex items-center justify-center gap-sm hover:bg-surface-tint transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Nueva Consulta AI
+            </button>
+</div>
+<!-- Navigation Links -->
+<ul class="flex-1 overflow-y-auto py-sm">
+<li>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">psychology</span>
+                    Inteligencia AI
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">assessment</span>
+                    Reportes
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-lg py-sm text-primary font-bold border-r-4 border-primary bg-surface-container-low transition-colors duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+                    Usuarios
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Configuración
+                </a>
+</li>
+</ul>
+<!-- Footer Links -->
+<ul class="pb-lg">
+<li>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">help</span>
+                    Ayuda
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 ease-in-out font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+                    Cerrar Sesión
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface-bright docked full-width top-0 h-16 flex justify-between items-center px-xl py-sm z-10 border-b border-surface-container-highest">
+<div class="flex-1 flex items-center">
+<!-- Search is meant for the page content here, keeping top nav clean -->
+<span class="font-title-lg text-title-lg font-black text-primary">Igualab Platform</span>
+</div>
+<div class="flex items-center gap-lg">
+<button class="text-on-surface-variant hover:text-primary transition-opacity active:opacity-70">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-sm">
+<img alt="Avatar de usuario" class="w-8 h-8 rounded-full object-cover bg-surface-variant" data-alt="A small circular avatar portrait of a professional corporate user. Clean, well-lit, neutral light background, modern business attire. High quality, realistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOoPTas_dzH5CkSvnr4n_zIksJg70PycC89rIQN4KmAiWnXloknYHYAZQOPntPMPX06NW5y-F0nRpw5MdlJTqJboj03etUhy_uMhRvh3I9i0xtsVa2iWa8JX5ZdnEmVzaf7_-9jBzpTR16OAuGBk8pItK3d7IEdzluAEA4budy8_WvcRERa7RC6Bzoeo3HNheKpy-KSVruDZYZoO3J0_vM8LQ1rn0fOZQPdS_IMFlQLk8qPJdjjlO2"/>
+<button class="font-label-md text-label-md text-primary font-medium hover:text-surface-tint transition-colors">
+                        Cerrar sesión
+                    </button>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 overflow-y-auto bg-background p-lg lg:p-xl">
+<div class="max-w-container-max mx-auto space-y-xl">
+<!-- Page Header & Search -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-sm">Buscador de Contactos</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Encuentra perfiles profesionales en la red para análisis de talento y sostenibilidad.</p>
+<div class="flex flex-col md:flex-row gap-md">
+<!-- Main Search Input -->
+<div class="flex-1 relative">
+<div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="block w-full pl-[40px] pr-md py-3 font-body-md text-body-md text-on-surface bg-surface border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-shadow" placeholder="Buscar por nombre o palabras clave..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex gap-sm">
+<select class="block w-48 pl-md pr-xl py-3 font-body-md text-body-md text-on-surface bg-surface border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
+<option value="">Todos los cargos</option>
+<option value="director">Director</option>
+<option value="gerente">Gerente de Sostenibilidad</option>
+<option value="analista">Analista</option>
+</select>
+<select class="block w-48 pl-md pr-xl py-3 font-body-md text-body-md text-on-surface bg-surface border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
+<option value="">Todas las empresas</option>
+<option value="tech">Tecnología</option>
+<option value="finanzas">Finanzas</option>
+<option value="energia">Energía Renovable</option>
+</select>
+<button class="bg-primary text-on-primary font-label-md text-label-md py-sm px-xl rounded-lg hover:bg-surface-tint transition-colors flex items-center gap-xs">
+                                Buscar
+                            </button>
+</div>
+</div>
+</div>
+<!-- Results Grid (Bento style) -->
+<div>
+<div class="flex justify-between items-end mb-md">
+<h3 class="font-title-lg text-title-lg text-on-surface">Resultados <span class="text-on-surface-variant font-normal text-body-md">(24 encontrados)</span></h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-lg">
+<!-- Contact Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm hover:shadow-md transition-shadow flex flex-col h-full group">
+<div class="flex items-start gap-md mb-lg">
+<img alt="Foto de contacto" class="w-16 h-16 rounded-full object-cover border-2 border-surface-container-low" data-alt="Professional headshot of a confident businesswoman in her 30s. Soft, bright natural lighting, modern corporate office background blurred. Wearing a dark blazer. High-end editorial corporate photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAHft_LLfubRDTgylEQjqGAOCFfOCRLSys-p7EkyhOA3p34PIDj4Z4usgv7J501aau9y1LGSsYeenLfeNXcUnKBUVq-NAPfoAHX9JTQlCZAjCG4qhFF_yF8aDaEw_rklS5gmQWV8dL3Wyywh69iCtWNUhjJL5stOn-qW6Zeproq8B1XBiUkvuZjmZqZlhUjpgzajBo2Tf3Oy5MhjKqRl1hIWlYs9PvHYzrsSwXBcBiAvrz7EPyMIrb"/>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface leading-tight">Laura Mendoza</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Directora de Sostenibilidad</p>
+<p class="font-label-sm text-label-sm text-primary uppercase mt-unit">EcoTech Corp</p>
+</div>
+</div>
+<div class="mt-auto pt-md border-t border-surface-container-highest">
+<button class="w-full flex items-center justify-center gap-sm py-2 px-md font-label-md text-label-md text-[#0A66C2] border border-[#0A66C2] rounded-lg hover:bg-[#0A66C2] hover:text-white transition-colors duration-200">
+<span>Ver perfil en LinkedIn</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Contact Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm hover:shadow-md transition-shadow flex flex-col h-full group">
+<div class="flex items-start gap-md mb-lg">
+<img alt="Foto de contacto" class="w-16 h-16 rounded-full object-cover border-2 border-surface-container-low" data-alt="Professional portrait of a mature man in his 50s. Glasses, thoughtful expression. Warm indoor lighting, subtle green plants in the blurred background. Corporate environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEx9pDXcKmfjNcUPH80pndZ_3WpSE6nHJOPOHZI8T6k2QIg3NogiD2qFC24yGhy9LJ9LT_j4gbaV3u1KWQPxhJzq2hE0y2m6U2rOtlTEx6Uw4uT4QzlbDWJfvvykTPQuo162l38WrDMWpGmiXfBanDec6ZpQBMn_7aluPHtpdWfdCxi0EdunH8eIjhfmIeNmo3eNQWdphcssCWgw_K368mnxoomrWkSeaqU5WRxq6tUclD3zF0gnMO"/>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface leading-tight">Carlos Ruiz</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Gerente de Innovación Verde</p>
+<p class="font-label-sm text-label-sm text-primary uppercase mt-unit">AgroAndina S.A.</p>
+</div>
+</div>
+<div class="mt-auto pt-md border-t border-surface-container-highest">
+<button class="w-full flex items-center justify-center gap-sm py-2 px-md font-label-md text-label-md text-[#0A66C2] border border-[#0A66C2] rounded-lg hover:bg-[#0A66C2] hover:text-white transition-colors duration-200">
+<span>Ver perfil en LinkedIn</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Contact Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm hover:shadow-md transition-shadow flex flex-col h-full group">
+<div class="flex items-start gap-md mb-lg">
+<img alt="Foto de contacto" class="w-16 h-16 rounded-full object-cover border-2 border-surface-container-low" data-alt="Modern professional portrait of a young male professional in his late 20s. Smart casual attire. Bright, airy light-mode aesthetic studio lighting. Approachable smile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbQAnKAkqZS-YfjpYXs10y4NwS9v13jxfM0WdRsKNOjk3tZ2tcP6fG4HhGhpRorw66Mwtj5UdkfDHu8Mx1N-17tAUu0TgeabrwJPzz5nqa0I5FEzBGdGAZttBRxYaIqIcBLLvpguaBILOhm3G7cDjfyTJm8T-oKjult7gh5slsZZqP-HuC-ckS74yrMRrW962VQS7NXNRY9YxoHp3ilZrOeyTX3a9XmJF-w5CVTi8taRQ3YfzDcomW"/>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface leading-tight">Miguel Aranda</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Analista ESG Senior</p>
+<p class="font-label-sm text-label-sm text-primary uppercase mt-unit">Banco Central</p>
+</div>
+</div>
+<div class="mt-auto pt-md border-t border-surface-container-highest">
+<button class="w-full flex items-center justify-center gap-sm py-2 px-md font-label-md text-label-md text-[#0A66C2] border border-[#0A66C2] rounded-lg hover:bg-[#0A66C2] hover:text-white transition-colors duration-200">
+<span>Ver perfil en LinkedIn</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Contact Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg shadow-sm hover:shadow-md transition-shadow flex flex-col h-full group">
+<div class="flex items-start gap-md mb-lg">
+<img alt="Foto de contacto" class="w-16 h-16 rounded-full object-cover border-2 border-surface-container-low" data-alt="Corporate headshot of a woman in her 40s. Elegant dark attire, confident posture. Soft, diffused lighting against a pure white background. High contrast, sharp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlIojy8KDxUyROzHQoP4t6WTu3yJGOlmivuJ-HwDuIZeXMXxDp_5FwuPTBbZkO1G2-AlKLWHJzzt_NZ032SS9nvaKdflKjCUjZVfSbXoXa1a2IKPn8KWuAwqiZSIleNFbA8btNotC0Wx-wdy1NGnV9-WeLzMI7zWVybwgymHdfVKX480_BNWrf414QAat0bYrZPxto6rER6kRU12LrRErHarUiBZy51aXhl_gRxyjGnb5QM7KZwy7I"/>
+<div>
+<h4 class="font-title-lg text-title-lg text-on-surface leading-tight">Sofia Torres</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">VP Impacto Ambiental</p>
+<p class="font-label-sm text-label-sm text-primary uppercase mt-unit">Energías Limpias Latam</p>
+</div>
+</div>
+<div class="mt-auto pt-md border-t border-surface-container-highest">
+<button class="w-full flex items-center justify-center gap-sm py-2 px-md font-label-md text-label-md text-[#0A66C2] border border-[#0A66C2] rounded-lg hover:bg-[#0A66C2] hover:text-white transition-colors duration-200">
+<span>Ver perfil en LinkedIn</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Pagination (Simplified) -->
+<div class="mt-xl flex justify-center">
+<div class="flex items-center gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-low disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-container text-on-primary-container font-label-md">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-low font-label-md">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-low font-label-md">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
