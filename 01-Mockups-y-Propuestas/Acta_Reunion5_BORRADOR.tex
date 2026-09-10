@@ -1,0 +1,209 @@
+% =========================================================================
+% ACTA DE REUNIÓN — CS3081-005-2026 · BORRADOR
+% Plantilla de estilo basada en el modelo oficial de Google Docs del curso
+% Compilar con:  tectonic Acta_Reunion5_BORRADOR.tex
+% =========================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper, top=2.6cm, bottom=2.4cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Carlito}                    % métrica idéntica a Calibri
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{needspace}
+
+% ------------------------- Paleta de la plantilla -------------------------
+\definecolor{rojo}{HTML}{E4002B}   % marca CS3081
+\definecolor{grisB}{HTML}{B7B7B7}  % bordes de tabla
+\definecolor{grisH}{HTML}{202124}  % encabezados de tabla (negro)
+\definecolor{grisL}{HTML}{F3F4F6}  % celdas de etiqueta
+\definecolor{rosa}{HTML}{FCE8EC}   % caja PROPÓSITO / REGISTRO
+\definecolor{grisV}{HTML}{555555}  % valores (itálica)
+\definecolor{grisN}{HTML}{666666}  % notas y pie
+\definecolor{tinto}{HTML}{333333}
+
+\arrayrulecolor{grisB}
+\renewcommand{\arraystretch}{1.55}
+\setlength{\tabcolsep}{4pt}
+
+% ------------------------- Encabezado y pie corridos ----------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\textbf{\color{rojo}CS3081\hspace{0.7em}|\hspace{0.7em}INGENIERÍA DE SOFTWARE}\hspace{1.4em}{\color{grisN}·\hspace{0.7em}Acta de reunión con usuarios}}
+\fancyfoot[R]{\footnotesize\color{grisN}Uso académico · Proyecto real\hspace{2em}Página \thepage\ de \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{14pt}
+
+% ------------------------- Comandos de estilo -----------------------------
+\newcommand{\asec}[1]{\Needspace*{13\baselineskip}\par\vspace{18pt}{\noindent\fontsize{14}{17}\selectfont\textbf{#1}}\par\vspace{9pt}}
+\newcommand{\cajanota}[2]{\par\noindent\fcolorbox{grisB}{rosa}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\footnotesize \textbf{\textcolor{rojo}{#1: }}{\color{tinto}#2}}}\par\vspace{7pt}}
+\newcommand{\hc}[1]{\cellcolor{grisH}\textcolor{white}{\textbf{#1}}}
+\newcommand{\lb}[1]{\cellcolor{grisL}\textbf{#1}}
+\newcommand{\vl}[1]{\textcolor{grisV}{\textit{#1}}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\begin{document}
+
+% ============================ TÍTULO ======================================
+{\centering {\fontsize{22}{26}\selectfont\textbf{ACTA DE REUNION}}\par}
+\vspace{10pt}
+
+\cajanota{PROPÓSITO}{documentar cada interacción con usuarios o representantes del cliente. Complete el acta durante la reunión, compártala dentro de las 24 horas y registre la evidencia de validación.}
+
+% ============================ 1. DATOS ====================================
+\asec{1. DATOS GENERALES}
+{\footnotesize
+\begin{tabular}{|L{2.35cm}|L{5.45cm}|L{2.1cm}|L{4.3cm}|}
+\hline
+\lb{Código de acta} & \vl{CS3081-005-2026} & \lb{Fecha} & \vl{11/09/2026} \\ \hline
+\lb{Hora de inicio} & \vl{[completar]} & \lb{Hora de término} & \vl{[completar]} \\ \hline
+\lb{Proyecto} & \multicolumn{3}{L{12.0cm}|}{\vl{Proyecto Igualab - Plataforma de analítica de sostenibilidad (RAG)}} \\ \hline
+\lb{Módulo/Fase} & \vl{Análisis y Diseño --- presentación de arquitectura y prototipo; control de cambios de alcance (módulo Bolsa de Valores, registro de exclusión de LinkedIn)} & \lb{Modalidad} & \vl{[ ] Presencial \ [X] Virtual} \\ \hline
+\end{tabular}}
+
+% ============================ 2. OBJETIVO =================================
+\asec{2. OBJETIVO Y RESULTADO ESPERADO}
+{\footnotesize
+\begin{tabular}{|L{2.9cm}|L{11.3cm}|}
+\hline
+\lb{Objetivo de la reunión} & \vl{Presentar la arquitectura y el prototipo con el cliente (hito del cronograma del plan), revisar el avance del cierre del análisis con arquitectura (REQ-13/14), \textbf{someter a decisión del Product Owner} dos cambios de alcance --- la \textbf{no viabilidad del módulo de Visualización de Datos de Bolsa de Valores} (CU007, RF-018/RF-019, RN-008) y el \textbf{registro formal de la exclusión de LinkedIn} --- y \textbf{obtener la aprobación formal del cliente sobre el stack tecnológico} con el que se desarrollará la plataforma (fase 1).} \\ \hline
+\lb{Resultado esperado} & \vl{Decisión del PO registrada sobre el módulo de Bolsa (eliminar o renombrar) y sobre LinkedIn, versión del A\&D a actualizar (v1.2) con la trazabilidad de los cambios, y avance del cierre del análisis comprometido con fecha.} \\ \hline
+\end{tabular}}
+
+% ============================ 3. PARTICIPANTES ============================
+\asec{3. PARTICIPANTES}
+{\footnotesize
+\begin{tabular}{|C{0.8cm}|L{4.1cm}|L{3.1cm}|L{4.4cm}|C{1.8cm}|}
+\hline
+\hc{N°} & \hc{Nombre y apellido} & \hc{Organización / equipo} & \hc{Rol en la reunión} & \hc{Asistencia} \\ \hline
+1 & \vl{Oscar Rafael Baldeón Montoro} & \vl{Cliente} & \vl{Cliente / Product Owner} & \vl{[ ] Sí \ [X] No} \\ \hline
+2 & \vl{\textbf{Fabricio Godofredo Ladera La Torre}} & \vl{Equipo UTEC} & \vl{\textbf{Jefe de Proyecto (PM)}} & \vl{[X] Sí \ [ ] No} \\ \hline
+3 & \vl{Juan Renato Flores Pascual} & \vl{Equipo UTEC} & \vl{Desarrollador Frontend} & \vl{[ ] Sí \ [ ] No} \\ \hline
+4 & \vl{Carlos David Ordinola Ortega} & \vl{Equipo UTEC} & \vl{Analista Funcional} & \vl{[ ] Sí \ [ ] No} \\ \hline
+5 & \vl{Luis Javier Millones Carrasco} & \vl{Equipo UTEC} & \vl{Analista Funcional} & \vl{[ ] Sí \ [ ] No} \\ \hline
+6 & \vl{Juan Marcelo Ferreyra Gonzales} & \vl{Equipo UTEC} & \vl{Desarrollador Backend} & \vl{[ ] Sí \ [ ] No} \\ \hline
+7 & \vl{Mauricio Gabriel Gonzalez Kremer} & \vl{Equipo UTEC} & \vl{Tester} & \vl{[ ] Sí \ [ ] No} \\ \hline
+8 & \vl{Alonso Aarón Benites Camacho} & \vl{Equipo UTEC} & \vl{Tester} & \vl{[ ] Sí \ [ ] No} \\ \hline
+\end{tabular}}
+
+% ============================ 4. AGENDA ===================================
+\asec{4. AGENDA}
+{\footnotesize
+\begin{tabular}{|C{0.8cm}|L{8.6cm}|L{2.6cm}|C{2.2cm}|}
+\hline
+\hc{N°} & \hc{Tema} & \hc{Responsable} & \hc{Tratado} \\ \hline
+1 & \vl{Avance del cierre del análisis con arquitectura (casos de uso + BD/diccionario --- REQ-13/14)} & \vl{Carlos / Luis} & \vl{[ ] Sí \ [ ] No} \\ \hline
+2 & \vl{Presentación de arquitectura y prototipo con el cliente (cronograma del plan)} & \vl{Equipo / Fabricio (PM)} & \vl{[ ] Sí \ [ ] No} \\ \hline
+3 & \vl{\textbf{Decisión del PO}: viabilidad del módulo de Visualización de Datos de Bolsa de Valores (CU007, RF-018/019, RN-008)} & \vl{Oscar (Cliente)} & \vl{[ ] Sí \ [ ] No} \\ \hline
+4 & \vl{Registro formal (retroactivo) de la exclusión de LinkedIn del alcance} & \vl{Oscar / Fabricio} & \vl{[ ] Sí \ [ ] No} \\ \hline
+5 & \vl{Alineación del A\&D (v1.2) al modelo de usuarios del acta 4 (2 roles / 3 personas)} & \vl{Carlos / Luis} & \vl{[ ] Sí \ [ ] No} \\ \hline
+6 & \vl{\textbf{Aprobación del stack tecnológico} de la fase 1 por el cliente (evidencia)} & \vl{Fabricio / Equipo / Oscar} & \vl{[ ] Sí \ [ ] No} \\ \hline
+\end{tabular}}
+
+% ============================ 5. DESARROLLO ===============================
+\asec{5. DESARROLLO DE LA REUNIÓN}
+{\footnotesize
+\begin{longtable}{|C{0.8cm}|L{3.0cm}|L{7.6cm}|L{2.8cm}|}
+\hline
+\rowcolor{grisH}\hc{N°} & \hc{Tema / necesidad} & \hc{Síntesis de lo conversado} & \hc{Conclusión / estado} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{grisH}\hc{N°} & \hc{Tema / necesidad} & \hc{Síntesis de lo conversado} & \hc{Conclusión / estado} \\ \hline
+\endhead
+1 & \vl{Avance del análisis con arquitectura} & \vl{Carlos y Luis presentaron el avance del Análisis y Diseño: el documento mantiene el \textbf{proceso to-be} validado en el acta 4 (REQ-14) y avanza hacia el cierre de los pendientes de REQ-13 (\textbf{diagramas de casos de uso} y \textbf{diagrama de BD con diccionario de datos}). Compromiso de fecha para el cierre.} & \vl{En proceso (REQ-13/14)} \\ \hline
+2 & \vl{Presentación de arquitectura y prototipo} & \vl{Se presenta al cliente la \textbf{arquitectura lógica de referencia} (seguridad/RBAC, ingesta, asistente IA RAG, reportes, auditoría) y el \textbf{prototipo navegable} actualizado, como hito del cronograma aprobado (11/09). El prototipo se muestra alineado al modelo de \textbf{2 roles} decidido (acta 4, REQ-10).} & \vl{Presentado} \\ \hline
+3 & \vl{Viabilidad del módulo de Bolsa de Valores} & \vl{El equipo informó la \textbf{no viabilidad} del módulo de \textbf{Visualización de Datos de Bolsa de Valores} en fase 1, por tres causas: (i) los datos de la BVL son \textbf{licenciados} --- el acceso por API tiene un costo aproximado de \textbf{US\$ 20 mensuales} y la ONG \textbf{no dispone de presupuesto} (concordante con REQ-11: sin producción ni infraestructura de pago); (ii) la alternativa de \textbf{web scraping} desde el servidor de la ONG \textbf{(IP estática)} acarrea un \textbf{riesgo real de bloqueo (ban) de la IP} por el proveedor; y (iii) la propia \textbf{RN-008} restringe la fuente de los dashboards a la \textbf{información ingestada y validada}, que corresponde a \textbf{memorias anuales y reportes de sostenibilidad (GRI)} de empresas cotizadas --- es decir, el módulo no contempla \textbf{datos de mercado} (precio, valor de acción, capitalización), por lo que el nombre ``Bolsa de Valores'' resulta engañoso. Se someten a decisión del PO: \textbf{(a) eliminar} el módulo (CU007, RF-018/019, RN-008 y el actor externo ``Bolsa de Valores de Lima''), absorbiendo la función consultiva en los dashboards de la data ingerida (CU005/CU006); o \textbf{(b) conservarlo renombrado} como ``Dashboards de Sostenibilidad --- empresas cotizadas'' (RN-008 reescrita: fuente = solo ingesta, rol Administrador, finalidad consultiva sin edición), limpiando los elementos de data de mercado en los prototipos.} & \vl{[Decisión del cliente en reunión]} \\ \hline
+4 & \vl{Registro de la exclusión de LinkedIn} & \vl{Se registró formalmente que la \textbf{búsqueda de contactos vía LinkedIn} queda \textbf{excluida del alcance} del proyecto. Se deja constancia de que esta exclusión ya figuraba implícitamente en el \textbf{Plan de Proyecto v1.1 aprobado} (no lo contiene) y en el numerado oficial de requerimientos (RF-001\ldots 021); el presente registro formaliza la decisión y cierra su trazabilidad frente a los prototipos históricos (mockup CU010) que aún lo muestran.} & \vl{[Confirmación del cliente]} \\ \hline
+5 & \vl{Alineación del A\&D al modelo de usuarios} & \vl{El A\&D v1.1 aún menciona el rol ``Usuario'' (actores, CU001, RF-001/002/004, RN-008 y texto residual de módulos) heredado de versiones previas. Se registra la \textbf{alineación del A\&D (v1.2)} al modelo decidido en el acta 4 (REQ-10): \textbf{2 roles / 3 personas}, eliminando toda referencia al rol eliminado. \textbf{Aclaración de gobernanza:} el Plan de Proyecto v1.1 permanece como \textbf{línea base firmada sin modificar}; los cambios anteriores se documentan mediante actas y trazabilidad, no mediante la edición del plan.} & \vl{En proceso (REQ-13/14)} \\ \hline
+6 & \vl{Stack tecnológico de la fase 1} & \vl{Se presentó al cliente el \textbf{stack tecnológico} con el que se desarrolla la plataforma y el cliente \textbf{[lo aprueba / aprueba con observaciones]}: (i) \textbf{frontend}: aplicación web responsiva con la identidad visual validada en los prototipos (desplegada para demostración); (ii) \textbf{IA/LLM}: asistente \textbf{RAG} con embeddings --- el \textbf{LLM se consume por API} del \textbf{servidor de la universidad} (acta 2; RNF-010 del A\&D); (iii) \textbf{arquitectura lógica de referencia en AWS} (Cognito, API Gateway, Lambda por dominio, S3, Bedrock, OpenSearch, Aurora/DynamoDB), cuyos módulos y RBAC se \textbf{implementan en el entorno de desarrollo universitario} sin despliegue a producción (acta 4, REQ-11). \textbf{La aprobación del stack queda registrada en esta acta como evidencia} del avance requerido (stack tecnológico aprobado por el cliente).} & \vl{[Estado en reunión]} \\ \hline
+\end{longtable}}
+
+% ============================ 6. REQUISITOS ===============================
+\asec{6. NECESIDADES, REQUISITOS Y CAMBIOS IDENTIFICADOS}
+{\footnotesize\itshape\color{grisN} Registre solo lo comprendido en la reunión. La incorporación al alcance se confirma mediante la priorización y validación correspondiente.\par}
+\vspace{5pt}
+{\footnotesize
+\begin{longtable}{|C{1.3cm}|L{5.3cm}|C{1.3cm}|C{1.3cm}|L{3.4cm}|C{1.6cm}|}
+\hline
+\rowcolor{grisH}\hc{ID} & \hc{Necesidad / requisito / cambio} & \hc{Tipo} & \hc{Prioridad} & \hc{Criterio o evidencia} & \hc{Estado} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{grisH}\hc{ID} & \hc{Necesidad / requisito / cambio} & \hc{Tipo} & \hc{Prioridad} & \hc{Criterio o evidencia} & \hc{Estado} \\ \hline
+\endhead
+REQ-15 & \vl{\textbf{Viabilidad del módulo de Visualización de Datos de Bolsa de Valores} (CU007, RF-018/019, RN-008, actor externo BVL): (a) \textbf{eliminar} el módulo --- la función consultiva se absorbe en los dashboards de la \textbf{data ingestada} (CU005/CU006); o (b) \textbf{conservarlo renombrado} ``\textbf{Dashboards de Sostenibilidad --- empresas cotizadas}'' (RN-008 reescrita: fuente = solo documentos ingestados y validados; rol Administrador; consultivo, sin edición). \textbf{Causas de no viabilidad}: licencia BVL por API (\textasciitilde US\$ 20/mes) sin presupuesto de la ONG; web scraping con riesgo de \textbf{ban de la IP estática} del servidor de la ONG; RN-008 restringe la fuente a la ingesta (sin datos de mercado).} & \vl{Cambio} & \vl{Alta} & \vl{Decisión final del PO (Oscar) en la reunión} & \vl{Por definir} \\ \hline
+REQ-16 & \vl{\textbf{Registro formal de la exclusión de LinkedIn} del alcance del proyecto. Constancia retroactiva: la exclusión ya figura implícitamente en el \textbf{Plan v1.1 aprobado} (sin LinkedIn) y en el numerado oficial RF-001\ldots021; este registro cierra la trazabilidad frente a los prototipos históricos (mockup CU010).} & \vl{Cambio} & \vl{Media} & \vl{Plan v1.1 aprobado (sin LinkedIn); revisión del equipo} & \vl{Por definir} \\ \hline
+REQ-17 & \vl{\textbf{Alineación del A\&D v1.2} al modelo de usuarios definido (acta 4, REQ-10): eliminar el rol ``Usuario'' de actores (§7.1), CU001, RF-001/002/004, RF-018, RN-008 y texto residual (§2/§3); renumerar casos de uso según la decisión de REQ-15 si corresponde. \textbf{El Plan de Proyecto no se modifica} (línea base firmada); los impactos se dan por trazabilidad en el A\&D.} & \vl{Documento} & \vl{Alta} & \vl{Acta 4 REQ-10 (definido)} & \vl{En proceso} \\ \hline
+REQ-18 & \vl{\textbf{Aprobación del stack tecnológico} de la fase 1: (i) frontend web responsivo (prototipos validados, demo desplegada); (ii) \textbf{LLM por API del servidor de la universidad} con asistente RAG (acta 2 / RNF-010); (iii) arquitectura lógica de referencia AWS (Cognito, API Gateway, Lambda, S3, Bedrock, OpenSearch, Aurora/DynamoDB) implementada en el entorno de desarrollo universitario, sin producción (acta 4, REQ-11).} & \vl{RN} & \vl{Alta} & \vl{Presentación en esta reunión + demo del prototipo} & \vl{Por definir} \\ \hline
+\end{longtable}}
+
+% ============================ 7. ACUERDOS =================================
+\asec{7. ACUERDOS Y COMPROMISOS}
+{\footnotesize\itshape\color{grisN} Cada compromiso debe expresar una acción verificable, un responsable único y una fecha acordada.\par}
+\vspace{5pt}
+{\footnotesize
+\begin{longtable}{|C{0.8cm}|L{6.3cm}|L{2.5cm}|C{1.8cm}|C{1.5cm}|L{1.3cm}|}
+\hline
+\rowcolor{grisH}\hc{N°} & \hc{Acción / entregable} & \hc{Responsable} & \hc{Fecha límite} & \hc{Estado} & \hc{Evidencia} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{grisH}\hc{N°} & \hc{Acción / entregable} & \hc{Responsable} & \hc{Fecha límite} & \hc{Estado} & \hc{Evidencia} \\ \hline
+\endhead
+1 & \vl{\textbf{Decidir el destino del módulo de Bolsa de Valores}: (a) eliminar o (b) renombrar ``Dashboards de Sostenibilidad --- empresas cotizadas''} & \vl{Oscar (Cliente)} & \vl{11/09/2026 (en reunión)} & \vl{Pendiente} & \vl{Esta acta} \\ \hline
+2 & \vl{\textbf{Confirmar el registro} formal de la exclusión de LinkedIn del alcance} & \vl{Oscar (Cliente)} & \vl{11/09/2026 (en reunión)} & \vl{Pendiente} & \vl{Esta acta} \\ \hline
+3 & \vl{Actualizar el \textbf{Análisis y Diseño v1.2}: alineación al modelo de 2 roles (acta 4 REQ-10) y aplicación de la decisión REQ-15 (incluida renumeración de CU si procede)} & \vl{Carlos / Luis (Analistas)} & \vl{[completar]} & \vl{Pendiente} & \vl{Esta acta} \\ \hline
+4 & \vl{Continuar el cierre del análisis con arquitectura: \textbf{diagramas de casos de uso} y \textbf{diagrama de BD con diccionario de datos} (REQ-13) sobre la base de las decisiones de esta acta} & \vl{Carlos / Luis (Analistas)} & \vl{[completar]} & \vl{En proceso} & \vl{Esta acta} \\ \hline
+5 & \vl{Ajustar el \textbf{prototipo/demo} al resultado de REQ-15 (retirar la vista de Bolsa si se elimina; re-etiquetar si se renombra) y la vista de LinkedIn (retirada de la demo)} & \vl{Juan Renato (Frontend)} & \vl{[completar]} & \vl{Pendiente} & \vl{Esta acta} \\ \hline
+6 & \vl{\textbf{Aprobar formalmente el stack tecnológico} de la fase 1: frontend web + LLM por API universitaria (RAG) + arquitectura lógica de referencia AWS en entorno de desarrollo} & \vl{Oscar (Cliente)} & \vl{11/09/2026 (en reunión)} & \vl{Pendiente} & \vl{Esta acta} \\ \hline
+7 & \vl{Enviar el acta 5 por correo dentro de las 24 horas} & \vl{Fabricio (PM)} & \vl{11/09/2026} & \vl{Pendiente} & \vl{Correo} \\ \hline
+\end{longtable}}
+
+% ============================ 8. PRÓXIMA ==================================
+\asec{8. PRÓXIMA INTERACCIÓN Y SEGUIMIENTO}
+{\footnotesize
+\begin{tabular}{|L{2.5cm}|L{4.6cm}|L{2.6cm}|L{4.5cm}|}
+\hline
+\lb{Próxima reunión} & \vl{21/09/2026 (cronograma del Plan)} & \lb{Objetivo} & \vl{Validación final de requerimientos, arquitectura y prototipo; avance del cierre del análisis (REQ-13/14) con las decisiones de esta acta aplicadas} \\ \hline
+\lb{Canal de seguimiento} & \vl{Correo / Discord} & \lb{Responsable del acta} & \vl{Fabricio Godofredo Ladera La Torre (PM)} \\ \hline
+\lb{Fecha de envío del acta} & \vl{[completar]} & \lb{Ubicación del archivo} & \vl{Repositorio del equipo CS3081} \\ \hline
+\end{tabular}}
+
+% ============================ 9. VALIDACIÓN ===============================
+\asec{9. VALIDACIÓN DEL ACTA/FIRMAS}
+{\footnotesize\itshape\color{grisN} La validación puede realizarse mediante firma, correo, mensaje en el canal acordado o confirmación registrada. Adjunte la evidencia correspondiente.\par}
+\vspace{5pt}
+{\footnotesize
+\begin{tabular}{|L{4.7cm}|L{4.7cm}|L{4.7cm}|}
+\hline
+\hc{Representante del usuario / cliente} & \hc{Representante del equipo} & \hc{Docente o ACL (si corresponde)} \\ \hline
+\vl{Nombre: Oscar Rafael Baldeón Montoro\newline Cargo / rol: Cliente / Product Owner} & \vl{Nombre: Fabricio Godofredo Ladera La Torre\newline Cargo / rol: Jefe de Proyecto (PM)} & \vl{Nombre: Teofilo Chambilla Aquino\newline Cargo / rol: Docente (acompañamiento)} \\ \hline
+\vl{Método de validación: [Firma / correo]} & \vl{Método de validación: Firma} & \vl{Método de validación: [Firma / correo]} \\ \hline
+\vl{Fecha: [dd/mm/aaaa]\newline Observaciones: [Completar]} & \vl{Fecha: [dd/mm/aaaa]\newline Observaciones: [Completar]} & \vl{Fecha: [dd/mm/aaaa]\newline Observaciones: [Completar]} \\ \hline
+\end{tabular}}
+
+% ============================ 10. APROBACIÓN ==============================
+\asec{10. APROBACIÓN (V°B° CEO)}
+El presente acta es revisada y aprobada por la Gerencia General antes de su envío al cliente.
+\vspace{4pt}
+
+{\itshape Oscar Rafael Baldeón Montoro}
+\vspace{10pt}
+
+\textbf{Nombre:} Oscar Rafael Baldeón Montoro
+
+\textbf{Cargo:} CEO / Gerente General
+
+\textbf{Firma:} \rule[-2pt]{6.5cm}{0.4pt}
+
+\textbf{Fecha:} [dd/mm/aaaa]
+
+\vspace{6pt}
+\label{LastPage}
+\end{document}

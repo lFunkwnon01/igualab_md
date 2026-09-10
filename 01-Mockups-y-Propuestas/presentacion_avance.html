@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Avance Igualab — Presentación (7 min)</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter','Segoe UI',sans-serif;background:#0d1f17;overflow:hidden}
+  .slide{display:none;width:100vw;height:100vh;padding:44px 64px 70px;flex-direction:column;color:#111}
+  .slide.active{display:flex}
+  /* Temas de fondo por capítulo */
+  .portada{background:linear-gradient(135deg,#006038 0%,#0a5c38 60%,#123f2c 100%);color:#fff;justify-content:center;align-items:center;text-align:center}
+  .claro{background:#f6f8f6}
+  /* Encabezado de slide */
+  .kicker{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#006038;margin-bottom:4px}
+  h2{font-size:30px;color:#12251c;margin-bottom:2px}
+  .pct{position:absolute;top:20px;right:28px;background:#006038;color:#fff;font-weight:800;font-size:15px;padding:8px 14px;border-radius:999px}
+  .pct small{font-weight:500;opacity:.85}
+  .content{flex:1;display:flex;gap:28px;margin-top:18px}
+  .col{flex:1;display:flex;flex-direction:column;gap:14px}
+  /* Tarjetas */
+  .card{background:#fff;border:1px solid #e3e8e4;border-radius:14px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .card h3{font-size:15px;color:#006038;margin-bottom:6px}
+  .card p,.card li{font-size:13.5px;line-height:1.5;color:#2a3a31}
+  .card ul{padding-left:18px}
+  .ev{border-left:4px solid #006038;background:#eef5f0}
+  .ev b{color:#006038}
+  /* Tablas compactas */
+  table.c{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:10px;overflow:hidden}
+  table.c th{background:#202124;color:#fff;padding:7px 10px;text-align:left;font-size:12px}
+  table.c td{padding:7px 10px;border-bottom:1px solid #eef1ee;color:#2a3a31}
+  /* Imagen placeholder */
+  .imgph{flex:1;border:2px dashed #9db8a8;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5a6b60;font-size:13px;background:#eef5f0;text-align:center;padding:12px}
+  /* Notas del expositor */
+  .notes{position:fixed;bottom:64px;left:64px;right:64px;background:#12251c;color:#dfeae3;border-radius:12px;padding:12px 18px;font-size:13px;line-height:1.5;display:none;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+  .notes.on{display:block}
+  .notes b{color:#8fd6ac}
+  .notes .tm{color:#f2b632;font-weight:700}
+  /* Barra inferior */
+  .bar{position:fixed;bottom:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.55);color:#cfe0d5;font-size:12.5px;z-index:9}
+  .bar .pro{flex:1;height:6px;background:#2a4436;border-radius:99px;margin:0 18px;overflow:hidden}
+  .bar .pro i{display:block;height:100%;width:0;background:#35c07e;transition:.25s}
+  .k{opacity:.65}
+  /* Portada */
+  .portada .logo{width:120px;border-radius:18px;margin-bottom:22px}
+  .portada h1{font-size:44px;line-height:1.15}
+  .portada .sub{font-size:17px;opacity:.9;margin-top:10px}
+  .portada .meta{margin-top:26px;font-size:14px;opacity:.85;line-height:1.7}
+  .portada .tiempo{margin-top:20px;background:rgba(255,255,255,.14);padding:10px 20px;border-radius:10px;font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SLIDE 1 · PORTADA (10 s) ═══════════════ -->
+<section class="slide portada active" data-t="10">
+  <img class="logo" src="../igualab_logo.jpeg" alt="">
+  <h1>Plataforma de Analítica de Sostenibilidad (RAG)</h1>
+  <div class="sub">Avance · CS3081 Ingeniería de Software · 10-09-2026</div>
+  <div class="meta">
+    Cliente / PO: Oscar Baldeón (Igualab) · PM: Fabricio Ladera<br>
+    Equipo: Carlos Ordinola · Luis Millones · Marcelo Ferreyra · Renato Flores · Mauricio Gonzalez · Alonso Benites
+  </div>
+  <div class="tiempo">⏱ Duración total: <b>7 minutos</b> · navega con → (notas del expositor: tecla N)</div>
+  <div class="notes">Portada: 1 frase — <span class="tm">10 s</span>. "Somos el equipo Igualab; hoy les mostramos el avance en 8 puntos con su %."</div>
+</section>
+
+<!-- ═══════════════ SLIDE 2 · PLAN DE PROYECTO (40 s) ═══════════════ -->
+<section class="slide claro" data-t="40">
+  <div class="pct">100% <small>cerrado</small></div>
+  <div class="kicker">1 · Evidencia del plan de proyecto</div>
+  <h2>Plan de Proyecto v1.1 — aprobado y firmado</h2>
+  <div class="content">
+    <div class="col">
+      <div class="card ev">
+        <h3>🔓 Evidencia de cierre</h3>
+        <ul>
+          <li><b>Correo 04-09</b>: envío del Acta 3 + link del Plan al cliente ("revisar a detalle; si está conforme, una firma")</li>
+          <li><b>Captura de firma</b>: cliente conforme con lo entregado (evidencia en vault)</li>
+          <li><b>Acta 3 firmada</b> cliente + PM (pendiente docente)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Qué compromete el plan (Fase 1)</h3>
+        <p>Portal RAG sobre la base del cliente · Minería, Energía y Petróleo · SCRUM con cronograma 21-08 → 20-11 · hitos M1–M5</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="imgph">[IMAGEN: evidencia_plan_firma.jpeg + fragmento del correo del 4-sep]</div>
+    </div>
+  </div>
+  <div class="notes"><span class="tm">40 s</span>. Mensaje: "El plan está cerrado: entregado, revisado y firmado por el PO — la base de la Fase 1 está congelada. Evidencia: acta 3 + firma."</div>
+</section>
+
+<!-- ═══════════════ SLIDE 3 · DIAGRAMA DE PROCESO (40 s) ═══════════════ -->
+<section class="slide claro" data-t="40">
+  <div class="pct">90% <small>por cerrar</small></div>
+  <div class="kicker">2 · Diagrama de proceso</div>
+  <h2>Proceso to-be modelado en BPMN 2.0</h2>
+  <div class="content">
+    <div class="col">
+      <div class="card">
+        <h3>✅ Logrado</h3>
+        <ul>
+          <li><b>14 procesos de negocio</b> (lógica sin stack): acceso/sesión, usuarios, ingesta, motor RAG, brechas GRI, sanciones, reportes, auditoría…</li>
+          <li><b>Prospección comercial end-to-end</b> en BPMN 2.0 (estándar OMG): períodos puertas de decisión → oportunidad → consultoría</li>
+          <li>Visor HTML interactivo del modelo</li>
+        </ul>
+      </div>
+      <div class="card ev">
+        <h3>🟡 Falta (10%)</h3>
+        <p>Confirmación del cliente del diagrama de procesos → registrada en la acta del 11-09</p>
+      </div>
+    </div>
+    <div class="col"><div class="imgph">[IMAGEN: captura del BPMN con visor HTML]</div></div>
+  </div>
+  <div class="notes"><span class="tm">40 s</span>. "El proceso cierra su cadena: documento ingestado → IA RAG → brechas/sanciones → reporte → prospección."</div>
+</section>
+
+<!-- ═══════════════ SLIDE 4 · RF Y RNF (40 s) ═══════════════ -->
+<section class="slide claro" data-t="40">
+  <div class="pct">95% <small>definidos</small></div>
+  <div class="kicker">3 · Requerimientos</div>
+  <h2>RF, RNF y Reglas de Negocio</h2>
+  <div class="content">
+    <div class="col">
+      <table class="c">
+        <tr><th>Artefacto</th><th>Alcance</th></tr>
+        <tr><td><b>RF-001…021</b></td><td>seguridad/ sesión · RBAC · usuarios · ingesta · IA RAG con citas · GRI/sanciones · reportes PDF · dashboards · auditoría</td></tr>
+        <tr><td><b>RNF-001…011</b></td><td>responsivo · IA ≤ 30 s · ingesta asíncrona · disponibilidad ≥95% · seguridad · eficiencia de tokens · LLM por API</td></tr>
+        <tr><td><b>RN-001…010</b></td><td>sesión obligatoria · rol único · sin borrado físico · respuestas citadas · auditoría inmutable</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="card ev">
+        <h3>✅ Ajuste del acta 4 (aplicado)</h3>
+        <p><b>2 roles / 3 personas</b> (Oscar + 2 Administradores) — sin rol "Usuario". Superadmin ingesta / no usa IA; Administrador consulta.</p>
+      </div>
+      <div class="card"><p>🔗 Toda RF ligada a una regla de negocio; nota cap. [[24/25]]: RF-018 depende de la decisión REQ-15 (hoy)</p></div>
+    </div>
+  </div>
+  <div class="notes"><span class="tm">40 s</span>. "21 RF MUST HAVE + 11 RNF + 10 RN, todos trazados a las actas. El ajuste RBAC del acta 4 ya está reflejado."</div>
+</section>
+
+<!-- ═══════════════ SLIDE 5 · AVANCE A&D (45 s) ═══════════════ -->
+<section class="slide claro" data-t="45">
+  <div class="pct">70% <small>en curso</small></div>
+  <div class="kicker">4 · Documento de Análisis y Diseño</div>
+  <h2>A&D v1.1 (to-be) — cierre del análisis en 1–2 semanas</h2>
+  <div class="content">
+    <div class="col">
+      <div class="card">
+        <h3>✅ Contiene</h3>
+        <ul>
+          <li>Caso usos oficial <b>Cu001–Cu008</b> + especificaciones</li>
+          <li>RF/RNF/RN completos y alineados a actas</li>
+          <li>Proceso to-be + actores/externos revisados</li>
+        </ul>
+      </div>
+      <div class="card ev">
+        <h3>🟡 Pendiente (REQ-13, acuerdo del acta 4)</h3>
+        <ul>
+          <li><b>Diagramas de casos de uso</b></li>
+          <li><b>Diagrama de BD + diccionario de datos</b></li>
+          <li>Limpieza de texto residual (hallazgos 1–8 de v1.0) — revisados en v1.1</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col"><div class="imgph">[IMAGEN: portada/índice del PDF A&D v1.1 subida 08-09]</div></div>
+  </div>
+  <div class="notes"><span class="tm">45 s</span>. Frase clave: "el acta 4 fija 1-2 semanas para los diagramas de CU y BD/diccionario; es lo único que impide cerrar el análisis — compromiso con fecha en el acta del 11-09."</div>
+</section>
+
+<!-- ═══════════════ SLIDE 6 · PROTOTIPOS (45 s) ═══════════════ -->
+<section class="slide claro" data-t="45">
+  <div class="pct">85% <small>avance</small></div>
+  <div class="kicker">5 · Prototipos</div>
+  <h2>Mockup navegable — demo en vivo</h2>
+  <div class="content">
+    <div class="col">
+      <div class="card"><h3>✅ Logrado</h3>
+        <ul>
+          <li><b>14 pantallas Stitch</b> (CU001–CU013 + dashboard) + frontend desplegado en <b>Vercel</b></li>
+          <li>Selector de rol alineado al **RBAC 2 roles** del acta 4</li>
+          <li>Flujo Superadmin (ingesta/roles/auditoría) y Administrador (IA con citas → reporte)</li>
+        </ul>
+      </div>
+      <div class="card ev"><h3>🟡 Ajustes acta 4</h3><p>Rol "Usuario" y LinkedIn retirados del demo; destino de pantalla "Bolsa" según decisión del PO (REQ-15)</p></div>
+    </div>
+    <div class="col"><div class="imgph">[COBERTURA: 2–3 capturas clave · login + IA RAG con citado + dashboard]</div></div>
+  </div>
+  <div class="notes"><span class="tm">45 s</span>. Lanzar el demo en Vercel máximo 60 s: login como Administrador → consulta IA con cita → reporte. Si no hay pointer, volver a capture de pantalla.</div>
+</section>
+
+<!-- ═══════════════ SLIDE 7 · ARQUITECTURA (40 s) ═══════════════ -->
+<section class="slide claro" data-t="40">
+  <div class="pct">75% <small>avance</small></div>
+  <div class="kicker">6 · Arquitectura</div>
+  <h2>Arquitectura lógica de referencia</h2>
+  <div class="content">
+    <div class="col">
+      <div class="card">
+        <h3>🧩 3 capas</h3>
+        <ul>
+          <li><b>Acceso/Control:</b> autenticación + validación de rol por petición (2 roles, acta 4)</li>
+          <li><b>Lógica:</b> servicios por dominio — usuarios, ingesta, IA, reportes, auditoría</li>
+          <li><b>Conocimiento/Datos:</b> documents → vectorización → motor RAG citable + datos estructurados</li>
+        </ul>
+      </div>
+      <div class="card ev"><h3>🟡 Pendiente</h3>
+        <p>ER + diccionario (REQ-13) y confirmación de la BD concreta en entorno universitario; 4 diagramas de secuencia listos</p></div>
+    </div>
+    <div class="col"><div class="imgph">[IMAGEN: diagrama de arquitectura (nota 06) + 1 diagrama de secuencia]</div></div>
+  </div>
+  <div class="notes"><span class="tm">40 s</span>. Nota honesta: "phase 1 sobre entorno de desarrollo universitario (acta 4, REQ-11); el stack AWS es la referencia lógica."</div>
+</section>
+
+<!-- ═══════════════ SLIDE 8 · STACK (35 s) ═══════════════ -->
+<section class="slide claro" data-t="35">
+  <div class="pct">90% <small>evidenciado</small></div>
+  <div class="kicker">7 · Stack tecnológico</div>
+  <h2>Stack validado con evidencia del cliente</h2>
+  <div class="content">
+    <div class="col">
+      <table class="c">
+        <tr><th>Capa</th><th>Tecno</th><th>Evidencia</th></tr>
+        <tr><td>Frontend</td><td>Web responsiva + Tailwind</td><td>Mockup validado (acta 1) + demo Vercel</td></tr>
+        <tr><td>IA / LLM</td><td>RAG + embeddings</td><td>Acta 2: LLM por API universidad · RNF-010</td></tr>
+        <tr><td>Infra</td><td>AWS (Cognito, Lambda, S3, Bedrock, OpenSearch, Aurora/DynamoDB)</td><td>Acta 4 REQ-11: fase 1 sin producción → entorno universitario</td></tr>
+      </table>
+    </div>
+    <div class="col"><div class="imgph">[IMAGEN: capturas de las actas 2 y 4 (REQ-11) + link del demo]</div></div>
+  </div>
+  <div class="notes"><span class="tm">35 s</span>. El costo de tokens/infraestructura en fase 1 está cubierto por la universidad — respaldado en las actas 2 y 4.</div>
+</section>
+
+<!-- ═══════════════ SLIDE 9 · GOBERNANZA (30 s) ═══════════════ -->
+<section class="slide claro" data-t="30">
+  <div class="pct">100% <small>evidencia</small></div>
+  <div class="kicker">8 · Actas, dailys y reuniones</div>
+  <h2>Gobernanza documentada del proyecto</h2>
+  <div class="content">
+    <div class="col">
+      <table class="c">
+        <tr><th>Evidencia</th><th>Estado</th></tr>
+        <tr><td>Acta 01 (28-08) · Acta 02 (29-08)</td><td>✅ firmadas</td></tr>
+        <tr><td>Acta 03 (04-09) — plan entregado y firmado</td><td>✅ cliente+PM (pendiente docente)</td></tr>
+        <tr><td>Acta 04 (08-09) — RBAC, servidor, nuevo PM</td><td>🟡 realizada / por firmar</td></tr>
+        <tr><td>Acta 05 (hoy 11-09) — control de cambios*</td><td>📋 llevar a reunión</td></tr>
+        <tr><td><b>Dailys</b> (capturas Meet/Discord)</td><td>✅ 4 evidencias (10-09)</td></tr>
+      </table>
+    </div>
+    <div class="col"><div class="imgph">[IMAGEN: grid con: actas firmadas + las 4 capturas de daily]</div></div>
+  </div>
+  <div class="notes"><span class="tm">30 s</span> Mensajes: los cambios de alcance se registran por acta (control de cambios); el plan firmado no se edita. Marcar acta 5 solo si ya se realizó.</div>
+</section>
+
+<!-- ═══════════════ SLIDE 10 · CIERRE (20 s) ═══════════════ -->
+<section class="slide portada" data-t="20">
+  <h1>Próximos pasos (7 días)</h1>
+  <div class="sub" style="text-align:left;max-width:760px;margin-top:20px">
+    1️⃣ <b>Acta 5 (hoy)</b>: decisión del PO — módulo Bolsa (eliminar/renombrar) + registro LinkedIn<br>
+    2️⃣ <b>A&D v1.2</b>: alineación a 2 roles + diagramas CU/BD-diccionario (REQ-13)<br>
+    3️⃣ <b>Demo del prototipo</b> al cliente con el flujo definitivo
+  </div>
+  <div class="meta">Gracias · Fabricio Ladera (PM) — oscarbaldeon@igualab.org</div>
+  <div class="notes"><span class="tm">20 s</span>. Cierre y apertura a preguntas.</div>
+</section>
+
+<div class="bar">
+  <span class="k" id="counter">Slide 1/10</span>
+  <div class="pro"><i id="bar"></i></div>
+  <span>← → navegar · N notas · tiempo total ≈ 6:45 <span class="k">(tecla N: notas)</span></span>
+</div>
+<div class="notes" id="notesBox"></div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];let i=0;
+const timeTotal=slides.reduce((a,s)=>a+ +s.dataset.t,0);
+function show(){slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+  const cum=slides.slice(0,i+1).reduce((a,s)=>a+ +s.dataset.t,0);
+  document.getElementById('bar').style.width=(100*(i+1)/slides.length)+'%';
+  document.getElementById('counter').textContent=`Slide ${i+1}/${slides.length} · t acumulado ≈ ${Math.floor(cum/60)}:${String(cum%60).padStart(2,'0')}`;
+  const n=slides[i].querySelector('.notes');const box=document.getElementById('notesBox');
+  box.textContent=n?n.textContent:'';box.classList.toggle('on',!!n&&box.innerHTML===box.innerHTML&&box.classList.contains('on'));
+}
+addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){i=Math.min(i+1,slides.length-1);show();}
+  if(e.key==='ArrowLeft'){i=Math.max(i-1,0);show();}
+  if(e.key.toLowerCase()==='n'){document.getElementById('notesBox').classList.toggle('on');}
+  if(e.key==='Home'){i=0;show();}
+});
+show();
+</script>
+</body>
+</html>
