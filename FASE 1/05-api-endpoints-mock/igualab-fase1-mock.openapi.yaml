@@ -1,0 +1,286 @@
+openapi: "3.0.3"
+info:
+  title: Igualab API · FASE 1 (mock / simulación del esquema del back)
+  version: "1.0.0-fase1"
+  description: >
+    Contrato mock para la FASE 1 (plan de proyecto v1.2 + acta 5).
+    Los campos simulan datos del mock fidelizado (ai/igualab.vercel.app) para
+    probar integración antes del backend real.
+servers:
+  - url: https://igualab.vercel.app
+    description: Mock fidelizado (solo interfaces)
+  - url: http://localhost:8000/api/v1
+    description: Backend FastAPI de desarrollo
+tags:
+  - Auth
+  - Usuarios
+  - Configuracion
+  - Ingesta
+  - RAG
+  - GRI
+  - Reportes
+  - Auditoria
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Iniciar sesión (RF-001 · RN-001/005)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [correo, contrasena]
+              properties:
+                correo: { type: string, example: oscarbaldeon@igualab.org }
+                contrasena: { type: string, format: password }
+      responses:
+        "200": { $ref: "#/components/responses/LoginOk" }
+        "401": { $ref: "#/components/responses/CredError" }
+        "423": { description: "Cuenta bloqueada por intentos fallidos (RN-005)" }
+  /auth/recuperar:
+    post:
+      tags: [Auth]
+      summary: Solicitar enlace de recuperación (RF-002)
+      responses:
+        "202": { description: "Si el correo está registrado, recibirás un enlace" }
+  /usuarios:
+    get:
+      tags: [Usuarios]
+      summary: Listar usuarios (RF-005 · rol superadmin)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Usuario" }
+              example:
+                data:
+                  - id: 1
+                    nombre: "Oscar Baldeón"
+                    correo: "oscarbaldeon@igualab.org"
+                    rol: "superadmin"
+                    estado: "Activo"
+                  - id: 2
+                    nombre: "María López"
+                    correo: "maria.lopez@igualab.org"
+                    rol: "administrador"
+                    estado: "Activo"
+    post:
+      tags: [Usuarios]
+      summary: Crear usuario o cambiar rol (RF-005 · RN-003 transferencia)
+      responses:
+        "201": { $ref: "#/components/responses/LoginOk" }
+        "200":
+          description: Transferencia de rol ejecutada — el solicitante pasa a administrador (RN-003)
+          content:
+            application/json:
+              example:
+                mensaje: "Rol Superadmin transferido a María López. Ahora eres Administrador."
+                transaction_ok: true
+  /usuarios/{id}:
+    patch:
+      tags: [Usuarios]
+      summary: Habilitar/deshabilitar o cambiar rol (RF-005)
+      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
+      responses:
+        "200": { description: Actualizado (auditado CU009) }
+  /configuracion:
+    get:
+      tags: [Configuracion]
+      summary: Parámetros del sistema (RF-006)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                minutos_inactividad: 30
+                bloqueo: true
+                notificaciones: false
+    patch:
+      tags: [Configuracion]
+      summary: Actualizar parámetros (RF-006 · RN-004)
+      responses: { "200": { description: OK } }
+  /ingesta:
+    post:
+      tags: [Ingesta]
+      summary: >
+        Carga SÍNCRONA de documento .md (RF-007 · RN-008…RN-016).
+        El pipeline corre al momento; la respuesta espera el resultado.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [archivo, empresa_id, anho, tipo]
+              properties:
+                archivo: { type: string, format: binary, description: ".md con tablas con pipes" }
+                empresa_id: { type: integer, example: 1 }
+                anho: { type: integer, example: 2025 }
+                tipo: { type: string, enum: [memoria_anual, reporte_sostenibilidad] }
+      responses:
+        "200":
+          description: Ingesta procesada (síncrona)
+          content:
+            application/json:
+              examples:
+                ok:
+                  value:
+                    estado: "indexado"
+                    chunks: 147
+                    sha256: "9f2a…c1"
+                    tiempo_ms: 8312
+                observado:
+                  value:
+                    estado: "observado"
+                    motivo: "El documento no contiene secciones GRI o sanciones analizables (RN-012)"
+                rechazado:
+                  value:
+                    estado: "rechazado"
+                    motivo: "Tablas sin pipes detectadas en línea 42 (RN-010). Convierta la matriz con separadores | antes de reintentar."
+                rechazado_peso:
+                  value:
+                    estado: "rechazado"
+                    motivo: "El archivo supera el límite de 15 MB (RN-011). Divídalo por secciones o años."
+        "409":
+          description: Duplicado (RN-015)
+          content:
+            application/json:
+              example: { estado: "duplicado", doc_id_existente: "uuid-2025-memoria" }
+        "403": { description: "Solo Superadmin (RN-008)" }
+  /rag/chat:
+    post:
+      tags: [RAG]
+      summary: Consulta al asistente IA con citación (RF-010 · RN-022/023/025)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pregunta: { type: string, example: "¿Qué brechas GRI tiene Minera Andina?" }
+                empresa_id: { type: integer, nullable: true }
+      responses:
+        "200":
+          description: Respuesta con citas
+          content:
+            application/json:
+              example:
+                respuesta: "Minera Andina registra GRI 401 Empleo como SUB-REPORTADO (solo declara contrataciones, sin rotación ni beneficios) y GRI 413 Comunidades como BAJA SUSTANCIA [1][2]."
+                citas:
+                  - doc_id: "uuid-andina-md-2025"
+                    seccion: "3.6 Personal · Tabla indicadores"
+                    texto: "…"
+                cuota_restante_hoy: 184
+        "503":
+          description: "Asistente no disponible / cuota agotada (RF-011 · RN-024/025)"
+          content:
+            application/json:
+              example: { mensaje: "El asistente no está disponible ahora; intenta más tarde. El resto de la plataforma sigue operativa." }
+  /gri/brechas:
+    get:
+      tags: [GRI]
+      summary: Listar brechas por empresa (RF-012 · RN-017/018/020)
+      parameters:
+        - { name: empresa_id, in: query, schema: { type: integer } }
+        - { name: anho, in: query, schema: { type: integer } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                empresa: "Minera Andina S.A.A."
+                sector: "Minería"
+                data:
+                  - codigo: "GRI 401"
+                    tema: "Empleo"
+                    estado_sugerido: "SUB-REPORTADO"
+                    estado_final: null
+                    cita: "doc:1 · sección 4.2"
+                  - codigo: "GRI 306"
+                    estado_sugerido: "OK"
+                    estado_final: null
+                    cita: "doc:1 · sección 5.1"
+  /gri/brechas/{id}/estado:
+    patch:
+      tags: [GRI]
+      summary: "Validar o cambiar estado de brecha (RF-013 · RN-019 · supervisión humana)"
+      parameters: [{ name: id, in: path, required: true, schema: { type: string, format: uuid } }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                estado_final: { type: string, enum: [OK, SUB-REPORTADO, BAJA SUSTANCIA, CRITICO] }
+                observacion: { type: string }
+      responses:
+        "200": { description: "Estado actualizado con historial" }
+  /reportes:
+    post:
+      tags: [Reportes]
+      summary: Generar reporte PDF (RF-014 · RN-026/027)
+      responses:
+        "201":
+          description: PDF generado (versión v1)
+          content:
+            application/json:
+              example: { id: "rep-109", version: 1, pdf_path: "/static/reportes/andina_2025_v1.pdf" }
+        "409": { description: "Hay brechas sin estado confirmado (RN-019)" }
+    get:
+      tags: [Reportes]
+      summary: Historial de reportes (RF-015 · RN-028)
+      responses:
+        "200": { description: "Listado versionado solo lectura" }
+  /reportes/{id}/archivo:
+    get:
+      tags: [Reportes]
+      summary: Descargar PDF (RF-015)
+      responses: { "200": { description: "application/pdf" } }
+  /auditoria:
+    get:
+      tags: [Auditoria]
+      summary: Consultar eventos con filtros (RF-016 · RN-029/030)
+      parameters:
+        - { name: usuario_id, in: query, schema: { type: integer } }
+        - { name: desde, in: query, schema: { type: string, format: date } }
+        - { name: tipo, in: query, schema: { type: string, enum: [LOGIN, CAMBIO_ROL, INGESTA, GEN_REPORTE, AJUSTE_BRECHA] } }
+      responses:
+        "200":
+          description: OK (solo lectura)
+          content:
+            application/json:
+              example:
+                data:
+                  - { accion: "INGESTA", usuario: "oscar", resultado: "indexado (147 chunks)", fecha: "2026-09-12T10:23:00Z" }
+                  - { accion: "LOGIN", usuario: "maria", resultado: "ok", fecha: "2026-09-12T09:58:00Z" }
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id: { type: integer }
+        nombre: { type: string }
+        correo: { type: string }
+        rol: { type: string, enum: [superadmin, administrador] }
+        estado: { type: string, enum: [Activo, Deshabilitado] }
+  responses:
+    LoginOk:
+      description: Sesión creada
+      content:
+        application/json:
+          example: { token: "jwt-demo", rol: "superadmin", redirige: "#/dashboard" }
+    CredError:
+      description: Credenciales inválidas
+      content:
+        application/json:
+          example: { mensaje: "Credenciales inválidas" }

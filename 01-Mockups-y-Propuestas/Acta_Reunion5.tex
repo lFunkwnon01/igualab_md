@@ -1,0 +1,216 @@
+% =========================================================================
+% ACTA DE REUNIÓN — CS3081-005-2026
+% Plantilla de estilo basada en el modelo oficial de Google Docs del curso
+% Compilar con:  tectonic Acta_Reunion5.tex
+% =========================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper, top=2.6cm, bottom=2.4cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Carlito}                    % métrica idéntica a Calibri
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{needspace}
+
+% ------------------------- Paleta de la plantilla -------------------------
+\definecolor{rojo}{HTML}{E4002B}   % marca CS3081
+\definecolor{grisB}{HTML}{B7B7B7}  % bordes de tabla
+\definecolor{grisH}{HTML}{202124}  % encabezados de tabla (negro)
+\definecolor{grisL}{HTML}{F3F4F6}  % celdas de etiqueta
+\definecolor{rosa}{HTML}{FCE8EC}   % caja PROPÓSITO / REGISTRO
+\definecolor{grisV}{HTML}{555555}  % valores (itálica)
+\definecolor{grisN}{HTML}{666666}  % notas y pie
+\definecolor{tinto}{HTML}{333333}
+
+\arrayrulecolor{grisB}
+\renewcommand{\arraystretch}{1.55}
+\setlength{\tabcolsep}{4pt}
+
+% ------------------------- Encabezado y pie corridos ----------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\textbf{\color{rojo}CS3081\hspace{0.7em}|\hspace{0.7em}INGENIERÍA DE SOFTWARE}\hspace{1.4em}{\color{grisN}·\hspace{0.7em}Acta de reunión con usuarios}}
+\fancyfoot[R]{\footnotesize\color{grisN}Uso académico · Proyecto real\hspace{2em}Página \thepage\ de \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{14pt}
+
+% ------------------------- Comandos de estilo -----------------------------
+\newcommand{\asec}[1]{\Needspace*{13\baselineskip}\par\vspace{18pt}{\noindent\fontsize{14}{17}\selectfont\textbf{#1}}\par\vspace{9pt}}
+\newcommand{\cajanota}[2]{\par\noindent\fcolorbox{grisB}{rosa}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\footnotesize \textbf{\textcolor{rojo}{#1: }}{\color{tinto}#2}}}\par\vspace{7pt}}
+\newcommand{\hc}[1]{\cellcolor{grisH}\textcolor{white}{\textbf{#1}}}
+\newcommand{\lb}[1]{\cellcolor{grisL}\textbf{#1}}
+\newcommand{\vl}[1]{\textcolor{grisV}{\textit{#1}}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\begin{document}
+
+% ============================ TÍTULO ======================================
+{\centering {\fontsize{22}{26}\selectfont\textbf{ACTA DE REUNION}}\par}
+\vspace{10pt}
+
+\cajanota{PROPÓSITO}{documentar cada interacción con usuarios o representantes del cliente. Complete el acta durante la reunión, compártala dentro de las 24 horas y registre la evidencia de validación.}
+
+% ============================ 1. DATOS ====================================
+\asec{1. DATOS GENERALES}
+{\footnotesize
+\begin{tabular}{|L{2.35cm}|L{5.45cm}|L{2.1cm}|L{4.3cm}|}
+\hline
+\lb{Código de acta} & \vl{CS3081-005-2026} & \lb{Fecha} & \vl{11/09/2026} \\ \hline
+\lb{Hora de inicio} & \vl{10:00 a.m.} & \lb{Hora de término} & \vl{11:00 a.m.} \\ \hline
+\lb{Proyecto} & \multicolumn{3}{L{12.0cm}|}{\vl{Sistema de Análisis de Datos de Sostenibilidad (Igualab) --- analítica de sostenibilidad con asistente IA (RAG); línea base: Plan de Proyecto v1.2}} \\ \hline
+\lb{Módulo/Fase} & \vl{Presentación del Plan de Proyecto v1.2 y del prototipo; control de cambios de alcance (módulo Bolsa de Valores, registro de exclusión de LinkedIn)} & \lb{Modalidad} & \vl{[ ] Presencial \ [X] Virtual} \\ \hline
+\end{tabular}}
+
+% ============================ 2. OBJETIVO =================================
+\asec{2. OBJETIVO Y RESULTADO ESPERADO}
+{\footnotesize
+\begin{tabular}{|L{2.9cm}|L{11.3cm}|}
+\hline
+\lb{Objetivo de la reunión} & \vl{Presentar al cliente el \textbf{Plan de Proyecto v1.2} y obtener su \textbf{conformidad} (el PO revisó el documento y confirmó su acuerdo, sin observaciones), presentar el \textbf{prototipo} con el cliente (hito del cronograma del plan), \textbf{someter a decisión del Product Owner} tres decisiones de alcance --- la \textbf{no viabilidad del módulo de Visualización de Datos de Bolsa de Valores} (CU007, RF-018/RF-019, RN-008) y su \textbf{eliminación del alcance}, la \textbf{reprogramación de los dashboards de visualización a fase 2} y el \textbf{registro formal de la exclusión de LinkedIn} --- y \textbf{obtener del cliente un lenguaje sencillo} la conformidad con la solución planteada y su \textbf{autorización para que el equipo se encargue de las decisiones tecnológicas} (stack, infraestructura y herramientas de implementación), informando el avance en las demos; y \textbf{acordar el formato de ingesta de documentos}: el cliente subirá los archivos únicamente en \textbf{Markdown (.md)} (conversión desde PDF a su cargo), con \textbf{tablas estructuradas con pipes} para evitar errores de ingesta en el RAG (base de datos vectorizada).} \\ \hline
+\lb{Resultado esperado} & \vl{\textbf{Conformidad del PO (Oscar) con el Plan de Proyecto v1.2} presentado y aceptado sin observaciones, decisión del PO registrada sobre el módulo de Bolsa (la decisión adoptada es la \textbf{eliminación} del módulo y de sus actor/RF/RN asociados, y el \textbf{pase de los dashboards de visualización a fase 2}) y sobre LinkedIn, \textbf{acuerdo registrado sobre el formato de ingesta (.md con tablas en pipes), confirmado por el cliente}, y \textbf{autorización del cliente para la delegación de la decisión tecnológica al equipo} (stack, arquitectura y herramientas), registrada como evidencia.} \\ \hline
+\end{tabular}}
+
+% ============================ 3. PARTICIPANTES ============================
+\asec{3. PARTICIPANTES}
+{\footnotesize
+\begin{tabular}{|C{0.8cm}|L{4.1cm}|L{3.1cm}|L{4.4cm}|C{1.8cm}|}
+\hline
+\hc{N°} & \hc{Nombre y apellido} & \hc{Organización / equipo} & \hc{Rol en la reunión} & \hc{Asistencia} \\ \hline
+1 & \vl{Oscar Rafael Baldeón Montoro} & \vl{Cliente} & \vl{Cliente / Product Owner} & \vl{[X] Sí \ [ ] No} \\ \hline
+2 & \vl{\textbf{Fabricio Godofredo Ladera La Torre}} & \vl{Equipo UTEC} & \vl{\textbf{Jefe de Proyecto (PM)}} & \vl{[X] Sí \ [ ] No} \\ \hline
+3 & \vl{Juan Renato Flores Pascual} & \vl{Equipo UTEC} & \vl{Desarrollador Frontend} & \vl{[ ] Sí \ [X] No} \\ \hline
+4 & \vl{Carlos David Ordinola Ortega} & \vl{Equipo UTEC} & \vl{Analista Funcional} & \vl{[X] Sí \ [ ] No} \\ \hline
+5 & \vl{Luis Javier Millones Carrasco} & \vl{Equipo UTEC} & \vl{Analista Funcional} & \vl{[X] Sí \ [ ] No} \\ \hline
+6 & \vl{Juan Marcelo Ferreyra Gonzales} & \vl{Equipo UTEC} & \vl{Desarrollador Backend} & \vl{[X] Sí \ [ ] No} \\ \hline
+7 & \vl{Mauricio Gabriel Gonzalez Kremer} & \vl{Equipo UTEC} & \vl{Tester} & \vl{[X] Sí \ [ ] No} \\ \hline
+8 & \vl{Alonso Aarón Benites Camacho} & \vl{Equipo UTEC} & \vl{Tester} & \vl{[X] Sí \ [ ] No} \\ \hline
+\end{tabular}}
+
+% ============================ 4. AGENDA ===================================
+\asec{4. AGENDA}
+{\footnotesize
+\begin{tabular}{|C{0.8cm}|L{8.6cm}|L{2.6cm}|C{2.2cm}|}
+\hline
+\hc{N°} & \hc{Tema} & \hc{Responsable} & \hc{Tratado} \\ \hline
+1 & \vl{Presentación del \textbf{Plan de Proyecto v1.2} al cliente y conformidad del PO (Oscar)} & \vl{Fabricio (PM) / Oscar} & \vl{[X] Sí \ [ ] No} \\ \hline
+2 & \vl{Presentación del prototipo con el cliente (cronograma del plan)} & \vl{Equipo / Fabricio (PM)} & \vl{[X] Sí \ [ ] No} \\ \hline
+3 & \vl{\textbf{Decisión del PO}: viabilidad del módulo de Visualización de Datos de Bolsa de Valores (CU007, RF-018/019, RN-008)} & \vl{Oscar (Cliente)} & \vl{[X] Sí \ [ ] No} \\ \hline
+4 & \vl{Registro formal (retroactivo) de la exclusión de LinkedIn del alcance} & \vl{Oscar / Fabricio} & \vl{[X] Sí \ [ ] No} \\ \hline
+5 & \vl{\textbf{Delegación de las decisiones tecnológicas}: el cliente autoriza al equipo a definir el stack y las herramientas (en lenguaje no técnico), con avances informados en las demos} & \vl{Fabricio / Equipo / Oscar} & \vl{[X] Sí \ [ ] No} \\ \hline
+6 & \vl{\textbf{Reprogramación de los dashboards de visualización a fase 2} (concentrar fase 1 en el núcleo de valor)} & \vl{Equipo / Oscar} & \vl{[X] Sí \ [ ] No} \\ \hline
+7 & \vl{\textbf{Formato de ingesta de documentos}: conversión de PDF a \textbf{Markdown (.md)} a cargo del cliente, con tablas estructuradas con \textbf{pipes}} & \vl{Oscar / Fabricio} & \vl{[X] Sí \ [ ] No} \\ \hline
+\end{tabular}}
+
+% ============================ 5. DESARROLLO ===============================
+\asec{5. DESARROLLO DE LA REUNIÓN}
+{\footnotesize
+\begin{longtable}{|C{0.8cm}|L{3.0cm}|L{7.6cm}|L{2.8cm}|}
+\hline
+\rowcolor{grisH}\hc{N°} & \hc{Tema / necesidad} & \hc{Síntesis de lo conversado} & \hc{Conclusión / estado} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{grisH}\hc{N°} & \hc{Tema / necesidad} & \hc{Síntesis de lo conversado} & \hc{Conclusión / estado} \\ \hline
+\endhead
+1 & \vl{Presentación del Plan de Proyecto v1.2 y conformidad del PO} & \vl{Se presentó al Product Owner la \textbf{versión 1.2 del Plan de Proyecto}, que incorpora las actualizaciones acordadas con el cliente (modelo de 2 roles del acta 4 y ajustes de alcance). Fabricio (PM) explicó en lenguaje sencillo la estructura del documento, el cronograma y los cambios respecto de la versión anterior. Tras su revisión, \textbf{el PO (Oscar) manifestó su conformidad y acuerdo} con el Plan de Proyecto v1.2, \textbf{sin observaciones}, quedando la presentación y aceptación registradas en esta acta como evidencia.} & \vl{\textbf{Presentado y conformado por el PO}} \\ \hline
+2 & \vl{Presentación del prototipo} & \vl{Se presenta al cliente el \textbf{prototipo navegable} actualizado como hito del cronograma aprobado (11/09). El prototipo se muestra alineado al modelo de \textbf{2 roles} decidido (acta 4, REQ-10).} & \vl{Presentado} \\ \hline
+3 & \vl{Viabilidad del módulo de Bolsa de Valores} & \vl{El equipo informó la \textbf{no viabilidad} del módulo de \textbf{Visualización de Datos de Bolsa de Valores} en fase 1, por tres causas: (i) los datos de la BVL son \textbf{licenciados} --- el acceso por API tiene un costo aproximado de \textbf{US\$ 20 mensuales} y la ONG \textbf{no dispone de presupuesto} (concordante con REQ-11: sin producción ni infraestructura de pago); (ii) la alternativa de \textbf{web scraping} desde el servidor de la ONG \textbf{(IP estática)} acarrea un \textbf{riesgo real de bloqueo (ban) de la IP} por el proveedor; y (iii) la propia \textbf{RN-008} restringe la fuente de los dashboards a la \textbf{información ingestada y validada}, que corresponde a \textbf{memorias anuales y reportes de sostenibilidad (GRI)} de empresas cotizadas --- es decir, el módulo no contempla \textbf{datos de mercado} (precio, valor de acción, capitalización), por lo que el nombre ``Bolsa de Valores'' resulta engañoso. Ante la alternativa presentada al PO de \textbf{(a) eliminar} el módulo (CU007, RF-018/019, RN-008 y el actor externo ``Bolsa de Valores de Lima'') o \textbf{(b) conservarlo renombrado} como ``Dashboards de Sostenibilidad --- empresas cotizadas'', \textbf{el Product Owner decidió ELIMINAR el módulo de Bolsa de Valores del alcance} en fase 1, junto con sus requisitos y elementos de diseño asociados (RF-018/019, RN-008, actor externo BVL y vistas de Bolsa del prototipo). Complementariamente, el PO instruyó \textbf{reprogramar los dashboards de visualización de datos (KPIs ASG/ESG) a fase 2} (punto 6).} & \vl{\textbf{Decidido: eliminar módulo}} \\ \hline
+4 & \vl{Registro de la exclusión de LinkedIn} & \vl{Se registró formalmente que la \textbf{búsqueda de contactos vía LinkedIn} queda \textbf{excluida del alcance} del proyecto. Se deja constancia de que esta exclusión ya figuraba implícitamente en el \textbf{Plan de Proyecto v1.1 aprobado} (no lo contiene) y en el numerado oficial de requerimientos (RF-001\ldots 021); el presente registro formaliza la decisión y cierra su trazabilidad frente a los prototipos históricos (mockup CU010) que aún lo muestran. \textbf{El PO (Oscar) aprobó el registro de la exclusión.}} & \vl{\textbf{Aprobado por el PO}} \\ \hline
+5 & \vl{Delegación de la decisión tecnológica al equipo} & \vl{Dado que el cliente no requiere conocimientos técnicos profundos para validar el proyecto, se presenta en \textbf{lenguaje sencillo} (sin tecnicismos) la solución verificable: (i) la plataforma será una \textbf{aplicación web responsiva} (funciona en computadora y celular) con la identidad visual ya validada en el prototipo (demo desplegada y navegable); (ii) el \textbf{asistente IA} (RAG) se alimenta del \textbf{servidor de la universidad} (acta 2; RNF-010), sin costos para la ONG; y (iii) las \textbf{decisiones tecnológicas de implementación} (herramientas, arquitectura de solución, servicios de referencia --- en refinamiento, acta 4 REQ-11) \textbf{quedan bajo responsabilidad del equipo}, quien las informa en lenguaje claro y las valida funcionalmente en las demos. \textbf{El cliente autorizó la delegación}, la cual \textbf{queda registrada en esta acta como evidencia} del avance requerido (stack tecnológico por parte del equipo).} & \vl{\textbf{Aprobado por el PO}} \\ \hline
+6 & \vl{Reprogramación de los dashboards de visualización a fase 2} & \vl{El equipo propuso \textbf{concentrar el esfuerzo de la fase 1 en el núcleo de valor} del producto: ingesta de datos, asistente IA (RAG) con citado, brechas GRI y sanciones, reportes PDF y auditoría; y \textbf{reprogramar a \textbf{fase 2} los dashboards de visualización de datos} (KPIs ASG/ESG por empresa, sector y periodo, incl. el índice ASG 0--100 del prototipo). Ello se alinea con la eliminación del módulo de Bolsa de Valores (punto 3), evita duplicar esfuerzo de visualización en fase 1 y permite priorizar el cierre del análisis y el desarrollo core. \textbf{El PO aprobó el pase a fase 2}.} & \vl{\textbf{Aprobado por el PO}} \\ \hline
+7 & \vl{Formato de ingesta de documentos: conversión a Markdown (.md)} & \vl{Se conversó con el cliente el \textbf{formato de ingesta} de los documentos para el asistente IA. La idea inicial contemplaba que el sistema aceptara \textbf{solo formato PDF}; sin embargo, \textbf{el propio cliente propuso} realizar él mismo la \textbf{conversión de los PDF a formato Markdown (.md)} y subir los archivos ya convertidos. El equipo explicó en lenguaje sencillo las condiciones técnicas del formato: en Markdown, las \textbf{tablas deben estar estructuradas con pipes (``\textbar'')}; si el contenido \textbf{se sube en texto de corrido} (sin esa estructura), \textbf{puede ocurrir un error en la ingesta del LLM hacia el RAG} conectado a la \textbf{base de datos vectorizada}. El cliente \textbf{confirmó que él realizará la ingesta subiendo únicamente archivos .md} con el formato especificado (\textbf{tablas con pipes}); la conversión queda bajo su responsabilidad y el \textbf{PO (Oscar) se manifestó conforme} con lo acordado.} & \vl{\textbf{Acordado y aprobado por el PO}} \\ \hline
+\end{longtable}}
+
+% ============================ 6. REQUISITOS ===============================
+\asec{6. NECESIDADES, REQUISITOS Y CAMBIOS IDENTIFICADOS}
+{\footnotesize\itshape\color{grisN} Registre solo lo comprendido en la reunión. La incorporación al alcance se confirma mediante la priorización y validación correspondiente.\par}
+\vspace{5pt}
+{\footnotesize
+\begin{longtable}{|C{1.3cm}|L{5.3cm}|C{1.3cm}|C{1.3cm}|L{3.4cm}|C{1.6cm}|}
+\hline
+\rowcolor{grisH}\hc{ID} & \hc{Necesidad / requisito / cambio} & \hc{Tipo} & \hc{Prioridad} & \hc{Criterio o evidencia} & \hc{Estado} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{grisH}\hc{ID} & \hc{Necesidad / requisito / cambio} & \hc{Tipo} & \hc{Prioridad} & \hc{Criterio o evidencia} & \hc{Estado} \\ \hline
+\endhead
+REQ-15 & \vl{\textbf{Presentación del Plan de Proyecto v1.2 y conformidad del cliente}: se presentó al PO (Oscar) la versión 1.2 del Plan de Proyecto, que consolida las actualizaciones acordadas (modelo de 2 roles del acta 4 y ajustes de alcance). \textbf{El PO revisó el documento y manifestó su acuerdo sin observaciones}, quedando la presentación y aceptación registradas en esta acta como evidencia. El plan v1.2 queda como \textbf{línea base vigente} del proyecto.} & \vl{Documento} & \vl{Alta} & \vl{Plan de Proyecto v1.2 presentado + conformidad del PO (Oscar) en la reunión} & \vl{\textbf{Aprobado}} \\ \hline
+REQ-16 & \vl{\textbf{Eliminación del módulo de Visualización de Datos de Bolsa de Valores} del alcance (CU007, RF-018/019, RN-008, actor externo BVL): el \textbf{PO (Oscar) decidió eliminar}; la lectura consultiva queda cubierta por el núcleo de fase 1 (asistente IA, brechas GRI, sanciones y reportes), y los \textbf{dashboards de visualización se reprograman a fase 2} (ver REQ-19). \textbf{Causas documentadas de no viabilidad}: licencia BVL por API (\textasciitilde US\$ 20/mes) sin presupuesto de la ONG; web scraping con riesgo de \textbf{ban de la IP estática} del servidor de la ONG; RN-008 restringe la fuente a la ingesta (sin datos de mercado).} & \vl{Cambio} & \vl{Alta} & \vl{Decisión del PO (Oscar) en la reunión: eliminar} & \vl{\textbf{Decidido}} \\ \hline
+REQ-17 & \vl{\textbf{Registro formal de la exclusión de LinkedIn} del alcance del proyecto. Constancia retroactiva: la exclusión ya figura implícitamente en el \textbf{Plan v1.1 aprobado} (sin LinkedIn) y en el numerado oficial RF-001\ldots021; este registro cierra la trazabilidad frente a los prototipos históricos (mockup CU010).} & \vl{Cambio} & \vl{Media} & \vl{Registro presentado al PO (Oscar) y \textbf{aprobado} en la reunión} & \vl{\textbf{Aprobado}} \\ \hline
+REQ-18 & \vl{\textbf{Delegación de la decisión tecnológica al equipo de desarrollo} (fase 1), en lenguaje no técnico para el cliente: (i) plataforma web responsiva (prototipos validados, demo desplegada); (ii) \textbf{LLM por API del servidor de la universidad} con asistente RAG (acta 2 / RNF-010); (iii) el \textbf{equipo asume las decisiones de implementación} (stack, arquitectura de solución, herramientas --- estas últimas aún en definición y reprogramadas para presentación futura), \textbf{informándolas} en lenguaje claro \textbf{y validándolas funcionalmente en las demos} (entorno de desarrollo universitario, sin producción --- acta 4, REQ-11).} & \vl{RN} & \vl{Alta} & \vl{Presentación en esta reunión + demo del prototipo; \textbf{el PO (Oscar) autorizó la delegación}} & \vl{\textbf{Aprobado}} \\ \hline
+REQ-19 & \vl{\textbf{Reprogramación de los dashboards de visualización de datos (KPIs ASG/ESG, incl. índice ASG 0--100) de fase 1 a \textbf{fase 2}}: la fase 1 se concentra en el núcleo de valor (ingesta, asistente IA/RAG, brechas GRI, sanciones, reportes PDF, auditoría). Se retirará del alcance de fase 1 todo artefacto de dashboards (CU/RN/asociados y vistas del prototipo), actualizando la trazabilidad correspondiente.} & \vl{Cambio} & \vl{Alta} & \vl{\textbf{El PO (Oscar) aprobó} el pase a fase 2 en la reunión} & \vl{\textbf{Aprobado}} \\ \hline
+REQ-20 & \vl{\textbf{Formato de ingesta de documentos acordado con el cliente}: los archivos se subirán \textbf{únicamente en formato Markdown (.md)} ---el propio cliente realizará la conversión desde PDF---, con las \textbf{tablas estructuradas con pipes (``\textbar'')}. Si el contenido se sube en \textbf{texto de corrido} puede ocurrir un \textbf{error de ingesta del LLM hacia el RAG} conectado a la \textbf{base de datos vectorizada}. La idea inicial (aceptar solo PDF) queda reemplazada por este acuerdo.} & \vl{Cambio} & \vl{Alta} & \vl{Acordado con el PO (Oscar) en la reunión: \textbf{confirmado y conforme}} & \vl{\textbf{Aprobado}} \\ \hline
+\end{longtable}}
+
+% ============================ 7. ACUERDOS =================================
+\asec{7. ACUERDOS Y COMPROMISOS}
+{\footnotesize\itshape\color{grisN} Cada compromiso debe expresar una acción verificable, un responsable único y una fecha acordada.\par}
+\vspace{5pt}
+{\footnotesize
+\begin{longtable}{|C{0.8cm}|L{6.3cm}|L{2.5cm}|C{1.8cm}|C{1.5cm}|L{1.3cm}|}
+\hline
+\rowcolor{grisH}\hc{N°} & \hc{Acción / entregable} & \hc{Responsable} & \hc{Fecha límite} & \hc{Estado} & \hc{Evidencia} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{grisH}\hc{N°} & \hc{Acción / entregable} & \hc{Responsable} & \hc{Fecha límite} & \hc{Estado} & \hc{Evidencia} \\ \hline
+\endhead
+1 & \vl{\textbf{Plan de Proyecto v1.2 presentado y conformado}: el PO (Oscar) revisó el documento y manifestó su acuerdo sin observaciones; el plan v1.2 queda como línea base vigente} & \vl{Oscar (Cliente) / Fabricio (PM)} & \vl{11/09/2026 (en reunión)} & \vl{\textbf{Conformado}} & \vl{Esta acta} \\ \hline
+2 & \vl{\textbf{Destino del módulo de Bolsa de Valores resuelto}: el PO decidió \textbf{eliminar} el módulo (CU007, RF-018/019, RN-008, actor externo BVL); la lectura consultiva queda cubierta por el núcleo de fase 1} & \vl{Oscar (Cliente)} & \vl{11/09/2026 (en reunión)} & \vl{\textbf{Decidido}} & \vl{Esta acta} \\ \hline
+3 & \vl{\textbf{Registro formal de la exclusión de LinkedIn} del alcance: presentado al PO y \textbf{aprobado} en la reunión} & \vl{Oscar (Cliente)} & \vl{11/09/2026 (en reunión)} & \vl{\textbf{Aprobado}} & \vl{Esta acta} \\ \hline
+4 & \vl{\textbf{Ajuste del \textbf{prototipo/demo} realizado}: retirada la vista de Bolsa de Valores y sus elementos de data de mercado (decisión REQ-16), así como la vista de LinkedIn (retirada de la demo); ajuste verificado y \textbf{conformado}} & \vl{Juan Renato (Frontend)} & \vl{11/09/2026} & \vl{\textbf{Conformado}} & \vl{Esta acta} \\ \hline
+5 & \vl{\textbf{Delegación de la decisión tecnológica autorizada}: el equipo define y asume el stack, la arquitectura y las herramientas de la fase 1, informando avances en lenguaje claro en las demos; \textbf{el PO autorizó la delegación}} & \vl{Oscar (Cliente)} & \vl{11/09/2026 (en reunión)} & \vl{\textbf{Aprobado}} & \vl{Esta acta} \\ \hline
+6 & \vl{Enviar el acta 5 por correo dentro de las 24 horas} & \vl{Fabricio (PM)} & \vl{11/09/2026} & \vl{En proceso} & \vl{Correo} \\ \hline
+7 & \vl{\textbf{Formato de ingesta definido}: el cliente subirá los documentos \textbf{solo en .md} (conversión desde PDF a su cargo), con \textbf{tablas con pipes} para evitar errores de ingesta en el RAG (base de datos vectorizada); el \textbf{PO está conforme}} & \vl{Oscar (Cliente) / Fabricio (PM)} & \vl{11/09/2026 (en reunión)} & \vl{\textbf{Aprobado}} & \vl{Esta acta} \\ \hline
+8 & \vl{\textbf{Reprogramación de los dashboards de visualización a fase 2 aprobada} (REQ-19): actualizar la trazabilidad y el plan de sprints: retirar los dashboards del alcance de fase 1 (la demo del cronograma del 23/10 pasa a enfoque de integración) y registrar el alcance de fase 2} & \vl{Fabricio (PM) / Equipo} & \vl{14/09/2026} & \vl{Pendiente} & \vl{Esta acta} \\ \hline
+\end{longtable}}
+
+% ============================ 8. PRÓXIMA ==================================
+\asec{8. PRÓXIMA INTERACCIÓN Y SEGUIMIENTO}
+{\footnotesize
+\begin{tabular}{|L{2.5cm}|L{4.6cm}|L{2.6cm}|L{4.5cm}|}
+\hline
+\lb{Próxima reunión} & \vl{14/09/2026 (lunes) --- se coordina con el cliente la cadencia de \textbf{2 reuniones por semana} (ajuste a la planificación tentativa del plan v1.2 §6)} & \lb{Objetivo} & \vl{Validación final de requerimientos, arquitectura y prototipo; avance del \textbf{Análisis y Diseño} (REQ-13/14) con las decisiones de esta acta aplicadas} \\ \hline
+\lb{Canal de seguimiento} & \vl{WhatsApp (coordinación diaria, según plan v1.2 §4) / Correo (actas)} & \lb{Responsable del acta} & \vl{Fabricio Godofredo Ladera La Torre (PM)} \\ \hline
+\lb{Fecha de envío del acta} & \vl{12/09/2026 (dentro de las 24 h de la reunión; ver acuerdo 6)} & \lb{Ubicación del archivo} & \vl{Repositorio del equipo CS3081} \\ \hline
+\end{tabular}}
+
+% ============================ 9. VALIDACIÓN ===============================
+\asec{9. VALIDACIÓN DEL ACTA/FIRMAS}
+{\footnotesize\itshape\color{grisN} La validación puede realizarse mediante firma, correo, mensaje en el canal acordado o confirmación registrada. Adjunte la evidencia correspondiente.\par}
+\vspace{5pt}
+{\footnotesize
+\begin{tabular}{|L{4.7cm}|L{4.7cm}|L{4.7cm}|}
+\hline
+\hc{Representante del usuario / cliente} & \hc{Representante del equipo} & \hc{Docente o ACL (si corresponde)} \\ \hline
+\vl{Nombre: Oscar Rafael Baldeón Montoro\newline Cargo / rol: Cliente / Product Owner} & \vl{Nombre: Fabricio Godofredo Ladera La Torre\newline Cargo / rol: Jefe de Proyecto (PM)} & \vl{Nombre: Teofilo Chambilla Aquino\newline Cargo / rol: Docente (acompañamiento)} \\ \hline
+\vl{Método de validación: Firma y correo} & \vl{Método de validación: Correo (envío del acta)} & \vl{Método de validación: [Firma / correo]} \\ \hline
+\vl{Fecha: 12/09/2026\newline Observaciones: Conforme con el plan v1.2, las decisiones de alcance y el formato de ingesta .md} & \vl{Fecha: 12/09/2026\newline Observaciones: Acta enviada por correo dentro de las 24 horas} & \vl{Fecha: [dd/mm/aaaa]\newline Observaciones: [Completar]} \\ \hline
+\end{tabular}}
+
+% ============================ 10. APROBACIÓN ==============================
+\asec{10. APROBACIÓN (V°B° CEO)}
+El presente acta es revisada y aprobada por la Gerencia General antes de su envío al cliente.
+\vspace{4pt}
+
+{\itshape Oscar Rafael Baldeón Montoro}
+\vspace{10pt}
+
+\textbf{Nombre:} Oscar Rafael Baldeón Montoro
+
+\textbf{Cargo:} CEO / Gerente General
+
+\vspace{28pt}
+
+\textbf{Firma:} \rule[-2pt]{6.5cm}{0.4pt}
+
+\textbf{Fecha:} 12/09/2026
+
+\vspace{6pt}
+\label{LastPage}
+\end{document}

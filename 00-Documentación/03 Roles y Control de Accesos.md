@@ -1,3 +1,5 @@
+
+> ⚠️ **AVISO (12/09/2026)**: los docs [[04 RF]], [[05 RNF]], [[06 AWS]], [[09 Planificación]], [[10 Pendientes]], [[12-14 Kick-off]], [[15-19 Diagramas]], [[20 Prompt]], [[22 A&D]] y [[26 Arquitectura]] fueron **archivados** en `99-Archivo — Versiones Anteriores`. La base vigente = **Plan de Proyecto v1.2** + carpeta **`FASE 1/`** + actas.
 # 03 · Roles y Control de Accesos
 
 Modelo **RBAC** con **dos roles aislados (no jerárquicos)** y **exactamente 3 usuarios** en el portal (acta 1, REQ-03; **redefinido en acta 4, REQ-10**: se eliminó el rol "Usuario (lectura)"). Cada rol tiene un conjunto acotado de permisos y **no hereda** los de otro. En particular, el **Superadmin NO usa el asistente de IA**.

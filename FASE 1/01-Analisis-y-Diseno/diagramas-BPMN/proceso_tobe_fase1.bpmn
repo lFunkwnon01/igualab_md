@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_igualab_f1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Igualab FASE 1">
+  <bpmn:collaboration id="Collab_tobe">
+    <bpmn:participant id="Lane_Superadmin" name="Superadmin (gestión)" processRef="Proceso_Gestion"/>
+    <bpmn:participant id="Lane_Administrador" name="Administrador (explotación)" processRef="Proceso_Explotacion"/>
+  </bpmn:collaboration>
+  <bpmn:process id="Proceso_Gestion" isExecutable="false">
+    <bpmn:startEvent id="Start_Gest" name="Documento .md listo"/>
+    <bpmn:task id="Task_Select" name="Seleccionar empresa y año"/>
+    <bpmn:task id="Task_Upload" name="Subir .md en Ingesta"/>
+    <bpmn:exclusiveGateway id="Gw_Valid" name="¿Tablas con pipes y tamaño OK?"/>
+    <bpmn:task id="Task_Parse" name="Parseo markdown + chunking"/>
+    <bpmn:task id="Task_Embed" name="Embeddings locales"/>
+    <bpmn:task id="Task_Upsert" name="Upsert pgvector + audit"/>
+    <bpmn:endEvent id="End_Gest" name="Documento indexado"/>
+    <bpmn:sequenceFlow id="f1" sourceRef="Start_Gest" targetRef="Task_Select"/>
+    <bpmn:sequenceFlow id="f2" sourceRef="Task_Select" targetRef="Task_Upload"/>
+    <bpmn:sequenceFlow id="f3" sourceRef="Task_Upload" targetRef="Gw_Valid"/>
+    <bpmn:sequenceFlow id="f4" name="No" sourceRef="Gw_Valid" targetRef="End_Gest"/>
+    <bpmn:sequenceFlow id="f5" name="Sí" sourceRef="Gw_Valid" targetRef="Task_Parse"/>
+    <bpmn:sequenceFlow id="f6" sourceRef="Task_Parse" targetRef="Task_Embed"/>
+    <bpmn:sequenceFlow id="f7" sourceRef="Task_Embed" targetRef="Task_Upsert"/>
+    <bpmn:sequenceFlow id="f8" sourceRef="Task_Upsert" targetRef="End_Gest"/>
+  </bpmn:process>
+  <bpmn:process id="Proceso_Explotacion" isExecutable="false">
+    <bpmn:startEvent id="Start_Expl" name="Administrador inicia sesión"/>
+    <bpmn:task id="Task_Chat" name="Consultar asistente IA (RAG)"/>
+    <bpmn:task id="Task_Review" name="Revisar brechas GRI y sanciones"/>
+    <bpmn:userTask id="Task_State" name="Validar/copiar estado de brecha (RN-014)"/>
+    <bpmn:task id="Task_Report" name="Generar reporte PDF (plantilla + variables de BD)"/>
+    <bpmn:task id="Task_Download" name="Descargar reporte"/>
+    <bpmn:endEvent id="End_Expl" name="Prospección apoyada en datos"/>
+    <bpmn:sequenceFlow id="g1" sourceRef="Start_Expl" targetRef="Task_Chat"/>
+    <bpmn:sequenceFlow id="g2" sourceRef="Task_Chat" targetRef="Task_Review"/>
+    <bpmn:sequenceFlow id="g3" sourceRef="Task_Review" targetRef="Task_State"/>
+    <bpmn:sequenceFlow id="g4" sourceRef="Task_State" targetRef="Task_Report"/>
+    <bpmn:sequenceFlow id="g5" sourceRef="Task_Report" targetRef="Task_Download"/>
+    <bpmn:sequenceFlow id="g6" sourceRef="Task_Download" targetRef="End_Expl"/>
+  </bpmn:process>
+</bpmn:definitions>
