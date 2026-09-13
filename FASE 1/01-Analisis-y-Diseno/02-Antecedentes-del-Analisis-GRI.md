@@ -15,7 +15,7 @@ Ambos documentos llegan al sistema **ya convertidos a Markdown (.md)** por el pr
 
 Una **brecha GRI** es la diferencia entre **lo que el estándar GRI exige reportar** y **lo que la empresa realmente reporta** en sus memorias anuales o reportes de sostenibilidad.
 
-El estado del indicador se clasifica con el **catálogo GRI como referencia** (tabla `catalogo_gri` en la base de datos, nunca lo decide la IA por sí sola — ver RN-014):
+El estado del indicador se clasifica con el **catálogo GRI como referencia** (tabla `catalogo_gri` en la base de datos, nunca lo decide la IA por sí sola — ver RN-013):
 
 | Estado | Significado | Ejemplo (mock) |
 |---|---|---|
@@ -24,7 +24,7 @@ El estado del indicador se clasifica con el **catálogo GRI como referencia** (t
 | `BAJA SUSTANCIA` | el contenido existe pero es superficial (sin impacto medible) | *GRI 413 Comunidades locales — Baja sustancia: “menciona consultas pero sin indicadores de impacto”* (mock) |
 | `CRITICO` | (asignado por el humano) omisión grave o sanción asociada, prioridad de contacto | el analista lo asigna en la revisión del análisis |
 
-Ningún estado se calcula “a ojo” de la IA: cada fila de evaluación guarda el **código GRI**, la **cita** (documento, sección) y el **estado**; la IA/motor solo **sugiere**, y el humano **valida o cambia el estado antes de generar el reporte** (RN-014, RF-013 — supervisión humana acordada con el PO).
+Ningún estado se calcula “a ojo” de la IA: cada fila de evaluación guarda el **código GRI**, la **cita** (documento, sección) y el **estado**; la IA/motor solo **sugiere**, y el humano **valida o cambia el estado antes de generar el reporte** (RN-013, RF-013 — supervisión humana acordada con el PO).
 
 ## 3. ¿Cómo se identifica el estado sin que la IA decida el “GRI óptimo”?
 

@@ -13,40 +13,40 @@ BD de fase 1 = **14 tablas**, pero NO son 14 "igual de importantes". Se ordenan 
 | **N3 · Soporte operativo (3)** | `usuarios`, `roles`, `configuracion` | Necesarias pero pequeñas: darían problemas si se unen (ver §3). |
 | **N4 · Métricas/transversal (2)** | `sanciones`, `uso_llm` | Sanciones es **negocio** (objeto del reporte); uso_llm es el medidor del free tier. |
 
-Ejemplo: el parecido visual entre `gri_analisis` y `gri_analisis_historico` se puede confundir con "tabla repetida", pero cumplen roles opuestos: una es el **estado actual** del análisis (lo que muestra el sistema hoy), la otra es la **historia inmutable** de cambios (quién decidió qué y cuándo, RN-019). Son complementarias, no duplicadas.
+Ejemplo: el parecido visual entre `gri_analisis` y `gri_analisis_historico` se puede confundir con "tabla repetida", pero cumplen roles opuestos: una es el **estado actual** del análisis (lo que muestra el sistema hoy), la otra es la **historia inmutable** de cambios (quién decidió qué y cuándo, RN-018). Son complementarias, no duplicadas.
 
 ## 2. Tabla por tabla — ¿por qué existe, para qué, y por qué no sobra?
 
 ### N1 · Núcleo de negocio
 
-1. **`empresas`** — *de dónde nace*: alcance del plan v1.2 (análisis limitado a 3 sectores — acta/REQ-17). *Qué hace*: catálogo de empresas la única clave de negocio; que los documentos se asocien a `empresa_id` (RN-014) y al sector permitido (CHECK, RN-017). *Si no existiera*: cada submit de doc tendría que grabarse texto-plano y los filtros no garantizarían la restricción de sectores en la propia BD.
+1. **`empresas`** — *de dónde nace*: alcance del plan v1.2 (análisis limitado a 3 sectores — acta/REQ-17). *Qué hace*: catálogo de empresas la única clave de negocio; que los documentos se asocien a `empresa_id` (RN-013) y al sector permitido (CHECK, RN-016). *Si no existiera*: cada submit de doc tendría que grabarse texto-plano y los filtros no garantizarían la restricción de sectores en la propia BD.
 
-2. **`documentos`** — *de dónde nace*: RF-007/008 (ingesta) · acta 5 REQ-20. *Qué hace*: Garantiza la trazabilidad del archivo fuente. **Estado del pipeline por archivo** (.md ingerido: indexado/observado/rechazado) — obviamente todo análisis proviene de un doc; el hash (sha256) es el borde anti-duplicado (RN-015). *Si no existiera*: no habría forma de conocer **qué** está indexado, reproducir la ingesta de una empresa, o auditar el lugar de citación (doc → cita).
+2. **`documentos`** — *de dónde nace*: RF-007/008 (ingesta) · acta 5 REQ-20. *Qué hace*: Garantiza la trazabilidad del archivo fuente. **Estado del pipeline por archivo** (.md ingerido: indexado/observado/rechazado) — obviamente todo análisis proviene de un doc; el hash (sha256) es el borde anti-duplicado (RN-014). *Si no existiera*: no habría forma de conocer **qué** está indexado, reproducir la ingesta de una empresa, o auditar el lugar de citación (doc → cita).
 
-3. **`chunks_embeddings`** — *de dónde nace*: plan v1.2 (motor RAG), RN-022/23. *Qué hace*: **la BD vectorizada** — cada fragmento del `.md` con su embedding de 1024 dims y su metadata (empresa/año/código GRI/sección). Es la tabla que se consulta en cada pregunta del chat del Administrador. *Si no existiera* no hay RAG, y el no tendrían su fuente de búsqueda.
+3. **`chunks_embeddings`** — *de dónde nace*: plan v1.2 (motor RAG), RN-021/23. *Qué hace*: **la BD vectorizada** — cada fragmento del `.md` con su embedding de 1024 dims y su metadata (empresa/año/código GRI/sección). Es la tabla que se consulta en cada pregunta del chat del Administrador. *Si no existiera* no hay RAG, y el no tendrían su fuente de búsqueda.
 
-4. **`catalogo_gri`** — *de dónde nace*: pregunta explícita del PO ("¿cómo sabe la IA cuál es el GRI óptimo?") → respuesta: es el **estándar GRI precargado**; regla RN-018. *Qué hace*: define el "expected" (elementos mínimos de reporto por código); la IA no decide el estándar — aquí está la respuesta. *Si no existiera*: la "brecha" quedaría a cielo abierto en el modelo y violaría la regla de que el humano — no el LLM — define estados.
+4. **`catalogo_gri`** — *de dónde nace*: pregunta explícita del PO ("¿cómo sabe la IA cuál es el GRI óptimo?") → respuesta: es el **estándar GRI precargado**; regla RN-017. *Qué hace*: define el "expected" (elementos mínimos de reporto por código); la IA no decide el estándar — aquí está la respuesta. *Si no existiera*: la "brecha" quedaría a cielo abierto en el modelo y violaría la regla de que el humano — no el LLM — define estados.
 
-5. **`gri_analisis`** — *de dónde nace*: RN-019/020 (humano confirma/reajusta; *todas* las brechas se registran), acta 4/5. *Qué hace*: **la tabla del análisis** — fila por empresa+doc+código GRI, con `estado_sugerido` (salida del motor de reglas al terminar la ingesta) y `estado` (validado por el humano con `validado_por`). El reporte solo lee **esta tabla** (RN-027): es la base de la generación determinista. *Si no existiera*: el reporte tendría que "consultar al LLM" o re-analizar pdf en el vuelo — justo lo que decidimos prohibir (RN-027).
+5. **`gri_analisis`** — *de dónde nace*: RN-018/020 (humano confirma/reajusta; *todas* las brechas se registran), acta 4/5. *Qué hace*: **la tabla del análisis** — fila por empresa+doc+código GRI, con `estado_sugerido` (salida del motor de reglas al terminar la ingesta) y `estado` (validado por el humano con `validado_por`). El reporte solo lee **esta tabla** (RN-026): es la base de la generación determinista. *Si no existiera*: el reporte tendría que "consultar al LLM" o re-analizar pdf en el vuelo — justo lo que decidimos prohibir (RN-026).
 
-6. **`reportes_generados`** — *de dónde nace*: RN-026/028 (reportes PDF inmutables y versionados). *Qué hace*: registro de cada PDF (versión, hash, sector, pdf_path) — el entregable comercial. Con la **tabla compañera `reporteDetalle_snapshot`** (§N1-bis) garantiza que el reporte emitido sea fiel a la fecha y que toda próxsimas regeneración sea una versión nueva. *Si no existiera*: no hay versionado ni trazabilidad de entregables (violando RN-028/031).
+6. **`reportes_generados`** — *de dónde nace*: RN-025/028 (reportes PDF inmutables y versionados). *Qué hace*: registro de cada PDF (versión, hash, sector, pdf_path) — el entregable comercial. Con la **tabla compañera `reporteDetalle_snapshot`** (§N1-bis) garantiza que el reporte emitido sea fiel a la fecha y que toda próxsimas regeneración sea una versión nueva. *Si no existiera*: no hay versionado ni trazabilidad de entregables (violando RN-027/031).
 
-7. **`reporte_detalle_snapshot`** (n1-bis) — *de dónde nace*: RS-18/RN-026 — el reporte **consolida** brechas y sanciones con estado final + cita, y el resultado **no puede verse modificado**. *Qué hace*: fila por línea del reporte (BRECHA o SANCION — CHECK de exclusividad) con el **estado_final y cita congelados** a la fecha de emisión: si mañana un estado se cambia, el PDF anterior sigue siendo correcto históricamente. *Si no existiera*: el reporte dependería de estados vivos que siguen cambiando (reportes que "se reescriben solos") — violando RN-028.
+7. **`reporte_detalle_snapshot`** (n1-bis) — *de dónde nace*: RS-18/RN-025 — el reporte **consolida** brechas y sanciones con estado final + cita, y el resultado **no puede verse modificado**. *Qué hace*: fila por línea del reporte (BRECHA o SANCION — CHECK de exclusividad) con el **estado_final y cita congelados** a la fecha de emisión: si mañana un estado se cambia, el PDF anterior sigue siendo correcto históricamente. *Si no existiera*: el reporte dependería de estados vivos que siguen cambiando (reportes que "se reescriben solos") — violando RN-027.
 
 ### N2 · Cumplimiento de trazabilidad (aquí es donde "parece que sobra" y NO sobra)
 
 8. **`auditoria_eventos`** — *de dónde nace*: acta 4/5 (registro automático de eventos sensibles), plan v1.2 módulo de auditoría. *Qué hace*: bitácora append-only de login, cambio de rol, ingesta, generación. Es la traba de integridad del proyecto: no descarta NINGUNA acción que modifique estado. Si no existiera: nada verifiable con el cliente (la conformidad del acta 5 demostró que Oscar pide evidencia).
 
-9. **`gri_analisis_historico`** — *de dónde nace*: RF-025/RN-019 — el análisis de estados lo confirma o cambia **el humano por diseño** (supervisión del PO explicada con el propio Oscar). *Qué hace*: **diferencia crítico respecto de auditors**: registra específicamente **anterior → nuevo por indicador** con observación — imposible reconstituir con una auditoría global JSONB de forma consultiva (es lo que se muestra en el panel CU006 por fila). *Si no existiera*: los cambios de estado no serían recuperables ni reportables (break de RN-019). Nota: podría "fusionarse" con auditoria_eventos (ver §3.2 — decidido NO por consulta por detalle).
+9. **`gri_analisis_historico`** — *de dónde nace*: RF-025/RN-018 — el análisis de estados lo confirma o cambia **el humano por diseño** (supervisión del PO explicada con el propio Oscar). *Qué hace*: **diferencia crítico respecto de auditors**: registra específicamente **anterior → nuevo por indicador** con observación — imposible reconstituir con una auditoría global JSONB de forma consultiva (es lo que se muestra en el panel CU006 por fila). *Si no existiera*: los cambios de estado no serían recuperables ni reportables (break de RN-018). Nota: podría "fusionarse" con auditoria_eventos (ver §3.2 — decidido NO por consulta por detalle).
 
 ### N3 · Soporte operativo
 
 10. **`usuarios`** — acceso + responsabilité (RF-001/005; RN-001/003). 3 personas — soporta el índice único parcial de "1 solo Superadmin" (RS-01).
 11. **`roles`** — *el catálogo más pequeño que existe* y sigue siendo útil: define la integridad referencia del RBAC (FK usable en el middleware). Ver §3.1: es candidata a eliminación, con implicaciones.
 12. **`configuracion`** — parámetros dinámicos (minutos de inactividad, bloques, `upload_max_mb=15`, `llm_daily_limit=200`), RF-006/RNF-20: **cambiar el límite del free tier o el peso máximo sin desplegar código**.
-13. **`uso_llm`** — contador diario (fecha UNIQUE) del asistente: soporte de RN-025/RNF-11 (200 req/día), con diagnóstico (tokens/ incidencias) — es lo que permite avisar al PO "se agotó la cuota de hoy" y no gastar el cupo en generación de reportes (que no lo usan).
+13. **`uso_llm`** — contador diario (fecha UNIQUE) del asistente: soporte de RN-024/RNF-11 (200 req/día), con diagnóstico (tokens/ incidencias) — es lo que permite avisar al PO "se agotó la cuota de hoy" y no gastar el cupo en generación de reportes (que no lo usan).
 
-14. **`sanciones`** — *de dónde nace*: kick-off/plan (sanciones como evidencia comercial) + RN-021 (solo con cita). Es **negocio puro** (objeto del reporte N2), no soporte.
+14. **`sanciones`** — *de dónde nace*: kick-off/plan (sanciones como evidencia comercial) + RN-020 (solo con cita). Es **negocio puro** (objeto del reporte N2), no soporte.
 
 ## 3. ¿Se pueden juntar algunas? — Análisis de consolidación (honesto)
 
@@ -68,7 +68,7 @@ Evaluamos las 3 fusiones plausibles, con costo/beneficio:
 - **Costo real**: insert 1 fila por indicador — **mismos costos del reporte**. Mantener.
 
 ### 3.4 `uso_llm` → ¿una fila en `configuracion` con contador?
-- **Candidato** que cae solo: el contador **es por fecha** (clación diaria RN-025); `configuracion` es clave/valor — meter índices diarios violaría la unicidad de fechas. Además, la correlación de tokens cuesta horaría/journal al e2e. Mantener separada (la tabla del medidor). ✔
+- **Candidato** que cae solo: el contador **es por fecha** (clación diaria RN-024); `configuracion` es clave/valor — meter índices diarios violaría la unicidad de fechas. Además, la correlación de tokens cuesta horaría/journal al e2e. Mantener separada (la tabla del medidor). ✔
 
 ## 4. Resumen / decisión del equipo sobre el fundamento del modelo
 

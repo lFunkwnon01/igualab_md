@@ -13,7 +13,7 @@ flowchart LR
     A3 --> A4{"¿Tablas con pipes y tamaño dentro del límite?"}
     A4 -- No --> A5["Audita rechazo y muestra motivo en la UI"]
     A4 -- Sí --> A6["Chunking por secciones y filas de tabla"]
-    A6 --> A7["Embedding local + upsert en pgvector"]
+    A6 --> A7["Embeddings por API + upsert en pgvector"]
     A7 --> A8[("documentos y chunks_embeddings")]
   end
   subgraph EXPL["Línea analítica · Administrador"]
@@ -32,13 +32,13 @@ flowchart LR
 ```mermaid
 flowchart TD
     U["Superadmin en la UI"] -->|POST /api/v1/ingesta con archivo .md| API["FastAPI · middleware RBAC"]
-    API --> G1["1 Guard de formato: solo .md, tablas con pipes, tamaño ≤ 15 MB"]
+    API --> G1["1 Guard de formato: solo .md, tablas con pipes, tamaño ≤ 50 MB"]
     G1 -- falla --> X["Audita rechazo · estado RECHAZADO + motivo exacto hacia la UI"]
     G1 -- ok --> P1["2 Parseo markdown: encabezados y filas de tablas normalizadas"]
     P1 --> P2["3 Chunking por sección/fila ~800 chars con metadata: empresa, año, código GRI"]
-    P2 --> P3["4 Embeddings locales: Qwen3-Embedding-0.6B / bge-m3"]
+    P2 --> P3["4 Embeddings por APIes: servicio de embeddings del proveedor (p. ej. NVIDIA NIM / Google AI Studio)"]
     P3 --> P4["5 Upsert en chunks_embeddings con sha256 anti-duplicado"]
-    P4 --> ANA["6 Motor de análisis GRI según reglas de catalogo_gri → INSERT en tabla del análisis con estado_sugerido por fila"]
+    P4 --> ANA["6 Detección GRI: códigos presentes (catálogo de 40) + cita textual → INSERT en tabla del análisis SIN estado (lo asigna el humano en CU006)"]
     ANA --> AUD["7 Audita ingesta: usuario, archivo, hash, estado, tiempos"]
     AUD --> RESP["Éxito: respuesta con fichas de chunks ingestados y brechas sugeridas listas para revision humana"]
 ```
@@ -49,8 +49,8 @@ flowchart TD
     S --> R1{"¿Empresa dentro de sectores permitidos?"}
     R1 -- No --> DEN["Se informa límite de alcance de fase 1"]
     R1 -- Sí --> RAW["Consume la tabla del análisis poblada al terminar la ingesta, sin releer el documento"]
-    RAW --> SUG["IA/reglas sugieren estado: OK / Sub-reportado / Baja sustancia / Crítico"]
-    SUG --> HUM{"¿El humano valida o cambia el estado antes de generar? RN-019"}
+    RAW --> SUG["el sistema detecta códigos y extrae la cita (sin inferir estado)"]
+    SUG --> HUM{"¿El humano asigna el estado (OK / Baja / Sub) antes de generar? RN-018"}
     HUM -- Cambia --> REG["Historial: guarda estado, quién, cuándo, anterior → nuevo"]
     HUM -- Confirma --> GEN
     REG --> GEN["Generar PDF: SELECT determinista a gri_analisis con estados validados y sanciones → Jinja2 → WeasyPrint — sin llamar al LLM"]

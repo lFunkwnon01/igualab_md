@@ -37,7 +37,7 @@ Descripción: catálogo de empresas analizables; en fase 1 todas cotizan en la B
 | id | - | SERIAL (PK) | Identificador único de la empresa. | NO |
 | nombre | 160 | VARCHAR | Nombre comercial/razón social; único. | NO |
 | ticker | 12 | VARCHAR | Ticker en la BVL (p. ej. MINAND); único. | NO |
-| sector | 40 | VARCHAR | Sector permitido: Minería, Energía, Petróleo y Gas (CHECK — RN-017). | NO |
+| sector | 40 | VARCHAR | Sector permitido: Minería, Energía, Petróleo y Gas (CHECK — RN-016). | NO |
 | activo | - | BOOLEAN | false = no seleccionable en ingesta/análisis (default true). | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de creación del registro. | NO |
 
@@ -47,16 +47,16 @@ Descripción: cada archivo `.md` ingestado (memoria anual o reporte de sostenibi
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
 | id | 36 | UUID (PK) | Identificador único del documento. | NO |
-| empresa_id | - | INT (FK) | Empresa a la que pertenece → empresas.id (RN-014). | NO |
+| empresa_id | - | INT (FK) | Empresa a la que pertenece → empresas.id (RN-013). | NO |
 | anho | 5 | SMALLINT | Año del documento; CHECK entre 2000 y 2100. | NO |
 | tipo | 30 | VARCHAR | memoria_anual o reporte_sostenibilidad. | NO |
 | nombre_archivo | 255 | VARCHAR | Nombre original del `.md` subido. | NO |
-| ruta_origen | - | TEXT | Ruta del archivo original en disco (back-end; RN-031 no borrado). | NO |
-| sha256 | 64 | CHAR (UNIQUE) | Huella anti-duplicado del archivo (RN-015). | NO |
+| ruta_origen | - | TEXT | Ruta del archivo original en disco (back-end; RN-030 no borrado). | NO |
+| sha256 | 64 | CHAR (UNIQUE) | Huella anti-duplicado del archivo (RN-014). | NO |
 | estado | 20 | VARCHAR | indexado | observado | rechazado (RS-06). | NO |
 | motivo | - | TEXT | Motivo exacto del guard en rechazo/observación (RF-021). | SÍ |
 | chunks_count | - | INT | Nº de chunks indexados (éxito). | SÍ |
-| version | - | INT | Versión (incrementa si el contenido difiere; RN-016; default 1). | NO |
+| version | - | INT | Versión (incrementa si el contenido difiere; RN-015; default 1). | NO |
 | created_by | 36 | UUID (FK) | Superadmin que ingesta → usuarios.id. | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de ingesta. | NO |
 
@@ -70,14 +70,14 @@ Descripción: fragmentos del documento con su embedding para búsqueda semántic
 | chunk_index | - | INT | Posición del chunk dentro del documento (orden). | NO |
 | texto | - | TEXT | Fragmento de texto (sección o fila de tabla). | NO |
 | chunk_id_hash | 64 | CHAR (UNIQUE) | sha256 del texto — idempotencia del upsert (RNF-16). | NO |
-| embedding | - | VECTOR(1024) (índice HNSW cosine) | Vector del modelo local Qwen3-Embedding-0.6B / bge-m3. | NO |
-| seccion | 200 | VARCHAR | Encabezado de la sección/régimen origen (llave de la cita RN-023). | NO |
+| embedding | - | VECTOR(N) (índice HNSW cosine) | Vector devuelto por el **servicio de embeddings por API** del proveedor (N según modelo). | NO |
+| seccion | 200 | VARCHAR | Encabezado de la sección/régimen origen (llave de la cita RN-022). | NO |
 | gri_code | 12 | VARCHAR | Código GRI heredado del encabezado de la tabla; nulo si no aplica. | SÍ |
 | metadata | - | JSONB | Empresa_id, año, tipo doc, fila tabla, otros contextos. | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de indexación. | NO |
 
 ## Tabla: `catalogo_gri` (el estándar — semilla del sistema)
-Descripción: catálogo precargado del estándar GRI (Universal + series 200/300/400). La IA no inventa el estándar; consulta aquí (RN-018).
+Descripción: catálogo precargado del estándar GRI (Universal + series 200/300/400). La IA no inventa el estándar; consulta aquí (RN-017).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -89,26 +89,26 @@ Descripción: catálogo precargado del estándar GRI (Universal + series 200/300
 | vigente_desde | 5 | SMALLINT | Año de la versión del estándar referida (RS-11). | NO |
 
 ## Tabla: `gri_analisis`
-Descripción: **la tabla del análisis** — fila por empresa+doc+código GRI, incluidos los estados OK (RN-020). Poblada automáticamente al terminar la ingesta; la generación del reporte hace SELECT determinista de aquí (RN-027).
+Descripción: **la tabla del análisis** — fila por empresa+doc+código GRI, incluidos los estados OK (RN-019). Poblada automáticamente al terminar la ingesta; la generación del reporte hace SELECT determinista de aquí (RN-026).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
 | id | 36 | UUID (PK) | Identificador único de la fila de análisis. | NO |
 | empresa_id | - | INT (FK) | Empresa analizada → empresas.id. | NO |
 | doc_id | 36 | UUID (FK) | Documento fuente → documentos.id. | NO |
-| gri_code | 12 | VARCHAR (FK) | Código analizado → catalogo_gri.codigo (RN-018). | NO |
+| gri_code | 12 | VARCHAR (FK) | Código analizado → catalogo_gri.codigo (RN-017). | NO |
 | estado_sugerido | 20 | VARCHAR | Estado sugerido por el motor: OK / SUB-REPORTADO / BAJA SUSTANCIA / CRITICO. NO vinculante. | NO |
-| estado | 20 | VARCHAR | Estado final validado (mismo CHECK). Visible para el reporte. | NO |
+| estado | 20 | VARCHAR | Estado asignado **manualmente** por el Administrador: `OK` / `BAJA SUSTANCIA` / `SUB-REPORTADO` (3 únicos). Visible para el reporte. | NO |
 | cita_fragmento | - | TEXT | Fragmento citado del documento. | NO |
-| seccion | 200 | VARCHAR | Sección del documento (doc + sección = citación RN-023). | NO |
+| seccion | 200 | VARCHAR | Sección del documento (doc + sección = citación RN-022). | NO |
 | observacion | - | TEXT | **Obligatoria si estado difiere del sugerido** (RF-025); sustento humano. | SÍ* |
-| validado_por | 36 | UUID (FK) | Usuario que validó/cambió el estado (NULL = pendiente CU006; RN-019). | SÍ* |
+| validado_por | 36 | UUID (FK) | Usuario que validó/cambió el estado (NULL = pendiente CU006; RN-018). | SÍ* |
 | updated_at | - | TIMESTAMPTZ | Última actualización del estado. | NO |
 
-\* Obligatoriamente condicional según reglas semánticas (RF-025/RN-019).
+\* Obligatoriamente condicional según reglas semánticas (RF-025/RN-018).
 
 ## Tabla: `gri_analisis_historico`
-Descripción: auditoría por cambio de estado de una fila de análisis (RN-019; append-only por trigger).
+Descripción: auditoría por cambio de estado de una fila de análisis (RN-018; append-only por trigger).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -121,7 +121,7 @@ Descripción: auditoría por cambio de estado de una fila de análisis (RN-019; 
 | created_at | - | TIMESTAMPTZ | Fecha/hora del cambio. | NO |
 
 ## Tabla: `sanciones`
-Descripción: sanciones económicas identificadas — siempre con cita verificable (RN-021); sin borra físicá (RN-031).
+Descripción: sanciones económicas identificadas — siempre con cita verificable (RN-020); sin borra físicá (RN-030).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -130,12 +130,12 @@ Descripción: sanciones económicas identificadas — siempre con cita verificab
 | doc_id | 36 | UUID (FK) | Documento que la evidencia → documentos.id. | NO |
 | anho | 5 | SMALLINT | Año de la sanción. | NO |
 | entidad | 160 | VARCHAR | Entidad/norma emisora. | NO |
-| monto | (14,2) | NUMERIC | Monto económico (moneda implícita del registro). | SÍ |
+| monto | (14,2) | NUMERIC | Monto económico; **NULL = no determinado** (nunca 0 por defecto; RF-057/058). | SÍ |
 | doc_seccion | 200 | VARCHAR | Sección del documento citado (obligatoria, RS-16). | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de registro. | NO |
 
 ## Tabla: `reportes_generados`
-Descripción: entregables PDF generados, versionados e inmutables (RN-026/028).
+Descripción: entregables PDF generados, versionados e inmutables (RN-025/028).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -146,7 +146,7 @@ Descripción: entregables PDF generados, versionados e inmutables (RN-026/028).
 | version | - | INT | Versión del reporte; UNIQUE(empresa_id, anho, version). | NO |
 | pdf_path | - | TEXT | Ruta del PDF generado (WeasyPrint). | NO |
 | sha256 | 64 | CHAR | Hash del binario generado (auditoría de integridad). | NO |
-| resumen_ejecutivo | - | TEXT | Texto determinístico desde gri_analisis (sin LLM, RN-027). | NO |
+| resumen_ejecutivo | - | TEXT | Texto determinístico desde gri_analisis (sin LLM, RN-026). | NO |
 | usuario_id | 36 | UUID (FK) | Administrador que generó. | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de generación. | NO |
 
@@ -164,13 +164,13 @@ Descripción: una fila por indicador/sanción incluida en un reporte — congela
 | estado_final | 20 | VARCHAR | Estado congelado al emitir (no vivo). | SÍ |
 | cita_final | - | TEXT | Cita (doc + sección) al momento de emitir. | NO |
 | monto | (14,2) | NUMERIC | Monto congelado si SANCION. | SÍ |
-| es_brecha | - | BOOLEAN | true = línea de brecha (incl. las OK; RN-026); false = informativa. | NO |
+| es_brecha | - | BOOLEAN | true = línea de brecha (incl. las OK; RN-025); false = informativa. | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de creación. | NO |
 
 Regla: `CHECK (num_nonnulls(gri_analisis_id, sancion_id) = 1)`.
 
 ## Tabla: `auditoria_eventos`
-Descripción: bitácora de eventos sensibles (append-only; REVOKE UPDATE/DELETE — RN-029/30).
+Descripción: bitácora de eventos sensibles (append-only; REVOKE UPDATE/DELETE — RN-028/30).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -183,7 +183,7 @@ Descripción: bitácora de eventos sensibles (append-only; REVOKE UPDATE/DELETE 
 | created_at | - | TIMESTAMPTZ | Fecha/hora (indexada para rangos). | NO |
 
 ## Tabla: `uso_llm`
-Descripción: contador diario del asistente (free tier — RN-025/RNF-11). Una fila por fecha (UNIQUE).
+Descripción: contador diario del asistente (free tier — RN-024/RNF-11). Una fila por fecha (UNIQUE).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -203,7 +203,7 @@ Descripción: parámetros dinámicos del sistema (mock: Configuración). Cambiar
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
-| clave | 60 | VARCHAR (PK) | clave del parámetro: minutos_inactividad, bloqueo, notificaciones, upload_max_mb (15), llm_daily_limit (200). | NO |
+| clave | 60 | VARCHAR (PK) | clave del parámetro: minutos_inactividad, bloqueo, notificaciones, upload_max_mb (50), llm_daily_limit (200). | NO |
 | valor | - | TEXT/JSONB | Valor del parámetro. | NO |
 | descripcion | - | TEXT | Descripción del parámetro para el panel del Superadmin. | SÍ |
 | actualizado_por | 36 | UUID (FK) | Último Superadmin que lo modificó. | SÍ |

@@ -45,9 +45,9 @@ frontend/
 ## 3. Flujos clave del UI
 
 1. **Guard de sesión (RNF + RN-004)**: contador de inactividad como el mock (`idleTimer`); al expirar → bloqueo y redirección a login.
-2. **Ingesta síncrona (RN-013)**: botón *Subir* deshabilitado mientras el pipeline corre; barra de pasos (guard → parsing → embeddings → listo) con estados RECHAZADO/OBSERVADO + motivo textual.
-3. **Chat con citas (RF-010/011)**: los mensajes del asistente renderizan **chips de cita** (doc_id·sección) que abren el fragmento citado; si no hay fuente, el sistema muestra el mensaje de «sin información» tal como queda acordado (RN-022).
-4. **CU006 en `/#/ia`**: la tabla de brechas por empresa con el estado sugerido siempre editable (chips OK/Sub-reportado/Baja sustancia/Crítico) + confirmación; historial plegable por fila.
+2. **Ingesta síncrona (RN-012)**: botón *Subir* deshabilitado mientras el pipeline corre; barra de pasos (guard → parsing → embeddings → listo) con estados RECHAZADO/OBSERVADO + motivo textual.
+3. **Chat con citas (RF-010/011)**: los mensajes del asistente renderizan **chips de cita** (doc_id·sección) que abren el fragmento citado; si no hay fuente, el sistema muestra el mensaje de «sin información» tal como queda acordado (RN-021).
+4. **CU006 en `/#/ia` (formulario «Estados GRI»)**: tabla de **códigos detectados** (código · tema · **cita de respaldo** · estado desplegable · observación). El estado inicia **sin asignar** y lo fija el Administrador; al guardar se registra el historial por fila. El botón **Generar reporte** está **deshabilitado** hasta completar todas las filas.
 5. **Validación de estados antes del reporte**: si quedan brechas sin confirmar, el botón Generar queda deshabilitado y hace el vínculo con el detalle faltante (RF-014).
 
 ## 4. Reglas del front coherentes con las acciones
@@ -56,7 +56,7 @@ frontend/
 |---|---|
 | RN-003 | al cambiar rol a Superadmin se muestra confirmación «perderás tu rol actual» |
 | RN-009/010/011 | selector solo `.md`; validación de tamaño antes de enviar; mensaje con motivo del guard |
-| RN-013 | bloqueo del botón subir hasta terminar el pipeline |
-| RN-025 | indicador de cuota diaria en el chat (contador `uso_llm`) |
-| RN-028 | Descargas lista versiones sin permitir edición |
+| RN-012 | bloqueo del botón subir hasta terminar el pipeline |
+| RN-024 | indicador de cuota diaria en el chat (contador `uso_llm`) |
+| RN-027 | Descargas lista versiones sin permitir edición |
 | RNF-05 | navegación bloqueada al rol que no corresponde (guard de ruta + backend igualmente valida) |

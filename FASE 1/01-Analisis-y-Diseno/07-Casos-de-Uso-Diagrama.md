@@ -7,7 +7,7 @@
 - **Superadmin** (1 usuario — gestión de accesos e ingesta).
 - **Administrador** (2 usuarios — explotación analítica; supervisa el PO).
 - **PO (Oscar)** — supervisar (auditor de estados, no rol del sistema).
-- **LLM & Embeddings**: sistema externo (API `:free` de OpenRouter para el chat; embeddings locales para la BD vectorizada). **Sin function calling en fase 1 → solo RAG simple.**
+- **LLM & Embeddings**: sistema externo (API `:free` de OpenRouter para el chat; embeddings por API para la BD vectorizada). **Sin function calling en fase 1 → solo RAG simple.**
 
 ## 7.2 Diagrama general (mermaid)
 
@@ -35,7 +35,7 @@ flowchart LR
   CU002 -. incluye-CRUD roles + avisos .-> CU009
   CU004 -. registra eventos .-> CU009
   CU005 -. consultas RAG con contexto .-> LLM
-  CU004 -. embeddings locales .-> LLM
+  CU004 -. embeddings por API .-> LLM
   CU007 -. solo variables de la BD .-> LLM
   PO -. supervisa estados .-> CU006
 ```
@@ -97,7 +97,7 @@ flowchart LR
   SA(("Superadmin")) --> CU004((CU004))
   CU004 -.->|include| GUARD((Pre-validación: `.md`, pipes,<br/>15 MB, empresa y año))
   CU004 -.->|extend| DUP((Rechazar duplicado<br/>sha256))
-  CU004 -.->|include| IDX((Chunking +<br/>embeddings locales))
+  CU004 -.->|include| IDX((Chunking +<br/>embeddings por API))
   CU004 --> AUD((CU009 · evento ingesta))
 ```
 
