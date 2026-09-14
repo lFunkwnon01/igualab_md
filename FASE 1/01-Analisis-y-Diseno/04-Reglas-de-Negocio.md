@@ -1,4 +1,4 @@
-# 04 · Reglas de Negocio — FASE 1 (numeración = A&D v5)
+# 04 · Reglas de Negocio — FASE 1 (numeración = A&D v6)
 
 > **Fuente única**: `01-Mockups-y-Propuestas/Análisis y Diseño - Igualab .pdf` (v4, 14/09). La numeración y el contenido de esta tabla **replican el A&D** para que ambos documentos queden 1:1. Se corrigieron solo erratas de redacción y la numeración duplicada del A&D (dos reglas numeradas RN-037 → la segunda pasa a RN-038).
 
@@ -42,7 +42,8 @@
 | **RN-036** | Sesión activa                                      | Toda sesión recientemente activa permanece en ese estado por un **tiempo determinado**; cuando deja de estar activa, **se cierra la sesión**.                                                                                                                                                                                             |
 | **RN-037** | Consulta al modelo                                 | Las consultas deben limitarse a **sostenibilidad empresarial, indicadores GRI, sanciones económicas o el contenido de los documentos ingestados**; en caso contrario, no se atienden.                                                                                                                                                     |
 | **RN-038** | Requerimientos para consulta                       | Toda consulta debe indicar **empresa, sector y año** del reporte a consultar; en caso contrario, **no se permite** la consulta.                                                                                                                                                                                                           |
+| **RN-039** | Integridad de la ingesta | Un documento **rechazado o con ingesta interrumpida** no debe incorporarse **total ni parcialmente** al corpus documental. Solo se conserva la **información necesaria para identificar y auditar el rechazo**. |
 
 ---
 
-**Conteo: 38 RN** con numeración 001–038 (el A&D v5 ya corrigió la duplicación de RN-037). Pendiente en el A&D: (i) RN-017 y RN-019 repiten la restricción de sectores (candidatas a fusionar); (ii) RN-024 conserva una redacción confusa ("consolida, un sector para una empresa…").
+**Conteo: 39 RN** con numeración 001–039 (A&D v6). Pendiente en el A&D: (i) RN-017 y RN-019 repiten la restricción de sectores (candidatas a fusionar); (ii) RN-024 conserva redacción confusa; (iii) **sigue faltando una RN del límite de 50 MB** (la necesita RNF-014).

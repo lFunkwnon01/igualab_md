@@ -291,3 +291,27 @@ Con las decisiones del 13-14/09, el diagrama debe actualizar:
 1. `01-Mockups-y-Propuestas/Igualab - Plan de proyecto.docx (1).pdf` — **Plan v1.2**.
 2. `01-Mockups-y-Propuestas/Análisis y Diseño - Igualab .pdf` — **A&D v5** (RN 001–038, RF 001–053, RNF 001–030).
 3. `FASE 1/` — desarrollo del análisis, arquitectura, BD, stack, frontend y API, todo alineado a las dos fuentes anteriores.
+
+---
+
+## ANEXO 5 · A&D v6 (14/09 04:52)
+
+**Novedades incorporadas al vault:**
+| Nuevo | Contenido | Efecto |
+|---|---|---|
+| **RN-039 · Integridad de la ingesta** | Un documento **rechazado o interrumpido** no se incorpora **total ni parcialmente** al corpus; solo se conserva lo necesario para identificar/auditar el rechazo. | Refuerza la atomicidad: rechazos no dejan chunks ni análisis a medias. |
+| **RF-054** | Si la ingesta es rechazada/interrumpida, **revertir** el procesamiento y eliminar contenido/fragmentos/embeddings/resultados parciales, conservando el **motivo** para auditoría. | Deriva de RN-039. |
+| **RF-055** | Si **no se detectó ningún código GRI**, el **puntaje ESG se muestra «no disponible»**, no como cero. | Deriva de RN-031/RN-032/RN-034. Aplicado a `vw_puntaje_esg` (NULL). |
+
+**RN/RF/RNF quedan (v6):** RN **001–039**, RF **001–055**, RNF **001–030** — replicados en el vault con la misma numeración.
+
+**Pendientes que siguen en el A&D:**
+1. **Falta la RN del límite de 50 MB** (la requieren RNF-014 y el RF de rechazo por tamaño) — RN-039 ya se usó para integridad de la ingesta.
+2. **RN-017 vs RN-019**: repiten la restricción de sectores → fusionar.
+3. **RN-024**: redacción confusa ("consolida, un sector para una empresa…").
+4. **RNF-029** cita **RF-057** (no existe) → debe citar RF-002/003/004.
+5. **RNF-030** sin "Deriva de" → sugerido RNF-028/RF-029.
+6. **RNF-026** dice "conserve el rol declarado" → mejor "aplique el rol **vigente**" (coherente con la transferencia, RF-050).
+7. **CU007 Dashboards de Bolsa** y rol **"Usuario"** siguen en el A&D (acta 5 los eliminó).
+8. **Sección 8 (Modelo de datos) vacía** y **Diccionario = proyecto inmobiliario** → reemplazar por el ERD + Diccionario de FASE 1.
+9. **RF del pipeline ausentes**: chunking, embeddings y almacenamiento vectorial.

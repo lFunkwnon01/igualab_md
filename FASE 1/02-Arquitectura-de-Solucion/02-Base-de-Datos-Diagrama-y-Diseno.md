@@ -1,6 +1,6 @@
 # 02 · Base de Datos — Diagrama ERD, Diseño detallado y Reglas Semánticas (FASE 1)
 
-> **Numeración alineada al A&D v5 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Fuente de verdad: **Plan de Proyecto v1.2** + actas 4/5 · Norma: **GES/GAP** (conceptual → lógico → físico semántico) · Escenario: 3 usuarios (1 Superadmin + 2 Administradores) · 14 tablas.
 
@@ -170,7 +170,7 @@ erDiagram
 - **Qué**: registro de las 3 personas del proyecto (1 Superadmin + 2 Administradores). Ningún "Usuario" público en fase 1 (acta 4 · REQ-10).
 - **Columnas**: `id UUID PK default gen_random_uuid()` · `nombre VARCHAR(120) NOT NULL` · `correo VARCHAR(160) NOT NULL UNIQUE (case-insensitive via índice funcional lower(correo))` · `password_hash TEXT NOT NULL` (bcrypt/argon2 — RNF-01) · `rol VARCHAR(20) NOT NULL CHECK (rol IN ('superadmin','administrador'))` · `habilitado BOOLEAN NOT NULL DEFAULT true` · `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`.
 - **Reglas semánticas (RS)**:
-  - **RS-01 (RN-003)**: en toda la tabla existe **exactamente 1 fila con `rol='superadmin' AND habilitado=true`**. Se garantiza con índice único parcial: `CREATE UNIQUE INDEX uq_un_solo_superadmin ON usuarios ((rol)) WHERE rol='superadmin' AND habilitado=true;` — al transferir el rol, la transacción (UPDATE dupla) es **atómica**: el nuevo sube y el anterior baja en el mismo commit.
+  - **RS-01 (RN-002)**: en toda la tabla existe **exactamente 1 fila con `rol='superadmin'`**, **con independencia de su estado de habilitación**. Se garantiza con índice único: `CREATE UNIQUE INDEX uq_un_solo_superadmin ON usuarios ((rol)) WHERE rol='superadmin';` (sin filtro de `habilitado`, conforme a RN-002; además RF-013 impide deshabilitar al SuperAdmin). Al transferir el rol, la transacción (UPDATE doble) es **atómica**: la cuenta destino sube y la de origen baja en el mismo commit (RNF-011) — nunca hay 0 ni 2 SuperAdmin.
   - **RS-02 (RN-007)**: deshabilitar un usuario invalida sus tokens (los JWT llevan `iat`; en invalidación se registra en auditoría y se exige re-login).
   - **RS-03 (RN-001)**: sin usuario vigente no existe operación (todo FK `usuario_id` proviene de `usuarios.habilitado=true`).
 
@@ -259,11 +259,15 @@ erDiagram
 
 ## 4bis. Puntaje ESG (fase 1 — RN-031 / RF-028)
 
-El puntaje ESG de una empresa/año se calcula desde los estados manuales: **OK = 100 · Baja sustancia = 50 · Sub-reportado = 0**, promediado sobre los códigos evaluados. Se persiste/expone para el reporte (la visualización tipo dashboard sigue en fase 2). Campo/vista: `vw_puntaje_esg(empresa_id, anho, puntaje, codigos_evaluados)`.
+El puntaje ESG de una empresa/año se calcula desde los estados manuales: **OK = 100 · Baja sustancia = 50 · Sub-reportado = 0**, promediado sobre los códigos evaluados. Se persiste/expone para el reporte (la visualización tipo dashboard sigue en fase 2). Campo/vista: `vw_puntaje_esg(empresa_id, anho, puntaje, codigos_evaluados)` — devuelve **«no disponible» (NULL)** cuando **no se detectó ningún código GRI** (RN-032/RF-055: no debe calcularse como 0).
 
 ## 4ter. Sanciones sin monto y no determinados (A&D v2 RF-057/058, RNF-024)
 
 `sanciones.monto` puede ser `NULL` (no determinado) — **nunca 0 por defecto**; el reporte muestra por separado el **monto total cuantificado** y el **número de sanciones sin monto**. Se agrega `sanciones.sin_monto BOOLEAN` (derivado) o se infiere de `monto IS NULL` para las vistas.
+
+## 4quater. Integridad de la ingesta (RN-039 / RF-054)
+
+Un documento **rechazado o con ingesta interrumpida** **no** incorpora filas a `chunks_embeddings` ni resultados de análisis: la operación es **atómica** (RNF-017) y, si falla, **revierte**. En `documentos` solo se conserva el registro con `estado='rechazado'` y `motivo`, para historial y auditoría.
 
 ## 5. Vistas de agregación (preparatorias para el dashboard de fase 2)
 

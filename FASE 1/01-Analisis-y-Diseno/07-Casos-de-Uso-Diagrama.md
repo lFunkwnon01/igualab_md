@@ -1,6 +1,6 @@
 # 07 · Casos de Uso — Diagrama y Listado (FASE 1)
 
-> **Numeración alineada al A&D v5 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Casos de uso del A&D v1.0 **depurados** según plan v1.2 y actas 4/5: se eliminan CU007 de Dashboards de Bolsa de Valores (REQ-16/19), el rol Usuario del mock CU010 LinkedIn (REQ-17) y el chatbot inclusivo (fase 2). Se retoman 9 CU **vivos en el mock fidelizado**.
 

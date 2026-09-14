@@ -1,6 +1,6 @@
 # 03 · Diagramas de Procesos TO-BE — FASE 1 (formato BPMN)
 
-> **Numeración alineada al A&D v5 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Proceso to-be según el A&D actualizado y ajustado al plan de proyecto v1.2 + actas 4/5: **sin dashboard, sin Bolsa, sin LinkedIn**. Todos los flujos corresponden 1:1 con el mock fidelizado <https://igualab.vercel.app/>.
 > El BPMN fuente está en `diagramas-BPMN/proceso_tobe_fase1.bpmn` (visualizable en `00-Documentación/bpmn/visor_bpmn.html`). Aquí se incluye versión mermaid para lectura rápida.

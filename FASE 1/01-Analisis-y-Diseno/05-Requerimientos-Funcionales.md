@@ -1,6 +1,6 @@
-# 05 · Requerimientos Funcionales — FASE 1 (numeración = A&D v5)
+# 05 · Requerimientos Funcionales — FASE 1 (numeración = A&D v6)
 
-> **Fuente única**: A&D v5 (14/09 21:04). Replica numeración y contenido. El A&D v5 **cerró los huecos** de RF: ahora van **RF-001 a RF-053 correlativos**.
+> **Fuente única**: A&D v6 (14/09 21:04). Replica numeración y contenido. El A&D v6 incluye **RF-001 a RF-055** (se agregaron RF-054 integridad de la ingesta y RF-055 puntaje ESG «no disponible»).
 
 | N°         | Requerimiento Funcional                                                                                                                                                                                                                                                         | Deriva de                                    | Prioridad   |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------- |
@@ -58,6 +58,11 @@
 | **RF-052** | El sistema debe permitir al SuperAdmin **ingresar una nueva empresa** en el sistema.                                                                                                                                                                                            | RN-035                                       | MUST HAVE   |
 | **RF-053** | Al ingresar una nueva empresa, el sistema debe **obligar a colocarle un nombre y asignarle un sector** (Minería, Petróleo o Energía).                                                                                                                                           | RN-035                                       | MUST HAVE   |
 
+| **RF-054** | Si la ingesta es **rechazada o interrumpida**, el sistema debe **revertir el procesamiento** y eliminar todo contenido, fragmento, embedding o resultado de análisis **generado parcialmente**, conservando únicamente los datos y el **motivo del rechazo** para historial y auditoría. | **RN-039** | MUST HAVE |
+| **RF-055** | Si **no se detectó ningún código GRI** para una empresa y año, el sistema debe mostrar el **puntaje ESG como «no disponible»** en el reporte, en lugar de calcularlo como cero. | **RN-031, RN-032, RN-034** | MUST HAVE |
+
 ## Notas
-- **Correcciones aplicadas** (errores del A&D v5): RF-021 citaba **RN-039** (inexistente) → RN-033; RF-038 cita RN-027 → corresponde a RN-024/RN-025.
+
+- **Rechazo por tamaño (reparto)**: el RF de ingesta debe indicar que el sistema **rechaza con motivo** los documentos que **superen el límite de 50 MB**, antes de procesarlos. El límite es una **RN** (crear RN-039 en el A&D) y la capacidad de procesarlos es **RNF-014**; la validación en servidor, **RNF-006**.
+- **Correcciones aplicadas** (errores del A&D v6): RF-021 citaba **RN-039** (inexistente) → RN-033; RF-038 cita RN-027 → corresponde a RN-024/RN-025.
 - **RF de pipeline** aún ausentes en el A&D (propuestos): *chunking*, *embeddings por API* y *almacenamiento vectorial* — ver Anexo 3 del doc 10.
