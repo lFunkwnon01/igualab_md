@@ -1,5 +1,7 @@
 # 01 · Arquitectura de frontend (React) — FASE 1
 
+> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+
 > Base: mock fidelizado <https://igualab.vercel.app/> (SPA vanilla ya finalizada). Se migra a **React 18 + Vite** conservando pantallas, menús por rol y flujos (sin dashboard, sin Bolsa, sin LinkedIn — acta 5).
 
 ## 1. Estructura de proyecto

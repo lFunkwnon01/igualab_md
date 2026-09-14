@@ -1,5 +1,7 @@
 # 02 · Análisis GRI: antecedentes, qué es una brecha y cómo se califica
 
+> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+
 >Detalle solicitado por el PO (Oscar) en las interacciones previas (actas 1–5): entender con precisión qué son las **memorias anuales**, los **reportes de sostenibilidad (GRI)**, qué es una “brecha” y cómo se determina el estado de un indicador.
 
 ## 1. ¿Qué documentos consume el sistema (fuente de verdad)?

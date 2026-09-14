@@ -247,3 +247,26 @@ Con las decisiones del 13-14/09, el diagrama debe actualizar:
 | Título: `análisis al terminar — el reporte no consulta al LLM` | ✔ correcto, se mantiene |
 
 > Coherente con: RN-017 (alcance del análisis = último paso de la ingesta), RN-018 (estado manual), RN-035 (identificación y persistencia), RN-025 (el reporte consolida y no invoca IA).
+
+---
+
+## ANEXO 3 · Estado del A&D v4 (14/09) y correcciones
+
+**Lo que el A&D v4 sí actualizó:** el bloque completo de **RN (001–038)** y **RF (001–056)**, con mejoras incorporadas (RN-013 contenido mínimo, RN-014 identificación con empresa/año/tipo, RN-016 estados manuales de 3 valores, RN-017 análisis como último paso de la ingesta, RN-018 catálogo versionado, RN-019 sectores, RN-024 reporte, RN-035 registro de empresas, RN-036 sesión, RN-037/038 consultas). El FASE 1 ya quedó **1:1** con esta numeración.
+
+**Errores/ pendientes detectados en el A&D v4:**
+
+| # | Problema | Acción |
+|---|---|---|
+| 1 | **RN-037 duplicada** (dos reglas con el mismo código) | La segunda se renumeró a **RN-038** en FASE 1; corregir en el A&D |
+| 2 | **RN-017 y RN-019** repiten la restricción de sectores | Fusionar o diferenciar (RN-019 podría eliminarse) |
+| 3 | **RN-024** con redacción confusa ("consolida, un sector para una empresa…") | Usar: "consolida, para una empresa, su sector y un año específico" |
+| 4 | **RF-022** cita **RN-039**, inexistente | Debe citar RN-033 |
+| 5 | **RF-040** cita RN-026 (inmutabilidad) | Debe citar RN-024/RN-025 |
+| 6 | **RF-019, RF-039, RF-042** son huecos | Completar (chunking/embeddings/almacenamiento) o renumerar |
+| 7 | **RF de pipeline ausentes**: chunking, embeddings por API y almacenamiento vectorial | Reincorporar (ver Parte 1 de este doc) |
+| 8 | **RNF-029** dice "rechazar documentos que pesen **menos** de 50 MB" | Debe decir "que **superen** los 50 MB" (corregido en FASE 1) |
+| 9 | **Deriva de** con referencias inexistentes (RF-064/065/069/070/073; RN-019/020/023/030/031/034) | Corregir la trazabilidad de la tabla de RNF |
+| 10 | **CU007 Dashboards de Bolsa** y rol **"Usuario"** siguen en CU001/CU007 | Eliminar (acta 5) |
+| 11 | **Sección 8 (Modelo de datos) vacía** y **Diccionario = proyecto inmobiliario** | Reemplazar por el ERD + Diccionario de FASE 1 |
+| 12 | Nota de trabajo "**ideotas:** …" en CU001 | Eliminar |

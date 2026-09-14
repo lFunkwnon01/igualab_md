@@ -6,7 +6,7 @@
 
 | Carpeta | Contenido |
 |---|---|
-| `01-Analisis-y-Diseno/` | antecedentes y objetivos · análisis GRI · **diagramas de procesos TO-BE (BPMN + mermaid)** · reglas de negocio (36) · requerimientos funcionales (31) · no funcionales (32) · casos de uso (9 + mermaid) · especificaciones |
+| `01-Analisis-y-Diseno/` | antecedentes y objetivos · análisis GRI · **diagramas de procesos TO-BE (BPMN + mermaid)** · reglas de negocio (38) · requerimientos funcionales (56) · no funcionales (29) — numeración = A&D v4 · casos de uso (9 + mermaid) · especificaciones |
 | `02-Arquitectura-de-Solucion/` | arquitectura por módulos (**RAG simple, sin MCP**) + compara RAG vs MCP · modelos gratis sin function calling · **diagrama y diseño de la base de datos (PostgreSQL + pgvector)** · diccionario de datos (se completa al final, tras congelar la BD) |
 | `03-Stack-Tecnologico/` | stack decidido + LLM gratuito (GLM-5.2 `:free` / OpenRouter + embeddings por API) y variables de entorno |
 | `04-Frontend-React/` | arquitectura React 18 + Vite, mapeo 1:1 con el mock, comportamientos por RN |

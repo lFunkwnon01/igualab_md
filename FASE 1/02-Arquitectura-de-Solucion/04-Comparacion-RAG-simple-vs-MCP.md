@@ -1,5 +1,7 @@
 # 04 · Comparación: RAG simple vs RAG + MCP (decisión de FASE 1)
 
+> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+
 > Conclusión previa: **FASE 1 usa solo RAG simple (sin MCP/function calling)** — corrección al acta-arquitectura anterior (mi error al proponerlo). El diagrama manual de la arquitectura de solución (IGUALAB · "RAG + Generación de Reportes | Modelos Gratuitos") es la versión válida. Este documento justifica la decisión y guarda la comparación para re-evaluarla en el futuro.
 
 ## 1. Los dos enfoques en una línea

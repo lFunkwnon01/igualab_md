@@ -1,5 +1,7 @@
 # 01 · Stack tecnológico — FASE 1
 
+> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+
 > Decisión avalada por el PO en el acta 5 (REQ-18: «stack a elección libre del equipo»). Complemento del diagrama `v1_backend_arquitectura.jpeg` y del A&D.
 
 ## 1. Stack consolidado

@@ -1,5 +1,7 @@
 # 05 · Análisis de Alto Nivel — Por qué existe cada tabla (y por qué NO sobra)
 
+> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+
 > Cuestionamiento legítimo del equipo: "¿no son demasiadas tablas? ¿son todas necesarias?". Respuesta corta: **sí son necesarias, pero se explican de tres razones: la cadena del negocio, las reglas de negocio (RN) que las exigen, y la regla oro del modelo: cada tabla existe para un propietario distinto del dato — nunca dos tablas contengan lo mismo.**
 
 ## 1. Principio de diseño que gobierna el fundamento

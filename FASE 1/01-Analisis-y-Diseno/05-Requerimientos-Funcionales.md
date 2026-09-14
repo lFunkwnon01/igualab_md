@@ -1,49 +1,64 @@
-# 05 · Análisis de Requerimientos Funcionales — FASE 1
+# 05 · Requerimientos Funcionales — FASE 1 (numeración = A&D v4)
 
-> **Regla de calidad**: los RF (31) y las RN (36) están balanceados (menos RF que RN), y siempre > 0 sin duplicados ni RF sin RN de respaldo. Cada RF tiene RN de respaldo; se eliminaron los RF del A&D v1.0 ligados a Bolsa de Valores (RF-018/019), dashboards y a duplicados marcados en revisión («se repiteeeee»).
-> Mapeo al mock: cada RF indica la pantalla que lo materializa (mock viva <https://igualab.vercel.app/>).
+> **Fuente única**: A&D v4 (14/09). Se replica la **numeración y contenido** del A&D para que ambos documentos queden 1:1. Se conservan los huecos de numeración reservados del A&D (RF-019, RF-039, RF-042) para no romper la trazabilidad. La columna «Deriva de» replica las reglas citadas por el A&D; se corrigen entre corchetes las referencias inexistentes.
 
-| ID | Requerimiento funcional | RN de respaldo | Actores | Prioridad | Mock |
-|---|---|---|---|---|---|
-| **RF-001** | El sistema debe permitir a los usuarios autenticarse con correo y contraseña, validando cuenta habilitada. | RN-001, RN-005, RN-006 | Ambos | MUST HAVE | Login |
-| **RF-002** | El sistema debe permitir la **recuperación de contraseña** mediante enlace seguro de vigencia limitada enviado al correo registrado. | RN-006 | Ambos | MUST HAVE | Login |
-| **RF-003** | El sistema debe mantener la sesión activa y **expirar bloqueándola por inactividad** (tiempo configurable por el Superadmin). | RN-004, RN-007 | Ambos | MUST HAVE | Configuración |
-| **RF-004** | El sistema debe **restringir menús y endpoints según el rol** (Superadmin / Administrador) — RBAC. | RN-001, RN-002 | Ambos | MUST HAVE | Menús |
-| **RF-005** | El sistema debe permitir al Superadmin crear, habilitar/deshabilitar y **asignar roles**, con transferencia automática del rol Superadmin (se conserva 1 único Superadmin). | RN-003, RN-007 | Superadmin | MUST HAVE | Usuarios y roles |
-| **RF-006** | El sistema debe permitir al Superadmin **configurar parámetros** del sistema (minutos de inactividad, bloqueo, notificaciones). | RN-004 | Superadmin | SHOULD HAVE | Configuración |
-| **RF-007** | El sistema debe permitir la **carga síncrona de documentos `.md`** asociados a una empresa y un año, mostrando el resultado de la ingesta (éxito/observación/rechazo) en la misma operación. | RN-008…RN-015 | Superadmin | MUST HAVE | Ingesta |
-| **RF-008** | El sistema debe **pre-validar** cada `.md`: extensión, tamaño ≤ **50 MB**, tablas con pipes y contenido analizable, con motivo exacto de rechazo. | RN-009, RN-010, RN-011 | Sistema | MUST HAVE | Ingesta |
-| **RF-009** | El sistema debe **procesar e indexar automáticamente** cada documento válido (chunking + embeddings) y persistir los vectores con su metadata (doc_id, empresa, año, sección, código GRI). | RN-012, RN-013, RN-014 | Sistema | MUST HAVE | (interno) |
-| **RF-010** | El sistema debe permitir al Administrador **consultar al asistente IA (RAG)** en lenguaje natural sobre los documentos indexados, con respuesta y **fuentes citadas** (documento + sección). | RN-021, RN-022 | Administrador | MUST HAVE | Asistente de IA |
-| **RF-011** | El sistema debe informar cuando el asistente **no esté disponible** (o se agote la cuota del free tier), sin bloquear el resto de módulos. | RN-023, RN-024 | Administrador | MUST HAVE | Asistente de IA |
-| **RF-012** | El sistema debe **identificar los códigos GRI presentes** en el documento (catálogo de 40) con su **cita textual**, y listar brechas y sanciones por empresa (sector permitido). | RN-016, RN-017, RN-019, RN-020 | Administrador | MUST HAVE | Asistente de IA |
-| **RF-013** | El sistema debe permitir al Administrador **asignar manualmente el estado** de cada código GRI (`OK` / `Baja sustancia` / `Sub-reportado`) tras revisar la **cita** extraída del documento, **sin inferencia automática**, dejando historial del cambio. | RN-018 | Administrador (supervisión PO) | MUST HAVE | Asistente de IA |
-| **RF-014** | El sistema debe permitir **generar el reporte de prospección en PDF** con plantilla (estados GRI asignados, sanciones —incl. las sin monto—, **puntaje ESG** y resumen ejecutivo) alimentada con **variables desde la base de datos, sin invocar a la IA**. | RN-025, RN-026 | Administrador | MUST HAVE | Reportes de prospección |
-| **RF-015** | El sistema debe conservar el **historial de reportes generados** (versiones, sin edición) y permitir su **descarga**. | RN-027, RN-030 | Administrador | MUST HAVE | Descargar reportes |
-| **RF-016** | El sistema debe **registrar automáticamente los eventos sensibles** (login, cambio de rol, ingesta, generación de reporte) y permitir **consultarlos filtrando** por usuario, fecha y tipo. | RN-028, RN-029 | Superadmin (consulta) | MUST HAVE | Auditoría de accesos |
-| **RF-017** | El sistema debe permitir al Superadmin **gestionar el catálogo de empresas**: crear, editar (nombre, ticker, **sector** — solo de los 3 permitidos) y activar/desactivar empresas; la ingesta y el análisis solo aceptan empresas del catálogo. | RN-013, RN-016 | Superadmin | MUST HAVE | (vía Ingesta/Dashboard) |
-| **RF-018** | El sistema debe permitir al Superadmin **listar los documentos ingestados** con su estado del pipeline (indexado / observado / rechazado), versión, hash y fecha, y **re-subir una nueva versión** cuando el contenido difiere (estado OBSERVADO corregible). | RN-015, RN-030 | Superadmin | SHOULD HAVE | Ingesta |
-| **RF-019** | El sistema debe mantener el **historial de la conversación del Administrador con el asistente** durante la sesión y permitir iniciar una **nueva conversación** (nuevo contexto, sin arrastre). | RNF-11 | Administrador | SHOULD HAVE | Asistente de IA |
-| **RF-020** | El sistema debe **mostrar el contador de cuota diaria del asistente** (uso_llm) y avisar al alcanzar límites intermedios (75 %, 100 %). | RN-024, RNF-11 | Administrador | MUST HAVE | Asistente de IA |
-| **RF-021** | El sistema debe **notificar el resultado de la ingesta con motivo exacto** (éxito: nº de chunks; observación; rechazo con regla incumplida) tanto en pantalla como en auditoría. | RN-009…RN-014 | Superadmin | MUST HAVE | Ingesta |
-| **RF-022** | El sistema debe permitir **filtrar listados** por empresa, sector, año y estado (brechas GRI, documentos, historial de reportes, auditoría ya cubre su caso). | RN-016, RN-019 | Administrador / Superadmin | SHOULD HAVE | Múltiples vistas |
-| **RF-023** | El sistema debe permitir el **cierre de sesión manual** y el automático por inactividad, invalidando el token en cada caso. | RN-004, RN-007 | Ambos | MUST HAVE | Navbar |
-| **RF-024** | El sistema debe **restringir el análisis a empresas de los sectores permitidos** en todos los flujos (chat, brechas, reporte), informando el límite de alcance si se consulta otra. | RN-016 | Sistema | MUST HAVE | (todos) |
-| **RF-025** | Al cambiar el estado de una brecha, el sistema debe requerir una **observación textual** cuando el estado final difiere del sugerido (sustento humano, RN-018). | RN-018 | Administrador | MUST HAVE | Asistente de IA |
+| N° | Requerimiento Funcional | Deriva de (A&D) | Prioridad |
+|---|---|---|---|
+| **RF-001** | El sistema debe permitir la autenticación de usuarios con correo y contraseña, validando que la cuenta esté habilitada y tenga un rol asignado. | RN-001, RN-004, RN-007 | MUST HAVE |
+| **RF-002** | El sistema debe permitir la recuperación de contraseña mediante enlace seguro enviado al correo registrado, con vigencia limitada de **30 minutos**. | RN-010 | MUST HAVE |
+| **RF-003** | El sistema debe invalidar el enlace de recuperación al ser utilizado o al vencer su vigencia. | RN-010 | MUST HAVE |
+| **RF-004** | El sistema debe permitir al usuario cambiar su propia contraseña estando autenticado. | RN-010 | SHOULD HAVE |
+| **RF-005** | El sistema debe mantener la sesión activa y expirarla por inactividad después de **2 horas**. | RN-036 | MUST HAVE |
+| **RF-006** | El sistema debe permitir el cierre de sesión manual, invalidando la sesión activa. | RN-005 | MUST HAVE |
+| **RF-007** | El sistema debe restringir el acceso a funcionalidades según el rol asignado (SuperAdmin / Administrador). | RN-003, RN-001 | MUST HAVE |
+| **RF-008** | El sistema debe responder con error de autorización ante una acción no permitida para el rol. | RN-003 | MUST HAVE |
+| **RF-009** | El sistema debe invalidar todas las sesiones activas de una cuenta al deshabilitarla. | RN-005 | MUST HAVE |
+| **RF-010** | El sistema debe permitir al SuperAdmin crear cuentas con nombre, correo y contraseña, asignando automáticamente el rol Administrador. | RN-004, RN-007, RN-008 | MUST HAVE |
+| **RF-011** | El sistema debe rechazar el registro de cuentas con correo ya existente. | RN-007 | MUST HAVE |
+| **RF-012** | El sistema debe permitir al SuperAdmin habilitar y deshabilitar cuentas de Administrador. | RN-005 | MUST HAVE |
+| **RF-013** | El sistema debe impedir que la cuenta con rol SuperAdmin sea deshabilitada o eliminada desde la aplicación, indicando que debe transferirse el rol previamente. | RN-002 | MUST HAVE |
+| **RF-014** | El sistema debe mostrar un mensaje de alerta de confirmación antes de ejecutar el cambio de rol SuperAdmin a una cuenta con rol Administrador habilitada. La cuenta de origen cambia al rol Administrador al completarse el cambio. | RN-002, RN-009 | MUST HAVE |
+| **RF-015** | El sistema debe rechazar la transferencia si la cuenta destino no existe, está deshabilitada o ya tiene rol SuperAdmin. | RN-009 | MUST HAVE |
+| **RF-016** | El sistema debe listar las cuentas existentes con su rol y estado. | RN-003 | SHOULD HAVE |
+| **RF-017** | El sistema debe permitir al SuperAdmin cargar documentos asociando **sector, empresa, año y tipo** (memoria anual / reporte de sostenibilidad GRI). | RN-011, RN-014 | MUST HAVE |
+| **RF-018** | El sistema debe rechazar la carga si el archivo no tiene extensión `.md`. | RN-012 | MUST HAVE |
+| **RF-020** | El sistema debe validar que el documento contenga al menos un **código del catálogo GRI o una mención de sanción** (contenido mínimo). | RN-013 | MUST HAVE |
+| **RF-021** | El sistema debe calcular el **hash SHA-256** del contenido del archivo antes de procesarlo y rechazar la carga si ya existe un documento con el mismo hash. | RN-033 | MUST HAVE |
+| **RF-022** | El sistema debe rechazar la carga si ya existe un documento indexado con la **misma empresa, tipo y año**, indicando la fecha y la cuenta que realizó la carga original. | RN-033 *(el A&D cita RN-039, inexistente)* | MUST HAVE |
+| **RF-023** | El sistema debe procesar el documento de forma **síncrona**, informando el resultado (éxito / en proceso / rechazo) al finalizar. | RN-017 | MUST HAVE |
+| **RF-024** | El sistema debe indexar el contenido del documento para su consulta por el asistente. | RN-012 | MUST HAVE |
+| **RF-025** | El sistema debe listar los documentos ingestados con su estado (éxito / en proceso / rechazado), versión y fecha. | RN-017 | MUST HAVE |
+| **RF-026** | El sistema debe identificar posibles sanciones mediante **búsqueda de contenido** en el documento y, de encontrar evidencia, extraer mediante el servicio de IA la **entidad sancionadora y el monto** de la multa. | RN-015, RN-021, RN-022 | MUST HAVE |
+| **RF-027** | El sistema debe bloquear la ejecución del reporte de prospección para empresas **sin documentos ingestados**, indicando el motivo. | RN-020, RN-021 | MUST HAVE |
+| **RF-028** | El sistema debe permitir al Administrador **cambiar los estados de todos los códigos GRI analizados en la ingesta**; estados permitidos: `OK`, `Baja sustancia` y `Sub-reportado`. | RN-016 | MUST HAVE |
+| **RF-029** | El sistema debe registrar, para cada análisis, **si cada dimensión (brechas GRI, sanciones) contó con evidencia analizable** en el corpus. | RN-021 | MUST HAVE |
+| **RF-030** | El sistema debe permitir al Administrador **consultar en lenguaje natural** sobre el corpus indexado. | RN-022 | MUST HAVE |
+| **RF-031** | El sistema debe restringir la recuperación de contexto a los **documentos indexados**. | RN-022 | MUST HAVE |
+| **RF-032** | El sistema debe incluir en cada respuesta la **referencia al documento, empresa y año**, cuando corresponda. | RN-023 | MUST HAVE |
+| **RF-033** | El sistema debe **suprimir toda afirmación sin fuente verificable** en el corpus. | RN-023 | MUST HAVE |
+| **RF-034** | El sistema debe informar explícitamente cuando el corpus **no contiene información suficiente** para responder. | RN-022, RN-023 | MUST HAVE |
+| **RF-035** | El sistema debe conservar el **historial de consultas** del Administrador. | RN-027 | SHOULD HAVE |
+| **RF-036** | El sistema debe permitir al Administrador **generar un reporte de prospección por empresa y un año específico**. | RN-025 | MUST HAVE |
+| **RF-037** | El sistema debe mostrar para selección únicamente las **empresas con al menos un documento indexado** para la generación del reporte. | RN-020, RN-014 | MUST HAVE |
+| **RF-038** | El sistema debe permitir **seleccionar sector, empresa y año** del prospecto a consultar; si no se completan las opciones, no se pueden realizar consultas. | RN-020, RN-021, RN-035 | MUST HAVE |
+| **RF-040** | El sistema debe presentar en el reporte el **estado de cada código GRI del año específico**, con su **cita de respaldo**. | RN-027 *(el A&D cita RN-026)*, RN-026 | MUST HAVE |
+| **RF-041** | El sistema debe **listar los códigos GRI identificados del año** antes de generar el reporte, incluyendo las **sanciones asociadas**. Cada sanción indica su **monto** cuando esté disponible; si no, se conserva **nulo** y se identifica como «no cuantificada», **sin omitirla**. | RN-024, RN-015, RN-032 | MUST HAVE |
+| **RF-043** | El reporte debe tener un **campo separado** con el **monto total de sanciones cuantificadas** y el **número de sanciones sin monto**. | RN-032, RN-034 | MUST HAVE |
+| **RF-044** | El sistema debe generar automáticamente un **resumen ejecutivo** con: puntaje ESG, número total de brechas GRI por estado (OK, Sub-reportado, Baja sustancia), monto total de sanciones cuantificadas y número de sanciones sin monto — **sin intervención del usuario**. | RN-024, RN-025, RN-034 | MUST HAVE |
+| **RF-045** | El sistema debe generar el reporte **a partir de los resultados de análisis almacenados, sin invocar al servicio de IA**. | RN-025 | MUST HAVE |
+| **RF-046** | El sistema debe generar el reporte de prospección en **formato PDF**. | RN-024 | MUST HAVE |
+| **RF-047** | El sistema debe permitir al Administrador **visualizar el historial de reportes** generados, mostrando como mínimo empresa, año y fecha de generación. | RN-026, RN-030 | MUST HAVE |
+| **RF-048** | El sistema debe permitir **descargar** un reporte de prospección previamente generado. | RN-030 | SHOULD HAVE |
+| **RF-049** | El sistema debe **registrar automáticamente** los eventos: inicio de sesión, cambio de estado o rol, ingesta, rechazo de documento y generación de reportes. | RN-027 | MUST HAVE |
+| **RF-050** | El sistema debe **consignar en cada registro** la cuenta, fecha, hora y tipo de acción. | RN-028 | MUST HAVE |
+| **RF-051** | El sistema debe permitir al SuperAdmin **consultar el registro de auditoría** filtrando por usuario, fecha y tipo de evento. | RN-027, RN-028, RN-029 | SHOULD HAVE |
+| **RF-052** | El sistema debe **informar la indisponibilidad del servicio de IA sin bloquear** los demás módulos. | RN-030 | SHOULD HAVE |
+| **RF-053** | El sistema debe **aplicar el rol vigente** de la cuenta en las sesiones activas tras una transferencia del rol SuperAdmin. | RN-002, RN-009 | MUST HAVE |
+| **RF-054** | El sistema debe **calcular y mostrar el puntaje ESG** de una empresa y año (OK=100, Baja sustancia=50, Sub-reportado=0) a partir de los estados asignados. | RN-034, RN-025 | MUST HAVE |
+| **RF-055** | El sistema debe permitir al SuperAdmin **ingresar una nueva empresa** en el sistema. | RN-035 | MUST HAVE |
+| **RF-056** | Al ingresar una nueva empresa, el sistema debe **obligar a colocarle un nombre y asignarle un sector** (Minería, Petróleo o Energía). | RN-035 | MUST HAVE |
 
-## Notas de trazabilidad (cambios respecto al A&D v1.0)
-
-- **RF-018 y RF-019 (dashboards de Bolsa, v1.0) → ELIMINADOS** (acta 5 · REQ-16/19: dashboards a fase 2).
-- **RF-006/RF-007 (carga en PDF, v1.0) → REEMPLAZADOS** por RF-007/RF-008 en `.md` con guard (acta 5 · REQ-20).
-- Los RF quedan numerados desde el 1 en esta nueva base de FASE 1 (no se conserva el numerado RF-001…021 del v1.0 para evitar referencias a elementos eliminados); la eliminancia se registra en la trazabilidad del acta 5 (REQ-16: renumeración de CU correspondiente).
-
-## Adiciones del A&D v2 (13/09)
-
-| ID | Requerimiento funcional | RN | Actores | Prioridad |
-|---|---|---|---|---|
-| **RF-026** | El sistema debe **dividir el documento en fragmentos (chunking)** y obtener su representación vectorial **con embeddings **por API** del proveedor de IA** (decisión del equipo; se corrige RF-026 del A&D v2 que proponía API del proveedor). | RN-010 | Sistema | MUST HAVE |
-| **RF-027** | El sistema debe **rechazar la carga si ya existe** un documento indexado con la misma **empresa + tipo + año** (además del hash), indicando fecha y cuenta de la carga original. | RN-014, RN-030 | Superadmin | MUST HAVE |
-| **RF-028** | El sistema debe **calcular y mostrar el puntaje ESG** de una empresa/año (OK=100, Baja=50, Sub=0) a partir de los estados manuales, e incluirlo en el reporte. | RN-031 | Administrador | MUST HAVE |
-| **RF-029** | El sistema debe **identificar sanciones sin monto**, listarlas y reportarlas separadas del total cuantificado ("no determinado" ≠ 0). | RN-020, RN-033 | Administrador | MUST HAVE |
-| **RF-030** | El sistema debe **registrar, por cada análisis, si hubo evidencia analizable** por dimensión (brechas GRI / sanciones) — distingue ausencia de hallazgo de falta de evidencia. | RN-032 | Sistema | MUST HAVE |
-| **RF-031** | El sistema debe aplicar **borrado lógico** (marcado de estado) de documentos y fragmentos, sin borrado físico (los reportes se conservan: RN-028). | RN-034 | Superadmin | MUST HAVE |
+## Notas de trazabilidad
+- **Huecos de numeración** del A&D conservados: RF-019, RF-039, RF-042.
+- **Correcciones aplicadas** (errores del A&D v4): RF-022 citaba **RN-039** (inexistente) → RN-033; RF-040 citaba RN-026 (inmutabilidad) para un requerimiento de contenido → RN-024/RN-025.
+- **RF de pipeline** que el A&D v4 no lista y deberían existir (propuestos): *chunking*, *generación de embeddings por API*, *almacenamiento vectorial* — ver doc 10 · Anexo 3.

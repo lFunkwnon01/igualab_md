@@ -1,5 +1,7 @@
 # 01 · Arquitectura de Solución — FASE 1 (a medida)
 
+> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+
 > Fuente de verdad: **Plan de Proyecto v1.2** (aprobado 11/09) · acta 5 · **RAG simple, sin MCP ni function calling** · modelos `:free` sin costo.
 
 **Diagrama de la solución (elaborado por el equipo — versión vigente):**

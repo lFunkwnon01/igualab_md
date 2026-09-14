@@ -1,78 +1,48 @@
-# 04 · Reglas de Negocio — FASE 1
+# 04 · Reglas de Negocio — FASE 1 (numeración = A&D v4)
 
-> 31 RN, agrupadas por dominio. Cada RF referencia sus RN. Fuente: actas 1–5 + plan v1.2 + acuerdos con el PO (Oscar). Las RN decididas en el acta 5 marcan `([acta 5])`.
-
-## Grupo A · Acceso, sesiones y roles
-
-| ID         | Nombre                                               | Regla                                                                                                                                                                                                                                            |
-| ---------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **RN-001** | Acceso restringido                                   | Solo acceden usuarios registrados y **habilitados** por Igualab, con **rol asignado** que define su alcance (2 roles: Superadmin, Administrador — acta 4 REQ-10).                                                                                |
-| **RN-002** | Segregación de funciones                             | La gestión de accesos y la ingesta (Superadmin) quedan separadas de la explotación comercial (Administrador); ningún rol concentra ambas funciones.                                                                                              |
-| **RN-003** | Un solo Superadmin · transferencia automática de rol | Existe **siempre 1 solo Superadmin** activo. Si el Superadmin asigna el rol Superadmin a un Administrador, **el rol se transfiere: el Superadmin original vuelve automáticamente a Administrador**. El movimiento queda registrado en auditoría. |
-| **RN-004** | Bloqueo por inactividad                              | La sesión expira tras **30 minutos de inactividad** (CONFIG: configurable en `Configuración` del mock); al expirar la sesión se bloquea y exige reautenticación.                                                                                 |
-| **RN-005** | Bloqueo por intentos fallidos                        | Tras **5 intentos fallidos** consecutivos de login, la cuenta queda bloqueada **15 minutos** y se registra el evento en auditoría.                                                                                                               |
-| **RN-006** | Política de contraseñas                              | Mínimo **8 caracteres**, con mayúscula, minúscula, número y carácter especial. Nunca en texto plano (cifrado con hash fuerte).                                                                                                                   |
-| **RN-007** | Usuario deshabilitado no opera                       | Un usuario deshabilitado no puede iniciar sesión ni conservar tokens; sus sesiones vigentes se cierran al deshabilitarlo.                                                                                                                        |
-
-## Grupo B · Ingesta de documentos ([acta 5] REQ-20)
+> **Fuente única**: `01-Mockups-y-Propuestas/Análisis y Diseño - Igualab .pdf` (v4, 14/09). La numeración y el contenido de esta tabla **replican el A&D** para que ambos documentos queden 1:1. Se corrigieron solo erratas de redacción y la numeración duplicada del A&D (dos reglas numeradas RN-037 → la segunda pasa a RN-038).
 
 | ID | Nombre | Regla |
 |---|---|---|
-| **RN-008** | Ingesta exclusiva del Superadmin | Solo el Superadmin carga documentos; el Administrador no ve la opción de ingesta (el mock concuerda). |
-| **RN-009** | Conversión, formato y estructura de ingesta | La **conversión de formatos** está fuera del alcance: los documentos ingresan únicamente como **Markdown (.md)** convertido por el cliente, **responsable de la fidelidad** de la conversión (no verificable por el sistema). La **estructura exigible** es: extensión `.md` y **tablas pipe válidas** (encabezado entre `|`, **fila separadora** `|---|` y columnas consistentes). El **PDF no es formato de entrada**; un archivo que no cumpla se **rechaza** (o queda **OBSERVADO**) con motivo exacto, sin indexar (acta 5 · REQ-20). |
-| **RN-010** | Límite de peso del archivo | El archivo `.md` no puede superar **50 MB** (límite documental acordado en el A&D v2, RN-010). Un archivo mayor se rechaza con motivo explícito. |
-| **RN-011** | Contenido mínimo analizable (verificable) | El documento debe contener **al menos un código del catálogo GRI (40) o una mención de sanción**, reconocidos por **patrones configurados** (p. ej. `GRI <número>`, denominación del código, o términos de sanción de la lista del catálogo — ver RN-010). Si no se reconoce ninguno, el documento **no se indexa** y se marca **RECHAZADO** con el motivo "sin contenido analizable"; el Superadmin puede corregir y reintentar. *(Alternativa acordada con el PO: marcarlo OBSERVADO en lugar de rechazo definitivo.)* |
-| **RN-012** | Ingesta **síncrona** (sin colas) | Solo hay 1 Superadmin que ingesta: el pipeline procesa el documento al momento de la subida y la UI espera el resultado (éxito/observación/rechazo). **No se permite lanzar otra subida mientras la actual esté en proceso** (diseño acorde al alcance de 3 usuarios). |
-| **RN-013** | Identificación obligatoria del documento | Todo documento ingestado debe estar asociado a: **(i)** una empresa **existente y activa del catálogo**; **(ii)** el **año del ejercicio** del documento (`YYYY`, rango 2000–año actual+1); y **(iii)** su **tipo** (memoria anual o reporte de sostenibilidad GRI). Si falta cualquiera de los tres datos, la ingesta se **rechaza** indicando el dato faltante, sin procesar ni indexar. |
-| **RN-014** | Anti duplicado (doble unicidad) | Se rechaza un documento si (i) su **sha256** ya existe, o (ii) ya hay un documento **indexado de la misma empresa + año + tipo** (memoria anual / reporte GRI) — evita duplicación y reemplazos (A&D v2 RN-010/RF-023/024). |
-| **RN-015** | Hash inmutable y versiones | Un mismo documento (empresa + tipo + año) puede tener **múltiples versiones** (v1, v2, …) solo si el contenido difiere; El archivo original queda guardado (nunca se borra físicamente, RN-030). |
-
-## Grupo C · Alcance y contenido del análisis (GRI / sanciones) (GRI / sanciones)
-
-| ID | Nombre | Regla |
-|---|---|---|
-| **RN-016** | Sectores habilitados | El análisis de brechas se limita a los sectores, **acordado con el PO**: **Minería, Energía y Petróleo y Gas**. Empresas de otros sectores no se analizan en fase 1. |
-| **RN-017** | Catálogo de códigos GRI evaluables | Solo son evaluables los **40 códigos del catálogo corporativo versionado** (semilla reproducible). La **evidencia válida** es la reportada por la empresa en sus documentos; el **texto del estándar GRI oficial no es fuente de evaluación**. |
-| **RN-018** | Estado asignado 100 % por el humano (sin inferencia) | El estado de cada código GRI (`OK` / `Baja sustancia` / `Sub-reportado`) es **atribución exclusiva del Administrador**, según su criterio profesional y tras revisar la cita textual. **Ningún estado es calculado, inferido ni comparado automáticamente contra el estándar GRI.** Cada asignación conserva historial (quién, cuándo, anterior → nuevo). |
-| **RN-019** | Toda brecha queda registrada | **Cada una de las brechas detectadas (todas: las OK y las problemáticas) se persiste en `gri_analisis`/`sanciones` con cita (documento, sección), estado y fecha — igual en el mock (GRI 401 Sub-reportado, GRI 306 OK). Permitенте consultas y análisis posteriores. |
-| **RN-020** | Sanciones: solo con cita y sin monto se conservan | Una "sanción" solo puede registrarse si el documento aporta cita **identificable** (norma/entidad, documento y sección). Queda prohibido incorporar sanciones desde el conocimiento general del modelo. Las sanciones **sin monto determinado no se excluyen**: se listan y se cuentan por separado del monto total (**no determinado ≠ 0** — A&D v2 RN-010/RF-057/058). |
-
-## Grupo D · Asistente IA (RAG)
-
-| ID | Nombre | Regla |
-|---|---|---|
-| **RN-021** | Declaración explícita ante ausencia de información | La insuficiencia de información en **los documentos ingestados disponibles** es un **resultado válido y explícito**, tanto en las respuestas del asistente como en los reportes. La ausencia de respaldo **nunca se sustituye** por datos generados, inferidos, supuestos o atribuidos a fuentes inexistentes. (La distinción «sin hallazgo» / «sin evidencia analizable» se rige por RN-032; el deber de informarlo explícitamente, por RF correspondiente). |
-| **RN-022** | Citación obligatoria | Toda respuesta cita **documento + sección** de donde proviene la conclusión (acta 4 · REQ-14; RN-005 del A&D v1.0). |
-| **RN-023** | Disponibilidad del asistente | La operación de los módulos de gestión, ingesta, reportes históricos y auditoría es **independiente** de la disponibilidad del servicio de IA. La indisponibilidad del asistente (timeout/fallo del proveedor) se informa al usuario y **no bloquea** el resto del sistema. |
-| **RN-024** | Consumo moderado del free tier | El backend **limita el número de consultas diarias** del asistente (default **200/día**, tope del free tier), monitorea el uso con contadores y muestra al PO el consumo para acordar aumentos. Los **embeddings van por API del proveedor** y **también consumen cuota**: se contabilizan junto con las consultas del asistente (RN-010). |
-
-## Grupo E · Reportes de prospección
-
-| ID | Nombre | Regla |
-|---|---|---|
-| **RN-025** | Contenido del reporte de prospección | Todo reporte consolida, por **empresa, sector y un único año específico**: **puntaje ESG, nivel de riesgo, estado de todos los códigos GRI detectados —incl. `OK`— asignado manualmente por el Administrador, con su cita, sanciones con su total (las sin monto, aparte) y resumen ejecutivo**. Se emite en **PDF con fecha de generación** solo cuando **todos** los códigos detectados tienen estado asignado. |
-| **RN-026** | Variables desde la BD, nunca desde el LLM | El reporte se genera **solo consultando la tabla del análisis** (`gri_analisis` + `reporte_detalle_snapshot`): el análisis se ejecuta **al terminar la ingesta** y persiste, de modo que la generación del PDF es un SELECT determinista (sin llamadas al LLM). | **RN-027** | Reportes inmutables | Un reporte generado **no se edita**; cualquier nueva re-generación crea una **nueva versión**, y el historial se conserva (RN-034 del A&D v1.0). |
-
-## Grupo F · Auditoría y datos
-
-| ID | Nombre | Regla |
-|---|---|---|
-| **RN-027** | Eventos auditados | Registro automático e **inmutable** de: inicios de sesión, cambios de rol, ingestas y generación de reportes (usuario, fecha/hora, acción, resultado). ([acta 4]) |
-| **RN-028** | Auditoría solo-lectura | La auditoría no admite edición; no editable; filtrable por usuario/fecha/tipo y de acceso solo-lectura para el Superadmin. |
-| **RN-029** | No borrado físico | Documentos ingestados, chunks y reportes **nunca se borran físicamente**; la trazabilidad se garantiza por diseño. |
+| **RN-001** | Conjunto cerrado de roles | El sistema reconoce únicamente **dos roles: SuperAdmin y Administrador**. Toda cuenta tiene exactamente uno asignado. |
+| **RN-002** | Unicidad del SuperAdmin | El rol SuperAdmin está asignado a **exactamente una cuenta** en todo momento, con independencia de su estado de habilitación o de que tenga sesión abierta. |
+| **RN-003** | Permisos cerrados por rol | Ninguna cuenta puede ejecutar acciones no asignadas a su rol. |
+| **RN-004** | Condiciones de autenticación | Solo pueden autenticarse las cuentas **registradas y habilitadas** en el sistema. |
+| **RN-005** | Efecto de la deshabilitación | Una cuenta deshabilitada **pierde acceso inmediato** a todas las funcionalidades, cerrando su sesión activa. |
+| **RN-006** | Cuenta SuperAdmin inicial | El sistema se inicializa con una **única cuenta SuperAdmin creada durante el despliegue**. Esta cuenta no puede crearse mediante la aplicación. |
+| **RN-007** | Datos obligatorios de la cuenta | Toda cuenta se registra con **nombre, correo electrónico y contraseña**. |
+| **RN-008** | Rol por defecto | Toda cuenta creada desde la aplicación se asigna con rol **Administrador**. El rol SuperAdmin solo se obtiene por **transferencia**. |
+| **RN-009** | Transferencia del rol SuperAdmin | El rol SuperAdmin puede transferirse a una cuenta de Administrador **existente y habilitada**. La transferencia es **atómica**: la cuenta destino adquiere el rol y la cuenta origen pasa a Administrador en una sola operación. |
+| **RN-010** | Autonomía en la recuperación de acceso | Todo usuario debe poder recuperar el acceso a su cuenta ante la pérdida de credenciales, **sin intervención del SuperAdmin**. |
+| **RN-011** | Tipos de documento admisibles | Solo se admiten como documentos fuente **memorias anuales y reportes de sostenibilidad GRI**. El tipo es un **atributo obligatorio** con esos dos valores posibles. |
+| **RN-012** | Responsabilidad de la conversión | El sistema **no convierte formatos**: los documentos ingresan ya convertidos a **Markdown por el cliente**, quien es responsable de la **fidelidad** de la conversión y de la **integridad de las tablas (formato pipe)**. |
+| **RN-013** | Contenido mínimo del documento | El documento ingestado debe contener al menos **un código del catálogo GRI (40 códigos) o una mención de sanción**, reconocidos mediante el **mecanismo de detección configurado**. |
+| **RN-014** | Identificación obligatoria del documento | Todo documento se asocia a una **empresa existente y activa del catálogo**, al **año del ejercicio** del documento y a su **tipo** (memoria anual o reporte de sostenibilidad GRI). |
+| **RN-015** | Origen de las sanciones | Las sanciones se identifican **exclusivamente a partir de los documentos ingestados** de la empresa. No se consultan **fuentes externas**. |
+| **RN-016** | Asignación de estado GRI | El estado de cada código GRI tiene **tres valores únicos: `OK`, `Baja sustancia` y `Sub-reportado`**. Lo asigna **manualmente el Administrador**, según su criterio profesional, tras revisar la **cita textual** extraída. El sistema **no calcula ni infiere** el estado **ni compara** el contenido contra el texto del estándar GRI. |
+| **RN-017** | Alcance del análisis | El análisis se ejecuta **como último paso de la ingesta** y se limita a **una empresa, un año y los sectores habilitados**. Comprende la identificación de los **40 códigos GRI del catálogo** presentes en los documentos; sus resultados **se persisten en la base de datos** (tabla del análisis) y son la **única base del reporte**. |
+| **RN-018** | Catálogo de códigos GRI evaluables | Solo son evaluables los **40 códigos del catálogo corporativo versionado**. La evidencia válida es la **reportada por la empresa** en sus documentos; el **texto del estándar GRI oficial no es fuente de evaluación**. |
+| **RN-019** | Acotación de sectores del análisis | El análisis de brechas GRI y sanciones se limita a empresas de los sectores **Minería, Petróleo y Gas, y Energía**, acordados con el cliente. |
+| **RN-020** | Precondición del reporte de prospección | El reporte de una empresa solo se ejecuta si dicha empresa cuenta con **al menos un documento ingestado**. |
+| **RN-021** | Fundamentación en el corpus | El modelo LLM responde **exclusivamente con base en los documentos ingestados**. No emplea conocimiento externo ni genera información no respaldada por dichos documentos. |
+| **RN-022** | Trazabilidad de la información entregada | Toda información entregada es **atribuible a un documento del corpus**. Una afirmación sin respaldo trazable **no constituye información válida**. |
+| **RN-023** | Declaración explícita ante ausencia de información | La insuficiencia de información en los documentos ingestados disponibles es un **resultado válido y explícito** (respuestas del modelo y análisis para reportes). La ausencia de respaldo **nunca se sustituye** por datos generados, inferidos, supuestos o atribuidos a fuentes inexistentes. |
+| **RN-024** | Contenido del reporte de prospección | Todo reporte consolida, para **una empresa, un sector y un año específico**: el estado de **cada código GRI (asignado manualmente)**, las **sanciones identificadas** y un **resumen ejecutivo**. |
+| **RN-025** | Determinismo del reporte de prospección | El contenido del reporte se deriva **exclusivamente de los resultados ya almacenados**. Dos generaciones sobre los mismos datos y criterio producen el **mismo resultado**. |
+| **RN-026** | Inmutabilidad del reporte | Un reporte generado **no puede modificarse ni eliminarse**; se conserva permanentemente en el sistema. |
+| **RN-027** | Eventos auditados | Se registra automáticamente: **inicio de sesión, cambio de estado o rol de cuenta, ingesta, rechazo de documento y generación de reporte**. |
+| **RN-028** | Contenido del registro | Cada registro de auditoría consigna la **cuenta que originó la acción, fecha, hora y tipo de acción**. |
+| **RN-029** | Inmutabilidad de la auditoría | Los registros de auditoría **no pueden modificarse ni eliminarse**. |
+| **RN-030** | Degradación ante indisponibilidad del asistente | La indisponibilidad del servicio de IA **no impide** operar los módulos de **gestión de cuentas, descargas de reportes, auditoría y creación de empresas**. |
+| **RN-031** | Ausencia de hallazgo y ausencia de evidencia | La **ausencia de hallazgos** y la **falta de evidencia analizable** son resultados **distintos y no equivalentes**. La falta de evidencia **no constituye cumplimiento**. |
+| **RN-032** | Información parcial | La información incompleta respecto de los campos esperados **es admisible y se conserva identificada como tal**. Un dato no determinado **nunca se sustituye** por un valor por defecto **ni se omite** del análisis. |
+| **RN-033** | Unicidad de documento por empresa y año | No se admite más de un documento del **mismo tipo** (memoria anual o reporte de sostenibilidad) para una **misma empresa y año**, para evitar la duplicación. |
+| **RN-034** | Cálculo del puntaje ESG | El puntaje ESG de una empresa para un año se calcula **automáticamente** a partir de los **estados asignados** a sus códigos GRI. |
+| **RN-035** | Registro de empresas | El **SuperAdmin** crea y registra una empresa en el sistema; es necesario **un nombre y un sector asociado**. |
+| **RN-036** | Sesión activa | Toda sesión recientemente activa permanece en ese estado por un **tiempo determinado**; cuando deja de estar activa, **se cierra la sesión**. |
+| **RN-037** | Consulta al modelo | Las consultas deben limitarse a **sostenibilidad empresarial, indicadores GRI, sanciones económicas o el contenido de los documentos ingestados**; en caso contrario, no se atienden. |
+| **RN-038** | Requerimientos para consulta | Toda consulta debe indicar **empresa, sector y año** del reporte a consultar; en caso contrario, **no se permite** la consulta. *(En el A&D v4 esta regla aparece duplicada como RN-037; aquí se numera RN-038.)* |
 
 ---
 
-## Grupo G · Incorporadas del A&D v2 (13/09)
-
-| ID | Nombre | Regla |
-|---|---|---|
-| **RN-030** | Unicidad documento por empresa/año/tipo | No se admite más de un documento del mismo tipo (memoria anual o reporte de sostenibilidad) para una misma empresa y año; complementa el anti-duplicado por hash (A&D v2 RN-010). |
-| **RN-031** | Puntaje ESG (fase 1, en el reporte) | El puntaje ESG de una empresa/año se calcula automáticamente a partir de los estados manuales: **OK = 100, Baja sustancia = 50, Sub-reportado = 0**. Se incluye en el reporte (la visualización tipo dashboard sigue en fase 2) — A&D v2 RN-010/RF-075. |
-| **RN-032** | Ausencia de hallazgo ≠ falta de evidencia | La ausencia de hallazgos y la falta de evidencia analizable son resultados **distintos**; la falta de evidencia **no** constituye cumplimiento. Se registra por dimensión (brechas GRI / sanciones) si hubo evidencia analizable (A&D v2 RN-010/RN-010, RF-037). |
-| **RN-033** | Información parcial conservada | Un dato no determinado **nunca** se sustituye por un valor por defecto ni se omite; se conserva identificado como no determinado (A&D v2 RN-010/RNF-024). |
-| **RN-034** | Borrado lógico | Documentos, fragmentos y reportes se "eliminan" solo mediante **marcado de estado**; no existe borrado físico (A&D v2 RN-010, RF-068, RNF-022). |
-| **RN-035** | Identificación en la ingesta y persistencia (política) | La identificación de códigos y sanciones corresponde **al cierre de la ingesta** del documento, **no** a la generación del reporte. La presencia de un código se acredita con **patrones configurados** (código, denominación, encabezados) y su **cita textual**; las sanciones, con su cita (entidad, fecha y monto cuando existan). Los resultados son la **única base del reporte**, que se limita a consultarlos (sin re-análisis ni IA). Los **estados** son asignados por el Administrador (RN-018); la identificación **no asigna estados**. |
-| **RN-036** | Nivel de riesgo del reporte | El **nivel de riesgo** (Alto / Medio / Bajo) se deriva de los resultados del análisis del periodo (nº de códigos en estado `Sub-reportado` y sanciones identificadas), conforme a la regla de cálculo acordada con el PO. |
-
-**Conteo:** 36 reglas de negocio (una sola regla de ingesta/estructura + las del A&D v2). Cada RF (documento 05) explica qué RN le sirve de fundamento; ningún RF se respalda en una RN eliminada.
+**Conteo: 38 RN** con numeración 001–038 (se corrigió la duplicación de RN-037 del A&D). Pendiente de corregir en el A&D: (i) la duplicación de RN-037; (ii) RN-017 y RN-019 ambos mencionan los sectores (candidatos a fusionar); (iii) RN-024 conserva una redacción confusa ("consolida, un sector para una empresa…").
