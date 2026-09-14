@@ -1,11 +1,9 @@
 
-> ⚠️ **AVISO (12/09/2026)**: los docs [[04 RF]], [[05 RNF]], [[06 AWS]], [[09 Planificación]], [[10 Pendientes]], [[12-14 Kick-off]], [[15-19 Diagramas]], [[20 Prompt]], [[22 A&D]] y [[26 Arquitectura]] fueron **archivados** en `99-Archivo — Versiones Anteriores`. La base vigente = **Plan de Proyecto v1.2** + carpeta **`FASE 1/`** + actas.
 # 📌 Igualab — Vault de Proyecto
 
 > **Vault de planificación del proyecto Igualab** — *Plataforma de analítica de sostenibilidad (RAG)*
 > Estado: 🟢 **FASE 1 definida** — **Plan de Proyecto v1.2 aprobado (11/09, acta 5: conformidad del PO Oscar, sin observaciones)** · decisiones de alcance: sin Bolsa de Valores (REQ-16), sin LinkedIn (REQ-17), dashboards → fase 2 (REQ-19), ingesta solo `.md` con tablas con pipes (REQ-20), stack libre al equipo (REQ-18), **RAG simple sin MCP** · Sectores: **Minería, Energía y Petróleo** · próximos pasos: BD final + diccionario de datos e inicio del backend (próxima reunión 14/09, cadencia 2 reuniones/semana)
 > Fuentes oficiales: `01-Mockups-y-Propuestas/Igualab - Plan de proyecto.docx (1).pdf` (**Plan v1.2**) · **[[21 Actas de Reunión y Acuerdos|Actas CS3081-001…005]]** · `FASE 1/` — **análisis, arquitectura, stack, frontend y API de fase 1** · mock vivo: igualab.vercel.app
-> 🗄️ Archivados (ya no definen alcance): `Onepager Igualab.pdf` · `Requerimientos-Igualab.pdf`
 > Cliente / Product Owner: Oscar Baldeón — Fundador (oscarbaldeon@igualab.org)
 > Jefe de Proyecto (PM): **Fabricio Godofredo Ladera La Torre** *(acta 4)* · Frontend: Juan Renato Flores Pascual
 

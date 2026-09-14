@@ -1,5 +1,4 @@
 
-> ⚠️ **AVISO (12/09/2026)**: los docs [[04 RF]], [[05 RNF]], [[06 AWS]], [[09 Planificación]], [[10 Pendientes]], [[12-14 Kick-off]], [[15-19 Diagramas]], [[20 Prompt]], [[22 A&D]] y [[26 Arquitectura]] fueron **archivados** en `99-Archivo — Versiones Anteriores`. La base vigente = **Plan de Proyecto v1.2** + carpeta **`FASE 1/`** + actas.
 # 07 · Flujos por Rol
 
 Cada rol entra por el mismo mecanismo (autenticación + validación de rol) pero solo usa sus funciones. Numerado de RF según [[04 Requerimientos Funcionales|RF-001…021]].

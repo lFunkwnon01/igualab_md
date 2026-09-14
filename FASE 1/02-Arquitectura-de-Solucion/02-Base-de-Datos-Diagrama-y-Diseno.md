@@ -1,6 +1,6 @@
 # 02 · Base de Datos — Diagrama ERD, Diseño detallado y Reglas Semánticas (FASE 1)
 
-> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D v5 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Fuente de verdad: **Plan de Proyecto v1.2** + actas 4/5 · Norma: **GES/GAP** (conceptual → lógico → físico semántico) · Escenario: 3 usuarios (1 Superadmin + 2 Administradores) · 14 tablas.
 

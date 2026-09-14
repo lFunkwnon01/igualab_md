@@ -1,6 +1,6 @@
 # 03 · Diccionario de Datos — FASE 1 (norma GES/GAP · completo)
 
-> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D v5 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Formato por columna: **Campo · Tamaño · Tipo de Dato · Descripción · NULL**.
 > Diseño de origen: `02-Base-de-Datos-Diagrama-y-Diseno.md` (ERD [[Diagrama_bd.png]] + 21 reglas semánticas RS). Estado: **COMPLETADO** (diseño congelado — ERD v2 del equipo).

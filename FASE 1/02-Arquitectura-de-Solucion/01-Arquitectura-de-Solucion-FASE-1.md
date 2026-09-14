@@ -1,6 +1,6 @@
 # 01 · Arquitectura de Solución — FASE 1 (a medida)
 
-> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D v5 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Fuente de verdad: **Plan de Proyecto v1.2** (aprobado 11/09) · acta 5 · **RAG simple, sin MCP ni function calling** · modelos `:free` sin costo.
 
@@ -16,7 +16,6 @@
 **A continuación, el contenido detallado de la arquitectura (sin cambios):**
 
 
-> Extiende `00-Documentación/99-Archivo — Versiones Anteriores/26 Arquitectura de Solución FASE 1 — Stack, Módulos y Pipeline RAG.md` (histórico, con nota MCP descartada). Foco: **arquitectura a medida del RAG + generación de reportes** con modelos gratuitos. Alineada al plan v1.2 (motor RAG, reportes de prospección, chatbot analítico, auditoría, RBAC) y acta 5.
 
 ## 1. Vista general por capas (FASE 1)
 

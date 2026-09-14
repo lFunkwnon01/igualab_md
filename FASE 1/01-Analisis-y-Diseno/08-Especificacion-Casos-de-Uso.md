@@ -1,6 +1,6 @@
 # 08 · Especificación de Casos de Uso — FASE 1
 
-> **Numeración alineada al A&D v4 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D v5 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Formato estándar: Actores · Precondiciones · Flujo básico · Flujos alternativos · Postcondiciones · RF/RN asociados. La especificación de CU001 se aprovecha del del A&D v1.0 (ya aprobado y validado en el acta 4), limpiada al modelo de **2 roles**.
 

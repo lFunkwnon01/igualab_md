@@ -1,5 +1,4 @@
 
-> ⚠️ **AVISO (12/09/2026)**: los docs [[04 RF]], [[05 RNF]], [[06 AWS]], [[09 Planificación]], [[10 Pendientes]], [[12-14 Kick-off]], [[15-19 Diagramas]], [[20 Prompt]], [[22 A&D]] y [[26 Arquitectura]] fueron **archivados** en `99-Archivo — Versiones Anteriores`. La base vigente = **Plan de Proyecto v1.2** + carpeta **`FASE 1/`** + actas.
 # 08 · Ingesta de Datos
 
 > 🔄 **Cambio oficial (Plan aprobado + actas):** la ingesta la realiza el **🟡 Superadmin** (no el Administrador). La fuente es **la base de documentos del cliente** (sus propios reportes; el cliente **no cuenta con API ni acceso a Bolsa** — acta 1) y el procesamiento está **acotado a los sectores Minería, Energía y Petróleo** (acta 3, REQ-07).

@@ -270,3 +270,24 @@ Con las decisiones del 13-14/09, el diagrama debe actualizar:
 | 10 | **CU007 Dashboards de Bolsa** y rol **"Usuario"** siguen en CU001/CU007 | Eliminar (acta 5) |
 | 11 | **Sección 8 (Modelo de datos) vacía** y **Diccionario = proyecto inmobiliario** | Reemplazar por el ERD + Diccionario de FASE 1 |
 | 12 | Nota de trabajo "**ideotas:** …" en CU001 | Eliminar |
+
+---
+
+## ANEXO 4 · A&D v5 (14/09 21:04) y purga del vault
+
+**Cambios del A&D v5 aplicados al vault:**
+- **RN-037 duplicada → corregida** en el A&D: la segunda regla ahora es **RN-038** (nuestro doc ya la tenía así). Las RN quedan **001–038**.
+- **Huecos de RF cerrados**: ahora **RF-001 a RF-053 correlativos** (antes había huecos 019/039/042). Nuestro doc `05-RF` fue **renumerado a v5**.
+- **RNF-001 a RNF-030** (se agregó RNF-027 «rechazar si falta empresa/año/tipo» y se reordenó la cola). Nuestro doc `06-RNF` actualizado.
+
+**Purga ejecutada (versiones anteriores eliminadas):**
+- `00-Documentación/99-Archivo — Versiones Anteriores/` (16 documentos de versiones previas).
+- `01-Mockups-y-Propuestas/archivados/` (Onepager y Requerimientos antiguos).
+- `01-Mockups-y-Propuestas/v1_backend_arquitectura.jpeg` (diagrama de arquitectura previo; vigente: `Arquitectura_solution.png`).
+- `igualab.pptx.pdf` (presentación antigua).
+- Avisos de "archivado" en los documentos activos (ya no aplican).
+
+**Fuentes de verdad vigentes (solo 2):**
+1. `01-Mockups-y-Propuestas/Igualab - Plan de proyecto.docx (1).pdf` — **Plan v1.2**.
+2. `01-Mockups-y-Propuestas/Análisis y Diseño - Igualab .pdf` — **A&D v5** (RN 001–038, RF 001–053, RNF 001–030).
+3. `FASE 1/` — desarrollo del análisis, arquitectura, BD, stack, frontend y API, todo alineado a las dos fuentes anteriores.

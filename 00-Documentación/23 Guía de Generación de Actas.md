@@ -1,5 +1,4 @@
 
-> ⚠️ **AVISO (12/09/2026)**: los docs [[04 RF]], [[05 RNF]], [[06 AWS]], [[09 Planificación]], [[10 Pendientes]], [[12-14 Kick-off]], [[15-19 Diagramas]], [[20 Prompt]], [[22 A&D]] y [[26 Arquitectura]] fueron **archivados** en `99-Archivo — Versiones Anteriores`. La base vigente = **Plan de Proyecto v1.2** + carpeta **`FASE 1/`** + actas.
 # 23 · Guía de Generación de Actas (Plantilla + Workflow)
 
 Cómo se generan las actas del proyecto. **Fuente del formato:** plantilla oficial de Google Docs del curso ("ACTA DE REUNION — CS3081") y las actas firmadas 1–3 (`01-Mockups-y-Propuestas/Acta_Reunion[1-3].pdf`).

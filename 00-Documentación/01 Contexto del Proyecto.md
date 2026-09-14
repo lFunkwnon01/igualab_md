@@ -1,5 +1,4 @@
 
-> ⚠️ **AVISO (12/09/2026)**: los docs [[04 RF]], [[05 RNF]], [[06 AWS]], [[09 Planificación]], [[10 Pendientes]], [[12-14 Kick-off]], [[15-19 Diagramas]], [[20 Prompt]], [[22 A&D]] y [[26 Arquitectura]] fueron **archivados** en `99-Archivo — Versiones Anteriores`. La base vigente = **Plan de Proyecto v1.2** + carpeta **`FASE 1/`** + actas.
 # 01 · Contexto del Proyecto
 
 > ⚖️ **Actualización post-actas (05-09):** el alcance vigente es el **Portal RAG sobre la base de documentos del cliente**, acotado a **Minería, Energía y Petróleo**, máx. 3 usuarios, ingesta por Superadmin, IA delimitada con citas. El onepager (chatbot inclusivo) y el PDF de requerimientos antiguos están **archivados** en `01-Mockups-y-Propuestas/archivados/`. Resumen en [[12 Análisis y Recomendaciones]] y [[21 Actas de Reunión y Acuerdos]].

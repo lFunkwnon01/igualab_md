@@ -1,5 +1,4 @@
 
-> ⚠️ **AVISO (12/09/2026)**: los docs [[04 RF]], [[05 RNF]], [[06 AWS]], [[09 Planificación]], [[10 Pendientes]], [[12-14 Kick-off]], [[15-19 Diagramas]], [[20 Prompt]], [[22 A&D]] y [[26 Arquitectura]] fueron **archivados** en `99-Archivo — Versiones Anteriores`. La base vigente = **Plan de Proyecto v1.2** + carpeta **`FASE 1/`** + actas.
 # 21 · Actas de Reunión y Acuerdos
 
 Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Owner). Formato CS3081 (Ingeniería de Software). Los PDF firmados están en `01-Mockups-y-Propuestas/`.
