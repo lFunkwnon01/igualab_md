@@ -17,11 +17,11 @@
 
 > Motor: **PostgreSQL 16 + extensión pgvector** (base de datos **vectorizada** que sustenta el RAG).
 > Norma del curso: diseño por **GES/GAP** (modelo conceptual → modelo lógico → modelo físico), con especificación textual de cada tabla (paso previo obligatorio al **Diccionario de Datos**, que se completa en `03-Diccionario-de-Datos.md` una vez congelado este diseño).
-> Escenario de carga real: **3 usuarios** (1 Superadmin + 2 Administradores) por eso la ingesta es síncrona (RN-012).
+> Escenario de carga real: **3 usuarios** (1 Superadmin + 2 Administradores) por eso la ingesta es síncrona (RF-022).
 
 ## 1. Modelo conceptual (entidades y relaciones, texto)
 
-Las entidades del dominio son 12. El lector debe tener clara la cadena principal del negocio:
+Las entidades del dominio son 14. El lector debe tener clara la cadena principal del negocio:
 
 **empresa → documento (`.md`) → chunks (vectorizados) → análisis GRI/sanciones → reporte PDF**, y alrededor: **usuarios** (quién hace qué), **auditoría** (todo lo sensible), **catálogo GRI** (el estándar de referencia, no lo define la IA) y **uso_llm/configuración** (soporte operativo).
 
@@ -34,7 +34,7 @@ Relaciones (1:N salvo indicación):
 5. Cada **gri_analisis** registra su **historico de cambios de estado** (N:M 1:N) — quién, cuándo, de qué a qué (RN-018).
 6. Un **reporte_generado** pertenece a una empresa y **consolida** (N:M, mediante snapshot) las brechas con estado final + sanciones a su fecha de emisión.
 7. Todo **usuario** genera eventos en **auditoria_eventos** (append-only).
-8. **uso_llm** guarda el consumo diario del asistente (RN-024); **configuracion** guarda los parámetros del sistema.
+8. **uso_llm** guarda el consumo diario del asistente (RNF-028); **configuracion** guarda los parámetros del sistema.
 
 ## 2. Modelo lógico — Diagrama ER (mermaid)
 
@@ -106,7 +106,6 @@ erDiagram
         int empresa_id FK
         uuid doc_id FK
         varchar gri_code FK
-        varchar estado_sugerido
         varchar estado
         text cita_fragmento
         varchar seccion
@@ -168,10 +167,10 @@ erDiagram
 
 ### 3.1 `usuarios`
 - **Qué**: registro de las 3 personas del proyecto (1 Superadmin + 2 Administradores). Ningún "Usuario" público en fase 1 (acta 4 · REQ-10).
-- **Columnas**: `id UUID PK default gen_random_uuid()` · `nombre VARCHAR(120) NOT NULL` · `correo VARCHAR(160) NOT NULL UNIQUE (case-insensitive via índice funcional lower(correo))` · `password_hash TEXT NOT NULL` (bcrypt/argon2 — RNF-01) · `rol VARCHAR(20) NOT NULL CHECK (rol IN ('superadmin','administrador'))` · `habilitado BOOLEAN NOT NULL DEFAULT true` · `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`.
+- **Columnas**: `id UUID PK default gen_random_uuid()` · `nombre VARCHAR(120) NOT NULL` · `correo VARCHAR(160) NOT NULL UNIQUE (case-insensitive via índice funcional lower(correo))` · `password_hash TEXT NOT NULL` (bcrypt/argon2 — RNF-002) · `rol VARCHAR(20) NOT NULL CHECK (rol IN ('superadmin','administrador'))` · `habilitado BOOLEAN NOT NULL DEFAULT true` · `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`.
 - **Reglas semánticas (RS)**:
   - **RS-01 (RN-002)**: en toda la tabla existe **exactamente 1 fila con `rol='superadmin'`**, **con independencia de su estado de habilitación**. Se garantiza con índice único: `CREATE UNIQUE INDEX uq_un_solo_superadmin ON usuarios ((rol)) WHERE rol='superadmin';` (sin filtro de `habilitado`, conforme a RN-002; además RF-013 impide deshabilitar al SuperAdmin). Al transferir el rol, la transacción (UPDATE doble) es **atómica**: la cuenta destino sube y la de origen baja en el mismo commit (RNF-011) — nunca hay 0 ni 2 SuperAdmin.
-  - **RS-02 (RN-007)**: deshabilitar un usuario invalida sus tokens (los JWT llevan `iat`; en invalidación se registra en auditoría y se exige re-login).
+  - **RS-02 (RN-005)**: deshabilitar un usuario invalida sus tokens (los JWT llevan `iat`; en invalidación se registra en auditoría y se exige re-login).
   - **RS-03 (RN-001)**: sin usuario vigente no existe operación (todo FK `usuario_id` proviene de `usuarios.habilitado=true`).
 
 ### 3.2 `roles`
@@ -179,14 +178,14 @@ erDiagram
 
 ### 3.3 `empresas`
 - **Qué**: catálogo de empresas analizables que el Superadmin gestiona (RF-017).
-- **Columnas**: `id SERIAL PK` · `nombre VARCHAR(160) NOT NULL UNIQUE` · `ticker VARCHAR(12) UNIQUE` · `sector VARCHAR(40) NOT NULL CHECK (sector IN ('Minería','Energía','Petróleo y Gas'))` (**RN-016 hardcode en la BD**) · `activo BOOLEAN DEFAULT true`.
+- **Columnas**: `id SERIAL PK` · `nombre VARCHAR(160) NOT NULL UNIQUE` · `ticker VARCHAR(12) UNIQUE` · `sector VARCHAR(40) NOT NULL CHECK (sector IN ('Minería','Energía','Petróleo y Gas'))` (**RN-019 hardcode en la BD**) · `activo BOOLEAN DEFAULT true`.
 - **Nota de alcance (decisión del equipo)**: en fase 1 **no existe columna `pais`** — todas las empresas cotizan en la **Bolsa de Valores de Lima (Perú)**, el foco de fase 1. Si el día de mañana la herramienta se usa en otro país (fase 2+), se añadiría `pais` con default 'Perú' sin romper nada (migración prevista en el checklist).
-- **RS**: **RS-04 (RN-016)**: el análisis solo alcanza empresas del CHECK de sector; cualquier flujo que intente analizar otra empresa ni siquiera encuentra filas habilitadas. Empresas `activo=false` no aparecen en la selección de ingesta.
+- **RS**: **RS-04 (RN-019)**: el análisis solo alcanza empresas del CHECK de sector; cualquier flujo que intente analizar otra empresa ni siquiera encuentra filas habilitadas. Empresas `activo=false` no aparecen en la selección de ingesta.
 
 ### 3.4 `documentos`
 - **Qué**: cada `.md` subido (memoria anual o reporte de sostenibilidad) con su estado del pipeline.
-- **Columnas**: `id UUID PK` · `empresa_id INT REFERENCES empresas(id)` · `anho SMALLINT NOT NULL CHECK (anho BETWEEN 2000 AND 2100)` · `tipo VARCHAR(30) CHECK (tipo IN ('memoria_anual','reporte_sostenibilidad'))` · `nombre_archivo VARCHAR(255)` · `ruta_origen TEXT` (copia del .md en disco del backend, RN-030) · `sha256 CHAR(64) NOT NULL UNIQUE` (**RN-014 anti-duplicado**) · `estado VARCHAR(20) CHECK (estado IN ('indexado','observado','rechazado'))` **RN-011** · `motivo TEXT NULL` (texto exacto del guard o del observado) · `version INT NOT NULL DEFAULT 1` (se incrementa por re-sube con contenido distinto, RN-015) · `chunks_count INT NULL` (éxito: nº chunks) · `created_by UUID REFERENCES usuarios(id)` · `created_at TIMESTAMPTZ` · **`UNIQUE(empresa_id, anho, tipo)`** (unicidad documental por empresa/año/tipo — A&D v2 RN-010).
-- **RS**: **RS-05 (RN-013)**: `empresa_id` y `anho` obligatorios (sin asociación no se ingesta). **RS-06 (RN-012)**: es la "máquina de estados" síncrona de la ingesta — un documento solo existe si la operación de subida terminó (no hay estados intermedios residuales; en fallo se transacciona completo). **RS-07 (RN-030)**: **sin DELETE** (revoked); los rechazos también quedan guardados para trazabilidad.
+- **Columnas**: `id UUID PK` · `empresa_id INT REFERENCES empresas(id)` · `anho SMALLINT NOT NULL CHECK (anho BETWEEN 2000 AND 2100)` · `tipo VARCHAR(30) CHECK (tipo IN ('memoria_anual','reporte_sostenibilidad'))` · `nombre_archivo VARCHAR(255)` · `ruta_origen TEXT` (copia del .md en disco del backend, RN-022) · `sha256 CHAR(64) NOT NULL UNIQUE` (**RNF-010 SHA-256**) · `estado VARCHAR(20) CHECK (estado IN ('indexado','observado','rechazado'))` **RN-011** · `motivo TEXT NULL` (texto exacto del guard o del observado) · `version INT NOT NULL DEFAULT 1` (se incrementa por re-sube con contenido distinto, RN-033) · `chunks_count INT NULL` (éxito: nº chunks) · `created_by UUID REFERENCES usuarios(id)` · `created_at TIMESTAMPTZ` · **`UNIQUE(empresa_id, anho, tipo)`** (unicidad documental por empresa/año/tipo — RN-033).
+- **RS**: **RS-05 (RN-014)**: `empresa_id` y `anho` obligatorios (sin asociación no se ingesta). **RS-06 (RF-022)**: es la "máquina de estados" síncrona de la ingesta — un documento solo existe si la operación de subida terminó (no hay estados intermedios residuales; en fallo se transacciona completo). **RS-07 (RN-027)**: **sin DELETE** (revoked); los rechazos también quedan guardados para trazabilidad.
 
 ### 3.5 `chunks_embeddings` — la BD vectorizada (físico)
 - **Qué**: cada fragmento textual (chunk) con su **embedding**, núcleo del RAG.
@@ -205,16 +204,16 @@ erDiagram
 - **RS**: **RS-10 (RN-017)**: la detección de brechas **lee de aquí**; el modelo no sugiere indicadores inexistentes: solo se registran códigos existentes en `catalogo_gri`. **RS-11**: conservación de la versión del estándar analizada en cada fila de análisis (si GRI actualiza, los análisis anteriores no mutan).
 
 ### 3.7 `gri_analisis`
-- **Qué**: fila **brecha por empresa, documento, código GRI** — incl. estados OK (RN-019: todo se registra). Se **llena automáticamente al terminar la ingesta**: cuando el pipeline del `.md` termina, el motor de análisis corre contra `catalogo_gri` y persiste las filas con `estado_sugerido` **en la misma operación síncrona** → la generación de reporte **SOLO consulta esta tabla (SELECT determinista), nunca al LLM**.
-- **Columnas**: `id UUID PK` · `empresa_id` · `doc_id` · `gri_code` FK→catalogo_gri · `estado_sugerido VARCHAR(20)` **ELIMINADO en v2** (el A&D v2 prohíbe la inferencia: el estado lo asigna solo el humano) · `estado VARCHAR(20) CHECK IN ('OK','BAJA SUSTANCIA','SUB-REPORTADO')` — **3 estados únicos, asignados manualmente por el Administrador (RN-018 / A&D v2 RN-010)** · `cita_fragmento TEXT` (chunk referenciado) · `seccion VARCHAR(200)` · `observacion TEXT NULL` (exigida si el humano cambió el estado, RF-025) · `validado_por UUID NULL REFERENCES usuarios(id)` · `updated_at TIMESTAMPTZ`.
-- **RS**: **RS-12 (RN-018)**: `estado` (final) solo es visible para el reporte cuando `validado_por IS NOT NULL` — la generación bloquea si existen filas `NULL` (CU007 paso 2). **RS-13 (RN-020)**: toda fila con fuente `cita_fragmento + seccion`; `estado_sugerido` se calcula con las **reglas deterministas** de `catalogo_gri` (elementos mínimos), nunca por criterio libre del LLM. **RS-14 (RN-019)**: los códigos OK **también** se persisten con cita — tabla `gri_analisis` sin filtrado de resultado.
+- **Qué**: fila **brecha por empresa, documento, código GRI** — incl. estados OK (RN-019: todo se registra). Se **llena automáticamente al terminar la ingesta**: cuando el pipeline del `.md` termina, el motor de análisis corre contra `catalogo_gri` y persiste las filas **sin estado** (pendientes de asignación manual por el Administrador) **en la misma operación síncrona** → la generación de reporte **SOLO consulta esta tabla (SELECT determinista), nunca al LLM**.
+- **Columnas**: `id UUID PK` · `empresa_id` · `doc_id` · `gri_code` FK→catalogo_gri · `estado VARCHAR(20) CHECK IN ('OK','BAJA SUSTANCIA','SUB-REPORTADO')` — **3 estados únicos, asignados manualmente por el Administrador (RN-016)** · `cita_fragmento TEXT` (chunk referenciado) · `seccion VARCHAR(200)` · `observacion TEXT NULL` (exigida si el humano cambió el estado, RF-025) · `validado_por UUID NULL REFERENCES usuarios(id)` · `updated_at TIMESTAMPTZ`.
+- **RS**: **RS-12 (RN-018)**: `estado` (final) solo es visible para el reporte cuando `validado_por IS NOT NULL` — la generación bloquea si existen filas `NULL` (CU007 paso 2). **RS-13 (RN-020)**: toda fila con fuente `cita_fragmento + seccion`; el `estado` lo asigna **manualmente el Administrador** (RN-016), nunca por criterio libre del LLM. **RS-14 (RN-019)**: los códigos OK **también** se persisten con cita — tabla `gri_analisis` sin filtrado de resultado.
 
-- **RS-22 (caso borde — sin sanciones identificadas / empresa "sana")**: si el análisis no identifica sanciones, la tabla `sanciones` **quedará vacía para esa empresa/año** (su señal es la ausencia de filas). El reporte NO imprimirá "la empresa no tiene sanciones": compone un **bloque determinístico de plantilla**: "Sanciones identificadas: no se registraron sanciones en la información ingestada (doc + sección, período [anho])" — es la única formulación verificable (RN-010: la ausencia de filas no prueba inexistencia fuera de los docs). Las filas de `gri_analisis` sí se crean igual (estados OK con cita, RN-010); el snapshot solo registrará líneas de brechas.
+- **RS-22 (caso borde — sin sanciones identificadas / empresa "sana")**: si el análisis no identifica sanciones, la tabla `sanciones` **quedará vacía para esa empresa/año** (su señal es la ausencia de filas). El reporte NO imprimirá "la empresa no tiene sanciones": compone un **bloque determinístico de plantilla**: "Sanciones identificadas: no se registraron sanciones en la información ingestada (doc + sección, período [anho])" — es la única formulación verificable (RN-021: la ausencia de filas no prueba inexistencia fuera de los docs). Las filas de `gri_analisis` sí se crean igual (estados OK con cita, RN-016); el snapshot solo registrará líneas de brechas.
 
 ### 3.8 `gri_analisis_historico`
 - **Qué**: auditoría de cambios de estado (complementa la auditoría global con granularidad de campo).
 - **Columnas**: `id UUID PK` · `gri_analisis_id FK` · `estado_anterior VARCHAR(20) NOT NULL` · `estado_nuevo VARCHAR(20) NOT NULL` · `usuario_id FK` · `observacion TEXT` · `created_at TIMESTAMPTZ`.
-- **RS**: **RS-15 (RN-018/RN-028)**: insert-only; disparado por trigger tras UPDATE de `gri_analisis.estado`. Un cambio con estado final = sugerido también se registra (traza). 
+- **RS**: **RS-15 (RN-018/RN-028)**: insert-only; disparado por trigger tras UPDATE de `gri_analisis.estado`. Un cambio de estado también se registra (traza). 
 
 ### 3.9 `sanciones`
 - **Qué**: sanciones económicas identificadas, siempre con cita verificable (RN-020).
@@ -239,14 +238,14 @@ erDiagram
 - **RS**: **RS-19 (RN-028/30)**: `REVOKE UPDATE, DELETE` a la app rol de BD — la app solo puede **INSERT/SELECT**; particion por mes si creciera (no necesario en fase 1).
 
 ### 3.12 `uso_llm`
-- **Qué**: contador diario de consumo del asistente (free tier) — soporte de RN-024/RNF-11.
+- **Qué**: contador diario de consumo del asistente (free tier) — soporte de RNF-028.
 - **Columnas**: `dia DATE PK` · `consultas INT` · `tokens_in INT` · `tokens_out INT` · `modelo VARCHAR(80)` (último modelo usado — útil para incidencias del free: GLM-5.2 etc.) · `incidencias INT` (timeouts/failover).
-- **RS**: **RS-20 (RN-024)**: el middleware bloquea el chat cuando `consultas` del día ≥ límite (`configuracion.llm_daily_limit`, default 200); muestra aviso pero el resto del sistema sigue operando (fail-safe)e del free plan.
+- **RS**: **RS-20 (RNF-028)**: el middleware bloquea el chat cuando `consultas` del día ≥ límite (`configuracion.llm_daily_limit`, default 200); muestra aviso pero el resto del sistema sigue operando (fail-safe)e del free plan.
 
 ### 3.13 `configuracion`
 - **Qué**: parámetros del sistema (mock Configuración).
 - **Columnas**: `clave VARCHAR(60) PK` (`inactivery_min`, `bloqueo`, `notificaciones`, `upload_max_mb=50`, `llm_daily_limit=200`) · `valor JSONB` · `actualizado_por`, `updated_at`.
-- **RS**: **RS-21 (RN-004/RN-010)**: los guard del upload y del idle-timer **leen de aquí** — cambiar límites no toca código (RNF-20).
+- **RS**: **RS-21 (RN-036, RNF-014)**: los guard del upload y del idle-timer **leen de aquí** — cambiar límites no toca código.
 
 ## 4. Reglas semánticas globales (integración de las reglas anteriores)
 
@@ -255,13 +254,13 @@ erDiagram
 3. **Estado validado por humano** es la llave del reporte: sin `validado_por`, CU007 se bloquea (RS-12) — así el reporte nunca sale de la analítica no supervisada.
 4. **El estándar GRI manda**: toda fila de análisis referencia `catalogo_gri`; el LLM no aporta códigos ni estados por sí mismo (RS-10/13).
 5. **La vectorial es el dominio de consulta**: los fragments están autocontenidos (texto + metadata completa); una respuesta del RAG **síments** puede saber a doc/empresa/año/sección desde la propia fila vectorial.
-6. **Cotidiano sobre free tier**: `uso_llm` es la tabla del medidor — nada del flujo de ingesta la consulta (embedding local, RNF-11).
+6. **Cotidiano sobre free tier**: `uso_llm` es la tabla del medidor — nada del flujo de ingesta la consulta (embeddings por API, RNF-028).
 
 ## 4bis. Puntaje ESG (fase 1 — RN-031 / RF-028)
 
 El puntaje ESG de una empresa/año se calcula desde los estados manuales: **OK = 100 · Baja sustancia = 50 · Sub-reportado = 0**, promediado sobre los códigos evaluados. Se persiste/expone para el reporte (la visualización tipo dashboard sigue en fase 2). Campo/vista: `vw_puntaje_esg(empresa_id, anho, puntaje, codigos_evaluados)` — devuelve **«no disponible» (NULL)** cuando **no se detectó ningún código GRI** (RN-032/RF-055: no debe calcularse como 0).
 
-## 4ter. Sanciones sin monto y no determinados (A&D v2 RF-057/058, RNF-024)
+## 4ter. Sanciones sin monto y no determinados (RF-040/RF-055, RNF-019)
 
 `sanciones.monto` puede ser `NULL` (no determinado) — **nunca 0 por defecto**; el reporte muestra por separado el **monto total cuantificado** y el **número de sanciones sin monto**. Se agrega `sanciones.sin_monto BOOLEAN` (derivado) o se infiere de `monto IS NULL` para las vistas.
 

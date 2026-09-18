@@ -1,6 +1,8 @@
 # 09 · Revisión A&D v2 (sobrescrito 13/09) vs FASE 1 — RN, RF, RNF
 
-> Fuente revisada: `01-Mockups-y-Propuestas/Análisis y Diseño - Igualab .pdf` (versión del 13/09/2026, 34 RN · RF-001…RF-075 · RNF-001…RNF-036).
+> ⚠️ **BITÁCORA HISTÓRICA — NO es documentación vigente.** Registra la conciliación del equipo contra una versión antigua del A&D (v2, con RF-001…075). Ya fue resuelta y aplicada; la documentación vigente son los docs **01–08** de esta carpeta + el A&D actual. Se conserva solo como trazabilidad de decisiones. Estado actual del A&D: **RN 001–039 · RF 001–056 · RNF 001–036** (ver doc 10, Anexo 5).
+>
+> Fuente revisada en su momento: `Análisis y Diseño - Igualab .pdf` (versión del 13/09/2026, 34 RN · RF-001…RF-075 · RNF-001…RNF-036).
 > Objetivo: detectar **(A) aportes a incorporar**, **(B) contradicciones a resolver** y **(C) errores a corregir** en el A&D. La base de FASE 1 (`FASE 1/01-Analisis-y-Diseno/03…08`) es la referencia vigente.
 
 ---

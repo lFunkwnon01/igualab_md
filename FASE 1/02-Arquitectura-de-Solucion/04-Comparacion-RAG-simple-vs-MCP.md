@@ -17,8 +17,8 @@
 |---|---|---|---|
 | **Esfuerzo de desarrollo** | 1 componente (`rag_chat`) | + servidor MCP, definición de schemas de tools, bucle de decisiones, validación de argumentos | Fase 1 limitada en tiempo (Gantt del plan v1.2: demos 5/10–23/10); **decide: simple** |
 | **Complejidad de pruebas** | Flujo determinista y reproducible → fácil probar en el cronograma §7 del plan | Caminos no deterministas (el LLM puede invocar 0…n herramientas por turno) → casos de prueba combinatorios | Comprobamos calidad 9/11: mucho más fácil con determinismo |
-| **Consumo del free tier (RN-024/RNF-11)** | 1 llamada LLM por pregunta | 1 llamada por *paso* del agente (la misma pregunta puede consumir 3–6 llamadas) | Con 200 req/día el enfoque agéntico quema el cupo de las demos |
-| **Latencia (RNF-07 ≤ 30 s)** | 1 búsqueda + 1 generación | N herramientas + N generaciones | Simple garantiza el 30 s con margen |
+| **Consumo del free tier (RNF-028)** | 1 llamada LLM por pregunta | 1 llamada por *paso* del agente (la misma pregunta puede consumir 3–6 llamadas) | Con 200 req/día el enfoque agéntico quema el cupo de las demos |
+| **Latencia (RNF-033 ≤ 15 s)** | 1 búsqueda + 1 generación | N herramientas + N generaciones | Simple garantiza el 15 s con margen |
 | **Risk / trazabilidad** | Respuestas = interpolación controlada del contexto + citas verificadas (RS-09) | El path agéntico agrega modos de fallo nuevos (tool inexistente, argumentos mal formados, loops) | Menos superficie de error en fase 1 |
 | **Capacidad de responder** | Todo lo que está en chunks + lo que ya está en tablas (brechas/sanciones se consultan **vía endpoints REST del frontend**, no vía LLM) | Además, "acciones": el asistente podría *crear* el reporte desde el chat | En fase 1 **no se necesita** que el LLM actúe: CU007 se hace desde la UI con estados ya validados (RN-018) |
 | **Costo de ciertos datos estructurados** | Ya resuelto: la UI consulta la BD directamente (REST) y la base persistence el análisis (RN-019) | Redundante con MCP: tool `listar_brechas_gri` duplica lo que ya hace un GET | La BD + REST + vistas ya cubren los datos estructurados |
@@ -52,12 +52,12 @@ El diagrama manual es **coherente con esta decisión** una vez retirado el bloqu
 | Bloque del diagrama manual | Estado | Nota |
 |---|---|---|
 | UI React 18 + Vite (2 roles), Vercel + HTTPS | ✔ igual | idéntico a la doc |
-| API FastAPI (RBAC RNF-05, pydantic, errores RN-023/025) | ✔ igual | |
+| API FastAPI (RBAC RNF-004, pydantic, errores RN-023/025) | ✔ igual | |
 | Servicios monolito modular (7 servicios) | ✔ igual | |
 | Pipeline de ingesta síncrona (Guard→Parseo→Chunking→Embeddings→Persistencia pgvector HNSW) | ✔ igual | RN-009…RN-015 |
 | ~~MCP Server (tools)~~ | ✘ **eliminar cuadro | Debe salir del diagrama; en su lugar la flecha va directo Pipeline→BD y LLM↔API es chat-completions |
 | LLM OpenRouter free (GLM-5.2, respaldos) + Embeddings por API ( universidad) | ✔ igual | sin function calling |
-| PostgreSQL 16 + pgvector (12 tablas) | ✔ igual | coincidente con doc 02 |
+| PostgreSQL 16 + pgvector (14 tablas) | ✔ igual | coincidente con doc 02 |
 | Almacenamiento archivos (.md originals, respaldo auditoría) | ✔ igual | |
 | Docker compose / Vercel / Seguridad / Observabilidad / Decisiones clave | ✔ igual | — |
 

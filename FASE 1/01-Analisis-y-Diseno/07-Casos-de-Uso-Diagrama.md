@@ -79,7 +79,7 @@ flowchart LR
   SA(("Superadmin")) --> CU002((CU002))
   CU002 -.->|extend| CREAR((Crear usuario))
   CU002 -.->|extend| HAB((Habilitar/deshabilitar))
-  CU002 -.->|extend| TRANSF((Transferir rol Superadmin<br/>RN-003 · auto-degradación))
+  CU002 -.->|extend| TRANSF((Transferir rol Superadmin<br/>RN-009 · auto-degradación))
   CU002 -.->|include| AUD((CU009 · evento change Role))
 ```
 
@@ -97,7 +97,7 @@ flowchart LR
 ```mermaid
 flowchart LR
   SA(("Superadmin")) --> CU004((CU004))
-  CU004 -.->|include| GUARD((Pre-validación: `.md`, pipes,<br/>15 MB, empresa y año))
+  CU004 -.->|include| GUARD((Pre-validación: `.md`, pipes,<br/>50 MB, empresa y año))
   CU004 -.->|extend| DUP((Rechazar duplicado<br/>sha256))
   CU004 -.->|include| IDX((Chunking +<br/>embeddings por API))
   CU004 --> AUD((CU009 · evento ingesta))
@@ -120,8 +120,8 @@ flowchart LR
 flowchart LR
   AD(("Administrador")) --> CU006((CU006))
   PO(("PO Oscar")) -. supervisa .-> CU006
-  CU006 -.->|include| SUG((Sugerencia IA del estado<br/>según catalogo_gri))
-  CU006 -.->|extend| CAMB((Cambiar estado:<br/>OK/Sub/Baja/Crítico))
+  CU006 -.->|include| SUG((Asignación manual del estado<br/>por el Administrador — RN-016))
+  CU006 -.->|extend| CAMB((Cambiar estado:<br/>OK/Baja sustancia/Sub-reportado))
   CAMB --> HIST((Historial del<br/>cambio — quién y cuándo))
 ```
 

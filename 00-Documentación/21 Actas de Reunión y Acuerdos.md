@@ -1,9 +1,8 @@
-
 # 21 · Actas de Reunión y Acuerdos
 
 Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Owner). Formato CS3081 (Ingeniería de Software). Los PDF firmados están en `01-Mockups-y-Propuestas/`.
 
-> ⚠️ **Estado:** Actas 1 y 2 **firmadas** (cliente + PM) · Acta 3 firmada por cliente y PM, **pendiente firma del docente** · **Acta 4 (08-09, 10:55–11:15): REALIZADA** — solo asistió Fabricio (PM); acta completada en LaTeX y pendiente de firma/envío (`Acta_Reunion4_BORRADOR.tex/pdf`; guía en [[23 Guía de Generación de Actas]]).
+> ⚠️ **Estado:** Actas 1 y 2 **firmadas** · Acta 3 firmada por cliente y PM (firma del docente por confirmar) · **Acta 4 (08-09) realizada y firmada** (`Acta_Reunion4-(pequeno-cambio).pdf`) · **Acta 5 (11-09) aprobada** (`Acta_Reunion5.pdf`, Plan v1.2 conformado + decisiones de alcance). Guía de generación en [[23 Guía de Generación de Actas]].
 
 ---
 
@@ -71,7 +70,7 @@ Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Ow
 
 ---
 
-## 📋 Acta 3 — CS3081-003-2026 · vie 04-09-2026 · 10:00–10:20 · Virtual 🟡 Firmada (pendiente docente)
+## 📋 Acta 3 — CS3081-003-2026 · vie 04-09-2026 · 10:00–10:20 · Virtual 🟡 Firmada (docente por confirmar)
 
 **Proyecto:** Igualab — Plataforma de analítica de sostenibilidad (RAG) · **Fase:** Cierre de análisis / inicio de desarrollo · *Asistieron todos excepto Luis.*
 
@@ -98,54 +97,101 @@ Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Ow
 
 ---
 
-## 📝 Acta 4 — CS3081-004-2026 · mar 08-09-2026 · `[hora por definir]` · Virtual 🚧 BORRADOR
+## 📝 Acta 4 — CS3081-004-2026 · mar 08-09-2026 · Virtual ✅ Realizada y firmada
 
-**Proyecto:** Igualab — Plataforma de analítica de sostenibilidad (RAG) · **Fase:** Análisis y Diseño — confirmación de servidor y cierre del análisis (arquitectura) · *Primera acta con Fabricio Ladera como PM; asiste el equipo completo.*
+**Proyecto:** Igualab — Plataforma de analítica de sostenibilidad (RAG) · **Fase:** Análisis y Diseño — confirmación de servidor y cierre del análisis (arquitectura) · *Primera acta con Fabricio Ladera como PM.*
+**Archivo firmado:** `01-Mockups-y-Propuestas/Acta_Reunion4-(pequeno-cambio).pdf`.
 
-**Borrador completo:** `01-Mockups-y-Propuestas/Acta_Reunion4_BORRADOR.tex` (+ PDF compilado; guía en [[23 Guía de Generación de Actas]]). Completar horas y asistencia durante la reunión.
-
-### Decisiones (a validar en la reunión)
+### Decisiones
 | # | Tema | Conclusión | Estado |
 |---|---|---|---|
 | 1 | **Cambio de roles del equipo** | Juan Renato Flores pasa a **Desarrollador Frontend**; **Fabricio Godofredo Ladera La Torre asume como Jefe de Proyecto (PM)** | ✅ Decidido |
 | 2 | **Confirmación de servidor y despliegue** | Fase 1 íntegra en **entorno de desarrollo universitario** (servidor + LLM por API); **sin despliegue a producción**: el cliente no tiene presupuesto para sostener la infraestructura IA/RAG → **cierra REQ-08** (REQ-11) | ✅ Decidido |
 | 3 | **GAP y backlog inicial** | Análisis GAP y backlog **aprobados**; priorizados para Sprint 1 (login/RBAC) | ✅ Aprobado |
-| 4 | **A&D v1.1 (to-be) y cierre del análisis** | Presentado el **proceso to-be**; el análisis **aún no se cierra**: faltan los **diagramas de casos de uso** y el **diagrama de BD con diccionario de datos** — el equipo dispone de **1–2 semanas adicionales**; el avance depende de la **confirmación del cliente** sobre el diagrama de procesos (REQ-13) | 🚧 En proceso |
-| 5 | **Modelo de usuarios del portal** | **Definido por el cliente: opción (a)** — **2 roles / 3 personas**: Oscar = **Superadmin** + **2 Administradores**; se **elimina el rol "Usuario"** (ajusta el "máx. 3 usuarios" del acta 1, REQ-03) y habilita el avance del diagrama de procesos | ✅ Definido |
-| 6 | **Alcance 2ª fase** | Alta de usuarios **"Cliente" con `tenant_id`** (multi-tenant) + evaluación de **pasarela de pagos** (REQ-12) — sin desarrollo en fase 1. **Aclaración:** todo lo del plan de proyecto corresponde **únicamente a la fase 1**; la fase 2 depende del **tiempo del equipo** y del **presupuesto del cliente para salir a producción** — la inversión habilitaría el modelo retribuido (suscripción + consultoría) que amortizaría ese costo | 📌 Registrado |
+| 4 | **A&D (to-be) y cierre del análisis** | Proceso to-be presentado; el análisis se cierra con **diagramas de casos de uso** y **diagrama de BD con diccionario de datos** | ✅ Cerrado (en el A&D actual) |
+| 5 | **Modelo de usuarios del portal** | **Definido por el cliente: opción (a)** — **2 roles / 3 personas**: Oscar = **Superadmin** + **2 Administradores**; se **elimina el rol "Usuario"** | ✅ Definido |
+| 6 | **Alcance 2ª fase** | Usuarios **"Cliente" con `tenant_id`** (multi-tenant) + evaluación de **pasarela de pagos** — sin desarrollo en fase 1 | 📌 Registrado |
 
 ### Requerimientos capturados (acta)
 | ID | Requisito | Tipo | Prioridad | Estado |
 |---|---|---|---|---|
 | REQ-10 | Modelo de usuarios: **2 roles / 3 personas** (sin rol "Usuario") — opción (a) | Cambio | Alta | ✅ Definido |
 | REQ-11 | Fase 1 **solo en entorno de desarrollo** (universidad); sin producción | RN | Alta | ✅ Definido |
-| REQ-12 | 2ª fase: usuarios **"Cliente" con `tenant_id`** + **pasarela de pagos** — sujeta a tiempo del equipo y presupuesto de producción (plan = solo fase 1) | Cambio | Media | ✅ Definido |
-| REQ-13 | Cerrar análisis con arquitectura: **CU + BD/diccionario** (por definir: ~1–2 semanas tras confirmación del cliente) | Documento | Alta | 🚧 En proceso |
-| REQ-14 | **A&D v1.1** (to-be) como base del análisis con arquitectura | Documento | Alta | 🚧 En proceso |
+| REQ-12 | 2ª fase: usuarios **"Cliente" con `tenant_id`** + **pasarela de pagos** | Cambio | Media | ✅ Definido |
+| REQ-13 | Cerrar análisis con arquitectura: **CU + BD/diccionario** | Documento | Alta | ✅ Cumplido (A&D actual) |
+| REQ-14 | **A&D (to-be)** como base del análisis con arquitectura | Documento | Alta | ✅ Cumplido (A&D actual) |
 
-**Próxima reunión:** 11-09 (cronograma del Plan) → presentar arquitectura completa (CU + BD/diccionario) y prototipo.
+**Siguiente hito:** presentación de arquitectura completa y prototipo → **acta 5 (11-09)**.
 
 ---
 
-## 🧭 Consolidado del alcance vigente (post-actas)
+## 📋 Acta 5 — CS3081-005-2026 · vie 11-09-2026 · 10:00–11:00 · Virtual ✅ Aprobada
 
-1. **Producto:** Portal RAG de consulta sobre **la base de documentos del cliente** (sus propios reportes; sin API ni acceso a la Bolsa).
-2. **Sectores priorizados:** **Minería, Energía y Petróleo** (el resto queda fuera del procesamiento por volumen).
-3. **Usuarios:** exactamente **3 personas / 2 roles** — Oscar Baldeón (**Superadmin**) + **2 Administradores**; rol "Usuario (lectura)" **eliminado** (acta 4, REQ-10 definido) (ver [[03 Roles y Control de Accesos]]).
-4. **IA delimitada:** responde **solo** con la base del cliente y **cita fuente**; ante ausencia → buscar o indicar que no se encontró (REQ-01/02).
-5. **Costo:** minimizar tokens + servidor (REQ-05); desarrollo sin costo (infra universitaria); operación posterior = costo del cliente.
-6. **Fuera del alcance actual:** LinkedIn (eliminado), suscripción (2ª fase), i18n/rol público/chatbot de citas (sin prioridad; ver [[14 Requerimientos del Kick-off (RF-11+)|estados RF-11+]]).
-7. **Infraestructura:** desarrollo = servidor + LLM de la universidad; **fase 1 sin despliegue a producción** (acta 4, REQ-11 — el cliente no tiene presupuesto para infra IA/RAG).
-8. **2ª fase (registrada, sin desarrollo):** usuarios **"Cliente" con `tenant_id`** (multi-tenant) + **pasarela de pagos** (acta 4, REQ-12).
+**Proyecto:** Igualab — Sistema de Análisis de Datos de Sostenibilidad (RAG); línea base: **Plan de Proyecto v1.2** · **Fase:** Presentación del Plan v1.2 y del prototipo; control de cambios de alcance.
+**Archivos:** `01-Mockups-y-Propuestas/Acta_Reunion5.tex` (+ `Acta_Reunion5.pdf`).
+
+### Decisiones
+| # | Tema | Conclusión | Estado |
+|---|---|---|---|
+| 1 | **Plan de Proyecto v1.2** | Presentado al PO; **conformidad sin observaciones**. Queda como **línea base vigente** | ✅ Aprobado |
+| 2 | **Módulo de Bolsa de Valores** | **NO viable** (API BVL licenciada ~US$20/mes sin presupuesto; riesgo de ban por scraping; la fuente real es la ingesta). El PO decidió **eliminar** CU007/RF-018/019/RN-008 y el actor externo BVL | ✅ Decidido (eliminar) |
+| 3 | **Exclusión de LinkedIn** | Registro formal de su exclusión del alcance (cierra la trazabilidad del mockup CU010) | ✅ Aprobado |
+| 4 | **Delegación tecnológica** | El PO **autoriza** al equipo decidir stack, arquitectura y herramientas, informándolas y validándolas funcionalmente en las demos | ✅ Aprobado |
+| 5 | **Dashboards de visualización** | **Reprogramados a fase 2** (KPIs ASG/ESG, índice ASG 0–100); fase 1 se centra en el núcleo de valor | ✅ Aprobado |
+| 6 | **Formato de ingesta** | Los documentos se suben **únicamente en Markdown (`.md`)** (conversión a cargo del cliente), con **tablas de pipes**; reemplaza la idea inicial de aceptar solo PDF | ✅ Aprobado |
+
+### Requerimientos capturados (acta)
+| ID | Requisito | Tipo | Prioridad | Estado |
+|---|---|---|---|---|
+| REQ-15 | Presentación y **conformidad del Plan v1.2** (línea base vigente) | Documento | Alta | ✅ Aprobado |
+| REQ-16 | **Eliminación del módulo de Bolsa de Valores** (CU007, RF-018/019, RN-008, actor BVL) | Cambio | Alta | ✅ Decidido |
+| REQ-17 | **Registro formal de la exclusión de LinkedIn** | Cambio | Media | ✅ Aprobado |
+| REQ-18 | **Delegación de la decisión tecnológica** al equipo (stack, arquitectura, herramientas) | RN | Alta | ✅ Aprobado |
+| REQ-19 | **Reprogramación de los dashboards** de visualización a **fase 2** | Cambio | Alta | ✅ Aprobado |
+| REQ-20 | **Formato de ingesta**: solo `.md` con tablas de pipes | Cambio | Alta | ✅ Aprobado |
+
+**Próxima reunión:** 14/09 (lunes), cadencia acordada de **2 reuniones/semana** — validación final de requerimientos, arquitectura y prototipo; avance del A&D con las decisiones de esta acta.
+
+---
+
+## 📝 Acta 6 — CS3081-006-2026 · mar 15-09-2026 · Virtual 🚧 BORRADOR
+
+**Proyecto:** Proyecto Igualab — Plataforma de analítica de sostenibilidad (RAG) · **Fase:** Conformidad del PO (RN/RF/RNF) y avance del Análisis y Diseño (cierre previsto para el viernes 18/09).
+**Borrador:** `01-Mockups-y-Propuestas/Acta_Reunion6_BORRADOR.tex` (+ PDF compilado). Se completa en la reunión.
+
+### Temas previstos
+1. **Conformidad del PO (Oscar) con RN/RF/RNF** — validación por correo, sin observaciones (RN 001–039, RF 001–056, RNF 001–036).
+2. **Presentación del rediseño del mockup** con todas las funcionalidades de fase 1, alineado al alcance vigente.
+3. **Avance del Análisis y Diseño (A&D)** — gran avance; cierre previsto para el viernes 18/09.
+
+> El acta se centra en cerrar la **fase 1**; no se reabren temas ya cerrados (fase 2 en actas 4/5).
+
+### Requerimientos propuestos (IDs tentativos — continúan desde REQ-20)
+| ID | Necesidad / cambio | Tipo | Estado |
+|---|---|---|---|
+| REQ-21 | Conformidad del PO con RN/RF/RNF remitidos por correo | Documento | Por registrar |
+| REQ-22 | Presentación y aprobación del rediseño del mockup | Documento | Por registrar |
+| REQ-23 | Cierre del Análisis y Diseño (A&D) con trazabilidad final | Documento | En proceso |
+
+---
+
+## 🧭 Consolidado del alcance vigente (post-actas 1–5)
+
+1. **Producto:** portal RAG de consulta sobre **la base de documentos del cliente** (sus propios reportes; sin API ni acceso a la Bolsa).
+2. **Sectores priorizados:** **Minería, Petróleo y Gas, y Energía**.
+3. **Usuarios:** exactamente **3 personas / 2 roles** — Oscar Baldeón (**Superadmin**) + **2 Administradores**; rol "Usuario" **eliminado** (acta 4, REQ-10).
+4. **IA delimitada:** responde **solo** con el corpus ingestado y **cita la fuente**; ante ausencia, lo declara explícitamente.
+5. **Ingesta:** el **Superadmin** carga documentos **`.md` con tablas de pipes** (acta 5, REQ-20); el Administrador solo consulta.
+6. **Costo:** minimizar tokens + servidor; desarrollo sin costo (infra universitaria); operación posterior = costo del cliente.
+7. **Fuera de fase 1:** dashboards (fase 2, REQ-19), módulo Bolsa (eliminado, REQ-16), LinkedIn (excluido, REQ-17), chatbot inclusivo/portal público/i18n (fase 2).
+8. **Infraestructura:** desarrollo = servidor + LLM de la universidad; **fase 1 sin despliegue a producción** (acta 4, REQ-11).
+9. **2ª fase (registrada, sin desarrollo):** usuarios **"Cliente" con `tenant_id`** + **pasarela de pagos** (acta 4, REQ-12).
 
 ## 🔜 Pendientes inmediatos
-- ✅ **Cerrado en acta 4:** servidor de producción (REQ-08) → **sin producción en fase 1** (REQ-11); GAP/backlog revisados.
-- ✅ **Modelo de usuarios (REQ-10): definido — 2 roles / 3 personas** (Oscar = Superadmin + 2 Administradores; sin rol "Usuario").
-- 📌 **Cerrar el análisis (REQ-13):** diagramas de casos de uso + diagrama de BD con diccionario de datos — por definir (~1–2 semanas tras confirmación del diagrama de procesos/modelo de usuarios).
-- 📝 **Acta 4 (08-09):** completar horas/asistencia en el borrador, validar en la reunión y firmar (`Acta_Reunion4_BORRADOR`).
-- 🟡 Entrega/firma formal del acta 3 por el docente.
-- 🔧 **11-09:** presentación de arquitectura completa y prototipo con el cliente (cronograma del Plan).
-- 📄 Ajustar la documentación al modelo de usuarios decidido (ver [[22 Análisis y Diseño (Borrador) — Estado y Hallazgos]]).
+- 📌 **A&D:** corregir los pendientes documentados (CU007/rol "Usuario" aún presentes; sección 8 y diccionario de datos; RN del límite de 50 MB; RF del pipeline) — ver `FASE 1/01-Analisis-y-Diseno/10…` (Anexo 5).
+- 🟡 Firma del docente en el acta 3.
+- 🗓️ Cadencia de **2 reuniones/semana** con el cliente (acta 5).
+- 🔧 Avance de **backend y frontend** por sprint (`06-Desarrollo/BCK-IGUALAB`, `06-Desarrollo/FE-IGUALAB`).
 
 ## 🔗 Relacionado
-- [[09 Planificación y Roadmap]] · [[10 Pendientes y Supuestos]] · [[22 Análisis y Diseño (Borrador) — Estado y Hallazgos]] · [[13 Visión del CEO y Caso de Uso (Kick-off)]] · [[03 Roles y Control de Accesos]]
+- [[📌 Inicio]] · [[11 Stakeholders y Contactos]] · [[23 Guía de Generación de Actas]]

@@ -1,6 +1,8 @@
-# 10 · Contexto del chat "Requisitos de embeddings" + Auditoría RN/RF/RNF (A&D v2)
+# 10 · Contexto del chat "Requisitos de embeddings" + Auditoría RN/RF/RNF
 
-> Fuente: conversación compartida por el equipo (ChatGPT, 14/09) + revisión del A&D v2. Este documento **fija la decisión de arquitectura sobre embeddings** y consolida la **lista accionable de correcciones** de RN/RF/RNF para el A&D.
+> ⚠️ **BITÁCORA HISTÓRICA — NO es documentación vigente** salvo la **Parte 1** (decisión de arquitectura: embeddings y LLM por API), que sí rige. Los anexos 1–4 auditan versiones antiguas del A&D (v2–v5) y ya están superados; **el estado vigente es el Anexo 5 (A&D v6)** más la actualización del 15/09 (RF-056 y RNF-031…036, ver más abajo).
+
+> Fuente: conversación compartida por el equipo (ChatGPT, 14/09) + revisiones sucesivas del A&D. Este documento **fija la decisión de arquitectura sobre embeddings** y conserva la traza de correcciones de RN/RF/RNF.
 
 ---
 
@@ -304,6 +306,23 @@ Con las decisiones del 13-14/09, el diagrama debe actualizar:
 | **RF-055** | Si **no se detectó ningún código GRI**, el **puntaje ESG se muestra «no disponible»**, no como cero. | Deriva de RN-031/RN-032/RN-034. Aplicado a `vw_puntaje_esg` (NULL). |
 
 **RN/RF/RNF quedan (v6):** RN **001–039**, RF **001–055**, RNF **001–030** — replicados en el vault con la misma numeración.
+
+### Anexo 5-bis · Actualización del A&D (15/09) — último estado
+
+El A&D fue actualizado y **agrega**:
+
+| Nuevo | Contenido | Efecto |
+|---|---|---|
+| **RF-056** | Sección donde **todos los Administradores** pueden ver los reportes de prospección generados (por otros o por ellos mismos). | Deriva de RN-025/RN-026; complementa RF-044 (historial). |
+| **RNF-031** | Bloqueo temporal de cuenta tras **5 intentos fallidos** (15 min) y registro del bloqueo en auditoría. | Deriva de RF-001. |
+| **RNF-032** | Impide generar un nuevo reporte de la **misma empresa y año**; permite que todos los Administradores vean los PDF. | Deriva de RF-035, RN-026. |
+| **RNF-033** | Respuesta del asistente en **≤ 15 s** (excluyendo latencia del proveedor externo). | Deriva de RF-029. |
+| **RNF-034** | Auditoría en **UTC**, conversión a `America/Lima` solo en presentación. | Deriva de RF-046/047, RN-028. |
+| **RNF-035** | Contenido del corpus tratado **solo como datos**, nunca como instrucciones (defensa ante prompt injection). | Deriva de RF-029. |
+| **RNF-036** | Codificación **UTF-8** del contenido ingestado, sin pérdida de tildes/ñ. | Deriva de RF-023/RF-017. |
+
+**Estado consolidado (A&D actual):** RN **001–039**, RF **001–056**, RNF **001–036** — replicado en el vault (`04`, `05`, `06`).
+**Cambios de contenido en filas existentes:** RF-019 (reformulado: «sección identificable de GRI o sanciones; si no, "no identificado"»), RF-021 (ahora cita RN-039 + RN-033), RF-029 (cita RN-037), RF-039 (cita RN-038).
 
 **Pendientes que siguen en el A&D:**
 1. **Falta la RN del límite de 50 MB** (la requieren RNF-014 y el RF de rechazo por tamaño) — RN-039 ya se usó para integridad de la ingesta.

@@ -25,7 +25,7 @@ La arquitectura de Igualab se estructura en **tres capas principales**:
 - Módulos de gestión:
   - Panel de SuperAdmin (gestión de usuarios y control total)
   - Panel de Administrador (análisis comercial y consultas)
-- Dashboards de Bolsa de Valores (BVL) con visualizaciones
+- Dashboards de Bolsa de Valores (BVL) con visualizaciones — **fuera de alcance FASE 1 (fase 2)**
 - Formularios de autenticación y recuperación de contraseña
 
 #### Capa de Lógica de Negocio (Backend)
@@ -163,7 +163,7 @@ cados) - RF-019
 
 ---
 
-### Flujo 3: Consulta Analítica y Generación de Reporte (CU006)
+### Flujo 3: Consulta Analítica (CU004) y Generación de Reporte (CU006)
 
 ```
 Administrador
@@ -412,22 +412,9 @@ Documento Indexado
 
 ---
 
-### Patrón 3: CQRS (Command Query Responsibility Segregation)
+### Patrón 3: CQRS y Event Sourcing — NO aplicables a FASE 1
 
-**Aplicación:**
-- **Commands:** Acciones que cambian estado (ingesta, cambio de rol, etc.)
-- **Queries:** Lecturas que no modifican estado (consultas, listados)
-
-**Ventaja:** Separación clara entre operaciones de lectura/escritura
-
----
-
-### Patrón 4: Event Sourcing en Auditoría
-
-**Implementación:**
-- Cada acción importante genera un evento
-- Eventos almacenados de forma inmutable
-- Permite reconstruir el histórico de cualquier entidad
+> **Fuera de alcance FASE 1.** La arquitectura de fase 1 es un **monolito modular simple (RAG simple)**; no se implementan CQRS ni Event Sourcing.
 
 ---
 
@@ -460,7 +447,7 @@ Documento Indexado
 - **Validación de entrada:** Sanitización en todos los endpoints
 - **CORS:** Configurado para origen específico (dominio Igualab)
 - **Rate limiting:** Máx 5 intentos de autenticación en 15 minutos - RNF-031
-- **Cifrado en tránsito:** HTTPS obligatorio - RNF-024
+- **Cifrado en tránsito:** HTTPS obligatorio
 
 ### 4.5.5 Disponibilidad y Mantenimiento
 
@@ -479,7 +466,7 @@ Documento Indexado
 | Ingesta Documentos | Carga de archivos, validación, indexación | SuperAdmin | IA (RAG), BD |
 | Consultas Analíticas | Búsqueda semántica, generación reportes | Administrador | IA (RAG), BD, Email |
 | Auditoría | Registros inmutables de eventos | SuperAdmin | BD |
-| Dashboards BVL | Visualización de indicadores | Público/Autenticado | BD |
+| Dashboards BVL (fase 2 — fuera de alcance FASE 1) | Visualización de indicadores | Público/Autenticado | BD |
 
 ---
 
@@ -488,7 +475,7 @@ Documento Indexado
 Este diseño funcional detallado integra:
 - **Arquitectura:** Cliente-servidor con componentes desacoplados
 - **Seguridad:** Autenticación fuerte, auditoría completa, integridad de datos
-- **Escalabilidad:** Índices semánticos optimizados, procesamiento asíncrono donde aplica
+- **Escalabilidad:** Índices semánticos optimizados, procesamiento síncrono
 - **Usabilidad:** Interfaces intuitivas para SuperAdmin y Administrador
 - **Confiabilidad:** Degradación elegante si servicios externos no están disponibles
 

@@ -17,25 +17,24 @@ Ambos documentos llegan al sistema **ya convertidos a Markdown (.md)** por el pr
 
 Una **brecha GRI** es la diferencia entre **lo que el estándar GRI exige reportar** y **lo que la empresa realmente reporta** en sus memorias anuales o reportes de sostenibilidad.
 
-El estado del indicador se clasifica con el **catálogo GRI como referencia** (tabla `catalogo_gri` en la base de datos, nunca lo decide la IA por sí sola — ver RN-013):
+El estado del indicador lo asigna **manualmente el Administrador**, con el **catálogo GRI como referencia** (tabla `catalogo_gri` en la base de datos); la IA **no lo decide ni lo sugiere** — ver RN-016:
 
 | Estado | Significado | Ejemplo (mock) |
 |---|---|---|
 | `OK` | el reporte cubre el indicador con datos completos y metas verificables | *GRI 306 Residuos — OK: “Reporte completo con metas de reducción”* (Minera Andina, mock) |
-| `SUB-REPORTADO` | se menciona el tema pero faltan datos/metricas exigidas | *GRI 401 Empleo — Sub-reportado: “solo declara contrataciones, sin rotación ni beneficios”* (Minera Andina, mock) |
-| `BAJA SUSTANCIA` | el contenido existe pero es superficial (sin impacto medible) | *GRI 413 Comunidades locales — Baja sustancia: “menciona consultas pero sin indicadores de impacto”* (mock) |
-| `CRITICO` | (asignado por el humano) omisión grave o sanción asociada, prioridad de contacto | el analista lo asigna en la revisión del análisis |
+| `Baja sustancia` | el contenido existe pero es superficial (sin impacto medible) | *GRI 413 Comunidades locales — Baja sustancia: “menciona consultas pero sin indicadores de impacto”* (mock) |
+| `Sub-reportado` | se menciona el tema pero faltan datos/metricas exigidas | *GRI 401 Empleo — Sub-reportado: “solo declara contrataciones, sin rotación ni beneficios”* (Minera Andina, mock) |
 
-Ningún estado se calcula “a ojo” de la IA: cada fila de evaluación guarda el **código GRI**, la **cita** (documento, sección) y el **estado**; la IA/motor solo **sugiere**, y el humano **valida o cambia el estado antes de generar el reporte** (RN-013, RF-013 — supervisión humana acordada con el PO).
+Ningún estado se calcula “a ojo” de la IA: cada fila de evaluación guarda el **código GRI**, la **cita** (documento, sección) y el **estado**; el sistema **solo detecta los códigos y extrae la cita**, y el Administrador **asigna manualmente el estado antes de generar el reporte** (RN-016, RF-027 — supervisión humana acordada con el PO).
 
 ## 3. ¿Cómo se identifica el estado sin que la IA decida el “GRI óptimo”?
 
 Pregunta del PO: “¿cómo sabe la IA cuál es el GRI óptino? ¿hay un estándar que se deba seguir?”. Respuesta de diseño (fase 1):
 
-1. Existe un **catálogo GRI estándar** (Universal Standards serie 100, materiales 200-ambiental, 300-sociales y 400-goobreza) precargado en la tabla `catalogo_gri` con: código, denominación, sección requerida, **elementos mínimos de reporto esperados** y palabras clave de evidencia.
-2. El pipeline de ingesta **compara el contenido del documento** contra el catálogo: para cada código detectado registra el nivel de sustancia (lista de verificación de elementos mínimos: cifras, metas, casos, coberturas).
-3. El estado sugerido resulta de esas reglas **determinísticas** (no del conocimiento “general” del LLM); el LLM únicamente redacta la observación con su cita.
-4. El analista humano revisa la fila sugerida y **cambia el estado si corresponde** (`CRITICO`, `OK`, etc.). El histórico de cambios queda en la tabla (quién, cuándo, estado anterior/nuevo).
+1. Existe un **catálogo de 40 códigos GRI** (Universal Standards serie 100, materiales 200-ambiental, 300-sociales y 400-gobernanza) precargado en la tabla `catalogo_gri` con: código, denominación, sección requerida y palabras clave de evidencia (para **detección de presencia**, no para evaluar cumplimiento).
+2. El pipeline de ingesta **detecta la presencia de los códigos del catálogo** en el documento y **extrae la cita textual** de cada uno; **no evalúa ni califica** su contenido.
+3. La fila del análisis queda **sin estado** hasta la revisión: el sistema **no calcula ni sugiere** estado alguno.
+4. El Administrador revisa la fila **con su cita** y **asigna manualmente el estado** (`OK`, `Baja sustancia` o `Sub-reportado`). El histórico de cambios queda en la tabla (quién, cuándo, estado anterior/nuevo).
 
 ## 4. Flujo de servicios por defecto (de la meist noja del final del mock)
 

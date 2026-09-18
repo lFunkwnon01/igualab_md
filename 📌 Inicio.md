@@ -1,81 +1,77 @@
-
 # 📌 Igualab — Vault de Proyecto
 
-> **Vault de planificación del proyecto Igualab** — *Plataforma de analítica de sostenibilidad (RAG)*
-> Estado: 🟢 **FASE 1 definida** — **Plan de Proyecto v1.2 aprobado (11/09, acta 5: conformidad del PO Oscar, sin observaciones)** · decisiones de alcance: sin Bolsa de Valores (REQ-16), sin LinkedIn (REQ-17), dashboards → fase 2 (REQ-19), ingesta solo `.md` con tablas con pipes (REQ-20), stack libre al equipo (REQ-18), **RAG simple sin MCP** · Sectores: **Minería, Energía y Petróleo** · próximos pasos: BD final + diccionario de datos e inicio del backend (próxima reunión 14/09, cadencia 2 reuniones/semana)
-> Fuentes oficiales: `01-Mockups-y-Propuestas/Igualab - Plan de proyecto.docx (1).pdf` (**Plan v1.2**) · **[[21 Actas de Reunión y Acuerdos|Actas CS3081-001…005]]** · `FASE 1/` — **análisis, arquitectura, stack, frontend y API de fase 1** · mock vivo: igualab.vercel.app
-> Cliente / Product Owner: Oscar Baldeón — Fundador (oscarbaldeon@igualab.org)
-> Jefe de Proyecto (PM): **Fabricio Godofredo Ladera La Torre** *(acta 4)* · Frontend: Juan Renato Flores Pascual
+> **Plataforma de analítica de sostenibilidad (RAG)** — Igualab / cliente Oscar Baldeón (PO).
+> Estado: 🟡 **FASE 1 alineada; A&D en auditoría**. **Plan v1.2 aprobado** (acta 5, 11/09) · **A&D** (RN 001–039 · RF 001–056 · RNF 001–036) con hallazgos abiertos → ver [[AUDITORIA-ANALISIS-Y-DISENO]].
+> Alcance: **3 usuarios / 2 roles** (1 Superadmin + 2 Administradores) · flujo **sin Bolsa de Valores**, **sin LinkedIn**, **dashboards → fase 2**, **ingesta solo `.md` con tablas de pipes** · **RAG simple, sin MCP** · sectores: **Minería, Petróleo y Gas, Energía**.
+> Mock fidelizado: <https://igualab.vercel.app/>
+
+## ⚖️ Fuentes de verdad (solo estas)
+
+1. `01-Mockups-y-Propuestas/Igualab - Plan de proyecto.docx (1).pdf` — **Plan de Proyecto v1.2** (línea base aprobada).
+2. `01-Mockups-y-Propuestas/Análisis y Diseño - Igualab.pdf` — **A&D** (documento vivo; numeración RN/RF/RNF). ⚠️ Pendiente de corrección: secciones 5, 7.3, 8, 10, 11 y 13; diccionario de datos ajeno (inmobiliario). Ver [[AUDITORIA-ANALISIS-Y-DISENO]].
+3. `FASE 1/` — desarrollo del análisis, arquitectura, BD, stack, frontend y API, alineado 1:1 a las dos fuentes anteriores.
+
+> Toda desviación de alcance se registra por **acta (REQ)**; el Plan firmado no se re-versiona. Ver [[21 Actas de Reunión y Acuerdos]].
+
+> 📄 Auditoría vigente: [[AUDITORIA-ANALISIS-Y-DISENO]] · 🏗️ Infraestructura y flujo Git: [[INFRAESTRUCTURA-Y-FLUJO-GIT]].
 
 ---
 
-## 🧭 Mapa del Vault (MOC)
+## 🧭 Mapa del Vault
 
-Este vault organiza el análisis y la planificación del proyecto. Sigue el orden numerado para leerlo de forma progresiva.
+### 1 · Análisis y Diseño — `FASE 1/01-Analisis-y-Diseno/`
+- `01-Antecedentes-y-Objetivos.md` — qué es Igualab, objetivo general y **alcance de fase 1**.
+- `02-Antecedentes-del-Analisis-GRI.md` — memorias anuales, reportes GRI, qué es una **brecha** y cómo se califica.
+- `03-Diagramas-de-Procesos-TO-BE.md` — procesos to-be en Mermaid (+ BPMN en `diagramas-BPMN/`).
+- `04-Reglas-de-Negocio.md` — **RN-001…RN-039**.
+- `05-Requerimientos-Funcionales.md` — **RF-001…RF-056**.
+- `06-Requerimientos-No-Funcionales.md` — **RNF-001…RNF-036**.
+- `07-Casos-de-Uso-Diagrama.md` · `08-Especificacion-Casos-de-Uso.md` — **CU001…CU009** + especificaciones.
+- `09-Revision-A&D-v2-vs-FASE1.md` · `10-Contexto-Embeddings-y-Auditoria-AyD.md` — bitácora histórica de conciliación con el A&D (no es documentación vigente; el doc 10, Parte 1, sí fija la decisión de **embeddings/LLM por API**).
 
-### 1. Fundamentos
-- [[01 Contexto del Proyecto]] — qué es Igualab, el problema y los dos alcances detectados
-- [[02 Glosario]] — definición fija de términos (memorias, métricas, bolsa, IA)
-- [[03 Roles y Control de Accesos]] — RBAC de 2 roles (acta 4, REQ-10) y matriz de permisos
+### 2 · Arquitectura de Solución — `FASE 1/02-Arquitectura-de-Solucion/`
+- `01-Arquitectura-de-Solucion-FASE-1.md` — visión por módulos (**RAG simple, sin MCP**).
+- `02-Base-de-Datos-Diagrama-y-Diseno.md` — ERD v2 (**PostgreSQL + pgvector**) y 21 reglas semánticas.
+- `03-Diccionario-de-Datos.md` — diccionario (14 tablas).
+- `04-Comparacion-RAG-simple-vs-MCP.md` · `05-Analisis-Por-que-Existen-las-Tablas.md`.
 
-### 2. Requerimientos
-- [[04 Requerimientos Funcionales]] — RF-01 … RF-10
-- [[05 Requerimientos No Funcionales]] — RNF-01 … RNF-04
+### 3 · Stack y demás capas
+- `FASE 1/03-Stack-Tecnologico/01-Stack-Tecnologico.md` — stack decidido + LLM gratuito y variables de entorno.
+- `FASE 1/04-Frontend-React/01-Arquitectura-Frontend-React.md` — React 18 + Vite, mapeo 1:1 con el mock.
+- `FASE 1/05-api-endpoints-mock/igualab-fase1-mock.openapi.yaml` — OpenAPI mock (peticiones/respuestas simuladas).
 
-### 3. Solución técnica
-- [[06 Arquitectura (AWS)]] — componentes y stack propuesto
-- [[15 Arquitectura de Solución]] — visión de solución, componentes y base de datos (relacional vs no relacional según presupuesto)
-- [[16 Diagramas de Secuencia]] — flujos en Mermaid (ingesta, RAG, reporte PDF, rol público)
-- [[17 Diagrama de Casos de Uso]] — actores y casos de uso (Mermaid) + mapeo a RF
-- [[07 Flujos por Rol]] — caminos de Superadmin y Administrador (2 roles, acta 4)
-- [[08 Ingesta de Datos]] — pipeline S3 → Bedrock → OpenSearch → Aurora/DynamoDB
+### 4 · Gobernanza
+- [[21 Actas de Reunión y Acuerdos]] — actas **CS3081-001…005**: decisiones, acuerdos y estados.
+- [[23 Guía de Generación de Actas]] — plantilla LaTeX + workflow de actas.
+- [[11 Stakeholders y Contactos]] — cliente, equipo SCRUM y equipo académico.
 
-### 4. Planificación
-- [[09 Planificación y Roadmap]] — fases, MVP, hitos y épicas (sincronizado con el Plan aprobado + actas)
-- [[21 Actas de Reunión y Acuerdos]] — actas CS3081-001…004: decisiones, acuerdos y estados
-- [[10 Pendientes y Supuestos]] — decisiones abiertas, riesgos oficiales y supuestos
-- [[23 Guía de Generación de Actas]] — plantilla LaTeX + workflow de actas CS3081 (REQ, estilo, envío 24h)
-- [[11 Stakeholders y Contactos]] — cliente, equipo SCRUM y equipo académico
-- [[12 Análisis y Recomendaciones]] — reconciliación de documentos + **sección post-actas**
-- [[13 Visión del CEO y Caso de Uso (Kick-off)]] — análisis del video kick-off (histórico)
-- [[14 Requerimientos del Kick-off (RF-11+)]] — estados post-actas: vigentes, eliminados y sin prioridad
-
-### 5. Diseño y prototipo
-- [[17 Diagrama de Casos de Uso]] ya listado arriba; además:
-- [[18 Diagramas de Procesos (Lógica de Negocio)]] — 14 procesos de negocio sin stack (accesos, ingesta, brechas GRI, sanciones, IA, prospección E2E, público, auditoría, ciclo anual, chatbot)
-- [[19 BPMN — Modelado de Procesos (Estándar de Industria)]] — modelo BPMN 2.0 (estándar OMG) del proceso central + visor HTML en `00-Documentación/bpmn/`
-- [[20 Prompt Mockup MVP]] — prompts Stitch → AI Studio (CU001–CU013) y su estado
-- [[Diagramas de Procesos]] — 10 flujos Mermaid **técnicos** (RBAC, ingesta, motor RAG, GRI, sanciones, reportes, auditoría, fases, AWS)
-- `diseno/stitch_plataforma_igualab_sostenibilidad_e_inteligencia/` — 14 pantallas generadas (CU001–CU013 + dashboard) con `code.html` + `screen.png`
-- `frontend/` — mockup navegable (HTML + JS por vistas, desplegado en Vercel)
-
-### 6. Recursos
-- [[Recursos y Adjuntos]] — PDFs oficiales, actas, archivados, media, transcripciones y rutas
-- `03-Transcripciones/` — `transcript.txt` (kick-off) · `2026-09-02.md` (⚠ pendiente de contenido) · `transcribe.py`
-- `00-Documentación/Propuesta_Tecnica_Chatbot_Corporativo (1).md` — propuesta alternativa (Supabase/pgvector) para el chatbot corporativo
-
----
-
-## 🗂️ Resumen ejecutivo (post-actas)
-
-**Producto vigente:** Portal RAG de consulta sobre **la base de documentos del cliente** (sus propios reportes; sin API de Bolsa — acta 1), acotado a los sectores **Minería, Energía y Petróleo** (acta 3). La IA responde **solo** con esa base y **cita la fuente**; ante ausencia, busca o indica que no se encontró. **3 usuarios / 2 roles**: Oscar Baldeón = **Superadmin** + **2 Administradores**; rol "Usuario (lectura)" **eliminado** (acta 4, REQ-10); **el Superadmin ingesta** los documentos. Costo mínimo de tokens/servidor; **fase 1 opera íntegramente en el entorno de desarrollo de la universidad, sin despliegue a producción** (acta 4, REQ-11). **2ª fase:** usuarios **"Cliente" con `tenant_id`** + **pasarela de pagos** (acta 4, REQ-12) — **sujeta al tiempo del equipo y al presupuesto del cliente para salir a producción**; todo lo del plan corresponde solo a la fase 1. **LinkedIn eliminado** del alcance. Ver [[12 Análisis y Recomendaciones]] (sección post-actas).
+### 5 · Diseño, prototipo y recursos
+- `diseno/stitch_.../` — 14 pantallas generadas (CU + dashboard) con `code.html` + `screen.png`.
+- `frontend/` — mockup navegable (HTML + JS por vistas), desplegado en Vercel (submódulo `igualab-mock`).
+- `06-Desarrollo/FE-IGUALAB` y `06-Desarrollo/BCK-IGUALAB` — repos de desarrollo (submódulos).
+- `01-Mockups-y-Propuestas/` — Plan, A&D, actas firmadas y organigrama del equipo.
+- `02-Recursos-Media/` — media, fotos y evidencias.
+- `03-Transcripciones/` — transcript del kick-off + `transcribe.py`.
+- `00-Documentación/bpmn/` — visor BPMN 2.0.
 
 ---
 
 ## 🗂️ Resumen ejecutivo
 
-Igualab necesita una **plataforma de inteligencia de sostenibilidad y prospección** con control de accesos por roles, un asistente de IA (RAG + métricas), generación de reportes PDF, dashboards de la Bolsa de Valores y auditoría. El onboarding del cliente, sin embargo, describe inicialmente un **chatbot inclusivo público** para agendar citas (accesible para personas con discapacidad). 
+Igualab necesita una **plataforma de analítica de sostenibilidad con IA (RAG)** para su área comercial: procesa **memorias anuales y reportes de sostenibilidad GRI** (que el cliente ya entrega convertidos a **`.md`**), identifica **brechas GRI y sanciones**, y genera **reportes de prospección en PDF** para acercarse a las empresas como aliado estratégico. La IA responde **solo con el corpus ingestado y cita la fuente** (si no hay evidencia, lo declara explícitamente).
 
-**Conclusión del análisis:** ambos documentos describen alcances distintos que conviven. El chatbot inclusivo es el **RF-10 / Fase 2** de los requerimientos y el MVP se centra en la plataforma interna. Ver [[12 Análisis y Recomendaciones]].
+**Roles (2 / 3 personas):** 🟡 **Superadmin** (Oscar) — gestión de usuarios, **ingesta** de documentos, configuración y auditoría; no usa la IA. 🟢 **Administrador** (×2) — consulta el asistente, revisa/valida estados GRI y genera reportes.
 
-**Nuevo (post kick-off, transcrito):** el CEO confirma el **pivot a consultoría** (modelo retribuido) centrado en **prospección comercial**. El agente RAG unifica **reportes de sostenibilidad (estándar GRI)** y **memorias anuales de la Bolsa de Valores de Lima** (estas SÍ son la fuente real y contienen sanciones) para detectar **brechas GRI y sanciones**, generar reportes PDF y acercarse a empresas como aliado estratégico. Hay además un **rol público** de solo lectura, soporte **multilingüe** (ES/lenguas originarias/EN), necesidad de **autonomía por web scraping** y meta de postular a **Premio Kunan / Democracia Digital**. Ver [[13 Visión del CEO y Caso de Uso (Kick-off)]] y [[14 Requerimientos del Kick-off (RF-11+)]].
+**Fase 1 opera en el entorno de desarrollo universitario, sin producción.** La 2ª fase (usuarios "Cliente" con `tenant_id` + pasarela de pagos y dashboards) está registrada pero fuera del alcance.
 
 ---
 
-## ✅ Próximos pasos inmediatos (actas + cronograma)
-1. **📝 Acta 4 (martes 08-09):** completar horas/asistencia del borrador (`01-Mockups-y-Propuestas/Acta_Reunion4_BORRADOR`), validar en la reunión y firmar.
-2. **🟡 Entregar/firmar formalmente el acta 3** (falta firma del docente).
-3. **🔧 vie 11-09: Presentación de arquitectura y prototipo con el cliente** (cronograma del Plan).
-4. Ajustar documentación y mockups al modelo definido (acta 4: **2 roles / 3 personas**, sin "Usuario") y registrar la 2ª fase (Cliente + `tenant_id` + pasarela).
+## ✅ Estado y próximos pasos
 
-> Última actualización: 2026-09-08 · post-acta 4 (borrador)
+1. **Plan v1.2 aprobado** (acta 5, 11/09) — línea base vigente.
+2. **Análisis y diseño EN AUDITORÍA** — el `FASE 1/` está alineado, pero el **A&D** tiene secciones incompletas y contenido ajeno. Detalle y backlog en [[AUDITORIA-ANALISIS-Y-DISENO]].
+3. **Pendientes P0 del A&D:** sección 5 (proceso + 5.1/5.2), 7.3 (secuencia), 8 (modelo de datos vacío), 9 (diccionario inmobiliario ajeno), 11 (diseño arquitectónico + SOLID), y fichas CU005/CU006/CU007 + rol "Usuario".
+4. **Correcciones internas aplicadas (17/09):** límite `50 MB`, 3 estados GRI (sin «Crítico»), sin `estado_sugerido`, RAG sin `function calling`, 14 tablas, sectores `RN-019`. Queda unificar la numeración CU (A&D ↔ FASE 1 ↔ mock).
+5. **Desarrollo:** `BCK-IGUALAB` + `FE-IGUALAB` por `development → qa → uat → main` ([[INFRAESTRUCTURA-Y-FLUJO-GIT]]), con la demo de integración del cronograma.
+
+> Última actualización del vault: **2026-09-17**.

@@ -145,13 +145,13 @@ paths:
                 rechazado:
                   value:
                     estado: "rechazado"
-                    motivo: "Tablas sin pipes detectadas en línea 42 (RN-010). Convierta la matriz con separadores | antes de reintentar."
+                    motivo: "Tablas sin pipes detectadas en línea 42 (RN-013). Convierta la matriz con separadores | antes de reintentar."
                 rechazado_peso:
                   value:
                     estado: "rechazado"
-                    motivo: "El archivo supera el límite de 15 MB (RN-011). Divídalo por secciones o años."
+                    motivo: "El archivo supera el límite de 50 MB (RNF-014). Divídalo por secciones o años."
         "409":
-          description: Duplicado (RN-015)
+          description: Duplicado (RN-033)
           content:
             application/json:
               example: { estado: "duplicado", doc_id_existente: "uuid-2025-memoria" }
@@ -181,7 +181,7 @@ paths:
                     texto: "…"
                 cuota_restante_hoy: 184
         "503":
-          description: "Asistente no disponible / cuota agotada (RF-011 · RN-024/025)"
+          description: "Asistente no disponible / cuota agotada (RF-011 · RNF-028)"
           content:
             application/json:
               example: { mensaje: "El asistente no está disponible ahora; intenta más tarde. El resto de la plataforma sigue operativa." }
@@ -203,11 +203,9 @@ paths:
                 data:
                   - codigo: "GRI 401"
                     tema: "Empleo"
-                    estado_sugerido: "SUB-REPORTADO"
                     estado_final: null
                     cita: "doc:1 · sección 4.2"
                   - codigo: "GRI 306"
-                    estado_sugerido: "OK"
                     estado_final: null
                     cita: "doc:1 · sección 5.1"
   /gri/brechas/{id}/estado:
@@ -221,7 +219,7 @@ paths:
             schema:
               type: object
               properties:
-                estado_final: { type: string, enum: [OK, SUB-REPORTADO, BAJA SUSTANCIA, CRITICO] }
+                estado_final: { type: string, enum: [OK, SUB-REPORTADO, BAJA SUSTANCIA] }
                 observacion: { type: string }
       responses:
         "200": { description: "Estado actualizado con historial" }

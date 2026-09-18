@@ -19,8 +19,8 @@ flowchart LR
     A7 --> A8[("documentos y chunks_embeddings")]
   end
   subgraph EXPL["Línea analítica · Administrador"]
-    B1["Consulta al asistente IA con citación de fuentes"] --> B2["Revisa brechas GRI y sanciones sugeridas"]
-    B2 --> B3["Ajusta estado de brecha: OK / Sub-reportado / Baja sustancia / Crítico"]
+    B1["Consulta al asistente IA con citación de fuentes"] --> B2["Revisa brechas GRI y sanciones detectadas"]
+    B2 --> B3["Asigna estado de brecha: OK / Baja sustancia / Sub-reportado"]
     B3 --> B4["Genera reporte de prospección PDF"]
     B4 --> B5["Descarga y comparte con el área comercial"]
   end
@@ -42,7 +42,7 @@ flowchart TD
     P3 --> P4["5 Upsert en chunks_embeddings con sha256 anti-duplicado"]
     P4 --> ANA["6 Detección GRI: códigos presentes (catálogo de 40) + cita textual → INSERT en tabla del análisis SIN estado (lo asigna el humano en CU006)"]
     ANA --> AUD["7 Audita ingesta: usuario, archivo, hash, estado, tiempos"]
-    AUD --> RESP["Éxito: respuesta con fichas de chunks ingestados y brechas sugeridas listas para revision humana"]
+    AUD --> RESP["Éxito: respuesta con fichas de chunks ingestados y brechas detectadas listas para revision humana"]
 ```
 
 ```mermaid
@@ -52,7 +52,7 @@ flowchart TD
     R1 -- No --> DEN["Se informa límite de alcance de fase 1"]
     R1 -- Sí --> RAW["Consume la tabla del análisis poblada al terminar la ingesta, sin releer el documento"]
     RAW --> SUG["el sistema detecta códigos y extrae la cita (sin inferir estado)"]
-    SUG --> HUM{"¿El humano asigna el estado (OK / Baja / Sub) antes de generar? RN-018"}
+    SUG --> HUM{"¿El humano asigna el estado (OK / Baja sustancia / Sub-reportado) antes de generar? RN-016"}
     HUM -- Cambia --> REG["Historial: guarda estado, quién, cuándo, anterior → nuevo"]
     HUM -- Confirma --> GEN
     REG --> GEN["Generar PDF: SELECT determinista a gri_analisis con estados validados y sanciones → Jinja2 → WeasyPrint — sin llamar al LLM"]

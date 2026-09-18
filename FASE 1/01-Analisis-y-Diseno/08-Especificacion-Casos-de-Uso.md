@@ -47,9 +47,9 @@
 5. El sistema persiste y audita el cambio de rol/estado (CU009).
 
 **Flujos alternativos**
-- **A1 · Asignación de rol Superadmin a un Admin (RN-003)**: en el paso 4, si el rol elegido es Superadmin, el sistema **transfiere el rol**: el Superadmin actual devuelve automáticamente el rol a Administrador. Se muestra aviso: «Serás rebajado a Administrador. ¿Deseas continuar?»; si confirma, se ejecuta el cambio atómico; si no, no se altera nada.
+- **A1 · Asignación de rol Superadmin a un Admin (RN-009)**: en el paso 4, si el rol elegido es Superadmin, el sistema **transfiere el rol**: el Superadmin actual devuelve automáticamente el rol a Administrador. Se muestra aviso: «Serás rebajado a Administrador. ¿Deseas continuar?»; si confirma, se ejecuta el cambio atómico; si no, no se altera nada.
 - **A2 · Correo duplicado**: se rechaza con mensaje; lista intacta.
-- **A3 · Deshabilitar usuario**: el sistema **cierra las sesiones activas** del usuario (RN-007) y audita.
+- **A3 · Deshabilitar usuario**: el sistema **cierra las sesiones activas** del usuario (RN-005) y audita.
 
 ---
 
@@ -71,23 +71,23 @@
 |---|---|
 | Actores | Superadmin; LLM/Embeddings (servicio externo) |
 | RF / RN | RF-007, RF-008, RF-009 / RN-008…RN-015 |
-| Precondiciones | Sesión Superadmin; empresa registrada; archivo .md listo (tablas con pipes, ≤ 15 MB). |
+| Precondiciones | Sesión Superadmin; empresa registrada; archivo .md listo (tablas con pipes, ≤ 50 MB). |
 | Postcondición | Documento indexado (chunking + embeddings en pgvector) o estado RECHAZADO/OBSERVADO con motivo; auditoría ok. |
 
 **Flujo básico**
 1. El Superadmin abre *Ingesta de documentos*.
-2. Selección a empresa y año (obligatorio, RN-013) y tipo (memoria anual / reporte de sostenibilidad).
+2. Selección a empresa y año (obligatorio, RN-014) y tipo (memoria anual / reporte de sostenibilidad).
 3. Selección del archivo `.md` (solo acepta `.md`, RN-009; ≤ 50 MB) y *Subir*.
 4. **Guard**: valida extensión, tamaño (50 MB), tablas con pipes y contenido mínimo (RF-008).
 5. Anti-duplicado por sha256 (RN-014): si existe, informativo + enlace al doc ya indexado.
-6. **Procesamiento síncrono**: parseo markdown → filas normalizadas → chunking → **embeddings por API** → upsert pgvector (RN-012).
-7. La UI espera y muestra el resultado: nº de chunks indexados o estado *OBSERVADO* (sin secciones GRI/sanciones, RN-011).
+6. **Procesamiento síncrono**: parseo markdown → filas normalizadas → chunking → **embeddings por API** → upsert pgvector (RNF-028).
+7. La UI espera y muestra el resultado: nº de chunks indexados o estado *OBSERVADO* (sin secciones GRI/sanciones, RN-013).
 8. Auditoría (CU009) con usuario, hash, tiempos.
 
 **Flujos alternativos**
 - **A1 · Rechazo por formato** (paso 4): mensaje exacto del guard («texto de corrido sin pipes», «pesa X MB», «archivo vacío») y **no se indexa nada**. Se permite reintentar con otro archivo.
 - **A2 · Documento sin contenido analizable** (paso 4): estado *OBSERVADO* con motivo; corregible re-subiendo una versión nueva (RN-015).
-- **A3 · Falla del embedding local**: la operación se completo con estado *OBSERVADO señalado (normalmente, falla del servidor universitario)*; reintentable sin duplicar (hash ya registrado).
+- **A3 · Falla del servicio de embeddings (API)**: la operación se completo con estado *OBSERVADO señalado (normalmente, falla del servidor universitario)*; reintentable sin duplicar (hash ya registrado).
 
 > Nota de diseño: al ser **síncrono**, el máximo de un documento grande está sujeto a UX (spinner con estado del pipeline: guard → parseo → chunking → embedding). Sin colas de mensajes.
 
@@ -97,8 +97,8 @@
 
 | Campo | Detalle |
 |---|---|
-| Actores | Administrador; LLM (LLM free con function calling) |
-| RF / RN | RF-010, RF-011 / RN-021, RN-022, RN-023, RN-024 |
+| Actores | Administrador; LLM (RAG simple, sin function calling) |
+| RF / RN | RF-010, RF-011 / RN-021, RN-022, RN-023, RNF-028 |
 | Precondiciones | Sesión activa; ≥ 1 documento indexado; cuota disponible. |
 | Postcondición | Respuesta con citas + historial de chat en la sesión; evento opcional auditado. |
 
@@ -111,8 +111,8 @@
 
 **Flujos alternativos**
 - **A1 · Sin información relevante** (paso 3–4): el asistente declara «el documento no aborda este punto» (RN-021), lista lo que sí hay.
-- **A2 · LLM/cuota no disponible** (paso 4–5): mensaje de indisponibilidad y de sugerencia «intenta más tarde» (RF-011); el resto del sistema sigue operando (RNF-10).
-- **A3 · Consulta sobre empresa/sector fuera de alcance** (fase 1): respuesta con el límite declarado (RN-016) y enlace al alcance.
+- **A2 · LLM/cuota no disponible** (paso 4–5): mensaje de indisponibilidad y de sugerencia «intenta más tarde» (RF-049); el resto del sistema sigue operando (RNF-016).
+- **A3 · Consulta sobre empresa/sector fuera de alcance** (fase 1): respuesta con el límite declarado (RN-019) y enlace al alcance.
 
 ---
 
@@ -121,7 +121,7 @@
 | Campo | Detalle |
 |---|---|
 | Actores | Administrador; PO (Oscar) supervisa |
-| RF / RN | RF-013 / RN-017, RN-018, RN-019 |
+| RF / RN | RF-027 / RN-016, RN-017, RN-019 |
 | Precondición | Análisis GRI ejecutado para la empresa. |
 | Postcondición | Estados confirmados en `gri_analisis` con historial; listos para el reporte. |
 
@@ -129,7 +129,7 @@
 1. El Administrador abre la tabla de resultados del análisis de una empresa (mock: filas GRI 401/413/306).
 2. El sistema muestra cada código GRI detectado **con su cita textual**; el estado aparece **sin asignar** (el sistema no infiere ni compara con el estándar).
 3. El Administrador revisa cada fila y **asigna manualmente el estado** (`OK` / `Baja sustancia` / `Sub-reportado`) según su criterio profesional, usando la cita como sustento.
-4. El sistema guarda el cambio con autor, fecha y estado anterior→nuevo (RN-018).
+4. El sistema guarda el cambio con autor, fecha y estado anterior→nuevo (RN-016).
 5. Supervisión: el PO puede solicitar una re-verificación (rol humano de control acordado en actas).
 
 **Formulario «Estados GRI» (diseño de la pantalla)**
@@ -141,7 +141,7 @@
 
 **Flujos alternativos**
 - **A0 · Fila sin estado**: intento de generar reporte → el sistema indica las filas pendientes y no genera.
-- **A1 · Desacuerdo con la sugerencia**: el humano escribe una observación que se guarda junto al cambio.
+- **A1 · Observación del analista**: el humano escribe una observación que se guarda junto al cambio.
 - **A2 · Estado BAJA SUSTANCIA**: exige observación del analista; queda registrado en el historial junto a la cita.
 
 ---
@@ -156,8 +156,8 @@
 | Postcondición | PDF generado, versionado e inmutable; evento auditado. |
 
 **Flujo básico**
-1. El Administrador selecciona empresa y año (sector permitido — RN-016).
-2. El sistema valida que **todas las brechas tengan estado confirmado** (RN-018); si falta alguna, la notifica y bloquea la generación.
+1. El Administrador selecciona empresa y año (sector permitido — RN-019).
+2. El sistema valida que **todas las brechas tengan estado confirmado** (RN-016); si falta alguna, la notifica y bloquea la generación.
 3. El backend recolecta las **variables dinámicas con un SELECT determinista** a la **tabla del análisis** (`gri_analisis`) y a `sanciones` (RN-026), calcula el **puntaje ESG** (OK=100/Baja=50/Sub=0) y separa las **sanciones sin monto**: sin llamadas al LLM.
 4. El **resumen ejecutivo** se compone **determinísticamente desde la tabla del análisis** (`gri_analisis`): conteos por estado, sanciones y destino — **la generación del reporte no hace llamadas al LLM** (el RAG solo vive en el chat).
 5. La plantilla Jinja2 se compone y **WeasyPrint genera el PDF**; se registra en `reportes_generados` (v1) y audita.

@@ -26,12 +26,12 @@ Desarrollar una plataforma web de analítica de sostenibilidad que permita a Igu
 
 ## 3. ALCANCE DEL PROYECTO (FASE 1)
 
-El proyecto comprende el diseño, desarrollo e implementación de una plataforma web que centralice la ingesta, indexación, consulta y explotación analítica de memorias anuales y reportes de sostenibilidad (GRI) de empresas que cotizan en la Bolsa de Valores de Lima, mediante una arquitectura cliente-servidor y un motor de inteligencia artificial basado en RAG (Retrieval-Augmented Generation), construido sobre un LLM gratuito con función de llamadas de herramientas (modelos famosos).
+El proyecto comprende el diseño, desarrollo e implementación de una plataforma web que centralice la ingesta, indexación, consulta y explotación analítica de memorias anuales y reportes de sostenibilidad (GRI) de empresas que cotizan en la Bolsa de Valores de Lima, mediante una arquitectura cliente-servidor y un motor de inteligencia artificial basado en RAG (Retrieval-Augmented Generation), construido sobre un LLM gratuito, con RAG simple y sin function calling.
 
 El sistema está orientado a optimizar las operaciones de **dos perfiles** (model cullet mock, acta 4 · REQ-10; 3 usuarios: 1 Superadmin + 2 Administradores):
 
 - **Superadmin** (1 persona — gestión): crea usuarios, habilita/deshabilita, asigna roles, y es responsable de la **ingesta de documentos** `.md` (memorias anuales y reportes de sostenibilidad) al sistema, incluida la validación de su correcta indexación.
-- **Administrador** (2 personas — explotación): realiza consultas al asistente de IA (RAG), **revisa y supervisa** las brechas GRI y sanciones detectadas (puede ajustar su estado crítico / ok con supervisión humana antes de generar), y genera **reportes de prospección comercial en PDF**.
+- **Administrador** (2 personas — explotación): realiza consultas al asistente de IA (RAG), **revisa y supervisa** las brechas GRI y sanciones detectadas (puede ajustar su estado — OK / Baja sustancia / Sub-reportado — con supervisión humana antes de generar), y genera **reportes de prospección comercial en PDF**.
 
 El Superadmin concentra la administración de accesos y la carga de información fuente; el Administrador se enfoca exclusivamente en la explotación analítica y comercial de esa información.
 

@@ -24,7 +24,7 @@ Descripción: usuarios de la plataforma (3 en fase 1: 1 Superadmin + 2 Administr
 | id | 36 | UUID (PK) | Identificador único del usuario (gen_random_uuid). | NO |
 | nombre | 120 | VARCHAR | Nombre completo del usuario. | NO |
 | correo | 160 | VARCHAR | Correo institucional; único (índice funcional lower(correo)). | NO |
-| password_hash | - | TEXT | Hash bcrypt/argon2 de la contraseña (RNF-01; nunca texto plano). | NO |
+| password_hash | - | TEXT | Hash bcrypt/argon2 de la contraseña (RNF-002; nunca texto plano). | NO |
 | rol | 20 | VARCHAR (FK) | Rol del usuario → roles.rol. Consulte CHECK: superadmin/administrador. | NO |
 | habilitado | - | BOOLEAN | Estado de la cuenta (true = puede operar; RN-005/RS-02). | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de creación del registro. | NO |
@@ -39,7 +39,7 @@ Descripción: catálogo de empresas analizables; en fase 1 todas cotizan en la B
 | id | - | SERIAL (PK) | Identificador único de la empresa. | NO |
 | nombre | 160 | VARCHAR | Nombre comercial/razón social; único. | NO |
 | ticker | 12 | VARCHAR | Ticker en la BVL (p. ej. MINAND); único. | NO |
-| sector | 40 | VARCHAR | Sector permitido: Minería, Energía, Petróleo y Gas (CHECK — RN-016). | NO |
+| sector | 40 | VARCHAR | Sector permitido: Minería, Energía, Petróleo y Gas (CHECK — RN-019). | NO |
 | activo | - | BOOLEAN | false = no seleccionable en ingesta/análisis (default true). | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de creación del registro. | NO |
 
@@ -49,16 +49,16 @@ Descripción: cada archivo `.md` ingestado (memoria anual o reporte de sostenibi
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
 | id | 36 | UUID (PK) | Identificador único del documento. | NO |
-| empresa_id | - | INT (FK) | Empresa a la que pertenece → empresas.id (RN-013). | NO |
+| empresa_id | - | INT (FK) | Empresa a la que pertenece → empresas.id (RN-014). | NO |
 | anho | 5 | SMALLINT | Año del documento; CHECK entre 2000 y 2100. | NO |
 | tipo | 30 | VARCHAR | memoria_anual o reporte_sostenibilidad. | NO |
 | nombre_archivo | 255 | VARCHAR | Nombre original del `.md` subido. | NO |
 | ruta_origen | - | TEXT | Ruta del archivo original en disco (back-end; RN-030 no borrado). | NO |
-| sha256 | 64 | CHAR (UNIQUE) | Huella anti-duplicado del archivo (RN-014). | NO |
+| sha256 | 64 | CHAR (UNIQUE) | Huella anti-duplicado del archivo (RNF-010). | NO |
 | estado | 20 | VARCHAR | indexado | observado | rechazado (RS-06). | NO |
 | motivo | - | TEXT | Motivo exacto del guard en rechazo/observación (RF-021). | SÍ |
 | chunks_count | - | INT | Nº de chunks indexados (éxito). | SÍ |
-| version | - | INT | Versión (incrementa si el contenido difiere; RN-015; default 1). | NO |
+| version | - | INT | Versión (incrementa si el contenido difiere; RN-033; default 1). | NO |
 | created_by | 36 | UUID (FK) | Superadmin que ingesta → usuarios.id. | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de ingesta. | NO |
 
@@ -99,11 +99,10 @@ Descripción: **la tabla del análisis** — fila por empresa+doc+código GRI, i
 | empresa_id | - | INT (FK) | Empresa analizada → empresas.id. | NO |
 | doc_id | 36 | UUID (FK) | Documento fuente → documentos.id. | NO |
 | gri_code | 12 | VARCHAR (FK) | Código analizado → catalogo_gri.codigo (RN-017). | NO |
-| estado_sugerido | 20 | VARCHAR | Estado sugerido por el motor: OK / SUB-REPORTADO / BAJA SUSTANCIA / CRITICO. NO vinculante. | NO |
 | estado | 20 | VARCHAR | Estado asignado **manualmente** por el Administrador: `OK` / `BAJA SUSTANCIA` / `SUB-REPORTADO` (3 únicos). Visible para el reporte. | NO |
 | cita_fragmento | - | TEXT | Fragmento citado del documento. | NO |
 | seccion | 200 | VARCHAR | Sección del documento (doc + sección = citación RN-022). | NO |
-| observacion | - | TEXT | **Obligatoria si estado difiere del sugerido** (RF-025); sustento humano. | SÍ* |
+| observacion | - | TEXT | **Obligatoria al cambiar el estado** (RF-025); sustento humano. | SÍ* |
 | validado_por | 36 | UUID (FK) | Usuario que validó/cambió el estado (NULL = pendiente CU006; RN-018). | SÍ* |
 | updated_at | - | TIMESTAMPTZ | Última actualización del estado. | NO |
 
@@ -132,7 +131,7 @@ Descripción: sanciones económicas identificadas — siempre con cita verificab
 | doc_id | 36 | UUID (FK) | Documento que la evidencia → documentos.id. | NO |
 | anho | 5 | SMALLINT | Año de la sanción. | NO |
 | entidad | 160 | VARCHAR | Entidad/norma emisora. | NO |
-| monto | (14,2) | NUMERIC | Monto económico; **NULL = no determinado** (nunca 0 por defecto; RF-057/058). | SÍ |
+| monto | (14,2) | NUMERIC | Monto económico; **NULL = no determinado** (nunca 0 por defecto; RF-040/RF-055). | SÍ |
 | doc_seccion | 200 | VARCHAR | Sección del documento citado (obligatoria, RS-16). | NO |
 | created_at | - | TIMESTAMPTZ | Fecha de registro. | NO |
 
@@ -185,7 +184,7 @@ Descripción: bitácora de eventos sensibles (append-only; REVOKE UPDATE/DELETE 
 | created_at | - | TIMESTAMPTZ | Fecha/hora (indexada para rangos). | NO |
 
 ## Tabla: `uso_llm`
-Descripción: contador diario del asistente (free tier — RN-024/RNF-11). Una fila por fecha (UNIQUE).
+Descripción: contador diario del asistente (free tier — RNF-028). Una fila por fecha (UNIQUE).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -201,7 +200,7 @@ Descripción: contador diario del asistente (free tier — RN-024/RNF-11). Una f
 | created_at | - | TIMESTAMPTZ | Fecha de inserción. | NO |
 
 ## Tabla: `configuracion`
-Descripción: parámetros dinámicos del sistema (mock: Configuración). Cambiar límites sin desplegar (RNF-20).
+Descripción: parámetros dinámicos del sistema (mock: Configuración). Cambiar límites sin desplegar.
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|

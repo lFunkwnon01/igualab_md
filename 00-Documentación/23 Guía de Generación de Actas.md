@@ -49,7 +49,7 @@ Requiere `tectonic` (XeTeX autocontenido) y la fuente **Carlito** (clónica mét
 2. **REQ ≠ RF/RNF/RN:** los `REQ-xx` son acuerdos con el cliente (acta); los `RF-xxx/RNF-xxx/RN-xxx` son la especificación del documento Análisis y Diseño. Un REQ puede impactar varios RF (ej.: REQ-10 → RF-004/005).
 3. **No se re-crean REQs pasados:** se confirman/cierran por **referencia cruzada** (ej.: REQ-11 *"cierra REQ-08"*; REQ-12 *"en concordancia con acta 1 REQ-06 y acta 2 REQ-04"*).
 4. **Estados válidos:** `Propuesto · Validado · Registrado · Pendiente · Descartado · Cumplido`.
-5. **Trazabilidad:** todo cambio de alcance requiere decisión del **PO (Oscar Baldeón) registrada en acta** (regla del vault, `14 RF-11+.md`).
+5. **Trazabilidad:** todo cambio de alcance requiere decisión del **PO (Oscar Baldeón) registrada en acta** y su propagación al A&D y a `FASE 1/`.
 
 ---
 
@@ -87,7 +87,7 @@ Requiere `tectonic` (XeTeX autocontenido) y la fuente **Carlito** (clónica mét
 5. [ ] PDF re-compilado y revisado (paginación limpia)
 6. [ ] Enviado por correo al cliente (canal: Correo/Discord)
 7. [ ] Firmas §9–10 recogidas → renombrar a `Acta_ReunionN.pdf` y archivar
-8. [ ] Sintetizar el acta en [[21 Actas de Reunión y Acuerdos]] y propagar cambios al vault (roles, pendientes, plan)
+8. [ ] Sintetizar el acta en [[21 Actas de Reunión y Acuerdos]] y propagar los cambios al vault (A&D y `FASE 1/`).
 
 ## 🔗 Relacionado
-- [[21 Actas de Reunión y Acuerdos]] · [[10 Pendientes y Supuestos]] · [[09 Planificación y Roadmap]]
+- [[📌 Inicio]] · [[21 Actas de Reunión y Acuerdos]] · [[11 Stakeholders y Contactos]]
