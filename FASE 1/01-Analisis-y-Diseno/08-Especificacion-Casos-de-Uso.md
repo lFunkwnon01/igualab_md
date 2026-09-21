@@ -1,8 +1,7 @@
 # 08 · Especificación de Casos de Uso — FASE 1
 
-> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
-
-> Formato estándar: Actores · Precondiciones · Flujo básico · Flujos alternativos · Postcondiciones · RF/RN asociados. La especificación de CU001 se aprovecha del del A&D v1.0 (ya aprobado y validado en el acta 4), limpiada al modelo de **2 roles**.
+> **Numeración = A&D vigente** (`analisis-diseno-latex/main.pdf`, sección 7.2). Casos de uso **CU001…CU007**.
+> Formato: Actores · Precondiciones · Flujo básico · Flujos alternativos · Postcondición · RF/RN asociados.
 
 ---
 
@@ -10,180 +9,165 @@
 
 | Campo | Detalle |
 |---|---|
-| Actores | Superadmin, Administrador |
-| RF / RN | RF-001, RF-002, RF-003 / RN-001, RN-004, RN-005, RN-006 |
+| Actores | SuperAdmin, Administrador, Servicio de correo (externo) |
+| RF / RN | RF-001…RF-005 / RN-004, RN-007, RN-010, RN-011, RN-012, RN-013 |
 | Precondiciones | Sistema desplegado; usuario registrado, habilitado y con rol. |
-| Postcondición | Sesión activa con rol identificado y evento auditado. |
+| Postcondición | Sesión activa con rol vigente y evento auditado (CU007). |
 
 **Flujo básico**
 1. El usuario accede a la URL de la plataforma.
-2. El sistema muestra el formulario de inicio de sesión.
-3. El usuario ingresa correo y contraseña y selecciona *Iniciar sesión*.
-4. El sistema valida estado de cuenta, credenciales y rol (RN-001, RN-005, RN-007).
-5. El sistema establece la sesión y registra el evento de login (CU009).
-6. El sistema redirige a su vista según el rol (Superadmin: gestión; Administrador: analítica) — *mock: MENUS por rol*.
+2. Ingresa correo y contraseña y selecciona *Iniciar sesión*.
+3. El sistema valida que la cuenta exista y esté habilitada, y que la contraseña sea correcta.
+4. El sistema identifica el rol y genera un token firmado (JWT) con la identidad y el rol vigente.
+5. Establece la sesión y redirige a la vista del rol (SuperAdmin: gestión; Administrador: analítica).
+6. Registra el evento de login en la auditoría.
 
 **Flujos alternativos**
-- **A1 · Credenciales inválidas** (paso 4): mensaje «Credenciales inválidas». A los 5 intentos fallidos (RN-005): bloqueo 15 min.
-- **A2 · Usuario deshabilitado** (paso 4): «Usuario deshabilitado. Contacte al administrador».
-- **A3 · Recuperación de contraseña**: flujo completo del A&D v1.0 (enlace con vigencia limitada, confirmación, política de contraseñas RN-006).
+- **A1 · Credenciales inválidas:** mensaje «Credenciales inválidas» (idéntico si la cuenta no existe). Tras **5 intentos** fallidos, bloqueo **15 min** (RN-012) y registro en auditoría.
+- **A2 · Cuenta deshabilitada:** «Usuario deshabilitado. Contacte al administrador».
+- **A3 · Recuperación de contraseña:** enlace seguro de **un solo uso** con vigencia de **30 min** (RN-010, RN-011); al usarlo se invalida y se revocan las sesiones.
+- **A4 · Cambio de contraseña (autenticado)**: aplica la misma política de complejidad (RN-011).
+- **A5 · Cierre de sesión / inactividad**: la sesión expira tras **2 horas** de inactividad (RN-013).
 
 ---
 
-## CU002 · Gestión de usuarios y roles
+## CU002 · Gestión de usuarios
 
 | Campo | Detalle |
 |---|---|
-| Actores | Superadmin |
-| RF / RN | RF-005 / RN-001, RN-002, RN-003, RN-007 |
-| Precondiciones | Sesión Superadmin activa. |
-| Postcondición | Usuario creado/actualizado; máx. 1 Superadmin vigente; evento auditado. |
-
-**Flujo básico (crear/editar/rol)**
-1. El Superadmin abre *Usuarios y roles*.
-2. El sistema lista usuarios (nombre, correo, rol, estado) — *mock `js/data.js`*.
-3. El Superadmin crea un usuario (nombre, correo, rol inicial) o edita existente.
-4. El sistema valida unicidad de correo, formato y estado (RN-001).
-5. El sistema persiste y audita el cambio de rol/estado (CU009).
-
-**Flujos alternativos**
-- **A1 · Asignación de rol Superadmin a un Admin (RN-009)**: en el paso 4, si el rol elegido es Superadmin, el sistema **transfiere el rol**: el Superadmin actual devuelve automáticamente el rol a Administrador. Se muestra aviso: «Serás rebajado a Administrador. ¿Deseas continuar?»; si confirma, se ejecuta el cambio atómico; si no, no se altera nada.
-- **A2 · Correo duplicado**: se rechaza con mensaje; lista intacta.
-- **A3 · Deshabilitar usuario**: el sistema **cierra las sesiones activas** del usuario (RN-005) y audita.
-
----
-
-## CU003 · Configuración del sistema
-
-| Campo | Detalle |
-|---|---|
-| Actores | Superadmin |
-| RF / RN | RF-006 / RN-004 |
-| Postcondición | Parámetros persistidos y auditados. |
-
-**Flujo básico**: minutos de inactividad (default 30), bloqueo por inactividad (on/off), notificaciones (toggle) — *mock config*; valida rangos y persiste.
-
----
-
-## CU004 · Ingesta de documentos (.md) — SÍNCRONA
-
-| Campo | Detalle |
-|---|---|
-| Actores | Superadmin; LLM/Embeddings (servicio externo) |
-| RF / RN | RF-007, RF-008, RF-009 / RN-008…RN-015 |
-| Precondiciones | Sesión Superadmin; empresa registrada; archivo .md listo (tablas con pipes, ≤ 50 MB). |
-| Postcondición | Documento indexado (chunking + embeddings en pgvector) o estado RECHAZADO/OBSERVADO con motivo; auditoría ok. |
+| Actores | SuperAdmin |
+| RF / RN | RF-006…RF-009 / RN-001, RN-002, RN-005, RN-006, RN-007, RN-008, RN-009 |
+| Precondiciones | Sesión SuperAdmin activa. |
+| Postcondición | Cuenta creada/habilitada/deshabilitada o rol transferido; existe exactamente 1 SuperAdmin; evento auditado. |
 
 **Flujo básico**
-1. El Superadmin abre *Ingesta de documentos*.
-2. Selección a empresa y año (obligatorio, RN-014) y tipo (memoria anual / reporte de sostenibilidad).
-3. Selección del archivo `.md` (solo acepta `.md`, RN-009; ≤ 50 MB) y *Subir*.
-4. **Guard**: valida extensión, tamaño (50 MB), tablas con pipes y contenido mínimo (RF-008).
-5. Anti-duplicado por sha256 (RN-014): si existe, informativo + enlace al doc ya indexado.
-6. **Procesamiento síncrono**: parseo markdown → filas normalizadas → chunking → **embeddings por API** → upsert pgvector (RNF-028).
-7. La UI espera y muestra el resultado: nº de chunks indexados o estado *OBSERVADO* (sin secciones GRI/sanciones, RN-013).
-8. Auditoría (CU009) con usuario, hash, tiempos.
+1. El SuperAdmin abre *Usuarios*.
+2. El sistema lista las cuentas (nombre, correo, rol, estado).
+3. El SuperAdmin crea una cuenta (nombre, correo y contraseña); el sistema le asigna el rol **Administrador** (RN-008).
+4. El sistema valida unicidad de correo y formato (RN-007) y persiste.
+5. Audita el cambio.
 
 **Flujos alternativos**
-- **A1 · Rechazo por formato** (paso 4): mensaje exacto del guard («texto de corrido sin pipes», «pesa X MB», «archivo vacío») y **no se indexa nada**. Se permite reintentar con otro archivo.
-- **A2 · Documento sin contenido analizable** (paso 4): estado *OBSERVADO* con motivo; corregible re-subiendo una versión nueva (RN-015).
-- **A3 · Falla del servicio de embeddings (API)**: la operación se completo con estado *OBSERVADO señalado (normalmente, falla del servidor universitario)*; reintentable sin duplicar (hash ya registrado).
-
-> Nota de diseño: al ser **síncrono**, el máximo de un documento grande está sujeto a UX (spinner con estado del pipeline: guard → parseo → chunking → embedding). Sin colas de mensajes.
+- **A1 · Transferencia del rol SuperAdmin (RN-009):** se selecciona una cuenta de Administrador **habilitada**; se pide confirmación y el sistema ejecuta la transferencia **atómica** (destino→SuperAdmin, origen→Administrador). Las sesiones activas aplican el **rol vigente**.
+- **A2 · Correo duplicado:** se rechaza con mensaje.
+- **A3 · Deshabilitar cuenta:** invalida de inmediato sus sesiones activas (RN-005) y audita.
+- **A4 · Intento de deshabilitar al SuperAdmin:** se impide; primero debe transferirse el rol (RN-002, RN-006).
 
 ---
 
-## CU005 · Consulta al asistente IA (RAG)
+## CU003 · Ingesta de documentos (memorias y reportes GRI)
 
 | Campo | Detalle |
 |---|---|
-| Actores | Administrador; LLM (RAG simple, sin function calling) |
-| RF / RN | RF-010, RF-011 / RN-021, RN-022, RN-023, RNF-028 |
-| Precondiciones | Sesión activa; ≥ 1 documento indexado; cuota disponible. |
-| Postcondición | Respuesta con citas + historial de chat en la sesión; evento opcional auditado. |
+| Actores | SuperAdmin; Proveedor de IA (embeddings, externo) |
+| RF / RN | RF-012…RF-017 / RN-018, RN-019, RN-020, RN-021, RN-022, RN-023, RN-024, RN-025, RN-026 |
+| Precondiciones | Sesión SuperAdmin; empresa registrada; archivo `.md` (tablas de pipes, ≤ 50 MB). |
+| Postcondición | Documento indexado y análisis GRI poblado, o estado rechazado/observado con motivo; auditoría ok. |
+
+**Flujo básico**
+1. El SuperAdmin abre *Ingesta*.
+2. Selecciona sector y empresa, año y tipo (memoria anual / reporte de sostenibilidad GRI).
+3. Selecciona el archivo `.md` y pulsa *Ingestar*.
+4. **Guard**: valida el tipo real del archivo, el tamaño (≤ 50 MB), las tablas de pipes y el contenido mínimo (≥ 1 código GRI o mención de sanción).
+5. Calcula el **SHA-256** y verifica unicidad (contenido y empresa/año/tipo).
+6. **Procesamiento síncrono**: parseo → chunking → *embeddings* por API → indexación (pgvector).
+7. Ejecuta el **análisis GRI/sanciones** como último paso (filas sin estado).
+8. Muestra el resultado y registra el evento en auditoría.
+
+**Flujos alternativos**
+- **A1 · Empresa no registrada:** permite crearla (nombre + sector) y reintentar.
+- **A2 · Documento duplicado** (mismo hash o misma empresa/año/tipo): rechaza e indica la carga original.
+- **A3 · Sin contenido analizable:** estado **OBSERVADO** (no rechazado) hasta corregirse.
+- **A4 · Rechazo/interrupción:** **rollback atómico**; conserva solo el motivo (sin fragmentos, embeddings ni análisis parciales) (RN-026).
+
+---
+
+## CU004 · Consulta al asistente de IA (RAG)
+
+| Campo | Detalle |
+|---|---|
+| Actores | Administrador; Proveedor de IA (RAG simple, sin *function calling*) |
+| RF / RN | RF-023, RF-024 / RN-033, RN-034, RN-035, RN-036, RN-037 |
+| Precondiciones | Sesión activa; ≥ 1 documento indexado; cuota del proveedor disponible. |
+| Postcondición | Respuesta **con citas** (documento/empresa/año) o declinación explícita. |
 
 **Flujo básico**
 1. El Administrador abre *Asistente de IA*.
-2. Escribe su consulta en lenguaje natural (p. ej. «brechas de Minera Andina en GRI 400»).
-3. El backend arma el **RAG**: búsqueda semántica pgvector (k=4, filtros empresa/año).
-4. Si la pregunta abarca datos estructurados (listado de brechas, sanciones), el backend ya los tiene: las listas provienen de la base de datos y se muestran en la misma respuesta del chat (sin tools/agentes).
-5. El sistema arma la respuesta con **fuentes citadas** (doc + sección) y la muestra (mock: chat con badges de citación).
+2. Selecciona **sector, empresa y año** (obligatorio — RN-037).
+3. Formula su consulta en lenguaje natural.
+4. El backend arma el RAG: búsqueda semántica (pgvector, k=4) con el contexto seleccionado.
+5. Devuelve la respuesta **fundada solo en el corpus**, con **citación** de documento y sección (RN-033, RN-034).
 
 **Flujos alternativos**
-- **A1 · Sin información relevante** (paso 3–4): el asistente declara «el documento no aborda este punto» (RN-021), lista lo que sí hay.
-- **A2 · LLM/cuota no disponible** (paso 4–5): mensaje de indisponibilidad y de sugerencia «intenta más tarde» (RF-049); el resto del sistema sigue operando (RNF-016).
-- **A3 · Consulta sobre empresa/sector fuera de alcance** (fase 1): respuesta con el límite declarado (RN-019) y enlace al alcance.
+- **A1 · Sin información suficiente:** el asistente lo **declara explícitamente**, sin inventar (RN-035).
+- **A2 · Consulta fuera de dominio:** declina explícitamente (RN-036).
+- **A3 · Proveedor de IA no disponible:** informa el error sin bloquear el resto de módulos (RNF-019).
 
 ---
 
-## CU006 · Revisión y ajuste de estado de brechas (supervisión humana)
+## CU005 · Detección de brechas GRI y sanciones
 
 | Campo | Detalle |
 |---|---|
 | Actores | Administrador; PO (Oscar) supervisa |
-| RF / RN | RF-027 / RN-016, RN-017, RN-019 |
-| Precondición | Análisis GRI ejecutado para la empresa. |
-| Postcondición | Estados confirmados en `gri_analisis` con historial; listos para el reporte. |
+| RF / RN | RF-018…RF-022, RF-027 / RN-027, RN-028, RN-029, RN-030, RN-031, RN-032 |
+| Precondición | Empresa con al menos un documento indexado; análisis GRI poblado al finalizar la ingesta. |
+| Postcondición | Estados confirmados en la tabla del análisis, con historial; listos para el reporte. |
 
 **Flujo básico**
-1. El Administrador abre la tabla de resultados del análisis de una empresa (mock: filas GRI 401/413/306).
-2. El sistema muestra cada código GRI detectado **con su cita textual**; el estado aparece **sin asignar** (el sistema no infiere ni compara con el estándar).
-3. El Administrador revisa cada fila y **asigna manualmente el estado** (`OK` / `Baja sustancia` / `Sub-reportado`) según su criterio profesional, usando la cita como sustento.
-4. El sistema guarda el cambio con autor, fecha y estado anterior→nuevo (RN-016).
-5. Supervisión: el PO puede solicitar una re-verificación (rol humano de control acordado en actas).
-
-**Formulario «Estados GRI» (diseño de la pantalla)**
-- Selección previa: **empresa + año** (solo con documentos indexados).
-- Tabla con columnas: **Código · Tema · Cita de respaldo (documento + sección) · Estado (desplegable) · Observación**.
-- Solo se listan **códigos detectados**; el estado inicia **sin asignar**.
-- **Validaciones**: cada fila exige estado (`OK` / `Baja sustancia` / `Sub-reportado`); la observación es obligatoria cuando el estado difiere del criterio del catálogo; al guardar se registra en el historial (quién, cuándo, anterior → nuevo).
-- El botón **«Generar reporte»** permanece **deshabilitado** mientras existan filas sin estado.
+1. El Administrador selecciona la empresa y el año.
+2. El sistema muestra los códigos GRI detectados **con su cita textual** (documento y sección) y las sanciones identificadas.
+3. El Administrador revisa cada cita y **asigna manualmente** el estado: `OK`, `Baja sustancia` o `Sub-reportado` (RN-029, RN-030).
+4. El sistema guarda el cambio con autor, fecha y estado anterior→nuevo.
+5. Calcula el puntaje ESG a partir de los estados asignados (RN-032).
+6. Habilita la generación del reporte cuando todas las filas tienen estado.
 
 **Flujos alternativos**
-- **A0 · Fila sin estado**: intento de generar reporte → el sistema indica las filas pendientes y no genera.
-- **A1 · Observación del analista**: el humano escribe una observación que se guarda junto al cambio.
-- **A2 · Estado BAJA SUSTANCIA**: exige observación del analista; queda registrado en el historial junto a la cita.
+- **A1 · Sin códigos detectados:** el puntaje ESG se muestra **«no disponible»** (nunca cero).
+- **A2 · Documentación insuficiente:** informa y no genera resultado.
+- **A3 · Proveedor de IA no disponible:** informa el error y permite reintentar.
+
+> El sistema **no** compara contra el estándar GRI ni infiere el estado; solo detecta códigos y extrae la cita (RN-028).
 
 ---
 
-## CU007 · Generación de reporte de prospección (PDF)
+## CU006 · Generación de reportes de prospección (PDF)
 
 | Campo | Detalle |
 |---|---|
 | Actores | Administrador |
-| RF / RN | RF-014 / RN-025, RN-026, RN-027 |
-| Precondiciones | Empresa + **un único año** seleccionados; **todos los códigos detectados con estado asignado manualmente** (formulario CU006); línea comercial disponible. |
-| Postcondición | PDF generado, versionado e inmutable; evento auditado. |
+| RF / RN | RF-025, RF-026 / RN-038, RN-039, RN-040, RN-041 |
+| Precondiciones | Empresa + un año seleccionados; todas las brechas con estado asignado; empresa con ≥ 1 documento indexado. |
+| Postcondición | PDF generado, **inmutable**, con snapshot congelado; evento auditado. |
 
 **Flujo básico**
-1. El Administrador selecciona empresa y año (sector permitido — RN-019).
-2. El sistema valida que **todas las brechas tengan estado confirmado** (RN-016); si falta alguna, la notifica y bloquea la generación.
-3. El backend recolecta las **variables dinámicas con un SELECT determinista** a la **tabla del análisis** (`gri_analisis`) y a `sanciones` (RN-026), calcula el **puntaje ESG** (OK=100/Baja=50/Sub=0) y separa las **sanciones sin monto**: sin llamadas al LLM.
-4. El **resumen ejecutivo** se compone **determinísticamente desde la tabla del análisis** (`gri_analisis`): conteos por estado, sanciones y destino — **la generación del reporte no hace llamadas al LLM** (el RAG solo vive en el chat).
-5. La plantilla Jinja2 se compone y **WeasyPrint genera el PDF**; se registra en `reportes_generados` (v1) y audita.
+1. El Administrador selecciona empresa y año.
+2. El sistema valida que todas las brechas tengan estado confirmado (RN-038).
+3. Recolecta las variables con un **SELECT determinista** a la tabla del análisis y a `sanciones`, **sin invocar al LLM** (RN-040).
+4. Compone el **resumen ejecutivo** (conteos por estado, sanciones y puntaje ESG) de forma determinística.
+5. Genera el PDF (Jinja2 → WeasyPrint), registra el reporte y audita.
 
 **Flujos alternativos**
-- **A1 · Falta confirmar estados** (paso 2): volver a CU006.
-- **A2 · Regeneración**: crea **nueva versión** (v2) sin modificar la previa (RN-027).
-- **A3 · Empresa sin sanciones identificadas (RS-22)**: si el SELECT no devuelve filas de `sanciones`, el reporte imprime el bloque determinístico «Sanciones identificadas: no se registraron sanciones en la información ingestada (doc + sección, período [anho])» — sin inventar ni omitir; usa formulación verificable (RN-020).
+- **A1 · Faltan estados:** bloquea la generación e indica las filas pendientes.
+- **A2 · Sin sanciones:** imprime el bloque determinístico «no se registraron sanciones… (doc + sección, período)»; no inventa ni omite.
+- **A3 · Reporte ya existente** para la misma empresa/año: no se genera un segundo (RN-041).
 
 ---
 
-## CU008 · Historial y descarga de reportes
+## CU007 · Auditoría de eventos del sistema
 
 | Campo | Detalle |
 |---|---|
-| Actores | Administrador |
-| RF / RN | RF-015 / RN-027, RN-030 |
-| Flujo básico | listar (filtros empresa/fecha/versión) → descargar PDF → solo lectura (inmutabilidad). |
+| Actores | SuperAdmin (consulta); el sistema escribe |
+| RF / RN | RF-028 / RN-042, RN-043, RN-044, RN-045 |
+| Precondición | Sesión SuperAdmin activa; existe al menos un evento. |
+| Postcondición | Eventos consultables; la consulta no modifica el registro. |
 
----
+**Flujo básico**
+1. El sistema registra automáticamente los eventos sensibles (inicio de sesión, cambio de rol/estado, ingesta, rechazo y generación de reporte) con cuenta, fecha/hora (UTC) y tipo.
+2. El SuperAdmin accede al módulo de *Auditoría*.
+3. Aplica filtros (usuario, fecha y tipo de evento) y consulta el registro (solo lectura).
 
-## CU009 · Auditoría de eventos del sistema
-
-| Campo | Detalle |
-|---|---|
-| Actores | Superadmin (consulta); sistema escribe |
-| RF / RN | RF-016 / RN-028, RN-029 |
-| Flujo básico | Vista *Auditoría de accesos* → filtros usuario/fecha/tipo → tabla de eventos (solo lectura, append-only). |
-> **Nota A&D v2 (13/09)**: estados GRI = 3 (OK/Baja/Sub), asignación 100 % manual; puntaje ESG en el reporte; sanciones sin monto se listan y cuentan aparte; límite documental 50 MB; unicidad documento por empresa/año/tipo; embeddings por API; borrado lógico.
+**Flujos alternativos**
+- **A1 · Sin coincidencias:** informa que no hay eventos para el criterio.
+- **A2 · Acceso no autorizado:** un rol distinto de SuperAdmin es denegado (HTTP 403) y el intento queda registrado.

@@ -1,3 +1,10 @@
 .obsidian/
 .vercel
 graphify-out/
+
+# Media pesada (no versionar en Git; usar almacenamiento externo)
+02-Recursos-Media/kickoff_audio.wav
+02-Recursos-Media/video.mp4
+
+# Material del curso CS3081 (referencia, no contenido del proyecto)
+software_pdf/

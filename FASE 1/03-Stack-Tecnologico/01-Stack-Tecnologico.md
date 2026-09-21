@@ -2,7 +2,7 @@
 
 > **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
-> Decisión avalada por el PO en el acta 5 (REQ-18: «stack a elección libre del equipo»). Complemento del diagrama `Arquitectura_solution.png` y del A&D.
+> Decisión avalada por el PO en el acta 5 (REQ-18: «stack a elección libre del equipo»). Complemento del diagrama `arquitecturasolution.jpeg` — **arquitectura de solución por capas (7 capas)** — y del A&D.
 
 ## 1. Stack consolidado
 
@@ -10,11 +10,12 @@
 |---|---|---|---|
 | Frontend | **React 18 + Vite** (SPA, React Router) | ^18 | mock ya está modelado; sin SSR necesario |
 | UI kit | CSS by: CSS Modules + material symbols (como mock) | — | continuidad del mock fidelizado |
-| Backend | **FastAPI (Python 3.12)** + SQLModel + pydantic v2 | 0.11x | tipos, async, OpenAPI automático |
-| Motor de subprocess: se ejecuta | FastAPI BackgroundTasks (patrón sync-guarda) | — | RF-022 no colas |
+| Backend | **FastAPI (Python 3.11)** + **SQLAlchemy Async · AsyncSession** + Pydantic v2 | 0.11x | tipos, async, OpenAPI automático |
+| Driver/method BD | **AsyncPG** (motor async de SQLAlchemy hacia PostgreSQL) | — | capa 6–7 del diagrama por capas |
+| Motor de ejecución | FastAPI BackgroundTasks (patrón sync-guarda) | — | RF-015 sin colas |
 | BD | **PostgreSQL 16 + pgvector** (HNSW cosine) | pgvector ≥ 0.6 | RAG simple sin infraextra |
 | Pipeline | **markdown-it-py** · PyMuPDF de respaldo (PDF del cliente ya convertido) | — | RN-009/010 |
-| Embeddings | **Servicio de embeddings por API del proveedor de IA** (NVIDIA NIM `nv-embed` o Google `gemini-embedding`, free tier) — **sin modelo local** | — | $0 con free tier; **consume cuota** (ver RNF-028) |
+| Embeddings | **Servicio de embeddings por API del proveedor de IA** (NVIDIA NIM `nv-embed` o Google `gemini-embedding`, free tier) — **sin modelo local** | — | $0 con free tier; **consume cuota** (ver RNF-027) |
 | LLM chat/agente | **GLM-5.2 `:free`** (Z.ai) vía **OpenRouter** (OpenAI-compatible, RAG simple sin function calling) — router `openrouter/free` como failover | — | $0, 200–1000 req/día |
 | Reportes | **Jinja2 + WeasyPrint** | — | variables dinámicas de BD |
 | Despliegue | Docker compose (backend + postgres + pgvector) en server universidad; mock en Vercel | — | plan §10 |
@@ -38,12 +39,12 @@
 | RN clave | Componente |
 |---|---|
 | RN-009/010 (solo .md, pipes) | guard FastAPI + markdown-it-py (validación pre-chunking) |
-| RNF-014 (50 MB) | middleware de tamaño + config |
-| RF-022 (síncrona) | endpoint síncrono + spinner de pipeline en React |
-| RN-017/019 (catalogo_gri + humano) | tabla catalogo_gri + servicios gri_analisis + UI CU006 |
-| RN-022 (citas) | prompt system + post-check de ids citados |
-| RN-026 (variables de BD) | queries SQL directas en servicio reportes + Jinja2 |
-| RNF-028 (free tier) | tabla uso_llm y rate limit en FastAPI middleware |
+| RNF-020 (50 MB) | middleware de tamaño + config |
+| RF-015 (síncrona) | endpoint síncrono + spinner de pipeline en React |
+| RN-027/019 (catalogo_gri + humano) | tabla catalogo_gri + servicios gri_analisis + UI CU006 |
+| RN-034 (citas) | prompt system + post-check de ids citados |
+| RN-041 (variables de BD) | queries SQL directas en servicio reportes + Jinja2 |
+| RNF-027 (free tier) | tabla uso_llm y rate limit en FastAPI middleware |
 
 ## 4. Variables de entorno (resumen)
 
@@ -87,4 +88,4 @@ El código **no depende del proveedor** (todo es OpenAI-compatible vía `LlmClie
 ### Opción C — Z.ai oficial (Zhipu)
 - Consola en **https://z.ai / https://open.bigmodel.cn**: API key propia; el plan gratuito da los modelos **Flash** (GLM-4.7-Flash / 4.5-Flash, 1 request concurrente).
 
-> El modelo `GLM-5.2` completo es pago en algunos proveedores (≈ US$1.40/US$4.40 por 1M tokens in/out); **gratis** se consigue vía OpenRouter `:free` o NVIDIA NIM. Los **embeddings van por API del proveedor** (decisión del chat «Requisitos de embeddings»), por lo que **también consumen cuota**: el contador de uso debe incluir los tokens de embeddings (tabla `uso_llm` o `uso_embeddings`) — RNF-028.
+> El modelo `GLM-5.2` completo es pago en algunos proveedores (≈ US$1.40/US$4.40 por 1M tokens in/out); **gratis** se consigue vía OpenRouter `:free` o NVIDIA NIM. Los **embeddings van por API del proveedor** (decisión del chat «Requisitos de embeddings»), por lo que **también consumen cuota**: el contador de uso debe incluir los tokens de embeddings (tabla `uso_llm` o `uso_embeddings`) — RNF-027.

@@ -1,5 +1,7 @@
 # 🔍 Auditoría — Análisis y Diseño (Igualab)
 
+> ⚠️ **DOCUMENTO HISTÓRICO (auditoría del 17/09/2026).** Superado por la actualización del A&D del **20/09/2026** (sha256 `1663a85f…`), que ya incorporó **Modelo de datos (13 tablas)**, **Diccionario de datos de Igualab**, **Volumen estimado** y **glosario**, y renumeró **CU007 = Auditoría**. Los hallazgos sobre las secciones **8, 9 y 10** y la mención a **«14 tablas»** **ya no aplican**. Se conserva como bitácora de la limpieza. Estado vigente: `FASE 1/` + A&D actual.
+
 > **Fecha:** 2026-09-17 · **Alcance:** contrastar el *Análisis y Diseño* (A&D), el vault `FASE 1/`, el **Plan de Proyecto v1.2**, el **mock** (`https://igualab.vercel.app/`) y los repos **BCK-IGUALAB / FE-IGUALAB**.
 > **Criterio de verdad:** Plan v1.2 (línea base) + A&D (documento vivo) + decisiones por acta (REQ).
 > **Estado FASE 1:** 2 roles (Superadmin/Administrador) · sin Bolsa de Valores · sin LinkedIn · dashboards → fase 2 · ingesta solo `.md` (tablas de pipes) · RAG simple sin MCP · sectores Minería / Petróleo y Gas / Energía.

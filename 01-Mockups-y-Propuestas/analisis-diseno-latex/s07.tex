@@ -1,0 +1,216 @@
+% ====================================================================
+%  SECCIÓN 7 — ANÁLISIS DE REQUERIMIENTOS FUNCIONAL
+% ====================================================================
+\section{Análisis de Requerimientos Funcional}
+
+\subsection{Actores}
+\textbf{SuperAdmin:} usuario con privilegios totales sobre la plataforma. Gestiona las cuentas (creación, habilitación, deshabilitación y asignación de roles) y es responsable del catálogo de empresas y de la ingesta de memorias anuales y reportes de sostenibilidad al sistema, incluida la validación de su correcta indexación.
+
+\medskip
+\textbf{Administrador:} usuario operativo encargado de la explotación analítica del sistema. Consulta al asistente de IA (RAG) en lenguaje natural, revisa y valida las brechas GRI y sanciones por empresa, y genera reportes de prospección en PDF para apoyar el acercamiento comercial de Igualab.
+
+\medskip
+\textbf{Proveedor de IA (Externo):} servicio externo consumido \emph{vía API} que sustenta el motor RAG: generación de \emph{embeddings} (indexación semántica) y generación de respuestas a las consultas del Administrador.
+
+\medskip
+\textbf{Servicio de correo (Externo):} servicio de envío de correo electrónico utilizado para la recuperación de contraseña.
+
+\subsection{Diagrama Caso de Uso y su Especificación}
+
+\subsubsection{Listado de casos de uso}
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item Casos de uso de la Empresa
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{|C{2.4cm}|L{9.2cm}|C{2.9cm}|}
+\hline
+\thd{CÓDIGO} & \thd{NOMBRE} & \thd{CU PADRE} \\
+\hline
+CU001 & Autenticación y Gestión de Sesión & --- \\
+\hline
+CU002 & Gestión de Usuarios & --- \\
+\hline
+CU003 & Ingesta de Documentos (memorias y reportes GRI) & --- \\
+\hline
+CU004 & Consulta al Asistente de IA (RAG) & --- \\
+\hline
+CU005 & Detección de Brechas GRI y Sanciones & CU003 \\
+\hline
+CU006 & Generación de Reportes de Prospección (PDF) & CU005 \\
+\hline
+CU007 & Auditoría de Eventos del Sistema & --- \\
+\hline
+\end{tabular}
+\end{center}
+
+% ------------------------------- CU001 -------------------------------
+\newcommand{\frow}[2]{#1 & #2 \\ \hline}
+\newcommand{\ficha}[1]{\begin{longtable}{|>{\columncolor{cellgray}\bfseries\RaggedRight\arraybackslash}p{3.3cm}|L{11.9cm}|}\hline #1 \end{longtable}}
+\newcommand{\figframe}[2]{\begin{center}\fbox{\begin{minipage}{0.94\textwidth}\centering\vspace{4pt}{\small [ IMAGEN ] #1}\\[6pt]#2\vspace{4pt}\end{minipage}}\end{center}}
+\newcommand{\figempty}[1]{\begin{center}\fbox{\begin{minipage}{0.94\textwidth}\centering\vspace{6pt}{\small [ IMAGEN ] #1}\vspace{6pt}\end{minipage}}\end{center}}
+
+\clearpage
+\subsubsection*{CU001: Autenticación y Gestión de Sesión}
+\addcontentsline{toc}{subsubsection}{CU001: Autenticación y Gestión de Sesión}
+\ficha{
+\frow{Descripción}{Este caso de uso permite a los usuarios registrados (SuperAdmin y Administrador) iniciar una sesión segura en la plataforma mediante correo electrónico y contraseña. El sistema valida las credenciales contra los registros existentes, verifica que la cuenta esté habilitada, identifica el rol y establece una sesión autenticada mediante un token JWT firmado que incorpora la identidad de la cuenta y su rol vigente. El caso de uso abarca además la recuperación de contraseña mediante enlace seguro, el cambio de contraseña con sesión activa, el cierre de sesión y la expiración de la sesión por inactividad.}
+\frow{Actores}{SuperAdmin\newline Administrador\newline Servicio de correo (externo)}
+\frow{Precondiciones}{-- El sistema debe estar desplegado y operativo.\newline -- La cuenta debe estar registrada en la plataforma y habilitada.\newline -- La cuenta debe contar con un rol asignado (SuperAdmin o Administrador).\newline -- Para la recuperación de contraseña, el correo debe estar registrado y el servicio de correo disponible.}
+\frow{Flujo Básico}{\textbf{Autenticación exitosa}\newline 1. El usuario accede a la URL de la plataforma. El sistema muestra el formulario de inicio de sesión.\newline 2. El usuario ingresa su correo electrónico y contraseña, y selecciona ``Iniciar sesión''.\newline 3. El sistema valida que la cuenta exista y se encuentre habilitada.\newline 4. El sistema valida que la contraseña corresponda a la cuenta registrada.\newline 5. El sistema identifica el rol de la cuenta (SuperAdmin o Administrador) y genera un token de autenticación firmado que incorpora la identidad y el rol vigente.\newline 6. El sistema establece la sesión activa y redirige al usuario a la vista principal correspondiente a su rol: panel de gestión para SuperAdmin, panel analítico para Administrador.}
+\frow{Flujo Alternativo}{\textbf{Credenciales inválidas}\newline En el paso 4, la contraseña no corresponde a la cuenta. El sistema muestra el mensaje ``Credenciales inválidas'' ---idéntico tanto si la cuenta no existe como si la contraseña es incorrecta--- y el usuario permanece en la pantalla de inicio, donde puede reintentar.\par\vspace{4pt}\textbf{Correo con formato inválido}\newline En el paso 2, el usuario ingresa un correo con formato inválido. El sistema muestra ``Ingrese un correo válido.'' y no procesa la solicitud.\par\vspace{4pt}\textbf{Cuenta deshabilitada}\newline En el paso 3, el sistema detecta que la cuenta está deshabilitada. Bloquea el acceso y muestra ``Usuario deshabilitado''. Contacte al administrador.''\par\vspace{4pt}\textbf{Bloqueo por intentos fallidos}\newline Tras 5 intentos fallidos consecutivos, el sistema bloquea temporalmente la cuenta durante 15 minutos, impide nuevos intentos y registra el evento en el módulo de auditoría.\par\vspace{4pt}\textbf{Recuperación de contraseña}\newline 1. Desde la pantalla de inicio, el usuario selecciona ``¿Olvidaste tu contraseña?'' e ingresa el correo asociado a la cuenta.\newline 2. El sistema muestra un mensaje idéntico para toda cuenta (``Si el correo está registrado en el sistema, recibirás un enlace de recuperación en los próximos minutos''), genera un enlace seguro con vigencia de 30 minutos y lo envía por correo.\newline 3. El usuario abre el enlace, que lo redirige a la pantalla de recuperación, e ingresa y confirma una nueva contraseña que cumpla la política de seguridad.\newline 4. El sistema actualiza la contraseña, invalida el enlace utilizado y redirige al formulario de inicio de sesión.\newline Variantes: si el enlace expiró, el sistema muestra ``El enlace de recuperación ha expirado.'' y solicita generar uno nuevo; si las contraseñas no coinciden, muestra ``Las contraseñas no coinciden.''; si la contraseña no cumple los requisitos, muestra el mensaje con la política mínima. En ningún caso se actualiza la contraseña.\par\vspace{4pt}\textbf{Cambio de contraseña con sesión activa}\newline Un usuario autenticado cambia su propia contraseña. El sistema aplica la misma política de complejidad y almacenamiento seguro que en el registro.\par\vspace{4pt}\textbf{Cierre de sesión y expiración por inactividad}\newline El usuario puede cerrar sesión manualmente, con lo que el sistema invalida la sesión activa. Además, tras 2 horas de inactividad el sistema expira la sesión y solicita reautenticación. Si la cuenta es deshabilitada, todas sus sesiones activas se invalidan de inmediato; tras una transferencia del rol SuperAdmin, la sesión aplica el rol vigente.}
+\frow{Post Condiciones}{-- Éxito: el usuario queda autenticado con una sesión activa y un token que refleja su rol vigente; solo se habilitan las funcionalidades correspondientes a su rol.\newline -- Fallo: el usuario permanece en la pantalla de inicio de sesión, sin acceso a la plataforma.}
+\frow{Restricciones}{-- Solo pueden autenticarse las cuentas registradas y habilitadas en el sistema.\newline -- El rol de la cuenta se obtiene exclusivamente del token firmado por el servidor, nunca de parámetros de la petición.\newline -- Las contraseñas se almacenan mediante una función de hash de un solo sentido con sal única por usuario; nunca se guardan en texto plano.\newline -- La autorización se evalúa en cada endpoint y la revocación de la sesión se verifica en cada petición.}
+\frow{Casos de Uso Padre}{Ninguno}
+}
+\figframe{Diagrama de caso de uso --- CU001}{\includegraphics[width=0.78\textwidth]{img/im-019-011.png}}
+\figframe{Prototipo --- CU001}{\includegraphics[width=0.52\textwidth]{img/im-020-012.png}}
+
+% ------------------------------- CU002 -------------------------------
+\clearpage
+\subsubsection*{CU002: Gestión de Usuarios}
+\addcontentsline{toc}{subsubsection}{CU002: Gestión de Usuarios}
+\ficha{
+\frow{Descripción}{Este caso de uso permite al SuperAdmin realizar la administración de las cuentas del sistema: crear cuentas (a las que se asigna automáticamente el rol Administrador), habilitar y deshabilitar cuentas de Administrador, listar las cuentas existentes con su rol y estado, y transferir el rol SuperAdmin a una cuenta de Administrador existente y habilitada. La transferencia es atómica y garantiza que en todo momento exista exactamente una cuenta SuperAdmin.}
+\frow{Actores}{SuperAdmin}
+\frow{Precondiciones}{-- El SuperAdmin debe haber iniciado sesión exitosamente.\newline -- Para crear una cuenta, el correo ingresado no debe estar registrado previamente.\newline -- Para transferir el rol SuperAdmin, la cuenta destino debe existir, tener rol Administrador y estar habilitada.}
+\frow{Flujo Básico}{\textbf{Administración de cuentas}\newline 1. El SuperAdmin accede al módulo de gestión de usuarios.\newline 2. El sistema lista las cuentas existentes mostrando, para cada una, su nombre, correo, rol y estado (habilitada o deshabilitada).\newline 3. El SuperAdmin crea una cuenta ingresando nombre, correo y contraseña.\newline 4. El sistema valida que el correo no esté registrado, crea la cuenta y le asigna automáticamente el rol Administrador.\newline 5. El sistema confirma la creación y actualiza el listado de cuentas.}
+\frow{Flujo Alternativo}{\textbf{Correo ya registrado}\newline En el paso 3, el correo ingresado ya existe en el sistema. El sistema rechaza el registro e informa que el correo ya está en uso.\par\vspace{4pt}\textbf{Habilitar / deshabilitar cuenta}\newline El SuperAdmin habilita o deshabilita una cuenta de Administrador. Al deshabilitarla, el sistema invalida de inmediato todas las sesiones activas de esa cuenta y le revoca el acceso a todas las funcionalidades.\par\vspace{4pt}\textbf{Intento de deshabilitar o eliminar al SuperAdmin}\newline El sistema impide deshabilitar o eliminar la cuenta con rol SuperAdmin desde la aplicación, indicando que primero debe transferirse el rol a otra cuenta.\par\vspace{4pt}\textbf{Transferencia del rol SuperAdmin}\newline 1. El SuperAdmin selecciona como destino una cuenta de Administrador existente y habilitada.\newline 2. El sistema muestra una alerta de confirmación antes de ejecutar el cambio.\newline 3. Al confirmar, el sistema ejecuta la transferencia de forma atómica: la cuenta destino adquiere el rol SuperAdmin y la cuenta origen pasa a rol Administrador en una sola operación. Las sesiones activas aplican el rol vigente tras la transferencia.\par\vspace{4pt}\textbf{Transferencia inválida}\newline Si la cuenta destino no existe, está deshabilitada o ya tiene rol SuperAdmin, el sistema rechaza la transferencia e informa el motivo.}
+\frow{Post Condiciones}{-- Éxito: las cuentas y sus estados o roles quedan persistidos; el sistema mantiene siempre exactamente una cuenta con rol SuperAdmin.\newline -- Fallo: la operación se cancela y se notifica el error, sin alterar el estado de las cuentas.}
+\frow{Restricciones}{-- Solo el rol SuperAdmin puede acceder a este módulo.\newline -- En todo momento existe exactamente una cuenta con rol SuperAdmin, con independencia de su estado o de que tenga una sesión abierta; esto se garantiza además mediante una restricción de integridad en la base de datos.\newline -- La cuenta SuperAdmin inicial se crea durante el despliegue y no puede crearse desde la aplicación.\newline -- Toda cuenta creada desde la aplicación nace con rol Administrador; el rol SuperAdmin solo se obtiene por transferencia.\newline -- La transferencia del rol se ejecuta dentro de una transacción única; un fallo parcial revierte toda la operación.}
+\frow{Casos de Uso Padre}{---}
+}
+\figframe{Diagrama de caso de uso --- CU002}{\includegraphics[width=0.72\textwidth]{img/im-022-013.png}}
+\figframe{Prototipo --- CU002}{\includegraphics[width=0.9\textwidth]{img/im-022-014.png}}
+\figframe{Prototipo --- CU002}{\includegraphics[width=0.62\textwidth]{img/im-023-016.png}}
+
+% ------------------------------- CU003 -------------------------------
+\clearpage
+\subsubsection*{CU003: Ingesta de Documentos (memorias y reportes GRI)}
+\addcontentsline{toc}{subsubsection}{CU003: Ingesta de Documentos (memorias y reportes GRI)}
+\ficha{
+\frow{Descripción}{Este caso de uso permite al SuperAdmin cargar memorias anuales y reportes de sostenibilidad GRI en formato Markdown (.md, con tablas de pipes), asociándolos a una empresa, un año y un tipo. El sistema valida el archivo, calcula su hash para evitar duplicados, lo indexa para el asistente y ejecuta automáticamente el análisis GRI como último paso.}
+\frow{Actores}{SuperAdmin}
+\frow{Precondiciones}{-- El SuperAdmin debe haber iniciado sesión exitosamente.\newline -- Debe existir la empresa (activa) a la que se asociará el documento.\newline -- El archivo debe estar en Markdown (.md), con tablas de pipes y un tamaño de hasta 50 MB.}
+\frow{Flujo Básico}{\textbf{Ingesta de documentos}\newline 1. El SuperAdmin accede al módulo de Ingesta de documentos.\newline 2. Selecciona el sector y la empresa, el año y el tipo (memoria anual o reporte de sostenibilidad GRI).\newline 3. Selecciona el archivo .md y pulsa ``Ingestar''.\newline 4. El sistema valida el tipo real del archivo, el tamaño (hasta 50 MB), las tablas con pipes y el contenido mínimo (al menos un código GRI o una mención de sanción).\newline 5. El sistema calcula el hash SHA-256 y verifica la unicidad (por contenido y por empresa/año/tipo).\newline 6. El sistema procesa el documento de forma síncrona: parseo, segmentación (chunking), embeddings por API e indexación.\newline 7. Al finalizar la indexación, ejecuta el análisis GRI y de sanciones (las filas quedan sin estado, pendientes de validación humana).\newline 8. El sistema muestra el resultado (número de fragmentos indexados o el estado) y registra el evento en la auditoría.}
+\frow{Flujo Alternativo}{\textbf{Empresa no registrada}\newline Si la empresa no existe, el SuperAdmin puede crearla con ``Agregar empresa'' ingresando su nombre y su sector, y reintentar la ingesta.\par\vspace{4pt}\textbf{Documento duplicado}\newline Si el contenido ya fue ingestado (mismo hash) o ya existe un documento del mismo tipo para la empresa y el año, el sistema rechaza la carga e indica la fecha y la cuenta de la carga original.\par\vspace{4pt}\textbf{Documento sin contenido analizable}\newline Si el documento no contiene ningún código GRI ni mención de sanción, el sistema lo marca como \emph{observado} (no rechazado) y no lo indexa hasta corregirse.\par\vspace{4pt}\textbf{Rechazo o interrupción}\newline Si el archivo no es .md, supera los 50 MB o el proceso se interrumpe, el sistema revierte el procesamiento (sin dejar fragmentos, embeddings ni análisis parciales) y conserva solo el motivo del rechazo.}
+\frow{Post Condiciones}{-- Éxito: el documento queda indexado y el análisis GRI/sanciones poblado, listo para la revisión del Administrador.\newline -- Fallo: el documento queda como rechazado u observado con su motivo, sin incorporar contenido al corpus.}
+\frow{Restricciones}{-- Solo el rol SuperAdmin puede acceder a este módulo.\newline -- Solo se admite Markdown (.md) con tablas de pipes; el sistema no convierte formatos.\newline -- Tamaño máximo por archivo: 50 MB.\newline -- La ingesta es atómica: no deja contenido parcial ante rechazo o interrupción.}
+\frow{Casos de Uso Padre}{---}
+}
+\figframe{Diagrama de caso de uso --- CU003}{\includegraphics[width=0.72\textwidth]{img/im-025-018.png}}
+\figframe{Prototipo --- CU003}{\includegraphics[width=0.62\textwidth]{img/im-026-019.png}}
+\figframe{Prototipo --- CU003}{\includegraphics[width=0.92\textwidth]{img/im-026-020.png}}
+
+% ------------------------------- CU004 -------------------------------
+\clearpage
+\subsubsection*{CU004: Consulta al Asistente de IA (RAG)}
+\addcontentsline{toc}{subsubsection}{CU004: Consulta al Asistente de IA (RAG)}
+\ficha{
+\frow{Descripción}{Este caso de uso permite al Administrador usar al agente de IA para hacerle consultas dependiendo de la empresa y sector específico, también eligiendo el año de los documentos a analizar. Este puede hablar en lenguaje natural con el asistente y responderá de acuerdo a la información de los documentos en el sistema.}
+\frow{Actores}{Administrador}
+\frow{Precondiciones}{-- El Administrador debe haber iniciado sesión exitosamente.\newline -- Debe encontrarse en el módulo correcto para Consulta de Asistente de IA}
+\frow{Flujo Básico}{\textbf{Consultas al Asistente de IA}\newline 1. El Administrador accede al módulo de Consulta de Asistente de IA.\newline 2. El Administrador debe elegir el sector, empresa y año para delimitar la información que va a usar el agente de IA. El sistema muestra un mensaje inicial sobre las empresas actualmente en el sistema, y da sugerencias de prompts en lenguaje natural.\newline 3. El Administrador debe ingresar su consulta en lenguaje natural pidiendo la información pertinente de la empresa.\newline 4. El agente de IA debe procesarla, buscando información dentro de los documentos en el sistema.\newline 5. El agente de IA devuelve la respuesta conteniendo la información pedida de la consulta junto con citas para evitar información inventada.}
+\frow{Flujo Alternativo}{\textbf{Información no encontrada}\newline Al devolver la información o respuesta pedida, si el documento o información pedida no existe, la IA deberá informar en su respuesta que no existe o no se encuentra, no inventarse información para cumplir con lo pedido.}
+\frow{Post Condiciones}{-- Éxito: En la respuesta del agente de IA debe responder a la consulta y devolver la información solicitada.\newline -- Fallo: En su respuesta del agente de IA debe informarle al Administrador que no se encuentra la información solicitada.}
+\frow{Restricciones}{-- Solo el rol Administrador tiene la capacidad de interactuar con el agente de IA.}
+\frow{Casos de Uso Padre}{---}
+}
+\figframe{Diagrama de caso de uso --- CU004}{\includegraphics[width=0.72\textwidth]{img/im-028-021.png}}
+\figframe{Prototipo --- CU004}{\includegraphics[width=0.85\textwidth]{img/im-028-022.png}}
+
+% ------------------------------- CU005 -------------------------------
+\clearpage
+\subsubsection*{CU005: Detección de Brechas GRI y Sanciones}
+\addcontentsline{toc}{subsubsection}{CU005: Detección de Brechas GRI y Sanciones}
+\ficha{
+\frow{Descripción}{El Administrador revisa, sobre una empresa con documentos indexados, los códigos GRI y las sanciones detectados por el sistema, y asigna \textbf{manualmente} el estado de cada código (OK, Baja sustancia o Sub-reportado). El sistema no compara el contenido contra el estándar GRI ni infiere el estado: solo detecta los códigos del catálogo presentes y extrae la cita textual de respaldo; las sanciones se toman de menciones explícitas en los documentos.}
+\frow{Actores}{Administrador}
+\frow{Precondiciones}{-- El Administrador ha iniciado sesión exitosamente y su sesión está vigente.\newline -- La empresa a analizar existe y tiene al menos un documento indexado.\newline -- El análisis GRI se pobló automáticamente al finalizar la ingesta.}
+\frow{Flujo Básico}{\textbf{Revisión y validación de brechas}\newline 1. El Administrador accede al módulo de análisis y selecciona la empresa y el año.\newline 2. El sistema muestra los códigos GRI detectados con su \textbf{cita textual} (documento y sección) y las sanciones identificadas.\newline 3. El Administrador revisa cada cita y \textbf{asigna manualmente el estado} del código: OK, Baja sustancia o Sub-reportado.\newline 4. El sistema guarda el cambio con autor, fecha y estado anterior $\rightarrow$ nuevo (historial).\newline 5. El sistema calcula el puntaje ESG a partir de los estados asignados.\newline 6. Cuando todas las filas tienen estado, el sistema habilita la generación del reporte de prospección.}
+\frow{Flujo Alternativo}{\textbf{Documentación insuficiente}\newline Si la empresa no tiene documentos indexados, el sistema informa la insuficiencia de datos y no genera resultado.\par\vspace{4pt}\textbf{Sin códigos detectados}\newline Si no se detectó ningún código GRI, el puntaje ESG se muestra como ``no disponible'' (nunca como cero) y se declara la ausencia de hallazgos.\par\vspace{4pt}\textbf{Fallo del proveedor de IA}\newline Si el servicio externo no está disponible, el sistema informa el error sin bloquear el resto de los módulos y permite reintentar.}
+\frow{Post Condiciones}{-- Éxito: los estados quedan validados en la tabla del análisis, con su historial, y el resultado queda listo para generar el reporte de prospección.\newline -- Fallo: no se altera la información previamente almacenada y se notifica el motivo.}
+\frow{Restricciones}{-- Solo el rol Administrador puede revisar y validar las brechas y sanciones.\newline -- El sistema no infiere ni calcula el estado; la asignación es 100\,\% manual (RN-029, RN-030).\newline -- Toda brecha y sanción reportada debe citar su fuente (documento y sección).\newline -- No se consultan fuentes externas al corpus del sistema.}
+\frow{Casos de Uso Padre}{CU003 --- Ingesta de Documentos (memorias y reportes GRI)}
+\frow{Casos de Uso Padre}{CU003 --- Ingesta de Documentos (memorias y reportes GRI)}
+}
+\figframe{Diagrama de caso de uso --- CU005}{\includegraphics[width=0.72\textwidth]{img/im-030-024.png}}
+\figframe{Prototipo --- CU005}{\includegraphics[width=0.9\textwidth]{img/im-031-025.png}}
+
+% ------------------------------- CU006 -------------------------------
+\clearpage
+\subsubsection*{CU006: Generación de Reportes de Prospección (PDF)}
+\addcontentsline{toc}{subsubsection}{CU006: Generación de Reportes de Prospección (PDF)}
+\ficha{
+\frow{Descripción}{En este caso de uso el Administrador tiene la capacidad de generar reportes de prospección, los cuales contienen el código GRI, las sanciones de la empresa en dicho año y su puntaje ESG.}
+\frow{Actores}{Administrador}
+\frow{Precondiciones}{-- El Administrador debe haber iniciado sesión exitosamente.\newline -- Debe encontrarse en el módulo de reportes de prospección.\newline -- El documento del que se generará el reporte debe encontrarse en el sistema.}
+\frow{Flujo Básico}{\textbf{Generar reportes de prospección}\newline 1. El Administrador accede al módulo de reportes de prospección.\newline 2. Es necesario llenar los datos del sector, empresa y año del cual se generará dicho documento.\newline 3. Tiene la capacidad de hacer una vista previa del documento previa a la generación y descarga del documento.\newline 4. Puede generar y descargar el documento de reporte de prospección.}
+\frow{Flujo Alternativo}{\textbf{Generar reporte de un año que no haya documento}\newline El sistema no habilita la vista previa, generación o descarga del documento ya que no hay posibilidad de hacerlo.\par\vspace{4pt}\textbf{Generar un reporte de un documento previamente usado}\newline El sistema no permitirá generar un reporte de un documento del cual ya se haya hecho un reporte.}
+\frow{Post Condiciones}{-- Éxito: El documento es generado, capaz de visualizarse y descargarse.\newline -- Fallo: El documento no es capaz de ser generado si el documento no existe.}
+\frow{Restricciones}{-- Solo el rol Administrador puede acceder a este módulo.\newline -- El documento del cual se hará el reporte debe existir en el sistema.\newline -- No es posible generar un documento del mismo año, empresa y sector.}
+\frow{Casos de Uso Padre}{CU005 --- Detección de Brechas GRI y Sanciones}
+}
+\figframe{Diagrama de caso de uso --- CU006}{\includegraphics[width=0.85\textwidth]{img/im-032-027.png}}
+\figframe{Prototipo --- CU006}{\includegraphics[width=0.9\textwidth]{img/im-032-028.png}}
+
+% ------------------------------- CU007 -------------------------------
+\clearpage
+\subsubsection*{CU007: Auditoría de Eventos del Sistema}
+\addcontentsline{toc}{subsubsection}{CU007: Auditoría de Eventos del Sistema}
+\ficha{
+\frow{Descripción}{El sistema registra automáticamente los eventos sensibles (inicios de sesión, cambios o transferencias de rol, ingesta de documentos y generación de reportes) con el usuario, la acción y la fecha, y permite al SuperAdmin consultarlos y filtrarlos para garantizar la trazabilidad y el cumplimiento de las políticas de seguridad.}
+\frow{Actores}{SuperAdmin}
+\frow{Precondiciones}{-- El SuperAdmin ha iniciado sesión exitosamente y su sesión está vigente\newline -- Para la consulta, existe al menos un evento registrado.}
+\frow{Flujo Básico}{1. Cada vez que ocurre un evento sensible (login, cambio/transferencia de rol, ingesta, generación de reporte), el sistema lo registra automáticamente con usuario, acción, entidad afectada y fecha/hora.\newline 2. El SuperAdmin accede al módulo de auditoría.\newline 3. El sistema muestra el registro de eventos.\newline 4. El SuperAdmin aplica filtros (por usuario, tipo de evento o rango de fechas) y consulta los eventos de interés.}
+\frow{Flujo Alternativo}{\textbf{Sin coincidencias}\newline En el paso 4, ningún evento cumple el filtro aplicado. El sistema informa que no hay eventos para ese criterio.\par\vspace{4pt}\textbf{Acceso no autorizado}\newline Si un rol distinto de SuperAdmin intenta acceder al módulo, el sistema deniega el acceso (HTTP 403) y registra el intento.}
+\frow{Post Condiciones}{-- Los eventos sensibles quedan registrados de forma persistente y son consultables por el SuperAdmin.\newline -- La consulta no modifica los registros; el log es de solo lectura al consultarse.}
+\frow{Restricciones}{-- Solo el rol SuperAdmin tiene acceso a esta sección.\newline -- La información registrada es inmutable.}
+\frow{Casos de Uso Padre}{---}
+}
+\figframe{Diagrama de caso de uso --- CU007}{\includegraphics[width=0.72\textwidth]{img/im-033-030.png}}
+\figframe{Prototipo --- CU007}{\includegraphics[width=0.9\textwidth]{img/im-034-031.png}}
+
+% ---------------------------- 7.3 SECUENCIA --------------------------
+\clearpage
+\subsection{Diagrama de Secuencia}
+\addcontentsline{toc}{subsubsection}{Autenticación y Gestión de Sesión}
+\noindent\textbf{Caso de uso:} Autenticación y Gestión de Sesión
+\begin{center}\includegraphics[width=0.85\textwidth]{img/im-034-033.png}\end{center}
+
+\addcontentsline{toc}{subsubsection}{Gestión de Usuarios}
+\noindent\textbf{Caso de uso:} Gestión de Usuarios
+\begin{center}\includegraphics[width=0.85\textwidth]{img/im-035-034.png}\end{center}
+
+\addcontentsline{toc}{subsubsection}{Ingesta de documentos (análisis GRI)}
+\noindent\textbf{Caso de uso:} Ingesta de documentos (análisis GRI)
+\begin{center}\includegraphics[width=0.85\textwidth]{img/im-036-035.png}\end{center}
+
+\addcontentsline{toc}{subsubsection}{Consulta al Asistente de IA}
+\noindent\textbf{Caso de uso:} Consulta al Asistente de IA
+\begin{center}\includegraphics[width=0.85\textwidth]{img/im-037-036.png}\end{center}
+
+\addcontentsline{toc}{subsubsection}{Generación de Reportes de Prospección}
+\noindent\textbf{Caso de uso:} Generación de Reportes de Prospección
+\begin{center}\includegraphics[width=0.85\textwidth]{img/im-038-037.png}\end{center}
+
+\addcontentsline{toc}{subsubsection}{Auditoría de Eventos del Sistema}
+\noindent\textbf{Caso de uso:} Auditoría de Eventos del Sistema
+\begin{center}\includegraphics[width=0.85\textwidth]{img/im-039-038.png}\end{center}
+
+% ------------------------------- 7.4 RF -------------------------------
+\clearpage
+\subsection{Requerimientos Funcionales}
+Los requerimientos funcionales se redactan de forma atómica, verificable, comprensible y libre de implementación, y cada uno se deriva de una o varias reglas de negocio (RN). Se detallan a continuación.
+
+\begingroup\small
+\input{rf.tex}
+\endgroup
+
+% ------------------------------- 7.5 RNF ------------------------------
+\subsection{Requerimientos No Funcionales}
+Los requerimientos no funcionales definen las restricciones de calidad bajo las cuales opera el sistema y se derivan de las reglas de negocio (RN) y de los requerimientos funcionales (RF) a los que califican. Se presentan categorizados.
+
+\begingroup\small
+\input{rnf.tex}
+\endgroup

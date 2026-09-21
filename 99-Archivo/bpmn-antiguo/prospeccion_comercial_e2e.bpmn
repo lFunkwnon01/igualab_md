@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Igualab" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collab_Igualab">
+    <bpmn:participant id="Pool_Igualab" name="Igualab — Prospección comercial (proceso E2E)" processRef="Process_Igualab"/>
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Igualab" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Igualab">
+      <bpmn:lane id="Lane_Plataforma" name="Plataforma Igualab (automático)">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>G1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T1b</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>E1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>G2</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Analista" name="Analista comercial (Análisis)">
+        <bpmn:flowNodeRef>T3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>E2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T6</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T10</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>E3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T9</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>G5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T11</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T12</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>E4</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Empresa" name="Empresa objetivo (externo)">
+        <bpmn:flowNodeRef>T7</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>G4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T8</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Información nueva analizada (base del cliente)"></bpmn:startEvent>
+    <bpmn:serviceTask id="T1" name="Priorizar empresas con brechas y sanciones"></bpmn:serviceTask>
+    <bpmn:serviceTask id="T1b" name="Archivar observación para el siguiente ciclo"></bpmn:serviceTask>
+    <bpmn:serviceTask id="T2" name="Generar perfil de oportunidad"></bpmn:serviceTask>
+    <bpmn:userTask id="T3" name="Registrar la oportunidad en seguimiento (contacto institucional)"></bpmn:userTask>
+    <bpmn:userTask id="T5" name="Preparar dossier de prospección (reporte + propuesta de valor)"></bpmn:userTask>
+    <bpmn:userTask id="T6" name="Acercarse a la empresa como aliado estratégico"></bpmn:userTask>
+    <bpmn:userTask id="T7" name="Evaluar propuesta de valor"></bpmn:userTask>
+    <bpmn:userTask id="T8" name="Coordinar reunión de trabajo"></bpmn:userTask>
+    <bpmn:userTask id="T10" name="Programar seguimiento en el próximo ciclo anual"></bpmn:userTask>
+    <bpmn:userTask id="T9" name="Presentar propuesta de consultoría retribuida"></bpmn:userTask>
+    <bpmn:userTask id="T11" name="Formalizar contrato de consultoría"></bpmn:userTask>
+    <bpmn:userTask id="T12" name="Prestar la consultoría con soporte analítico de la plataforma"></bpmn:userTask>
+    <bpmn:exclusiveGateway id="G1" name="¿Brecha o sanción relevante?"></bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="G2" name="¿Contacto clave identificado?"></bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="G4" name="¿Empresa interesada?"></bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="G5" name="¿Acepta el servicio?"></bpmn:exclusiveGateway>
+    <bpmn:endEvent id="E1" name="Sin oportunidad por ahora"></bpmn:endEvent>
+    <bpmn:endEvent id="E2" name="Oportunidad en seguimiento"></bpmn:endEvent>
+    <bpmn:endEvent id="E3" name="En seguimiento (próximo ciclo)"></bpmn:endEvent>
+    <bpmn:endEvent id="E4" name="Ingreso retribuido e impacto de sostenibilidad"></bpmn:endEvent>
+    <bpmn:sequenceFlow id="F01" sourceRef="Start_1" targetRef="T1"/>
+    <bpmn:sequenceFlow id="F02" sourceRef="T1" targetRef="G1"/>
+    <bpmn:sequenceFlow id="F03" name="No" sourceRef="G1" targetRef="T1b"/>
+    <bpmn:sequenceFlow id="F04" sourceRef="T1b" targetRef="E1"/>
+    <bpmn:sequenceFlow id="F05" name="Sí" sourceRef="G1" targetRef="T2"/>
+    <bpmn:sequenceFlow id="F06" sourceRef="T2" targetRef="G2"/>
+    <bpmn:sequenceFlow id="F07" name="No" sourceRef="G2" targetRef="T3"/>
+    <bpmn:sequenceFlow id="F08" sourceRef="T3" targetRef="E2"/>
+    <bpmn:sequenceFlow id="F12" name="Sí" sourceRef="G2" targetRef="T5"/>
+    <bpmn:sequenceFlow id="F13" sourceRef="T5" targetRef="T6"/>
+    <bpmn:sequenceFlow id="F14" sourceRef="T6" targetRef="T7"/>
+    <bpmn:sequenceFlow id="F15" sourceRef="T7" targetRef="G4"/>
+    <bpmn:sequenceFlow id="F16" name="No" sourceRef="G4" targetRef="T10"/>
+    <bpmn:sequenceFlow id="F17" sourceRef="T10" targetRef="E3"/>
+    <bpmn:sequenceFlow id="F18" name="Sí" sourceRef="G4" targetRef="T8"/>
+    <bpmn:sequenceFlow id="F19" sourceRef="T8" targetRef="T9"/>
+    <bpmn:sequenceFlow id="F20" sourceRef="T9" targetRef="G5"/>
+    <bpmn:sequenceFlow id="F21" name="Sí" sourceRef="G5" targetRef="T11"/>
+    <bpmn:sequenceFlow id="F22" sourceRef="T11" targetRef="T12"/>
+    <bpmn:sequenceFlow id="F23" sourceRef="T12" targetRef="E4"/>
+    <bpmn:sequenceFlow id="F24" name="No" sourceRef="G5" targetRef="T10"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Igualab">
+    <bpmndi:BPMNPlane id="BPMNPlane_Igualab" bpmnElement="Collab_Igualab">
+      <bpmndi:BPMNShape id="Pool_Igualab_di" bpmnElement="Pool_Igualab" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="2870" height="690"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Plataforma_di" bpmnElement="Lane_Plataforma" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="2840" height="230"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Analista_di" bpmnElement="Lane_Analista" isHorizontal="true">
+        <dc:Bounds x="190" y="310" width="2840" height="230"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Empresa_di" bpmnElement="Lane_Empresa" isHorizontal="true">
+        <dc:Bounds x="190" y="540" width="2840" height="230"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="220" y="177" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T1_di" bpmnElement="T1">
+        <dc:Bounds x="300" y="155" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="G1_di" bpmnElement="G1">
+        <dc:Bounds x="470" y="170" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T1b_di" bpmnElement="T1b">
+        <dc:Bounds x="560" y="155" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="E1_di" bpmnElement="E1">
+        <dc:Bounds x="602" y="248" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T2_di" bpmnElement="T2">
+        <dc:Bounds x="760" y="155" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="G2_di" bpmnElement="G2">
+        <dc:Bounds x="930" y="170" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T3_di" bpmnElement="T3">
+        <dc:Bounds x="1010" y="385" width="130" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="E2_di" bpmnElement="E2">
+        <dc:Bounds x="1460" y="407" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T5_di" bpmnElement="T5">
+        <dc:Bounds x="1540" y="385" width="140" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T6_di" bpmnElement="T6">
+        <dc:Bounds x="1740" y="385" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T7_di" bpmnElement="T7">
+        <dc:Bounds x="1900" y="615" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="G4_di" bpmnElement="G4">
+        <dc:Bounds x="2070" y="630" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T8_di" bpmnElement="T8">
+        <dc:Bounds x="2170" y="615" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T10_di" bpmnElement="T10">
+        <dc:Bounds x="2070" y="385" width="130" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="E3_di" bpmnElement="E3">
+        <dc:Bounds x="2260" y="407" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T9_di" bpmnElement="T9">
+        <dc:Bounds x="2330" y="385" width="130" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="G5_di" bpmnElement="G5">
+        <dc:Bounds x="2510" y="400" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T11_di" bpmnElement="T11">
+        <dc:Bounds x="2600" y="385" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T12_di" bpmnElement="T12">
+        <dc:Bounds x="2760" y="385" width="140" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="E4_di" bpmnElement="E4">
+        <dc:Bounds x="2950" y="407" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F01_di" bpmnElement="F01">
+        <di:waypoint x="256" y="195"/>
+        <di:waypoint x="300" y="195"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F02_di" bpmnElement="F02">
+        <di:waypoint x="420" y="195"/>
+        <di:waypoint x="470" y="195"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F03_di" bpmnElement="F03">
+        <di:waypoint x="520" y="195"/>
+        <di:waypoint x="560" y="195"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F04_di" bpmnElement="F04">
+        <di:waypoint x="620" y="235"/>
+        <di:waypoint x="620" y="248"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F05_di" bpmnElement="F05">
+        <di:waypoint x="495" y="220"/>
+        <di:waypoint x="495" y="270"/>
+        <di:waypoint x="740" y="270"/>
+        <di:waypoint x="740" y="195"/>
+        <di:waypoint x="760" y="195"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F06_di" bpmnElement="F06">
+        <di:waypoint x="880" y="195"/>
+        <di:waypoint x="930" y="195"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F07_di" bpmnElement="F07">
+        <di:waypoint x="955" y="220"/>
+        <di:waypoint x="955" y="425"/>
+        <di:waypoint x="1010" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F08_di" bpmnElement="F08">
+        <di:waypoint x="1140" y="425"/>
+        <di:waypoint x="1460" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F12_di" bpmnElement="F12">
+        <di:waypoint x="980" y="195"/>
+        <di:waypoint x="1510" y="195"/>
+        <di:waypoint x="1510" y="425"/>
+        <di:waypoint x="1540" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F13_di" bpmnElement="F13">
+        <di:waypoint x="1680" y="425"/>
+        <di:waypoint x="1740" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F14_di" bpmnElement="F14">
+        <di:waypoint x="1860" y="425"/>
+        <di:waypoint x="1880" y="425"/>
+        <di:waypoint x="1880" y="655"/>
+        <di:waypoint x="1900" y="655"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F15_di" bpmnElement="F15">
+        <di:waypoint x="2020" y="655"/>
+        <di:waypoint x="2070" y="655"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F16_di" bpmnElement="F16">
+        <di:waypoint x="2095" y="630"/>
+        <di:waypoint x="2095" y="465"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F17_di" bpmnElement="F17">
+        <di:waypoint x="2200" y="425"/>
+        <di:waypoint x="2260" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F18_di" bpmnElement="F18">
+        <di:waypoint x="2120" y="655"/>
+        <di:waypoint x="2170" y="655"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F19_di" bpmnElement="F19">
+        <di:waypoint x="2290" y="655"/>
+        <di:waypoint x="2310" y="655"/>
+        <di:waypoint x="2310" y="425"/>
+        <di:waypoint x="2330" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F20_di" bpmnElement="F20">
+        <di:waypoint x="2460" y="425"/>
+        <di:waypoint x="2510" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F21_di" bpmnElement="F21">
+        <di:waypoint x="2560" y="425"/>
+        <di:waypoint x="2600" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F22_di" bpmnElement="F22">
+        <di:waypoint x="2720" y="425"/>
+        <di:waypoint x="2760" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F23_di" bpmnElement="F23">
+        <di:waypoint x="2900" y="425"/>
+        <di:waypoint x="2950" y="425"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F24_di" bpmnElement="F24">
+        <di:waypoint x="2535" y="450"/>
+        <di:waypoint x="2535" y="500"/>
+        <di:waypoint x="2135" y="500"/>
+        <di:waypoint x="2135" y="465"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

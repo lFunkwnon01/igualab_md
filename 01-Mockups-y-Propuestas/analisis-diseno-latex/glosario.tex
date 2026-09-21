@@ -1,0 +1,53 @@
+% ============================ GLOSARIO ==============================
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\bfseries\fontsize{14}{17}\selectfont GLOSARIO DE TÉRMINOS}
+\end{center}
+\vspace{10pt}
+
+\newcommand{\glos}[2]{\par\vspace{4pt}\noindent\textbf{#1}: #2\par}
+\newcommand{\grupo}[1]{\par\vspace{10pt}\noindent\textbf{\underline{#1}}\par\vspace{2pt}}
+
+\grupo{Términos de negocio y dominio}
+\glos{ASG (Ambiental, Social y Gobernanza)}{Dimensiones que evalúan el desempeño en sostenibilidad de una empresa.}
+\glos{Brecha GRI}{Situación en la que un código o indicador GRI aplicable al sector de una empresa no se encuentra reportado, o se reporta con evidencia insuficiente.}
+\glos{DEI / RSE}{Diversidad e Inclusión / Responsabilidad Social Empresarial, ámbitos de trabajo de Igualab.}
+\glos{Estándar GRI (Global Reporting Initiative)}{Marco internacional de reportes de sostenibilidad, organizado en códigos por área temática (ej. GRI 400 = laboral/social).}
+\glos{Memoria anual}{Documento financiero obligatorio para las empresas que cotizan en la Bolsa de Valores de Lima.}
+\glos{Prospección comercial}{Identificación de empresas con brechas GRI o sanciones detectadas, para acercarse a ellas como aliado estratégico.}
+\glos{Puntaje ESG}{Indicador numérico calculado automáticamente a partir de los estados asignados a los códigos GRI de una empresa (OK = 100, Baja sustancia = 50, Sub-reportado = 0).}
+\glos{Reporte de sostenibilidad}{Documento anual de las empresas, auditado bajo el estándar GRI.}
+\glos{Reporte de prospección}{Documento PDF generado por el sistema que consolida el estado de las brechas GRI, las sanciones identificadas y un resumen ejecutivo de una empresa, utilizado para el acercamiento comercial.}
+\glos{Sanción económica}{Penalidad impuesta a una empresa, identificada exclusivamente a partir de menciones explícitas en los documentos ingestados.}
+\glos{Sectores habilitados}{Los tres sectores acordados con el cliente para los cuales el sistema ejecuta el análisis de brechas: Minería, Petróleo y Gas, y Energía.}
+
+\grupo{Términos de roles y control de acceso}
+\glos{Administrador}{Rol operativo encargado de la explotación analítica del sistema: consulta al asistente de IA, revisión de brechas y sanciones, y generación de reportes de prospección.}
+\glos{Auditoría}{Registro automático e inmutable de eventos sensibles del sistema (inicio de sesión, cambios de rol, ingesta, generación de reportes), consultable por el SuperAdmin.}
+\glos{RBAC (Control de Accesos por Roles)}{Esquema que otorga permisos según el rol del usuario. En Igualab, el sistema reconoce únicamente dos roles: SuperAdmin y Administrador.}
+\glos{SuperAdmin}{Rol con privilegios totales sobre la plataforma: gestiona usuarios y es responsable del catálogo de empresas y la ingesta de documentos fuente.}
+
+\grupo{Términos técnicos y de sistema}
+\glos{Embedding}{Representación numérica (vector) de un fragmento de texto, generada por un modelo de IA, que permite medir la similitud semántica entre textos para habilitar la búsqueda del motor RAG.}
+\glos{Hash SHA-256}{Algoritmo criptográfico utilizado para calcular una huella digital única de cada documento cargado, con el fin de detectar y rechazar duplicados.}
+\glos{Ingesta}{Proceso de cargar al sistema las memorias anuales y reportes GRI, incluyendo su validación, indexación y disparo automático del análisis de brechas.}
+\glos{JWT (JSON Web Token)}{Token firmado por el servidor que incorpora la identidad de la cuenta y su rol vigente, utilizado para mantener la sesión autenticada.}
+\glos{Markdown (.md)}{Formato de texto estructurado en el que deben ingresar los documentos fuente al sistema; el sistema no realiza conversión de formatos, por lo que el cliente entrega los documentos ya convertidos.}
+\glos{Motor RAG (Retrieval-Augmented Generation)}{Componente de inteligencia artificial que responde consultas en lenguaje natural recuperando primero los fragmentos relevantes del corpus indexado, y generando luego una respuesta fundamentada exclusivamente en ellos.}
+\glos{Estado OBSERVADO}{Estado que se asigna a un documento ingestado cuando no contiene ningún código GRI ni mención de sanción reconocible; el documento no se rechaza por completo, pero tampoco se indexa hasta corregirse.}
+
+\grupo{Términos metodológicos (SCRUM)}
+\glos{Análisis GAP (AS IS / TO BE)}{Comparación entre la situación actual del proceso (manual) y la situación objetivo (con el sistema implementado).}
+\glos{Definition of Done (DoD)}{Criterios que un incremento debe cumplir para considerarse terminado.}
+\glos{MVP (Producto Mínimo Viable)}{Versión inicial del sistema con las funcionalidades esenciales para validar el valor con el cliente.}
+\glos{Product Backlog}{Lista priorizada de todos los requerimientos del producto.}
+\glos{Sprint}{Iteración de trabajo de duración fija en la que se produce un incremento del producto.}
+\glos{Sprint Backlog}{Conjunto de historias y tareas comprometidas para el sprint.}
+\glos{UAT (Prueba de Aceptación de Usuario)}{Validación final del sistema realizada por el cliente antes de la entrega.}
+
+\grupo{Términos del documento de Análisis y Diseño (RN / RF / RNF)}
+\glos{Caso de Uso (CU)}{Descripción estructurada de una interacción entre un actor y el sistema para lograr un objetivo específico (ej. CU003: Ingesta de Documentos).}
+\glos{Regla de Negocio (RN)}{Política o condición del dominio que el sistema debe respetar, referenciada por uno o varios requerimientos funcionales.}
+\glos{Requerimiento Funcional (RF)}{Descripción de una función concreta y verificable que el sistema debe ejecutar.}
+\glos{Requerimiento No Funcional (RNF)}{Atributo de calidad, seguridad o rendimiento que el sistema debe cumplir de forma transversal (ej. tiempo de respuesta, cifrado).}

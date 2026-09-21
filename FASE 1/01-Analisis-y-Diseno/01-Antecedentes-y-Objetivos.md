@@ -26,7 +26,7 @@ Desarrollar una plataforma web de analítica de sostenibilidad que permita a Igu
 
 ## 3. ALCANCE DEL PROYECTO (FASE 1)
 
-El proyecto comprende el diseño, desarrollo e implementación de una plataforma web que centralice la ingesta, indexación, consulta y explotación analítica de memorias anuales y reportes de sostenibilidad (GRI) de empresas que cotizan en la Bolsa de Valores de Lima, mediante una arquitectura cliente-servidor y un motor de inteligencia artificial basado en RAG (Retrieval-Augmented Generation), construido sobre un LLM gratuito, con RAG simple y sin function calling.
+El proyecto comprende el diseño, desarrollo e implementación de una plataforma web que centralice la ingesta, indexación, consulta y explotación analítica de memorias anuales y reportes de sostenibilidad (GRI) de empresas que cotizan en la Bolsa de Valores de Lima, mediante una **arquitectura cliente-servidor por capas** (ver `FASE 1/02-Arquitectura-de-Solucion/arquitecturasolution.jpeg`) y un motor de inteligencia artificial basado en RAG (Retrieval-Augmented Generation), construido sobre un LLM gratuito, con RAG simple y sin function calling.
 
 El sistema está orientado a optimizar las operaciones de **dos perfiles** (model cullet mock, acta 4 · REQ-10; 3 usuarios: 1 Superadmin + 2 Administradores):
 
@@ -40,7 +40,7 @@ El Superadmin concentra la administración de accesos y la carga de información
 | Excluido de fase 1 | Referencia |
 |---|---|
 | Dashboards de visualización (KPIs ASG/ESG, índice ASG 0-100) | acta 5 · REQ-19 |
-| Módulo de Bolsa de Valores (CU007, RF-018/019, RN-008) | acta 5 · REQ-16 |
+| Módulo de Bolsa de Valores (de la v1.0; eliminado del alcance) | acta 5 · REQ-16 |
 | Búsqueda vía LinkedIn (mock CU010) | acta 5 · REQ-17 |
 | Chatbot inclusivo & asistente vocal | fase 2 del plan |
 

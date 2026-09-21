@@ -1,9 +1,11 @@
 
 # 23 · Guía de Generación de Actas (Plantilla + Workflow)
 
-Cómo se generan las actas del proyecto. **Fuente del formato:** plantilla oficial de Google Docs del curso ("ACTA DE REUNION — CS3081") y las actas firmadas 1–3 (`01-Mockups-y-Propuestas/Acta_Reunion[1-3].pdf`).
+Cómo se generan las actas del proyecto. **Fuente del formato:** plantilla oficial de Google Docs del curso ("ACTA DE REUNION — CS3081") y las actas firmadas 1–3 (`01-Mockups-y-Propuestas/CS3081-001-2026_Acta_Reunion1.pdf` … `CS3081-003-2026_Acta_Reunion3.pdf`).
 
-> 📌 **Resumen del flujo:** copiar el `.tex` del último acta → renombrar a `Acta_ReunionN_BORRADOR.tex` → editar contenido → compilar con `tectonic` → llevar el PDF a la reunión → completar en vivo → enviar por correo en 24 h → firmar y archivar.
+> 📌 **Nomenclatura de archivo (obligatoria):** `CS3081-00N-2026_Acta_ReunionN` (código oficial del acta primero) para que la cita `CS3081-00N-2026` sea trazable 1 a 1 al archivo.
+
+> 📌 **Resumen del flujo:** copiar el `.tex` del último acta → renombrar a `CS3081-00N-2026_Acta_ReunionN_BORRADOR.tex` → editar contenido → compilar con `tectonic` → llevar el PDF a la reunión → completar en vivo → enviar por correo en 24 h → firmar y archivar.
 
 ---
 
@@ -11,14 +13,14 @@ Cómo se generan las actas del proyecto. **Fuente del formato:** plantilla ofici
 
 | Archivo | Rol |
 |---|---|
-| `01-Mockups-y-Propuestas/Acta_ReunionN_BORRADOR.tex` | **Fuente editable del acta** (LaTeX/XeLaTeX) |
-| `01-Mockups-y-Propuestas/Acta_ReunionN_BORRADOR.pdf` | Salida compilada (para la reunión y firma) |
-| `01-Mockups-y-Propuestas/Acta_ReunionN.pdf` | Acta **firmada** (archivo oficial, reemplaza al borrador) |
+| `01-Mockups-y-Propuestas/CS3081-00N-2026_Acta_ReunionN_BORRADOR.tex` | **Fuente editable del acta** (LaTeX/XeLaTeX) |
+| `01-Mockups-y-Propuestas/CS3081-00N-2026_Acta_ReunionN_BORRADOR.pdf` | Salida compilada (para la reunión y firma) |
+| `01-Mockups-y-Propuestas/CS3081-00N-2026_Acta_ReunionN.pdf` | Acta **firmada** (archivo oficial, reemplaza al borrador) |
 
 **Compilar:**
 ```bash
 cd 01-Mockups-y-Propuestas
-tectonic -X compile Acta_ReunionN_BORRADOR.tex
+tectonic -X compile CS3081-00N-2026_Acta_ReunionN_BORRADOR.tex
 ```
 Requiere `tectonic` (XeTeX autocontenido) y la fuente **Carlito** (clónica métrica de Calibri; instalada en `/usr/share/fonts/google-carlito-fonts/`).
 
@@ -86,7 +88,7 @@ Requiere `tectonic` (XeTeX autocontenido) y la fuente **Carlito** (clónica mét
 4. [ ] Estados §6 y compromisos §7 actualizados
 5. [ ] PDF re-compilado y revisado (paginación limpia)
 6. [ ] Enviado por correo al cliente (canal: Correo/Discord)
-7. [ ] Firmas §9–10 recogidas → renombrar a `Acta_ReunionN.pdf` y archivar
+7. [ ] Firmas §9–10 recogidas → renombrar a `CS3081-00N-2026_Acta_ReunionN.pdf` y archivar
 8. [ ] Sintetizar el acta en [[21 Actas de Reunión y Acuerdos]] y propagar los cambios al vault (A&D y `FASE 1/`).
 
 ## 🔗 Relacionado

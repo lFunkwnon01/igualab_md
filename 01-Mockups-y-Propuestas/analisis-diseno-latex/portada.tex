@@ -1,0 +1,22 @@
+% ============================ PORTADA ===============================
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  % Reglas negras (diseño de portada)
+  \draw[line width=2.4pt] ($(current page.north west)+(10.62cm,-2.31cm)$)
+        -- ($(current page.north west)+(10.62cm,-21.92cm)$);
+  \draw[line width=2.4pt] ($(current page.north west)+(10.62cm,-2.31cm)$)
+        -- ($(current page.north west)+(21cm,-2.31cm)$);
+  \draw[line width=2.4pt] ($(current page.north west)+(10.62cm,-10.15cm)$)
+        -- ($(current page.north west)+(21cm,-10.15cm)$);
+  \draw[line width=2.4pt] ($(current page.north west)+(0cm,-18.35cm)$)
+        -- ($(current page.north west)+(10.62cm,-18.35cm)$);
+
+  % Logotipo
+  \node at ($(current page.north west)+(15.95cm,-6.90cm)$)
+    {\includegraphics[width=8.80cm]{img/logo.png}};
+
+  % Título
+  \node[text width=9.80cm, align=center] at ($(current page.north west)+(15.95cm,-12.45cm)$)
+    {\bfseries\fontsize{14}{17}\selectfont DOCUMENTO DE ANALISIS Y DISEÑO};
+\end{tikzpicture}
+\newpage

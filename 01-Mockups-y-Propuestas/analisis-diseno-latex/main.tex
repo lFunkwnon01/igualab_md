@@ -1,0 +1,121 @@
+% =====================================================================
+%  IGUALAB — DOCUMENTO DE ANÁLISIS Y DISEÑO
+%  Versión LaTeX (reproducción del PDF "Análisis y Diseño - Igualab.pdf")
+%  Compilar:  tectonic -X compile main.tex
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage[spanish,es-noindentfirst]{babel}
+\usepackage[margin=2.54cm,top=2.54cm,bottom=2.54cm]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{makecell}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{float}
+\usepackage[hidelinks,colorlinks=true]{hyperref}
+\usepackage{microtype}
+
+% ---------------- Tipografías (equivalentes métricos de Arial) -------
+\setmainfont{Liberation Sans}
+\setsansfont{Liberation Sans}
+\setmonofont{Liberation Mono}
+
+% ---------------- Colores --------------------------------------------
+\definecolor{linkblue}{HTML}{1155CC}
+\definecolor{cellgray}{gray}{0.90}
+\hypersetup{colorlinks=true,linkcolor=linkblue,urlcolor=linkblue,citecolor=linkblue}
+
+% ---------------- Párrafos / interlineado ----------------------------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\linespread{1.15}
+\renewcommand{\arraystretch}{1.35}
+
+% ---- Opción B: texto JUSTIFICADO sin división de palabras (como Google Docs) ----
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\emergencystretch=3em
+% Permitir corte solo en identificadores con guion bajo (p. ej. fragmentos_documento)
+\let\igunderscore\_
+\renewcommand{\_}{\igunderscore\allowbreak}
+
+% ---------------- Encabezados ----------------------------------------
+\titleformat{\section}
+  {\normalfont\bfseries\fontsize{15.5}{18}\selectfont}
+  {\thesection.}{0.7em}{\MakeUppercase}
+\titlespacing*{\section}{0pt}{20pt}{8pt}
+
+\titleformat{\subsection}
+  {\normalfont\bfseries\fontsize{12.5}{15}\selectfont}
+  {\thesubsection.}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{14pt}{6pt}
+
+\titleformat{\subsubsection}
+  {\normalfont\bfseries\normalsize}
+  {\thesubsubsection.}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{10pt}{4pt}
+
+% ---------------- Tablas ---------------------------------------------
+\arrayrulecolor{black}
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{4pt}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+\newcommand{\thd}[1]{\textbf{#1}}
+
+% ---------------- Encabezado de página -------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\small\thepage}
+
+% Índice con puntos guía
+\renewcommand{\contentsname}{Contenido}
+\titlecontents{section}[0pt]{\bfseries\vspace{2pt}}{}{}{\titlerule*[0.5pc]{.}\contentspage}
+\titlecontents{subsection}[1.1em]{}{\contentslabel{2.1em}}{}{\titlerule*[0.5pc]{.}\contentspage}
+\titlecontents{subsubsection}[2.6em]{}{\contentslabel{3.0em}}{}{\titlerule*[0.5pc]{.}\contentspage}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+% =====================================================================
+\begin{document}
+
+% -------------------------- PORTADA ---------------------------------
+\input{portada.tex}
+
+% -------------------- FRONT MATTER (numerada) -----------------------
+\input{frontmatter.tex}
+
+% --------------------------- CONTENIDO ------------------------------
+\clearpage
+\phantomsection
+{\centering\bfseries\fontsize{14}{17}\selectfont Contenido\par}
+\vspace{10pt}
+\makeatletter
+\@starttoc{toc}
+\makeatother
+
+% ---------------------------- CUERPO --------------------------------
+\input{glosario.tex}
+
+\clearpage
+\input{s01-06.tex}
+\input{s07.tex}
+\input{s08-13.tex}
+
+\end{document}

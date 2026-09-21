@@ -1,6 +1,6 @@
 # 03 · Diagramas de Procesos TO-BE — FASE 1 (formato BPMN)
 
-> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración = A&D vigente** (`01-Mockups-y-Propuestas/analisis-diseno-latex/main.pdf`).
 
 > Proceso to-be según el A&D actualizado y ajustado al plan de proyecto v1.2 + actas 4/5: **sin dashboard, sin Bolsa, sin LinkedIn**. Todos los flujos corresponden 1:1 con el mock fidelizado <https://igualab.vercel.app/>.
 > El BPMN fuente está en `diagramas-BPMN/proceso_tobe_fase1.bpmn` (visualizable en `00-Documentación/bpmn/visor_bpmn.html`). Aquí se incluye versión mermaid para lectura rápida.
@@ -52,7 +52,7 @@ flowchart TD
     R1 -- No --> DEN["Se informa límite de alcance de fase 1"]
     R1 -- Sí --> RAW["Consume la tabla del análisis poblada al terminar la ingesta, sin releer el documento"]
     RAW --> SUG["el sistema detecta códigos y extrae la cita (sin inferir estado)"]
-    SUG --> HUM{"¿El humano asigna el estado (OK / Baja sustancia / Sub-reportado) antes de generar? RN-016"}
+    SUG --> HUM{"¿El humano asigna el estado (OK / Baja sustancia / Sub-reportado) antes de generar? RN-029"}
     HUM -- Cambia --> REG["Historial: guarda estado, quién, cuándo, anterior → nuevo"]
     HUM -- Confirma --> GEN
     REG --> GEN["Generar PDF: SELECT determinista a gri_analisis con estados validados y sanciones → Jinja2 → WeasyPrint — sin llamar al LLM"]
@@ -66,10 +66,10 @@ flowchart TD
 | Vista del mock | Paso del proceso |
 |---|---|
 | Login (demoAccounts) | Proceso 1 · autenticación |
-| Usuarios y roles (Superadmin) | Proceso 1 · gestión (RN-002, RN-003) |
+| Usuarios y roles (Superadmin) | Proceso 1 · gestión (RN-002, RN-003, RN-005) |
 | Ingesta de documentos | Proceso 2 completo |
 | Auditoría de accesos | Consulta de `auditoria_eventos` |
 | Asistente de IA (chat) | Proceso 3 (análisis y consulta) |
 | Reportes de prospección / Descargar | Proceso 3 (generación y entregables) |
 
-> Nota: los procesos **AS-IS** ya están en el documento A&D v1.0 (sección 5.1); el modelo **to-be** válido para FASE 1 es el de este documento. Los archivos `.bpmn` exportables (estándar BPMN 2.0, abribibles en bpmn.io / Camunda) están en la carpeta `diagramas-BPMN/`.
+> Nota: los procesos **AS-IS** están en el A&D vigente (sección 5.1); el modelo **to-be** válido para FASE 1 es el de este documento. Los archivos `.bpmn` exportables (estándar BPMN 2.0, abribibles en bpmn.io / Camunda) están en la carpeta `diagramas-BPMN/`.

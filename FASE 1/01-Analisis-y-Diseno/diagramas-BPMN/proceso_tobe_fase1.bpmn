@@ -10,7 +10,7 @@
     <bpmn:task id="Task_Upload" name="Subir .md en Ingesta"/>
     <bpmn:exclusiveGateway id="Gw_Valid" name="¿Tablas con pipes y tamaño OK?"/>
     <bpmn:task id="Task_Parse" name="Parseo markdown + chunking"/>
-    <bpmn:task id="Task_Embed" name="Embeddings locales"/>
+    <bpmn:task id="Task_Embed" name="Embeddings por API"/>
     <bpmn:task id="Task_Upsert" name="Upsert pgvector + audit"/>
     <bpmn:endEvent id="End_Gest" name="Documento indexado"/>
     <bpmn:sequenceFlow id="f1" sourceRef="Start_Gest" targetRef="Task_Select"/>

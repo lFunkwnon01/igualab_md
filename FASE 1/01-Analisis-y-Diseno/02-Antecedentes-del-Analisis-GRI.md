@@ -1,6 +1,6 @@
 # 02 · Análisis GRI: antecedentes, qué es una brecha y cómo se califica
 
-> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración = A&D vigente** (`01-Mockups-y-Propuestas/analisis-diseno-latex/main.pdf`).
 
 >Detalle solicitado por el PO (Oscar) en las interacciones previas (actas 1–5): entender con precisión qué son las **memorias anuales**, los **reportes de sostenibilidad (GRI)**, qué es una “brecha” y cómo se determina el estado de un indicador.
 
@@ -17,7 +17,7 @@ Ambos documentos llegan al sistema **ya convertidos a Markdown (.md)** por el pr
 
 Una **brecha GRI** es la diferencia entre **lo que el estándar GRI exige reportar** y **lo que la empresa realmente reporta** en sus memorias anuales o reportes de sostenibilidad.
 
-El estado del indicador lo asigna **manualmente el Administrador**, con el **catálogo GRI como referencia** (tabla `catalogo_gri` en la base de datos); la IA **no lo decide ni lo sugiere** — ver RN-016:
+El estado del indicador lo asigna **manualmente el Administrador**, con el **catálogo GRI como referencia** (tabla `catalogo_gri` en la base de datos); la IA **no lo decide ni lo sugiere** — ver RN-029:
 
 | Estado | Significado | Ejemplo (mock) |
 |---|---|---|
@@ -25,7 +25,7 @@ El estado del indicador lo asigna **manualmente el Administrador**, con el **cat
 | `Baja sustancia` | el contenido existe pero es superficial (sin impacto medible) | *GRI 413 Comunidades locales — Baja sustancia: “menciona consultas pero sin indicadores de impacto”* (mock) |
 | `Sub-reportado` | se menciona el tema pero faltan datos/metricas exigidas | *GRI 401 Empleo — Sub-reportado: “solo declara contrataciones, sin rotación ni beneficios”* (Minera Andina, mock) |
 
-Ningún estado se calcula “a ojo” de la IA: cada fila de evaluación guarda el **código GRI**, la **cita** (documento, sección) y el **estado**; el sistema **solo detecta los códigos y extrae la cita**, y el Administrador **asigna manualmente el estado antes de generar el reporte** (RN-016, RF-027 — supervisión humana acordada con el PO).
+Ningún estado se calcula “a ojo” de la IA: cada fila de evaluación guarda el **código GRI**, la **cita** (documento, sección) y el **estado**; el sistema **solo detecta los códigos y extrae la cita**, y el Administrador **asigna manualmente el estado antes de generar el reporte** (RN-029, RF-019 — supervisión humana acordada con el PO).
 
 ## 3. ¿Cómo se identifica el estado sin que la IA decida el “GRI óptimo”?
 

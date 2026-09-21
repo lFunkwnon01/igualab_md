@@ -285,7 +285,7 @@ Con las decisiones del 13-14/09, el diagrama debe actualizar:
 **Purga ejecutada (versiones anteriores eliminadas):**
 - `00-Documentación/99-Archivo — Versiones Anteriores/` (16 documentos de versiones previas).
 - `01-Mockups-y-Propuestas/archivados/` (Onepager y Requerimientos antiguos).
-- `01-Mockups-y-Propuestas/v1_backend_arquitectura.jpeg` (diagrama de arquitectura previo; vigente: `Arquitectura_solution.png`).
+- `01-Mockups-y-Propuestas/v1_backend_arquitectura.jpeg` (diagrama de arquitectura previo; vigente: `arquitecturasolution.jpeg` — arquitectura de solución por capas).
 - `igualab.pptx.pdf` (presentación antigua).
 - Avisos de "archivado" en los documentos activos (ya no aplican).
 

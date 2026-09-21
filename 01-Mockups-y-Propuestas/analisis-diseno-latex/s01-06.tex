@@ -1,0 +1,198 @@
+% ====================================================================
+%  SECCIONES 1–6
+% ====================================================================
+
+\section{Antecedentes}
+Igualab es una organización peruana dedicada a la consultoría en Diversidad e Inclusión (DEI), sostenibilidad y Responsabilidad Social Empresarial (RSE), enfocada en promover entornos laborales inclusivos y prácticas ASG (Ambiental, Social y Gobernanza) en el sector empresarial peruano. Fundada en 2016, cuenta con certificaciones como Entidad Perceptora de Donaciones (EPD) y reconocimientos internacionales como el Corporate Live Wire Innovation \& Excellence Awards.
+
+En el contexto peruano, las empresas que cotizan en la Bolsa de Valores de Lima (BVL) ---del orden de 115 emisores--- están obligadas a emitir memorias anuales financieras, mientras que los reportes de sostenibilidad son validados por auditores internacionales bajo estándares como el GRI (Global Reporting Initiative). Estos documentos contienen información crítica sobre cumplimiento normativo, sanciones económicas, indicadores de gobernanza y métricas de desempeño ambiental y social.
+
+\textbf{Problemática.} Hoy Igualab opera de manera reactiva en su área comercial: recibe empresas de forma orgánica y no cuenta con herramientas que sistematicen el análisis de la información pública para detectar oportunidades de acercamiento. Buscar, leer y comparar manualmente memorias y reportes (que suelen exceder las 100 páginas) es lento, no es trazable y no escala al universo de emisores de la BVL.
+
+Frente a ello, se plantea el desarrollo de una plataforma web basada en inteligencia artificial (RAG) que permita procesar reportes de sostenibilidad y memorias anuales, identificar brechas en indicadores ASG/GRI y generar información procesada que facilite la toma de decisiones comerciales.
+
+\section{Objetivo General}
+Desarrollar una plataforma web de analítica de sostenibilidad que permita a Igualab procesar y consultar información pública de empresas (reportes de sostenibilidad y memorias anuales de la Bolsa de Valores de Lima), identificando brechas en indicadores ASG mediante un asistente de inteligencia artificial (RAG), para impulsar la prospección comercial de la organización de manera proactiva y fundamentada en datos.
+
+\subsection{Objetivos específicos}
+\begin{enumerate}[leftmargin=1.6em,itemsep=4pt,topsep=4pt]
+  \item Diseñar la arquitectura de la plataforma que integre la información pública de las empresas (memorias anuales y reportes de sostenibilidad) y habilite su explotación mediante inteligencia artificial, asegurando escalabilidad, confiabilidad y eficiencia en el uso de recursos.
+  \item Implementar la autenticación y el control de acceso por roles (RBAC) con dos perfiles ---SuperAdmin (gestión) y Administrador (explotación analítica)---, garantizando la seguridad y la trazabilidad de las operaciones.
+  \item Desarrollar el módulo de ingesta que permita al SuperAdmin cargar documentos en Markdown (.md) y los deje indexados para su consulta por el Administrador a través de la inteligencia artificial.
+  \item Implementar el asistente de inteligencia artificial (RAG) que permita al Administrador consultar en lenguaje natural los documentos ingestados, apoyando la identificación de brechas en códigos GRI y de sanciones económicas, y citando siempre la fuente de la información.
+  \item Desarrollar la generación de reportes de prospección en formato PDF a partir de las brechas GRI y sanciones ya validadas, incluyendo un resumen ejecutivo y el puntaje ESG.
+  \item Establecer el sistema de auditoría que registre los eventos sensibles (inicios de sesión, cambios de rol, ingesta de datos y generación de reportes) para garantizar la trazabilidad y el cumplimiento de las políticas de seguridad.
+\end{enumerate}
+
+\section{Alcance del Proyecto}
+El proyecto comprende el diseño, desarrollo e implementación de una plataforma web que centralice la ingesta, indexación, consulta y explotación analítica de memorias anuales y reportes de sostenibilidad (GRI) de empresas que cotizan en la Bolsa de Valores de Lima (BVL), mediante una arquitectura cliente-servidor y un motor de inteligencia artificial basado en RAG (Retrieval-Augmented Generation). Este documento detalla el alcance de la \textbf{FASE 1} (primera versión del software).
+
+\subsection{Roles del sistema}
+El sistema está orientado a optimizar las operaciones de dos perfiles (acta CS3081-004-2026 · REQ-10):
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{SuperAdmin (1 persona):} gestiona las cuentas de la plataforma (creación, habilitación y deshabilitación, y transferencia del rol) y es responsable del catálogo de empresas y de la ingesta de documentos de sostenibilidad y memorias anuales al sistema.
+  \item \textbf{Administrador (2 personas):} realiza consultas al asistente de inteligencia artificial (RAG), revisa y valida las brechas GRI y sanciones, y genera reportes de prospección comercial en formato PDF.
+\end{itemize}
+
+El SuperAdmin concentra tanto la administración de accesos como la carga de información fuente, mientras que el Administrador se enfoca exclusivamente en la explotación analítica y comercial de dicha información.
+
+\subsection{Sectores en alcance}
+Por acuerdo con el cliente, el análisis de brechas GRI y sanciones se limita a tres sectores: \textbf{Minería, Petróleo y Gas, y Energía} (acta CS3081-003-2026 · REQ-07). Las empresas de otros sectores quedan fuera del análisis y de la generación de reportes en la FASE 1.
+
+\subsection{Fuera de alcance de la FASE 1}
+Se declaran explícitamente fuera del alcance de la FASE 1 las siguientes funcionalidades, por decisión del cliente registrada en acta:
+
+\begin{center}
+\begin{tabular}{|L{5.4cm}|L{9.6cm}|}
+\hline
+\thd{Excluido de la FASE 1} & \thd{Referencia (acta)} \\
+\hline
+Módulo de la Bolsa de Valores (y sus CU/RF asociados) & acta CS3081-005-2026 · REQ-16 \\
+\hline
+Búsqueda de contactos vía LinkedIn & acta CS3081-005-2026 · REQ-17 \\
+\hline
+Dashboards de visualización (KPIs ASG/ESG) & acta CS3081-005-2026 · REQ-19 \\
+\hline
+Portal público y chatbot/asistente vocal & actas CS3081-001 y 002 (FASE 2) \\
+\hline
+Usuarios ``Cliente'' (multi-tenant) y pasarela de pagos & acta CS3081-004-2026 · REQ-12 \\
+\hline
+Despliegue a producción (operación en el entorno universitario) & acta CS3081-004-2026 · REQ-11 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Nota de terminología}
+En este documento, \textbf{FASE 1} y \textbf{FASE 2} designan \textbf{versiones del software} (FASE 1 = primera versión, la que aquí se detalla; FASE 2 = versión futura). No deben confundirse con las \textbf{cuatro fases de desarrollo} del Plan de Proyecto v1.2 (Inicial, Análisis y Diseño, Desarrollo, Cierre), que describen la metodología de ejecución del proyecto.
+
+% --------------------------------------------------------------------
+\section{Diseño Funcional Detallado}
+La solución consiste en una plataforma web de analítica de sostenibilidad que permite a Igualab procesar reportes de sostenibilidad y memorias anuales de empresas que cotizan en la Bolsa de Valores de Lima, identificar brechas en indicadores ASG mediante inteligencia artificial y generar reportes de prospección comercial. La plataforma se estructura como un \textbf{monolito modular} sobre dos roles ---SuperAdmin y Administrador---, organizado en \textbf{ocho módulos funcionales} y un componente transversal de configuración.
+
+\subsection{Criterios de diseño y modularización}
+Conforme a los fundamentos de diseño ---modularidad, abstracción, acoplamiento y cohesión--- y a los principios \textbf{SOLID}, el sistema se descompone en módulos de grano fino y responsabilidad única:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt,topsep=2pt]
+  \item \textbf{Modularidad:} cada módulo agrupa una responsabilidad funcional y puede evolucionar y probarse de forma independiente.
+  \item \textbf{Abstracción:} los servicios exponen interfaces estables y ocultan los detalles de implementación (proveedor de IA, almacenamiento, correo).
+  \item \textbf{Alta cohesión y bajo acoplamiento:} cada módulo es dueño único de sus datos y se comunica mediante interfaces bien definidas.
+  \item \textbf{Aplicación de SOLID en Igualab:} cada módulo se implementa con un único servicio de responsabilidad única y su propio conjunto de datos; las integraciones externas (proveedor de IA y servicio de correo) se resuelven mediante interfaces sustituibles; cada servicio expone solo las operaciones que su consumidor requiere; y la configuración se inyecta por variables de entorno, no desde implementaciones concretas. En concreto:
+    \begin{itemize}[leftmargin=1.2em,itemsep=2pt,topsep=2pt]
+      \item \emph{Responsabilidad única:} un servicio por módulo (\texttt{auth\_service}, \texttt{ingesta\_service}, \texttt{gri\_analisis\_service}, \texttt{rag\_chat\_service}, \texttt{reportes\_pdf\_service}, \texttt{auditoria\_service}); la autenticación no se mezcla con la ingesta ni con los reportes.
+      \item \emph{Abierto/cerrado:} cambiar de proveedor de IA o de correo no obliga a modificar los servicios, porque se accede a ellos por interfaz.
+      \item \emph{Sustitución:} las implementaciones de \texttt{LlmClient} y \texttt{EmbeddingClient} (proveedor \emph{free} y respaldo) son intercambiables sin tocar el código que las consume.
+      \item \emph{Segregación de interfaces:} cada módulo publica únicamente las operaciones que su consumidor necesita (por ejemplo, la auditoría es de solo lectura para el SuperAdmin).
+      \item \emph{Inversión de dependencias:} los servicios dependen de abstracciones (repositorios y cliente de IA) y la configuración entra por variables de entorno (\texttt{LLM\_*}, \texttt{EMBEDDING\_*}, \texttt{UPLOAD\_MAX\_MB}).
+    \end{itemize}
+\end{itemize}
+
+\noindent\textbf{Decisión de despliegue:} la FASE 1 se implementa como un monolito modular (una sola unidad desplegable, con los módulos separados internamente); no se adoptan microservicios en esta versión.
+
+\subsection{Catálogo de módulos funcionales}
+Cada módulo indica el servicio que lo implementa (SRP), su caso de uso y los requisitos que cubre.
+
+\begin{center}
+\begingroup\small
+\begin{longtable}{|C{0.7cm}|L{4.4cm}|C{1.4cm}|L{7.8cm}|}
+\hline
+\thd{\#} & \thd{Módulo / Servicio (SRP)} & \thd{CU} & \thd{Requisitos (RF · RN · RNF)} \\
+\hline
+\endhead
+1 & Autenticación y Gestión de Sesión --- \texttt{auth\_service} & CU001 & RN-001…RN-013 · RF-001…RF-005 · RNF-001…RNF-009 \\
+\hline
+2 & Gestión de Usuarios --- \texttt{usuario\_service} & CU002 & RN-001…RN-009 · RF-006…RF-009 · RNF-012, RNF-013 \\
+\hline
+3 & Catálogo de Empresas --- \texttt{empresa\_service} & CU003 & RN-014…RN-017 · RF-010, RF-011 · --- \\
+\hline
+4 & Ingesta de Documentos --- \texttt{ingesta\_service} & CU003 & RN-018…RN-026 · RF-012…RF-017 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-029, RNF-031 \\
+\hline
+5 & Análisis y Validación de Brechas GRI --- \texttt{gri\_analisis\_service} & CU005 & RN-027…RN-032 · RF-018…RF-022, RF-027 · RNF-014, RNF-026, RNF-027 \\
+\hline
+6 & Asistente de IA (RAG) --- \texttt{rag\_chat\_service} & CU004 & RN-033…RN-037 · RF-023, RF-024 · RNF-010, RNF-017, RNF-018, RNF-019 \\
+\hline
+7 & Generación de Reportes de Prospección --- \texttt{reportes\_pdf\_service} & CU006 & RN-038…RN-041 · RF-025, RF-026 · --- \\
+\hline
+8 & Auditoría Funcional --- \texttt{auditoria\_service} & CU007 & RN-042…RN-045 · RF-028 · RNF-022, RNF-023, RNF-024 \\
+\hline
+--- & Configuración (transversal, sin módulo propio) & --- & Parámetros por variables de entorno: tamaño máximo de ingesta y cuota del proveedor de IA (RNF-020, RNF-027) \\
+\hline
+\end{longtable}
+\endgroup
+\end{center}
+
+\noindent{\small La numeración de CU y de requisitos corresponde a la del presente documento (secciones 6 y 7).}
+
+\subsection{Descripción de los módulos}
+
+\subsubsection{Módulo 1 --- Autenticación y Gestión de Sesión}
+Controla el acceso a la plataforma mediante correo y contraseña, garantizando que solo cuentas registradas y habilitadas puedan operar el sistema. Contempla la recuperación de contraseña por enlace temporal de un solo uso, el cambio de contraseña estando autenticado, la expiración de sesión por inactividad, el cierre de sesión manual y el bloqueo temporal de la cuenta tras 5 intentos fallidos consecutivos. La sesión se soporta con un token JWT firmado que incorpora la identidad de la cuenta, mientras que el rol vigente se valida en cada petición.
+
+\subsubsection{Módulo 2 --- Gestión de Usuarios}
+Exclusivo del SuperAdmin: permite crear cuentas de Administrador (con contraseña temporal para el primer acceso), habilitarlas o deshabilitarlas ---invalidando de inmediato sus sesiones activas--- y transferir el rol SuperAdmin a una cuenta de Administrador existente y habilitada, con confirmación previa y ejecución atómica. El sistema garantiza en todo momento la existencia de exactamente una cuenta con rol SuperAdmin y no contempla eliminación permanente de cuentas, solo habilitación y deshabilitación, para preservar la trazabilidad de auditoría.
+
+\subsubsection{Módulo 3 --- Catálogo de Empresas}
+Exclusivo del SuperAdmin: registra las empresas sobre las cuales se realizará el análisis, exigiendo nombre y sector. El sector es un atributo de la empresa y pertenece a un conjunto cerrado de tres valores (Minería, Petróleo y Gas, y Energía); las empresas de otros sectores no son elegibles para el análisis ni para la generación de reportes.
+
+\subsubsection{Módulo 4 --- Ingesta de Documentos}
+Exclusivo del SuperAdmin: carga memorias anuales y reportes de sostenibilidad GRI en formato Markdown (.md), asociados obligatoriamente a una empresa, un año y un tipo de documento. El sistema valida el tipo real del archivo en el servidor, calcula su hash SHA-256 para rechazar duplicados y verifica que contenga al menos un código GRI o una mención de sanción reconocible; en caso contrario, el documento se marca como observado en lugar de rechazarse por completo. El procesamiento es síncrono, con progreso visible al usuario, e incluye la indexación del contenido y la ejecución automática del análisis de brechas GRI como último paso de una ingesta exitosa. Ante rechazo o interrupción, el sistema revierte el procesamiento sin conservar contenido parcial.
+
+\subsubsection{Módulo 5 --- Análisis y Validación de Brechas GRI}
+Exclusivo del Administrador: traduce el contenido indexado en un diagnóstico de cumplimiento GRI con supervisión humana obligatoria. El motor identifica automáticamente qué códigos del catálogo GRI (40 códigos) están presentes en el documento, citando el fragmento de origen, sin comparar contra el texto del estándar GRI oficial. El Administrador revisa cada cita textual y asigna manualmente el estado del código (OK, Baja sustancia o Sub-reportado); el sistema no infiere ni calcula este estado de forma automática. Las sanciones económicas se identifican exclusivamente a partir de menciones explícitas en los documentos ingestados. El puntaje ESG se calcula a partir de los estados asignados; si no se detectó ningún código, se muestra como ``no disponible'', nunca como cero.
+
+\subsubsection{Módulo 6 --- Asistente de Inteligencia Artificial (RAG)}
+Exclusivo del Administrador: permite consultas en lenguaje natural sobre el corpus indexado, requiriendo seleccionar sector, empresa y año antes de habilitar la consulta. El asistente se limita a responder sobre sostenibilidad empresarial, indicadores GRI, sanciones o el contenido de los documentos ingestados; ante cualquier otra consulta declina explícitamente. Toda respuesta incluye la referencia al documento, empresa y año de origen, y suprime cualquier afirmación sin fuente verificable en el corpus; ante información insuficiente, lo declara en lugar de inventar una respuesta. El contenido recuperado se trata siempre como datos de referencia dentro del prompt, nunca como instrucciones del sistema. Ante indisponibilidad del proveedor externo de IA, informa el error sin bloquear el resto de los módulos.
+
+\subsubsection{Módulo 7 --- Generación de Reportes de Prospección}
+Exclusivo del Administrador: consolida el análisis validado de una empresa en un documento PDF para el acercamiento comercial. Solo puede generarse para empresas con al menos un documento indexado y se construye exclusivamente a partir de los resultados de análisis ya almacenados y validados manualmente, sin invocar al servicio de IA en este paso, por lo que dos generaciones sobre los mismos datos producen el mismo resultado. El reporte incluye el estado de cada código GRI con su cita de respaldo, las sanciones identificadas (con monto o marcadas como ``no cuantificada'') y un resumen ejecutivo con el puntaje ESG. Una vez generado, el reporte es inmutable; su historial es visualizable y descargable por cualquier Administrador.
+
+\subsubsection{Módulo 8 --- Auditoría Funcional}
+Exclusivo del SuperAdmin: registra automáticamente todo evento sensible del sistema ---inicio de sesión, cambio de estado o rol de cuenta, ingesta, rechazo de documento y generación de reportes---, consignando la cuenta responsable, la fecha y hora (UTC) y el tipo de acción. El registro es consultable filtrando por usuario, fecha y tipo de evento, y es de solo inserción: no admite edición ni eliminación.
+
+\subsection{Flujos funcionales end-to-end}
+\begin{itemize}[leftmargin=1.4em,itemsep=3pt,topsep=2pt]
+  \item \textbf{F1 · Ingesta y análisis (SuperAdmin):} autenticarse $\rightarrow$ seleccionar sector y empresa, año y tipo $\rightarrow$ subir el \texttt{.md} $\rightarrow$ \emph{guard} (extensión, tamaño, hash) $\rightarrow$ parseo y chunking $\rightarrow$ \emph{embeddings} por API $\rightarrow$ indexación $\rightarrow$ detección de códigos GRI y sanciones (filas sin estado) $\rightarrow$ auditoría $\rightarrow$ resultado con progreso.
+  \item \textbf{F2 · Consulta RAG (Administrador):} seleccionar sector, empresa y año $\rightarrow$ formular la pregunta $\rightarrow$ recuperación semántica $\rightarrow$ respuesta del modelo con citas (o declinación fuera de dominio).
+  \item \textbf{F3 · Revisión de brechas (Administrador):} abrir las filas con su cita $\rightarrow$ asignar el estado manual $\rightarrow$ registrar el histórico.
+  \item \textbf{F4 · Reporte de prospección (Administrador):} verificar estados validados $\rightarrow$ generar el PDF determinista (sin IA) $\rightarrow$ snapshot inmutable $\rightarrow$ auditoría $\rightarrow$ historial y descarga.
+  \item \textbf{F5 · Autenticación y usuarios (SuperAdmin):} iniciar sesión o recuperar contraseña; crear, habilitar/deshabilitar y transferir el rol SuperAdmin (atómico).
+  \item \textbf{F6 · Auditoría (SuperAdmin):} consultar y filtrar los eventos; solo lectura.
+\end{itemize}
+
+\subsection{Reglas transversales de diseño}
+\begin{enumerate}[leftmargin=1.6em,itemsep=2pt,topsep=2pt]
+  \item \textbf{RBAC de dos roles} en cada endpoint (autorización por petición; el rol se valida en el servidor).
+  \item \textbf{Ingesta síncrona} de \texttt{.md} (tablas con pipes), con hash y \textbf{reversión atómica} ante fallo.
+  \item \textbf{Tres estados GRI}, asignación 100\,\% manual; el puntaje ESG se deriva y es ``no disponible'' si no hay códigos.
+  \item \textbf{RAG simple} sin \emph{function calling}; citación obligatoria; el corpus se trata como datos (anti \emph{prompt injection}); \emph{timeout} de IA de 1 minuto.
+  \item \textbf{Reporte determinista sin IA} e inmutable.
+  \item \textbf{Auditoría append-only} en UTC.
+  \item \textbf{Trazabilidad:} cada módulo referencia sus CU $\leftrightarrow$ RF $\leftrightarrow$ RN $\leftrightarrow$ RNF (tabla anterior).
+\end{enumerate}
+
+% --------------------------------------------------------------------
+\section{Diagrama del Proceso}
+En este apartado se presentan los diagramas del proceso: la integración entre los sistemas de la empresa en la situación actual (5.1) y la interoperación con los sistemas externos vinculados con ella en la situación propuesta (5.2).
+
+\subsection{Integración entre los sistemas de la empresa}
+En la situación actual (AS-IS), Igualab no integra sistemas para el análisis comercial: el analista realiza todo el proceso de forma manual y reactiva. Busca y descarga cada informe (memoria anual y/o reporte de sostenibilidad) de fuentes dispersas, lo lee íntegramente, identifica brechas, sanciones y oportunidades de mejora, y elabora el documento de prospección en texto libre. No existe una base de datos ni una aplicación que articule estas actividades, por lo que no hay trazabilidad, comparación entre empresas ni reutilización de resultados. La figura siguiente representa el flujo end-to-end actual.
+
+\begin{center}
+\includegraphics[width=0.94\textwidth]{img/im-011-009.png}
+\end{center}
+
+\subsection{Interoperación con sistemas externos vinculados con la empresa}
+En la situación propuesta (TO-BE), la plataforma articula internamente el proceso y se comunica con sistemas externos mediante interfaces estandarizadas: el \textbf{proveedor de IA} (embeddings y generación por HTTPS/JSON), el \textbf{servicio de correo} (SMTP, para la recuperación de contraseña) y la \textbf{Bolsa de Valores de Lima (BVL)}, que es la fuente de los documentos y que el cliente entrega ya convertidos a Markdown, sin integración por API. El asistente de IA consume al proveedor externo como un servicio, sin que el modelo decida acciones sobre el sistema, y el contenido recuperado del corpus se trata como datos, nunca como instrucciones. Con ello, el proceso se organiza en los carriles del Sistema (automático), el SuperAdmin (gestión e ingesta) y el Administrador (explotación analítica), e incorpora el análisis GRI y de sanciones y la generación del reporte. La figura siguiente representa el proceso objetivo.
+
+\begin{center}
+\includegraphics[width=0.96\textwidth]{img/im-012-010.png}
+\end{center}
+\noindent Enlace del tablero del proceso: \href{https://miro.com/app/board/uXjVHq4p518=/}{https://miro.com/app/board/uXjVHq4p518=/}
+
+% --------------------------------------------------------------------
+\section{Reglas de Negocio}
+Las Reglas de Negocio (RN) se detallan a continuación, agrupadas por dominio: acceso y cuentas, empresas y sectores, ingesta documental, análisis GRI, asistente IA, reportes de prospección y auditoría.
+
+\begingroup\small
+\input{rn.tex}
+\endgroup

@@ -1,6 +1,3 @@
-[submodule "frontend"]
-	path = frontend
-	url = https://github.com/lFunkwnon01/igualab-mock.git
 [submodule "06-Desarrollo/BCK-IGUALAB"]
 	path = 06-Desarrollo/BCK-IGUALAB
 	url = https://github.com/ING-IGUALAB/BCK-IGUALAB.git

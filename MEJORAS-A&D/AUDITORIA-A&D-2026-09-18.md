@@ -1,5 +1,7 @@
 # Auditoría del A&D — versión 18/09/2026
 
+> ⚠️ **DOCUMENTO HISTÓRICO.** Auditó el PDF con sha256 `d7ac8e95…` (18/09). El A&D vigente es del **20/09/2026** (sha256 `1663a85f…`): ya trae modelo (13 tablas), diccionario de Igualab, volumen y glosario. Las fallas sobre las secciones **8, 9 y 10** y «14 tablas» **ya no aplican**; siguen vigentes las de **3, 4, 5, 7.1, 7.2, 7.3, 7.4, 7.5, 11, 12 y 13**.
+
 > **Documento auditado:** `01-Mockups-y-Propuestas/Análisis y Diseño - Igualab.pdf`
 > **sha256:** `d7ac8e95bd76bb59cc016d2e606743d891639140a3cb0f21da17ef1db95a5ba5` · **44 págs** · export 18/09 00:57.
 > **Referencia:** estructura oficial (1–13) + Plan v1.2 + actas 4/5 + repos FE/BCK-IGUALAB + mock.

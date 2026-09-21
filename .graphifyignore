@@ -9,5 +9,16 @@
 02-Recursos-Media/organigrama.png
 01-Mockups-y-Propuestas/invoice-129477.pdf
 
-# Archivo: contenido ajeno (proyecto inmobiliario) y pantallas fuera de alcance
+# Archivo: contenido ajeno (proyecto inmobiliario), pantallas y BPMN fuera de alcance
 99-Archivo/
+
+# Capturas de UI: duplican el contenido de su propio code.html (ya extraído)
+**/screen.png
+
+# LaTeX: figuras extraídas y artefactos de compilación (el contenido vive en los .tex)
+01-Mockups-y-Propuestas/analisis-diseno-latex/img/
+01-Mockups-y-Propuestas/analisis-diseno-latex/main.pdf
+01-Mockups-y-Propuestas/analisis-diseno-latex/comparativa-original-vs-latex.pdf
+
+# Material del curso CS3081 (no es contenido del proyecto)
+software_pdf/

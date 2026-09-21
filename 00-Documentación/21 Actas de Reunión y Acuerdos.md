@@ -2,7 +2,7 @@
 
 Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Owner). Formato CS3081 (Ingeniería de Software). Los PDF firmados están en `01-Mockups-y-Propuestas/`.
 
-> ⚠️ **Estado:** Actas 1 y 2 **firmadas** · Acta 3 firmada por cliente y PM (firma del docente por confirmar) · **Acta 4 (08-09) realizada y firmada** (`Acta_Reunion4-(pequeno-cambio).pdf`) · **Acta 5 (11-09) aprobada** (`Acta_Reunion5.pdf`, Plan v1.2 conformado + decisiones de alcance). Guía de generación en [[23 Guía de Generación de Actas]].
+> ⚠️ **Estado:** Actas 1 y 2 **firmadas** · Acta 3 firmada por cliente y PM (firma del docente por confirmar) · **Acta 4 (08-09) realizada y firmada** (`CS3081-004-2026_Acta_Reunion4.pdf`) · **Acta 5 (11-09) aprobada** (`CS3081-005-2026_Acta_Reunion5.pdf`, Plan v1.2 conformado + decisiones de alcance). Guía de generación en [[23 Guía de Generación de Actas]].
 
 ---
 
@@ -100,7 +100,7 @@ Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Ow
 ## 📝 Acta 4 — CS3081-004-2026 · mar 08-09-2026 · Virtual ✅ Realizada y firmada
 
 **Proyecto:** Igualab — Plataforma de analítica de sostenibilidad (RAG) · **Fase:** Análisis y Diseño — confirmación de servidor y cierre del análisis (arquitectura) · *Primera acta con Fabricio Ladera como PM.*
-**Archivo firmado:** `01-Mockups-y-Propuestas/Acta_Reunion4-(pequeno-cambio).pdf`.
+**Archivo firmado:** `01-Mockups-y-Propuestas/CS3081-004-2026_Acta_Reunion4.pdf`.
 
 ### Decisiones
 | # | Tema | Conclusión | Estado |
@@ -128,7 +128,7 @@ Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Ow
 ## 📋 Acta 5 — CS3081-005-2026 · vie 11-09-2026 · 10:00–11:00 · Virtual ✅ Aprobada
 
 **Proyecto:** Igualab — Sistema de Análisis de Datos de Sostenibilidad (RAG); línea base: **Plan de Proyecto v1.2** · **Fase:** Presentación del Plan v1.2 y del prototipo; control de cambios de alcance.
-**Archivos:** `01-Mockups-y-Propuestas/Acta_Reunion5.tex` (+ `Acta_Reunion5.pdf`).
+**Archivos:** `01-Mockups-y-Propuestas/CS3081-005-2026_Acta_Reunion5.tex` (+ `CS3081-005-2026_Acta_Reunion5.pdf`).
 
 ### Decisiones
 | # | Tema | Conclusión | Estado |
@@ -157,7 +157,7 @@ Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Ow
 ## 📝 Acta 6 — CS3081-006-2026 · mar 15-09-2026 · Virtual 🚧 BORRADOR
 
 **Proyecto:** Proyecto Igualab — Plataforma de analítica de sostenibilidad (RAG) · **Fase:** Conformidad del PO (RN/RF/RNF) y avance del Análisis y Diseño (cierre previsto para el viernes 18/09).
-**Borrador:** `01-Mockups-y-Propuestas/Acta_Reunion6_BORRADOR.tex` (+ PDF compilado). Se completa en la reunión.
+**Borrador:** `01-Mockups-y-Propuestas/CS3081-006-2026_Acta_Reunion6_BORRADOR.tex` (+ `CS3081-006-2026_Acta_Reunion6.pdf`). Se completa en la reunión.
 
 ### Temas previstos
 1. **Conformidad del PO (Oscar) con RN/RF/RNF** — validación por correo, sin observaciones (RN 001–039, RF 001–056, RNF 001–036).

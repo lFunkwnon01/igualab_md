@@ -2,288 +2,293 @@
 
 > **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
-> Fuente de verdad: **Plan de Proyecto v1.2** + actas 4/5 · Norma: **GES/GAP** (conceptual → lógico → físico semántico) · Escenario: 3 usuarios (1 Superadmin + 2 Administradores) · 14 tablas.
+> Fuente de verdad: **Plan de Proyecto v1.2** + actas 4/5 · Norma: **GES/GAP** (conceptual → lógico → físico) · Escenario: 3 usuarios (1 Superadmin + 2 Administradores) · **13 tablas — modelo de destino alineado a la arquitectura por capas (`arquitecturasolution.jpeg`, capas 6–7)**.
 
-**Diagrama ERD v2 (elaborado por el equipo, con los 7 cambios aplicados y verificado contra el diseño) — [[Diagrama_bd.png]]:**
+## ✅ v3 · MODELO DE DATOS DEPURADO (vigente — 13 tablas)
 
-![[Diagrama_bd.png]]
+> Adopta el ERD «modelo de datos depurado» entregado por el equipo, con las **correcciones aplicadas** tras su revisión (los puntos marcados con ⚙ en la especificación). Las decisiones D-01…D-05 quedaron **cerradas**:
+> - **D-01** → autenticación **sessionizada**: `sesiones` + `tokens_recuperacion` como tablas (refleja Capa 6: `Sesión (TokenRecuperación)`).
+> - **D-02** → `uso_llm` **retirada**: el medidor del asistente se deriva de `consultas_asistente` (COUNT por día/modelo); límites por variables de entorno (`LLM_DAILY_LIMIT`, `UPLOAD_MAX_MB` → doc `03-Stack` §4).
+> - **D-03** → `fragmentos_documento` como **tabla independiente** (texto · embedding vector(dim) NOT NULL · metadata), compatible con índice HNSW y búsqueda cosine k=4.
+> - **D-04** → sin `vw_puntaje_esg` como objeto del ERD: el puntaje se calcula desde `gri_analisis` cuando el negocio lo pida (fase 2 dashboard GET-only).
+> - **D-05** → nombres normalizados: ORM `CatalogoGRI` / `GRIAnalisis` · tabla `auditoria` (antes `auditoria_eventos`; coherente con Capa 6).
+> - **D-06 (nueva, resuelta)** → `reportes_prospeccion` con **UNIQUE parcial (empresa_id, anho)** — cumple RN-041 (un solo reporte por empresa/año; no hay versiones).
 
+### Tablas retiradas y su justificación (se quitaron módulos)
 
-*Lectura del ERD: roles → usuarios → (auditoria_eventos / uso_llm diario) · empresas → documentos → chunks_embeddings (vector 1024) → gri_analisis (con gri_analisis_historico, usando catalogo_gri como referencia) → reportes_generados → reporte_detalle_snapshot · sanciones (con cita) y configuracion como soporte. Sin `pais` (fase 1 = BVL-Perú). Los 7 cambios aplicados: gri_analisis renombrada · 1:N documentos→chunks · chunk_id_hash UNIQUE · observacion condicional (RF-025) · resumen_ejecutivo determinístico · vigente_desde en catalogo_gri · CHECK num_nonnulls en reporte_detalle_snapshot. Justificación del modelo completo: [[05-Analisis-Por-que-Existen-las-Tablas]].*
+| Retirada | Justificación |
+|---|---|
+| `roles` | El conjunto cerrado queda como **UNIQUE parcial en `usuarios.rol`** (un solo Superadmin) + CHECK/ENUM `rol_usuario`; catálogo de 2 filas sin valor referencial en fase 1 |
+| `configuracion` | Se quitó el **módulo Configuración**; umbrales operativos viven en variables de entorno (doc Stack §4) |
+| `uso_llm` | Consumo derivable de `consultas_asistente`; no corresponde a un RF/RNF confirmado en el alcance vigente |
+| `gri_analisis_historico` | Los cambios de estado sensibles quedan en `auditoria` (evento `AJUSTE_BRECHA` con detalle JSONB) |
+| `reporte_detalle_snapshot` | Sustituida por `contenido_snapshot` JSONB en la propia fila de `reportes_prospeccion` + PDF inmutable |
 
----
+### Cadena principal del negocio
 
-**A continuación, el contenido detallado (sin cambios):**
+**empresa → documento (`.md`) → fragmentos (vectorizados) → análisis GRI/sanciones → consulta asistente (RAG con citas) → reporte PDF → auditoría** (todo con usuario responsable).
 
-> Motor: **PostgreSQL 16 + extensión pgvector** (base de datos **vectorizada** que sustenta el RAG).
-> Norma del curso: diseño por **GES/GAP** (modelo conceptual → modelo lógico → modelo físico), con especificación textual de cada tabla (paso previo obligatorio al **Diccionario de Datos**, que se completa en `03-Diccionario-de-Datos.md` una vez congelado este diseño).
-> Escenario de carga real: **3 usuarios** (1 Superadmin + 2 Administradores) por eso la ingesta es síncrona (RF-022).
+### Relaciones (1:N salvo indicación)
 
-## 1. Modelo conceptual (entidades y relaciones, texto)
+1. Un **usuario** crea **sesiones** y **tokens_recuperacion** (1:N en ambos).
+2. Una **empresa** tiene muchos **documentos**; un usuario crea documentos (`creada_por`).
+3. Un **documento** se vectoriza en muchos **fragmentos_documento**; de un fragmento provienen `cita_textual` de **gri_analisis** y **sanciones** (FK `fragmento_id` NULL = cita directa del doc).
+4. El **catalogo_gri** referencia cada fila de **gri_analisis** (UNIQUE documento+código: una sola tabla de resultados).
+5. Una **consulta_asistente** registra sus **citas** (`consulta_citas` → fragmentos) — citas · fuentes de la Capa 6.
+6. Un reporte pertenece a una empresa (UNIQUE empresa+anho — RN-041); su **snapshot** se congela a la fecha de emisión.
+7. Todo evento sensible va a **auditoria** (append-only; FK usuario/empresa NULL).
 
-Las entidades del dominio son 14. El lector debe tener clara la cadena principal del negocio:
-
-**empresa → documento (`.md`) → chunks (vectorizados) → análisis GRI/sanciones → reporte PDF**, y alrededor: **usuarios** (quién hace qué), **auditoría** (todo lo sensible), **catálogo GRI** (el estándar de referencia, no lo define la IA) y **uso_llm/configuración** (soporte operativo).
-
-Relaciones (1:N salvo indicación):
-
-1. Una **empresa** tiene muchos **documentos** (memorias y reportes por año).
-2. Un **documento** se vectoriza en muchos **chunks_embeddings** (1 documentos : N chunks; el chunk es indivisible).
-3. Un **documento** produce muchas filas de **gri_analisis** (una por código GRI analizado) y puede citar muchas **sanciones**.
-4. El **catalogo_gri** (N:M lógico con gri_analisis) **define la referencia** del indicador: una fila de análisis corresponde a un código del catálogo.
-5. Cada **gri_analisis** registra su **historico de cambios de estado** (N:M 1:N) — quién, cuándo, de qué a qué (RN-018).
-6. Un **reporte_generado** pertenece a una empresa y **consolida** (N:M, mediante snapshot) las brechas con estado final + sanciones a su fecha de emisión.
-7. Todo **usuario** genera eventos en **auditoria_eventos** (append-only).
-8. **uso_llm** guarda el consumo diario del asistente (RNF-028); **configuracion** guarda los parámetros del sistema.
-
-## 2. Modelo lógico — Diagrama ER (mermaid)
+## Modelo lógico — ER (mermaid)
 
 ```mermaid
 erDiagram
-    usuarios ||--o{ auditoria_eventos : genera
+    usuarios ||--o{ sesiones : abre
+    usuarios ||--o{ tokens_recuperacion : crea
+    usuarios ||--o{ documentos : crea
+    usuarios ||--o{ auditoria : registra
+    usuarios ||--o{ consultas_asistente : pregunta
     empresas ||--o{ documentos : tiene
-    documentos ||--o{ chunks_embeddings : vectoriza
+    empresas ||--o{ reportes_prospeccion : recibe
+    empresas ||--o{ consultas_asistente : contextualiza
+    documentos ||--o{ fragmentos_documento : vectoriza
     documentos ||--o{ gri_analisis : produce
-    empresas ||--o{ gri_analisis : analiza
-    catalogo_gri ||--o{ gri_analisis : referencia
-    gri_analisis ||--o{ gri_analisis_historico : registra
-    empresas ||--o{ sanciones : registra
     documentos ||--o{ sanciones : cita
-    empresas ||--o{ reportes_generados : recibe
-    gri_analisis }o--o{ reportes_generados : consolida
+    catalogo_gri ||--o{ gri_analisis : referencia
+    fragmentos_documento ||--o{ gri_analisis : desde
+    fragmentos_documento ||--o{ sanciones : desde
+    consultas_asistente ||--o{ consulta_citas : cita
+    fragmentos_documento ||--o{ consulta_citas : fuente
 
     usuarios {
         uuid id PK
         varchar nombre
         varchar correo UK
         varchar password_hash
-        varchar rol "superadmin | administrador"
-        bool habilitado
-        timestamp created_at
+        rol_usuario rol "ENUM superadmin|administrador"
+        boolean habilitado
+        integer intentos_fallidos
+        timestamptz bloqueado_hasta "NULL"
+        timestamptz creado_en
     }
-    roles {
-        varchar rol PK
-        text descripcion
+    sesiones {
+        uuid id PK
+        uuid usuario_id FK
+        timestamptz creada_en
+        timestamptz ultima_actividad
+        boolean revocada
+    }
+    tokens_recuperacion {
+        uuid id PK
+        uuid usuario_id FK
+        varchar token_hash UK
+        timestamptz expira_en
+        boolean usado
+        timestamptz creado_en
     }
     empresas {
-        int id PK
+        uuid id PK
         varchar nombre UK
-        varchar ticker UK
         varchar sector
-        varchar pais
-        bool activo
+        boolean activo
+        timestamptz creado_en
     }
     documentos {
         uuid id PK
-        int empresa_id FK
+        uuid empresa_id FK
+        uuid creada_por FK
         smallint anho
         varchar tipo
         varchar nombre_archivo
-        varchar sha256 UK
-        varchar estado
-        int version
-        timestamp created_at
+        char sha256 UK
+        bigint tamano_bytes
+        estado_ingesta estado "ENUM"
+        text motivo_rechazo "NULL"
+        timestamptz creado_en
     }
-    chunks_embeddings {
+    fragmentos_documento {
         uuid id PK
-        uuid doc_id FK
-        int chunk_index
-        text texto
-        vector_1024 embedding
+        uuid documento_id FK
+        integer indice "UQ (documento_id, indice)"
         varchar seccion
-        varchar gri_code
+        text texto "NOT NULL"
+        vectordim embedding "N según proveedor"
         jsonb metadata
+        timestamptz creado_en
     }
     catalogo_gri {
         varchar codigo PK
         varchar serie
         varchar tema
-        text elementos_minimos
-        text_arreglo keywords
+        text descripcion
+        text elementos_minimos "restaurado"
+        text_arreglo keywords "restaurado"
+        varchar version_catalogo
     }
     gri_analisis {
         uuid id PK
-        int empresa_id FK
-        uuid doc_id FK
-        varchar gri_code FK
-        varchar estado
-        text cita_fragmento
-        varchar seccion
-        uuid validado_por FK
-        timestamp updated_at
-    }
-    gri_analisis_historico {
-        uuid id PK
-        uuid gri_analisis_id FK
-        varchar estado_anterior
-        varchar estado_nuevo
-        uuid usuario_id FK
-        text observacion
-        timestamp created_at
+        uuid documento_id FK
+        varchar gri_codigo FK
+        uuid fragmento_id FK "NULL"
+        text cita_textual
+        estado_gri estado "NULL"
+        uuid validado_por FK "NULL"
+        varchar version_catalogo "snapshot RS-11"
+        timestamptz realizado_en
     }
     sanciones {
         uuid id PK
-        int empresa_id FK
-        uuid doc_id FK
-        decimal monto
-        varchar entidad
-        varchar doc_seccion
-        smallint anho
-        timestamp created_at
+        uuid documento_id FK
+        uuid fragmento_id FK "NULL"
+        varchar autoridad_emisora
+        numeric monto "(14,2) NULL = no determinado"
+        varchar moneda "NULL"
+        text cita_textual
+        timestamptz creado_en
     }
-    reportes_generados {
+    consultas_asistente {
         uuid id PK
-        int empresa_id FK
+        uuid usuario_id FK
+        uuid empresa_id FK "NULL"
         smallint anho
-        int version
-        varchar pdf_path
-        varchar sha256
-        uuid usuario_id FK
-        timestamp created_at
+        text pregunta
+        text respuesta
+        varchar modelo
+        timestamptz creado_en
     }
-    auditoria_eventos {
-        bigserial id PK
-        uuid usuario_id FK
-        varchar accion
-        varchar resultado
-        jsonb detalle
-        timestamp created_at
+    consulta_citas {
+        uuid id PK
+        uuid consulta_id FK
+        uuid fragmento_id FK
+        smallint orden
+        text extracto
     }
-    uso_llm {
-        date dia PK
-        int consultas
-        int tokens_in
-        int tokens_out
+    reportes_prospeccion {
+        uuid id PK
+        uuid empresa_id FK
+        uuid generado_por FK
+        smallint anho
+        varchar pdf_path UK
+        char sha256 UK
+        jsonb contenido_snapshot
+        timestamptz creado_en
     }
-    configuracion {
-        varchar clave PK
-        jsonb valor
+    auditoria {
+        uuid id PK
+        uuid usuario_id FK "NULL"
+        uuid empresa_id FK "NULL"
+        tipo_evento_auditoria tipo_evento "ENUM append-only"
+        jsonb detalle "corregido: era varchar(500)"
+        timestamptz fecha_hora_utc
     }
 ```
 
-## 3. Especificación física y detallada por tabla
+## Especificación física y detallada por tabla
 
-> Convención GAP: para cada tabla se define qué **es**, sus **columnas** (tipo físico), la **llave**, las **restricciones de integridad** y las **reglas semánticas** (invariantes que el negocio exige y que la BD debe garantizar o verificar).
+> Convención GAP: qué es, columnas, llave, restricciones y reglas semánticas. Los puntos ⚙ marcan las **correcciones aplicadas** al ERD recibido.
 
-### 3.1 `usuarios`
-- **Qué**: registro de las 3 personas del proyecto (1 Superadmin + 2 Administradores). Ningún "Usuario" público en fase 1 (acta 4 · REQ-10).
-- **Columnas**: `id UUID PK default gen_random_uuid()` · `nombre VARCHAR(120) NOT NULL` · `correo VARCHAR(160) NOT NULL UNIQUE (case-insensitive via índice funcional lower(correo))` · `password_hash TEXT NOT NULL` (bcrypt/argon2 — RNF-002) · `rol VARCHAR(20) NOT NULL CHECK (rol IN ('superadmin','administrador'))` · `habilitado BOOLEAN NOT NULL DEFAULT true` · `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`.
-- **Reglas semánticas (RS)**:
-  - **RS-01 (RN-002)**: en toda la tabla existe **exactamente 1 fila con `rol='superadmin'`**, **con independencia de su estado de habilitación**. Se garantiza con índice único: `CREATE UNIQUE INDEX uq_un_solo_superadmin ON usuarios ((rol)) WHERE rol='superadmin';` (sin filtro de `habilitado`, conforme a RN-002; además RF-013 impide deshabilitar al SuperAdmin). Al transferir el rol, la transacción (UPDATE doble) es **atómica**: la cuenta destino sube y la de origen baja en el mismo commit (RNF-011) — nunca hay 0 ni 2 SuperAdmin.
-  - **RS-02 (RN-005)**: deshabilitar un usuario invalida sus tokens (los JWT llevan `iat`; en invalidación se registra en auditoría y se exige re-login).
-  - **RS-03 (RN-001)**: sin usuario vigente no existe operación (todo FK `usuario_id` proviene de `usuarios.habilitado=true`).
+### 1 · IDENTIDAD Y ACCESO
 
-### 3.2 `roles`
-- **Qué**: catálogo cerrado de los 2 perfiles (para integridad referencial del RBAC). `rol PK ('superadmin','administrador')`, `descripcion TEXT` con la definición del acta 4 (REQ-10). No admite nuevos roles en fase 1.
+#### 1.1 `usuarios`
+- **Qué**: las 3 personas del proyecto (1 Superadmin + 2 Administradores). Sin "Usuario" público (acta 4 · REQ-10).
+- **Columnas**: `id UUID PK` · `nombre VARCHAR(200) NOT NULL` · `correo VARCHAR(255) NOT NULL` ⚙ **UNIQUE case-insensitive** (`CREATE UNIQUE INDEX ON usuarios (lower(correo))`; RN-007 «correo único de dominio autorizado») · `password_hash VARCHAR(255)` (**bcrypt** — almacena el prefijo del algoritmo; NOT NULL) · `rol rol_usuario NOT NULL` (ENUM/CHECK: `superadmin|administrador` — sustituye a la tabla `roles`) · `habilitado BOOLEAN NOT NULL DEFAULT true` · `intentos_fallidos INT NOT NULL DEFAULT 0` **(RN-012)** · `bloqueado_hasta TIMESTAMPTZ NULL` (5 intentos → 15 min) · `creado_en TIMESTAMPTZ NOT NULL DEFAULT now()`.
+- **Restricciones**:
+  - ⚙ **UNIQUE parcial del único Superadmin (RN-002, sin filtro de habilitado)**: `CREATE UNIQUE INDEX uq_un_solo_superadmin ON usuarios (rol) WHERE rol='superadmin';` — transferencia de rol = transacción doble atómica (RNF-012).
+- **RS**: deshabilitar cuenta invalida sesiones (`sesiones.revocada=true`) y exige re-login (RN-005). Sin usuario habilitado no hay operación (RS-03).
 
-### 3.3 `empresas`
-- **Qué**: catálogo de empresas analizables que el Superadmin gestiona (RF-017).
-- **Columnas**: `id SERIAL PK` · `nombre VARCHAR(160) NOT NULL UNIQUE` · `ticker VARCHAR(12) UNIQUE` · `sector VARCHAR(40) NOT NULL CHECK (sector IN ('Minería','Energía','Petróleo y Gas'))` (**RN-019 hardcode en la BD**) · `activo BOOLEAN DEFAULT true`.
-- **Nota de alcance (decisión del equipo)**: en fase 1 **no existe columna `pais`** — todas las empresas cotizan en la **Bolsa de Valores de Lima (Perú)**, el foco de fase 1. Si el día de mañana la herramienta se usa en otro país (fase 2+), se añadiría `pais` con default 'Perú' sin romper nada (migración prevista en el checklist).
-- **RS**: **RS-04 (RN-019)**: el análisis solo alcanza empresas del CHECK de sector; cualquier flujo que intente analizar otra empresa ni siquiera encuentra filas habilitadas. Empresas `activo=false` no aparecen en la selección de ingesta.
+#### 1.2 `sesiones`
+- **Qué**: sesiones activas de cada usuario (Capa 6: `Usuario·Sesión`).
+- **Columnas**: `id UUID PK` · `usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE` · `creada_en TIMESTAMPTZ` · `ultima_actividad TIMESTAMPTZ` (soporte del idler RNF: inactivo por env var) · `revocada BOOLEAN NOT NULL DEFAULT false`.
+- **RS** ⚙: no hay borrado (RNF-019); revocar es la «eliminación» lógica. El JWT/Cookie referencia esta fila; cada petición valida `revocada=false` y habilitación (rol vigente — RNF-006 de trazabilidad).
 
-### 3.4 `documentos`
-- **Qué**: cada `.md` subido (memoria anual o reporte de sostenibilidad) con su estado del pipeline.
-- **Columnas**: `id UUID PK` · `empresa_id INT REFERENCES empresas(id)` · `anho SMALLINT NOT NULL CHECK (anho BETWEEN 2000 AND 2100)` · `tipo VARCHAR(30) CHECK (tipo IN ('memoria_anual','reporte_sostenibilidad'))` · `nombre_archivo VARCHAR(255)` · `ruta_origen TEXT` (copia del .md en disco del backend, RN-022) · `sha256 CHAR(64) NOT NULL UNIQUE` (**RNF-010 SHA-256**) · `estado VARCHAR(20) CHECK (estado IN ('indexado','observado','rechazado'))` **RN-011** · `motivo TEXT NULL` (texto exacto del guard o del observado) · `version INT NOT NULL DEFAULT 1` (se incrementa por re-sube con contenido distinto, RN-033) · `chunks_count INT NULL` (éxito: nº chunks) · `created_by UUID REFERENCES usuarios(id)` · `created_at TIMESTAMPTZ` · **`UNIQUE(empresa_id, anho, tipo)`** (unicidad documental por empresa/año/tipo — RN-033).
-- **RS**: **RS-05 (RN-014)**: `empresa_id` y `anho` obligatorios (sin asociación no se ingesta). **RS-06 (RF-022)**: es la "máquina de estados" síncrona de la ingesta — un documento solo existe si la operación de subida terminó (no hay estados intermedios residuales; en fallo se transacciona completo). **RS-07 (RN-027)**: **sin DELETE** (revoked); los rechazos también quedan guardados para trazabilidad.
+#### 1.3 `tokens_recuperacion`
+- **Qué**: tokens de recuperación de contraseña (un solo uso).
+- **Columnas**: `id UUID PK` · `usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE` · `token_hash VARCHAR(255)` ⚙ **UNIQUE — se guarda hash del token, nunca el token en claro** · `expira_en TIMESTAMPTZ` · `usado BOOLEAN NOT NULL DEFAULT false` (single-use) · `creado_en TIMESTAMPTZ`.
+- **RS**: expirado o usado → inválido; el cambio de contraseña revoca todas las sesiones del usuario.
 
-### 3.5 `chunks_embeddings` — la BD vectorizada (físico)
-- **Qué**: cada fragmento textual (chunk) con su **embedding**, núcleo del RAG.
-- **Columnas**: `id UUID PK` · `doc_id UUID REFERENCES documentos(id) ON DELETE CASCADE` (solo si un día se eliminara el doc, nunca en fase 1) · `chunk_index INT` · `texto TEXT NOT NULL` · **`embedding VECTOR(N)`** (pgvector; N según el modelo del proveedor: p. ej. 1024) · `seccion VARCHAR(200)` (encabezado markdown del chunk — llave de la cita) · `gri_code VARCHAR(12) NULL` (heredada del encabezado de la tabla GRI) · `n_tabla INT NULL` (n.º de fila dentro de la tabla origen) · `metadata JSONB` (empresa_id, año, tipo doc, página/parrafo) · `chunk_id_hash CHAR(64) NOT NULL UNIQUE` (sha256 del texto — **RNF-16.idempotencia**: re-ingesta no duplica chunks).
-- **Físico**:
-  - `CREATE EXTENSION IF NOT EXISTS vector;`
-  - `ALTER TABLE chunks_embeddings ALTER COLUMN embedding TYPE vector(1024);`
-  - Índice **HNSW**: `CREATE INDEX idx_chunks_hnsw ON chunks_embeddings USING hnsw (embedding vector_cosine_ops) WITH (m=16, ef_construction=64);`
-  - Búsqueda tipo: `ORDER BY embedding <=> :q LIMIT 4` (k=4, cosine).
-  - Parámetros elegidos para ~cientos de documentos en el server universitario (RNF-19/21): HNSW es o(√n) en el fseek.
-- **RS**: **RS-08**: `doc_id + chunk_index` es único por versión de documento; a su vez `chunk_id_hash` es único global (el mismo contenido nunca se indexa dos veces). **RS-09**: la metadata es **fuente de las citas**: `citación = documentos.nombre_archivo + chunks_embeddings.doctor` — nunca correspondiente a la mencionada por el LLM (RN-022/RNF, post-check ids).
+### 2 · EMPRESAS E INGESTA
 
-### 3.6 `catalogo_gri`
-- **Qué**: **el estándar**: tabla precargada (seed) del GRI Universal + tópicos de la serie 200/300/400. Define el "GRI óptimo" (pregunta explícita del PO).
-- **Columnas**: `codigo VARCHAR(12) PK` (p. ej. 'GRI 403') · `serie VARCHAR(3) CHECK IN ('100','200','300','400')` · `tema VARCHAR(120)` · `elementos_minimos TEXT` (checklist de qué debe reportar una empresa completa para el estado OK — descritos con el PO) · `keywords TEXT[]` (palabras clave de evidencia para la detección determinista) · `vigente_desde SMALLINT` (año de la versión del estándar).
-- **RS**: **RS-10 (RN-017)**: la detección de brechas **lee de aquí**; el modelo no sugiere indicadores inexistentes: solo se registran códigos existentes en `catalogo_gri`. **RS-11**: conservación de la versión del estándar analizada en cada fila de análisis (si GRI actualiza, los análisis anteriores no mutan).
+#### 2.1 `empresas`
+- **Qué**: catálogo de empresas analizables (gestión del Superadmin).
+- **Columnas**: `id UUID PK` · `nombre VARCHAR(200) NOT NULL UNIQUE` · `sector VARCHAR NOT NULL` ⚙ **CHECK cerrado** (`sector IN ('Minería','Petróleo y Gas','Energía')` — RN-015, en la BD) · `activo BOOLEAN NOT NULL DEFAULT true` · `creado_en TIMESTAMPTZ`.
+- **Nota de alcance**: sin `pais` en fase 1 — BVL-Perú (fase 2+ añade columna con default).
+- **RS (RN-015)**: el análisis solo alcanza empresas del CHECK; `activo=false` no aparece en ingesta.
 
-### 3.7 `gri_analisis`
-- **Qué**: fila **brecha por empresa, documento, código GRI** — incl. estados OK (RN-019: todo se registra). Se **llena automáticamente al terminar la ingesta**: cuando el pipeline del `.md` termina, el motor de análisis corre contra `catalogo_gri` y persiste las filas **sin estado** (pendientes de asignación manual por el Administrador) **en la misma operación síncrona** → la generación de reporte **SOLO consulta esta tabla (SELECT determinista), nunca al LLM**.
-- **Columnas**: `id UUID PK` · `empresa_id` · `doc_id` · `gri_code` FK→catalogo_gri · `estado VARCHAR(20) CHECK IN ('OK','BAJA SUSTANCIA','SUB-REPORTADO')` — **3 estados únicos, asignados manualmente por el Administrador (RN-016)** · `cita_fragmento TEXT` (chunk referenciado) · `seccion VARCHAR(200)` · `observacion TEXT NULL` (exigida si el humano cambió el estado, RF-025) · `validado_por UUID NULL REFERENCES usuarios(id)` · `updated_at TIMESTAMPTZ`.
-- **RS**: **RS-12 (RN-018)**: `estado` (final) solo es visible para el reporte cuando `validado_por IS NOT NULL` — la generación bloquea si existen filas `NULL` (CU007 paso 2). **RS-13 (RN-020)**: toda fila con fuente `cita_fragmento + seccion`; el `estado` lo asigna **manualmente el Administrador** (RN-016), nunca por criterio libre del LLM. **RS-14 (RN-019)**: los códigos OK **también** se persisten con cita — tabla `gri_analisis` sin filtrado de resultado.
+#### 2.2 `documentos`
+- **Qué**: cada `.md` subido con su estado del pipeline síncrono.
+- **Columnas**: `id UUID PK` · `empresa_id UUID REFERENCES empresas(id)` · `creada_por UUID REFERENCES usuarios(id)` · `anho SMALLINT NOT NULL CHECK ( BETWEEN 2000 AND 2100)` · `tipo VARCHAR NOT NULL CHECK IN ('memoria_anual','reporte_sostenibilidad')` · `nombre_archivo VARCHAR(255)` ⚙ guard: **sin espacios ni mayúsculas** (regla del guard) · `sha256 CHAR(64) NOT NULL UNIQUE` (RNF-011 anti-duplicado de contenido) · `tamano_bytes BIGINT NOT NULL CHECK (<= 50 MB — RN-015 límite de tamaño)` · `estado estado_ingesta NOT NULL` (ENUM: `indexado|observado|rechazado`) · `motivo_rechazo TEXT NULL` (texto exacto del guard) · `creado_en TIMESTAMPTZ`.
+- **Restricciones**: ⚙ **UNIQUE parcial `(empresas_id, anho, tipo) WHERE estado='indexado'`** (unicidad documental por empresa/año/tipo de documentos exitosos — RN-026/033).
+- **RS**: integridad atómica (RN-026/RN-026): documento rechazado → **cero fragmentos y cero análisis** (operación transaccional completa con rollback); solo queda el registro con `estado='rechazado'` y motivo, sin DELETE físico (RNF-019).
 
-- **RS-22 (caso borde — sin sanciones identificadas / empresa "sana")**: si el análisis no identifica sanciones, la tabla `sanciones` **quedará vacía para esa empresa/año** (su señal es la ausencia de filas). El reporte NO imprimirá "la empresa no tiene sanciones": compone un **bloque determinístico de plantilla**: "Sanciones identificadas: no se registraron sanciones en la información ingestada (doc + sección, período [anho])" — es la única formulación verificable (RN-021: la ausencia de filas no prueba inexistencia fuera de los docs). Las filas de `gri_analisis` sí se crean igual (estados OK con cita, RN-016); el snapshot solo registrará líneas de brechas.
+#### 2.3 `fragmentos_documento` (BD vectorizada — núcleo del RAG)
+- **Qué**: fragmento del documento con su embedding (antes `chunks_embeddings`).
+- **Columnas**: `id UUID PK` · `documento_id UUID REFERENCES documentos(id) ON DELETE CASCADE` · `indice INT NOT NULL` ⚙ **UNIQUE `(documento_id, indice)`** (combinado, no global — un índice es posición dentro del documento) · `seccion VARCHAR(500)` (encabezado markdown — llave de la cita RN-034) · `texto TEXT NOT NULL` ⚙ **CORREGIDO: es NOT NULL** — un fragmento sin texto no es buscable ni citable · `embedding VECTOR(N) NOT NULL` (pgvector; **la dimensión depende del modelo de embeddings del proveedor** — fijar en migración: p. ej. 1024) · `metadata JSONB NOT NULL` (empresa_id, año, tipo doc, fila de tabla origen) · `creado_en TIMESTAMPTZ`.
+- **Físico**: ⚙ **índice HNSW obligatorio**: `CREATE INDEX idx_frag_hnsw ON fragmentos_documento USING hnsw (embedding vector_cosine_ops) WITH (m=16, ef_construction=64);` — búsqueda `ORDER BY embedding <=> :q LIMIT 4` (k=4 cosine).
+- **RS**: consultado por el AI Harness (Capa 5); provee las citas verificables (doc/empresa/año/sección deducibles de la propia fila + joins).
 
-### 3.8 `gri_analisis_historico`
-- **Qué**: auditoría de cambios de estado (complementa la auditoría global con granularidad de campo).
-- **Columnas**: `id UUID PK` · `gri_analisis_id FK` · `estado_anterior VARCHAR(20) NOT NULL` · `estado_nuevo VARCHAR(20) NOT NULL` · `usuario_id FK` · `observacion TEXT` · `created_at TIMESTAMPTZ`.
-- **RS**: **RS-15 (RN-018/RN-028)**: insert-only; disparado por trigger tras UPDATE de `gri_analisis.estado`. Un cambio de estado también se registra (traza). 
+### 3 · ANÁLISIS GRI
 
-### 3.9 `sanciones`
-- **Qué**: sanciones económicas identificadas, siempre con cita verificable (RN-020).
-- **Columnas**: `id UUID PK` · `empresa_id` · `doc_id` · `anho SMALLINT` · `entidad VARCHAR(160)` (norma/entidad emisora) · `monto NUMERIC(14,2) NULL` · `moneda VARCHAR(3) NULL` · `doc_seccion VARCHAR(200) NOT NULL` · `fragmento TEXT NOT NULL` · `created_at`.
-- **RS**: **RS-16 (RN-020)**: no hay sanción sin cita (`doc_seccion` + `doc_id` obligatorios); prohibido insertar desde conocimiento general del LLM.
+#### 3.1 `catalogo_gri`
+- **Qué**: el estándar precargado (seed GRI) — la IA no decide el estándar.
+- **Columnas**: `codigo VARCHAR(20) PK` · `serie VARCHAR(50) CHECK IN ('100','200','300','400')` · `tema VARCHAR(200) NOT NULL` · `descripcion TEXT` ⚙ **+ `elementos_minimos TEXT NOT NULL` y `keywords TEXT[] NOT NULL` — RESTAURADOS (RS-10)**: sin ellos la detección determinista y el criterio OK/Baja/Sub del estado manual quedan indefinidos · `version_catalogo VARCHAR(30) NOT NULL` (versión del estándar — permitía conservar la versión del análisis).
+- **RS (RS-10/RN-027)**: toda fila de `gri_analisis` referencia solo códigos existentes aquí.
 
-### 3.10 `reportes_generados`
-- **Qué**: entregables PDF, con versionado e inmutabilidad.
-- **Columnas**: `id UUID PK` · `empresa_id` · `anho` · `sector VARCHAR(40)` (snapshot del texto A&D: sector no depende de join en futuro) · `version INT NOT NULL` · `pdf_path TEXT NOT NULL` · `sha256 CHAR(64) NOT NULL` · `resumen_ejecutivo TEXT` (texto **determinístico generado por la plantilla a partir de los datos de `gri_analisis`** — sin LLM en la generación) · — consume RN-026: los valores del reporte no se leen "en vivo" con el LLM) · `usuario_id FK` · `created_at` · **`UNIQUE(empresa_id, anho, version)`**.
+#### 3.2 `gri_analisis`
+- **Qué**: **la tabla del análisis** — fila por documento + código GRI (empresa/año se derivan del documento); incluye los OK.
+- **Columnas**: `id UUID PK` · `documento_id UUID REFERENCES documentos(id)` · `gri_codigo VARCHAR(20) REFERENCES catalogo_gri(codigo)` · `fragmento_id UUID NULL REFERENCES fragmentos_documento(id)` — cita textual proviene del fragmento (verificable) · `cita_textual TEXT NOT NULL` (transcripción textual del fragmento/doc) · `estado estado_gri NULL` (ENUM: `OK | BAJA SUSTANCIA | SUB-REPORTADO`) — **asignado manualmente por el Administrador**, sin `estado_sugerido` (RS-13/RN-029) · `validado_por UUID NULL REFERENCES usuarios(id)` (NULL = pendiente CU006) · ⚙ **`version_catalogo VARCHAR(30) NOT NULL` — RESTAURADA (RS-11)**: snapshot de la versión del catálogo al analizar; si el estándar cambia, el registro queda fiel a su fecha · `realizado_en TIMESTAMPTZ`.
+- **Restricciones**: ⚙ **UNIQUE parcial `(documento_id, gri_codigo)`** — una sola fila de resultados por doc/código (evita duplicados de análisis).
+- **RS**: el reporte solo lee estados **validados** (`validado_por IS NOT NULL` y `estado IS NOT NULL` — RS-12/RN-027). El estado del análisis se llena automáticamente al terminar la ingesta (pipeline síncrono) y queda pendiente CU006. **El historial de cambios** de estado se registra en `auditoria` (`AJUSTE_BRECHA` con detalle JSONB: analisis_id, anterior→nuevo, observación — sustituye a `gri_analisis_historico`).
 
+#### 3.3 `sanciones`
+- **Qué**: sanciones identificadas en los documentos — negocio puro del reporte.
+- **Columnas**: `id UUID PK` · `documento_id UUID REFERENCES documentos(id)` · `fragmento_id UUID NULL REFERENCES fragmentos_documento(id)` · `autoridad_emisora VARCHAR(255) NOT NULL` · `monto NUMERIC(14,2) NULL` ⚙ **NULL = monto no determinado — nunca 0 por defecto (RN-031/RN-032)** · `moneda VARCHAR(10) NULL` · `cita_textual TEXT NOT NULL` · `creado_en TIMESTAMPTZ`.
+- **RS**: ⚙ **sanción enlazada al DOCUMENTO; empresa y año se derivan de él** (decisión del modelo — evita duplicar FKs). Sin cita no hay sanción (RN-038): siempre con `fragmento_id` o cita extraída del documento.
 
-- **RS**: **RS-17 (RN-027)**: el binario del PDF nunca se reemplaza ni se edita; toda regeneración crea `version+1` (unique `empresa_id, anho, version`). **RS-18a (RN-025)**: al generar, la integridad del snapshot la garantiza `reporte_detalle_snapshot` (ver 3.10bis) — insertada en la misma transacción.
+### 4 · ASISTENTE RAG
 
-### 3.10bis `reporte_detalle_snapshot` (normalizada — mejora del ERD del equipo)
-- **Qué**: fila por indicador incluido en un reporte generado (reemplaza el `brechas_snapshot JSONB` anterior: ahora es **tabla normalizada**, mejor para auditoría y para el dashboard fase 2).
-- **Columnas**: `id BIGSERIAL PK` · `reporte_id UUID FK→reportes_generados ON DELETE RESTRICT` · `gri_analisis_id UUID FK→gri_analisis` (v1) **o** `sancion_id UUID FK→sanciones` — solo **uno** de los dos manda (CHECK exacto: `CHECK (num_nonnulls(gri_analisis_id, sancion_id) = 1)`) · `tipo_linea VARCHAR(20) CHECK IN ('BRECHA','SANCION','METRICA')` · `gri_code VARCHAR(12) NULL` · `estado_final VARCHAR(20) NULL` (snapshot, no vivo) · `cita_final TEXT NOT NULL` (doc + sección al momento de emitir) · `num_monto NUMERIC(14,2) NULL` (para SANCION) · `es_brecha BOOLEAN DEFAULT true` (false = línea informativa de indicador OK/SANCION…, RN-025 incluye los OK) · `created_at TIMESTAMPTZ`.
-- **RS-18 (RN-025)**: **RS** de integridad del snapshot: cada reporte debe tener **≥ 1 línea por cada brecha con estado validado** de su empresa/año (incluidas las OK con `es_brecha=true`, `estado_final='OK'`) + cada sanción citada; el servicio inserta el snapshot **en la misma transacción** que `reportes_generados`. La tabla es **append-only** (nunca se edita, RN-027): si el estado de una brecha cambia después, el reporte anterior sigue siendo fiel a su fecha. El `gri_analisis_id` / `sancion_id` del snapshot no necesita coincidir con el estado vivo actual (el snapshot es fiel a su fecha de emisión).
+#### 4.1 `consultas_asistente` — **NUEVA**
+- **Qué**: cada consulta al asistente IA (Capa 6: `ConsultaAsistente`) — el RAG ahora persiste.
+- **Columnas**: `id UUID PK` · `usuario_id UUID REFERENCES usuarios(id)` · `empresa_id UUID NULL REFERENCES empresas(id)` (NULL = consulta sin empresa activa) · `anho SMALLINT NULL` · `pregunta TEXT NOT NULL` · `respuesta TEXT NOT NULL` · `modelo VARCHAR(100) NOT NULL` (GLM-5.2 :free, respaldo…) · `creado_en TIMESTAMPTZ`.
+- **RS**: **sustituye a `uso_llm` como medidor del free tier** (D-02): consumo diario = `COUNT(*) GROUP BY date(creado_en), modelo` vs `LLM_DAILY_LIMIT` (env var) — RNF-027.
 
-### 3.11 `auditoria_eventos`
-- **Qué**: bitácora append-only de eventos sensibles (cuales: LOGIN, LOGIN_FALLIDO, CAMBIO_ROL, INGESTA, INGESTA_FALLIDA, GEN_REPORTE, AJUSTE_BRECHA, DESCARGA).
-- **Columnas**: `id BIGSERIAL PK` · `usuario_id UUID NULL` (nulo = evento anónimo, p. ej. login fallido de correo inexistente) · `accion VARCHAR(20) CHECK (lista arriba)` · `resultado VARCHAR(30)` · `detalle JSONB` (datos de contexto: hash, doc_id, motivo, cambio de rol anterior→nuevo, cuota restante) · `ip INET NULL` (introspección de red académica) · `created_at TIMESTAMPTZ DEFAULT now()` **indexed** para rangos de fecha.
-- **RS**: **RS-19 (RN-028/30)**: `REVOKE UPDATE, DELETE` a la app rol de BD — la app solo puede **INSERT/SELECT**; particion por mes si creciera (no necesario en fase 1).
+#### 4.2 `consulta_citas` — **NUEVA**
+- **Qué**: citas · fuentes de cada respuesta (constancia de la post-verificación de IDs citados).
+- **Columnas**: `id UUID PK` · `consulta_id UUID REFERENCES consultas_asistente(id) ON DELETE CASCADE` · `fragmento_id UUID REFERENCES fragmentos_documento(id)` — FK al fragmento citado (uuid, correcto) · `orden SMALLINT NOT NULL` (posición en la respuesta) · `extracto TEXT NOT NULL`.
+- **RS**: cada cita debe existir en el contexto recuperado (post-check ids — si el LLM cita fuera del contexto, la cita no se inserta).
 
-### 3.12 `uso_llm`
-- **Qué**: contador diario de consumo del asistente (free tier) — soporte de RNF-028.
-- **Columnas**: `dia DATE PK` · `consultas INT` · `tokens_in INT` · `tokens_out INT` · `modelo VARCHAR(80)` (último modelo usado — útil para incidencias del free: GLM-5.2 etc.) · `incidencias INT` (timeouts/failover).
-- **RS**: **RS-20 (RNF-028)**: el middleware bloquea el chat cuando `consultas` del día ≥ límite (`configuracion.llm_daily_limit`, default 200); muestra aviso pero el resto del sistema sigue operando (fail-safe)e del free plan.
+### 5 · REPORTES
 
-### 3.13 `configuracion`
-- **Qué**: parámetros del sistema (mock Configuración).
-- **Columnas**: `clave VARCHAR(60) PK` (`inactivery_min`, `bloqueo`, `notificaciones`, `upload_max_mb=50`, `llm_daily_limit=200`) · `valor JSONB` · `actualizado_por`, `updated_at`.
-- **RS**: **RS-21 (RN-036, RNF-014)**: los guard del upload y del idle-timer **leen de aquí** — cambiar límites no toca código.
+#### 5.1 `reportes_prospeccion`
+- **Qué**: entregables PDF inmutables (antes `reportes_generados` + `reporte_detalle_snapshot` fusionados).
+- **Columnas**: `id UUID PK` · `empresa_id UUID REFERENCES empresas(id)` · `generado_por UUID REFERENCES usuarios(id)` · `anho SMALLINT NOT NULL` · `pdf_path VARCHAR(500) NOT NULL UNIQUE` (WeasyPrint) · `sha256 CHAR(64) NOT NULL UNIQUE` (integridad del binario) · `contenido_snapshot JSONB NOT NULL` (estado consolidado congelado: brechas con `estado_final` + **cita textual** + sanciones con montos — sustituye la tabla normalizada) · `creado_en TIMESTAMPTZ`.
+- **Restricciones**: ⚙ **UNIQUE parcial `(empresa_id, anho)` — RESTAURADO (RN-041)**: no se generan dos reportes de la misma empresa/año (si cambia el análisis → RNF: consultar regla con PO antes de habilitar regeneración).
+- **RS**: el PDF no se invoca al LLM; todo dato proviene de SELECT determinista a `gri_analisis`(validado) + `sanciones` (RN-040/026). El snapshot es fiel a su fecha: cambios posteriores de estados no afectan el PDF emitido (RN-042).
 
-## 4. Reglas semánticas globales (integración de las reglas anteriores)
+### 6 · AUDITORÍA
 
-1. **Traza completa sin borrado**: ninguna tabla de negocio (documentos, chunks, gri_analisis, reportes, auditoría) admite DELETE físico en fase 1 (RN-030). Las 'eliminaciones' lógicas manejables son `activo=false` / `habilitado=false`.
-2. **Un único Superadmin** en todo instante (RS-01) con transferencia atómica — condición de negocio clave del enunciado del usuario en captura.
-3. **Estado validado por humano** es la llave del reporte: sin `validado_por`, CU007 se bloquea (RS-12) — así el reporte nunca sale de la analítica no supervisada.
-4. **El estándar GRI manda**: toda fila de análisis referencia `catalogo_gri`; el LLM no aporta códigos ni estados por sí mismo (RS-10/13).
-5. **La vectorial es el dominio de consulta**: los fragments están autocontenidos (texto + metadata completa); una respuesta del RAG **síments** puede saber a doc/empresa/año/sección desde la propia fila vectorial.
-6. **Cotidiano sobre free tier**: `uso_llm` es la tabla del medidor — nada del flujo de ingesta la consulta (embeddings por API, RNF-028).
+#### 6.1 `auditoria` (antes `auditoria_eventos`)
+- **Qué**: bitácora **append-only** de eventos sensibles (Capa 7: `solo INSERT`).
+- **Columnas**: `id UUID PK` · `usuario_id UUID NULL REFERENCES usuarios(id)` (NULL = evento anónimo, p. ej. login fallido de correo inexistente) · `empresa_id UUID NULL REFERENCES empresas(id)` (contexto opcional — ⚙ FK visibles aquí) · `tipo_evento tipo_evento_auditoria NOT NULL` (ENUM: `LOGIN | LOGIN_FALLIDO | CAMBIO_ROL | INGESTA | INGESTA_FALLIDA | GEN_REPORTE | AJUSTE_BRECHA | DESCARGA`) · `detalle JSONB NOT NULL` ⚙ **CORREGIDO: era VARCHAR(500)** — contexto por evento (hash, doc_id, motivo, rol anterior→nuevo, resultado de la operación, análisis_id para AJUSTE_BRECHA) · `fecha_hora_utc TIMESTAMPTZ NOT NULL DEFAULT now()` **(RNF-024: UTC; presentación en America/Lima solo en la UI)**.
+- **Físico**: ⚙ **REVOKE UPDATE, DELETE** al rol de la app — la BD garantiza el append-only (RN-043/RS-19): los eventos de `AJUSTE_BRECHA` sustituyen el historial de estado de `gri_analisis_historico`.
+- **Nota** ⚙: sin columna `ip` en el modelo depurado (la IP queda opcional en fase 2; el entorno es académico de 3 usuarios).
 
-## 4bis. Puntaje ESG (fase 1 — RN-031 / RF-028)
+## Reglas semánticas globales (v3)
 
-El puntaje ESG de una empresa/año se calcula desde los estados manuales: **OK = 100 · Baja sustancia = 50 · Sub-reportado = 0**, promediado sobre los códigos evaluados. Se persiste/expone para el reporte (la visualización tipo dashboard sigue en fase 2). Campo/vista: `vw_puntaje_esg(empresa_id, anho, puntaje, codigos_evaluados)` — devuelve **«no disponible» (NULL)** cuando **no se detectó ningún código GRI** (RN-032/RF-055: no debe calcularse como 0).
+1. **Sin borrado físico**: solo `sesiones.revocada`, `tokens_recuperacion.usado`, `empresas.activo=false`, `usuarios.habilitado=false` (RNF-019).
+2. **Un solo Superadmin**: índice único parcial — transferencia atómica (RS-01).
+3. **El estado lo asigna el humano**: sin `estado_sugerido`; `validado_por` exige humanidad (RS-12).
+4. **El estándar GRI manda**: `catalogo_gri` con `elementos_minimos` + `keywords` alimenta la detección (RS-10); `version_catalogo` se congela en el análisis (RS-11).
+5. **La vectorial es el dominio de consulta**: metadata autocontenida por fragmento — citas trazables (RS-09).
+6. **Bloqueo de cuenta**: 5 intentos → 15 min (`intentos_fallidos`/`bloqueado_hasta`, RN-012) + auditoría.
+7. **Un reporte por empresa/año**: UNIQUE parcial (RN-041) — regeneración solo si el PO la habilita.
 
-## 4ter. Sanciones sin monto y no determinados (RF-040/RF-055, RNF-019)
-
-`sanciones.monto` puede ser `NULL` (no determinado) — **nunca 0 por defecto**; el reporte muestra por separado el **monto total cuantificado** y el **número de sanciones sin monto**. Se agrega `sanciones.sin_monto BOOLEAN` (derivado) o se infiere de `monto IS NULL` para las vistas.
-
-## 4quater. Integridad de la ingesta (RN-039 / RF-054)
-
-Un documento **rechazado o con ingesta interrumpida** **no** incorpora filas a `chunks_embeddings` ni resultados de análisis: la operación es **atómica** (RNF-017) y, si falla, **revierte**. En `documentos` solo se conserva el registro con `estado='rechazado'` y `motivo`, para historial y auditoría.
-
-## 5. Vistas de agregación (preparatorias para el dashboard de fase 2)
-
-Ya diseñadas y sin costo operativo (la fase 1 solo las crea, no las expone):
-
-- `vw_brechas_por_sector_anho` — conteo de brechas por estado y sector (dashboard 1: módulo crítica por sector).
-- `vw_sanciones_empresa_anho` — sumatorias/montos y nº (dashboard 2).
-- `vw_uso_llm_diario` — consumo por día (panel del Superadmin) — sirve también control operativo del free tier.
-
-En fase 2 el dashboard es **GET-only** sobre estas vistas; no hay cambios de modelo.
-
-## 6. Checklist GAP
+## Checklist GAP
 
 | Paso GAP | Estado |
 |---|---|
-| Modelo conceptual (entidades, relaciones) | ✔ §1 (texto) |
-| Modelo lógico (ER diagrama mermaid) | ✔ §2 (compila sin errores de parseo) |
-| Modelo físico (columnas/tipos/índices detallados) | ✔ §3 |
-| Reglas semánticas (invariantes) | ✔ §3 + §4 |
-| **Diccionario de datos (norma GAP: campo · tamaño · tipo · descripción · null)** | ⏳ documento `03-Diccionario-de-Datos.md` — se completa al congelar el diseño, campo a campo de las 14 tablas |
+| Modelo conceptual (entidades, relaciones) | ✔ §cadena + relaciones (13 tablas) |
+| Modelo lógico (ER diagrama mermaid) | ✔ (compila; incluye los 4 grupos de Capa 7) |
+| Modelo físico (columnas/tipos/índices) | ✔ §Especificación |
+| Reglas semánticas (invariantes) | ✔ por tabla + §globales |
+| **Diccionario de datos (GAP: campo · tipo · descripción · NULL)** | ✔ documento `03-Diccionario-de-Datos.md` — 13 tablas fichadas con los cambios aplicados |
+
+> Referencias cruzadas: análisis de justificación → `05-Analisis-Por-que-Existen-las-Tablas.md` · stack/env vars de límites → `03-Stack-Tecnologico/01-Stack-Tecnologico.md` §4 · ERD vigente = «Diagrama ER — Modelo de Datos Depurado» (13 tablas, PostgreSQL 16 + pgvector, monolito modular).
