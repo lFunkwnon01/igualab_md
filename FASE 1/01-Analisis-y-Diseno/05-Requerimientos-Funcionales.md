@@ -1,6 +1,6 @@
 # 05 · Requerimientos Funcionales — FASE 1 (numeración vigente)
 
-> **Fuente única:** `analisis-diseno-latex/main.pdf`. 28 RF atómicos, cada uno derivado de una o varias RN.
+> **Fuente única:** `analisis-diseno-latex/main.pdf`. 30 RF atómicos, cada uno derivado de una o varias RN.
 
 | N° | Descripción del Requerimiento Funcional | Reglas de Negocio | Prioridad | Analista |
 |---|---|---|---|---|
@@ -29,6 +29,8 @@
 | RF-023 | Consultar al asistente en lenguaje natural sobre el corpus indexado. | RN-033, RN-034, RN-037 | MUST HAVE | C. Ordinola |
 | RF-024 | Recibir respuestas con citas y con el dominio restringido a sostenibilidad. | RN-034, RN-035, RN-036 | MUST HAVE | L. Millones |
 | RF-025 | Generar el reporte de prospección en PDF a partir de los resultados validados. | RN-038, RN-039, RN-040 | MUST HAVE | C. Ordinola |
-| RF-026 | Visualizar y descargar el historial de reportes de prospección. | RN-041 | NICE TO HAVE | L. Millones |
-| RF-027 | Visualizar las brechas GRI de una empresa con su cita de respaldo. | RN-028, RN-034 | MUST HAVE | C. Ordinola |
-| RF-028 | Consultar y filtrar los eventos de auditoría. | RN-042, RN-043, RN-044, RN-045 | NICE TO HAVE | L. Millones |
+| RF-026 | Visualizar el historial de reportes de prospección. | RN-041 | MUST HAVE | L. Millones |
+| RF-027 | Descargar el historial de reportes de prospección. | RN-041 | NICE TO HAVE | L. Millones |
+| RF-028 | Visualizar las brechas GRI de una empresa con su cita de respaldo. | RN-028, RN-034 | MUST HAVE | C. Ordinola |
+| RF-029 | Visualizar los eventos de auditoría en un panel. | RN-042, RN-043, RN-044, RN-045 | NICE TO HAVE | L. Millones |
+| RF-030 | Filtrar los eventos de auditoría por tipo de evento, usuario y fecha. | RN-042, RN-043, RN-044, RN-045 | NICE TO HAVE | L. Millones |

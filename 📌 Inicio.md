@@ -1,7 +1,7 @@
 # 📌 Igualab — Vault de Proyecto
 
 > **Plataforma de analítica de sostenibilidad (RAG)** — Igualab / cliente Oscar Baldeón (PO).
-> Estado: 🟢 **A&D reescrito en LaTeX y auditado** · **Plan v1.2 aprobado** (acta 5, 11/09) · **RN-001…RN-045 · RF-001…RF-028 · RNF-001…RNF-033** · secciones **1–13** completas.
+> Estado: 🟢 **A&D reescrito en LaTeX y auditado** · **Plan v1.2 aprobado** (acta 5, 11/09) · **RN-001…RN-045 · RF-001…RF-030 · RNF-001…RNF-030** · secciones **1–13** completas.
 > Alcance: **3 usuarios / 2 roles** (1 SuperAdmin + 2 Administradores) · sin Bolsa de Valores, sin LinkedIn, dashboards → fase 2, ingesta solo **`.md`** con tablas de pipes · **RAG simple, sin MCP** · sectores: **Minería, Petróleo y Gas, Energía**.
 > Mock de referencia (fuente viva del diseño): <https://igualab.vercel.app/>
 
@@ -31,8 +31,8 @@
 - `02-Antecedentes-del-Analisis-GRI.md` — memorias anuales, reportes GRI, qué es una **brecha** y cómo se califica.
 - `03-Diagramas-de-Procesos-TO-BE.md` — procesos to-be en Mermaid (+ BPMN en `diagramas-BPMN/`).
 - `04-Reglas-de-Negocio.md` — **RN-001…RN-045** (plantilla `SI…ENTONCES…SE APLICA A…SE BASA EN…EXCEPCIÓN`).
-- `05-Requerimientos-Funcionales.md` — **RF-001…RF-028** (atómicos + Analista).
-- `06-Requerimientos-No-Funcionales.md` — **RNF-001…RNF-033** (categorizados).
+- `05-Requerimientos-Funcionales.md` — **RF-001…RF-030** (atómicos + Analista).
+- `06-Requerimientos-No-Funcionales.md` — **RNF-001…RNF-030** (categorizados).
 - `07-Casos-de-Uso-Diagrama.md` · `08-Especificacion-Casos-de-Uso.md` — **CU001…CU007** + especificaciones.
 - `09-Revision-A&D-v2-vs-FASE1.md` · `10-Contexto-Embeddings-y-Auditoria-AyD.md` — bitácora histórica (el doc 10, Parte 1, fija la decisión de **embeddings/LLM por API**).
 
@@ -53,7 +53,7 @@
 - [[11 Stakeholders y Contactos]] — cliente, equipo SCRUM y equipo académico.
 
 ### 5 · Diseño, prototipo y recursos
-- `diseno/stitch_.../` — pantallas en alcance (`code.html` + `screen.png`); las fuera de alcance están en `99-Archivo/`.
+- `diseno/stitch_.../` — mockups de **Stitch (diseño histórico, numeración CU antigua)**. La **fuente viva del diseño es el mock desplegado** <https://igualab.vercel.app/> (SuperAdmin: Usuarios, Ingesta, Auditoría · Administrador: Asistente IA, Reportes, Descargas; **sin Configuración**). Pantallas fuera de alcance en `99-Archivo/`.
 - Mockup navegable **desplegado**: <https://igualab.vercel.app/>.
 - `06-Desarrollo/FE-IGUALAB` y `06-Desarrollo/BCK-IGUALAB` — repos de desarrollo (submódulos).
 - `01-Mockups-y-Propuestas/` — Plan, A&D, actas firmadas y organigrama.

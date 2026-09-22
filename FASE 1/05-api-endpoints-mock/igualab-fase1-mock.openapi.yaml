@@ -14,7 +14,6 @@ servers:
 tags:
   - Auth
   - Usuarios
-  - Configuracion
   - Ingesta
   - RAG
   - GRI
@@ -91,23 +90,6 @@ paths:
       parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]
       responses:
         "200": { description: Actualizado (auditado CU009) }
-  /configuracion:
-    get:
-      tags: [Configuracion]
-      summary: Parámetros del sistema (RF-006)
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              example:
-                minutos_inactividad: 30
-                bloqueo: true
-                notificaciones: false
-    patch:
-      tags: [Configuracion]
-      summary: Actualizar parámetros (RF-006 · RN-004)
-      responses: { "200": { description: OK } }
   /ingesta:
     post:
       tags: [Ingesta]

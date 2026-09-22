@@ -20,7 +20,7 @@ Total de tablas & 13 \\
 \hline
 Origen del diseño & ERD «Diagrama Entidad--Relación · IGUALAB --- Modelo de Datos Depurado» entregado por el equipo, con las correcciones aplicadas tras su revisión (puntos anotados en cada ficha) \\
 \hline
-Alcance retirado & Se quitaron módulos (Configuración, catálogo de roles, medidor LLM separado) $\rightarrow$ se retiraron 5 tablas del diseño v2 y se añadieron 4 nuevas \\
+Alcance retirado & Se retiraron 5 tablas del diseño v2 (configuración, catálogo de roles, medidor LLM separado) y se añadieron 4 nuevas \\
 \hline
 \end{tabular}
 \end{center}
@@ -56,11 +56,11 @@ Relaciones (todas 1:N salvo indicación):
 
 \begin{enumerate}[leftmargin=1.6em,itemsep=2pt,topsep=2pt]
   \item Un usuario abre muchas sesiones y crea muchos tokens\_recuperacion.
-  \item Una empresa tiene muchos documentos; un usuario crea los documentos (creada\_por).
+  \item Una empresa tiene muchos documentos; un usuario crea los documentos (creado\_por).
   \item Un documento se vectoriza en muchos fragmentos\_documento; un documento produce muchas filas de gri\_analisis y cita muchas sanciones.
   \item Cada fila de gri\_analisis referencia un código del catalogo\_gri y proviene de un fragmento (fragmento\_id --- cita verificable).
   \item Una consulta\_asistente registra sus citas (consulta\_citas) enlazadas a fragmentos.
-  \item Un reporte de prospección pertenece a una empresa (UNIQUE empresa+anho --- RN-041) y congela su snapshot a la fecha de emisión.
+  \item Un reporte de prospección pertenece a una empresa (UNIQUE empresa+anio --- RN-041) y congela su snapshot a la fecha de emisión.
   \item Todo evento sensible registra auditoria (append-only; FK usuario/empresa NULL cuando aplica).
 \end{enumerate}
 
@@ -68,7 +68,7 @@ Relaciones (todas 1:N salvo indicación):
 ERD «Modelo de Datos Depurado» (13 tablas). El diagrama anterior Diagrama\_bd.png queda como archivo histórico.
 
 \begin{center}
-\includegraphics[width=0.95\textwidth]{img/im-047-039.png}
+\includegraphics[width=0.95\textwidth]{img/erd-igualab.png}
 \end{center}
 
 \subsection{Restricciones clave (UNIQUE y reglas BD)}
@@ -78,19 +78,19 @@ ERD «Modelo de Datos Depurado» (13 tablas). El diagrama anterior Diagrama\_bd.
 \thd{Restricción} & \thd{Descripción} \\
 \hline
 \endhead
-UNIQUE parcial en usuarios.rol (WHERE rol='superadmin') & Un solo SuperAdmin en toda la tabla --- la transferencia es transacción doble atómica (RS-01). \\
+UNIQUE parcial en usuarios.rol (WHERE rol='superadmin') & Un solo Superadmin en toda la tabla --- la transferencia es transacción doble atómica (RS-01). \\
 \hline
 UNIQUE case-insensitive usuarios.correo (índice lower(correo)) & Correo único de dominio autorizado (RN-007). \\
 \hline
 UNIQUE documentos.sha256 & El mismo contenido nunca se ingesta dos veces (RNF-011). \\
 \hline
-UNIQUE parcial (empresa\_id, anho, tipo) WHERE estado='indexado' & Unicidad documental por empresa/año/tipo --- solo para documentos exitosos. \\
+UNIQUE parcial (empresa\_id, anio, tipo) WHERE estado='indexado' & Unicidad documental por empresa/año/tipo --- solo para documentos exitosos. \\
 \hline
 UNIQUE (documento\_id, indice) en fragmentos\_documento & Posición única del fragmento dentro del documento. \\
 \hline
 UNIQUE parcial (documento\_id, gri\_codigo) en gri\_analisis & Una sola fila de resultados por documento/código. \\
 \hline
-UNIQUE parcial (empresa\_id, anho) en reportes\_prospeccion & Un solo reporte por empresa/año (RN-041). \\
+UNIQUE parcial (empresa\_id, anio) en reportes\_prospeccion & Un solo reporte por empresa/año (RN-041). \\
 \hline
 CHECK sectores cerrados en empresas.sector & Minería · Petróleo y Gas · Energía (RN-015, en la BD). \\
 \hline
@@ -111,7 +111,7 @@ REVOKE UPDATE, DELETE en auditoria & Append-only garantizado por la BD. \\
 \hline
 roles & Catálogo cerrado de 2 filas --- sustituido por ENUM rol\_usuario + UNIQUE parcial en usuarios.rol. \\
 \hline
-configuracion & El módulo Configuración fue quitado $\rightarrow$ umbrales por variables de entorno (doc Stack §4). \\
+configuracion & La tabla fue retirada; los umbrales operativos se gestionan por variables de entorno (doc Stack §4). \\
 \hline
 uso\_llm & El consumo diario se deriva de consultas\_asistente (COUNT por día/modelo). \\
 \hline
@@ -135,277 +135,285 @@ reporte\_detalle\_snapshot & Sustituida por contenido\_snapshot JSONB + PDF inmu
 
 % ====================================================================
 \section{Diccionario de Datos}
-Formato por ficha: Campo · Tamaño · Tipo de Dato · Descripción · NULL (formato del informe de referencia).
+
+El modelo contiene 12 tablas en la base de datos transaccional y 1 tabla en la base de datos vectorial. Las relaciones entre ambas bases se registran como referencias lógicas (REF), no como claves foráneas físicas.
 
 \newcommand{\dicthead}{\hline \thd{Campo} & \thd{Tamaño} & \thd{Tipo de Dato} & \thd{Descripción} & \thd{NULL} \\ \hline}
 \newcommand{\dt}[5]{#1 & #2 & #3 & #4 & #5 \\ \hline}
 \newcommand{\tabname}[1]{\par\vspace{10pt}\noindent\textbf{Tabla: #1}\par}
-\newcommand{\domname}[1]{\par\vspace{14pt}\noindent\textbf{\large Dominio: #1}\par\vspace{4pt}}
-\addcontentsline{toc}{subsubsection}{Dominio: IDENTIDAD Y ACCESO}
 
-\domname{IDENTIDAD Y ACCESO}
+\par\vspace{8pt}\noindent\textbf{Base de datos transaccional:}
+
 \tabname{usuarios}
-Descripción: Registro de las personas que operan la plataforma (3 en fase 1: 1 SuperAdmin + 2 Administradores). El rol es un ENUM cerrado --- sustituye a la tabla roles del diseño anterior; soporta el bloqueo de cuenta por intentos fallidos (RN-012).
+Descripción: Almacena las cuentas de usuario, sus credenciales, rol y estado de acceso al sistema.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
-\dt{id}{36}{UUID (PK)}{Identificador único del usuario (gen\_random\_uuid).}{NO}
-\dt{nombre}{200}{VARCHAR}{Nombre completo oficial del usuario.}{NO}
-\dt{correo}{255}{VARCHAR}{Correo de dominio autorizado; único case-insensitive (índice funcional lower(correo)).}{NO}
-\dt{password\_hash}{255}{VARCHAR}{Hash bcrypt de la contraseña (RNF-002; nunca texto plano).}{NO}
-\dt{rol}{-}{rol\_usuario (ENUM)}{Rol cerrado: superadmin \textbar{} administrador (RN-001).}{NO}
-\dt{habilitado}{-}{BOOLEAN}{Cuenta habilitada para operar (RN-005; default true).}{NO}
-\dt{intentos\_fallidos}{-}{INTEGER}{Logins fallidos consecutivos --- contador para el bloqueo (RN-012).}{NO}
-\dt{bloqueado\_hasta}{-}{TIMESTAMPTZ}{Momento hasta el cual la cuenta queda bloqueada tras 5 intentos (15 min).}{SÍ}
-\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora automática de creación del registro.}{NO}
+\dt{id}{36}{UUID (PK)}{Identificador único del usuario.}{NO}
+\dt{nombre}{200}{VARCHAR}{Nombre completo del usuario.}{NO}
+\dt{correo}{255}{VARCHAR (UQ)}{Correo electrónico único utilizado para el inicio de sesión.}{NO}
+\dt{password\_hash}{255}{VARCHAR}{Hash seguro de la contraseña del usuario.}{NO}
+\dt{rol}{-}{rol\_usuario}{Rol asignado al usuario, por ejemplo SUPERADMIN o ADMIN.}{NO}
+\dt{habilitado}{-}{BOOLEAN}{Indica si la cuenta está habilitada para acceder al sistema.}{NO}
+\dt{intentos\_fallidos}{-}{INTEGER}{Cantidad acumulada de intentos fallidos de autenticación.}{NO}
+\dt{bloqueado\_hasta}{-}{TIMESTAMPTZ}{Fecha y hora hasta la que la cuenta permanece bloqueada.}{SÍ}
+\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de creación de la cuenta.}{NO}
 \end{longtable}
 \endgroup
 
 \tabname{sesiones}
-Descripción: sesiones explícitas de autenticación (Capa 6 Usuario·Sesión); el JWT/sid referencia esta fila y cada petición valida revocada=false y habilitación (rol vigente --- RNF-006).
+Descripción: Registra las sesiones iniciadas por los usuarios y permite controlar su actividad y revocación.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
-\dt{id}{36}{UUID (PK)}{Identificador único de la sesión (referenciado por el JWT/sid).}{NO}
-\dt{usuario\_id}{36}{UUID (FK)}{Usuario de la sesión $\rightarrow$ usuarios.id (ON DELETE CASCADE).}{NO}
-\dt{creada\_en}{-}{TIMESTAMPTZ}{Fecha y hora del login.}{NO}
-\dt{ultima\_actividad}{-}{TIMESTAMPTZ}{Última petición de la sesión (soporte del idle definido por env var).}{NO}
-\dt{revocada}{-}{BOOLEAN}{true = sesión inválida (logout o deshabilitación de cuenta --- RN-005).}{NO}
+\dt{id}{36}{UUID (PK)}{Identificador único de la sesión.}{NO}
+\dt{usuario\_id}{36}{UUID (FK)}{Usuario propietario de la sesión. Referencia a usuarios.id.}{NO}
+\dt{creada\_en}{-}{TIMESTAMPTZ}{Fecha y hora en que se creó la sesión.}{NO}
+\dt{ultima\_actividad}{-}{TIMESTAMPTZ}{Fecha y hora de la actividad más reciente de la sesión.}{NO}
+\dt{revocada}{-}{BOOLEAN}{Indica si la sesión fue invalidada antes de su expiración.}{NO}
 \end{longtable}
 \endgroup
 
 \tabname{tokens\_recuperacion}
-Descripción: tokens de recuperación de contraseña de un solo uso; se guarda el hash del token (nunca el token en claro).
+Descripción: Almacena los tokens de recuperación de contraseña y controla su vigencia y utilización.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
-\dt{id}{36}{UUID (PK)}{Identificador único del token.}{NO}
-\dt{usuario\_id}{36}{UUID (FK)}{Usuario destinatario $\rightarrow$ usuarios.id (ON DELETE CASCADE).}{NO}
-\dt{token\_hash}{255}{VARCHAR (UNIQUE, IDX)}{Hash criptográfico del token.}{NO}
-\dt{expira\_en}{-}{TIMESTAMPTZ}{Fecha y hora de expiración del token.}{NO}
-\dt{usado}{-}{BOOLEAN}{true = ya consumido (single-use).}{NO}
-\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de emisión.}{NO}
+\dt{id}{36}{UUID (PK)}{Identificador único del token de recuperación.}{NO}
+\dt{usuario\_id}{36}{UUID (FK)}{Usuario que solicitó la recuperación. Referencia a usuarios.id.}{NO}
+\dt{token\_hash}{255}{VARCHAR (IDX)}{Hash del token enviado al usuario; se indexa para facilitar su búsqueda.}{NO}
+\dt{expira\_en}{-}{TIMESTAMPTZ}{Fecha y hora de vencimiento del token.}{NO}
+\dt{usado}{-}{BOOLEAN}{Indica si el token ya fue utilizado.}{NO}
+\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de creación del token.}{NO}
 \end{longtable}
 \endgroup
-Reglas semánticas: expirado o ya usado $\rightarrow$ inválido. La contraseña nueva revoca todas las sesiones del usuario (RS de seguridad).
+Reglas semánticas: expirado o ya usado deriva a inválido. La contraseña nueva revoca todas las sesiones del usuario.
 
-\addcontentsline{toc}{subsubsection}{Dominio: EMPRESAS E INGESTA}
-\domname{EMPRESAS E INGESTA}
 \tabname{empresas}
-Descripción: Catálogo de empresas analizables gestionado por el SuperAdmin. En fase 1 no existe columna pais --- todas las empresas cotizan en la Bolsa de Valores de Lima (Perú); el CHECK garantiza los sectores en la propia BD.
+Descripción: Contiene las empresas evaluadas por la plataforma y la información básica de su clasificación.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
-\dt{id}{36}{UUID (PK)}{Identificador único de la empresa (gen\_random\_uuid).}{NO}
-\dt{nombre}{200}{VARCHAR}{Razón social / nombre comercial; único.}{NO}
-\dt{sector}{-}{VARCHAR (CHECK)}{Sector cerrado en vigencia: Minería \textbar{} Petróleo y Gas \textbar{} Energía (RN-015).}{NO}
-\dt{activo}{-}{BOOLEAN}{false = no seleccionable en ingesta/análisis (default true).}{NO}
-\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de creación del registro.}{NO}
+\dt{id}{36}{UUID (PK)}{Identificador único de la empresa.}{NO}
+\dt{nombre}{200}{VARCHAR (UQ)}{Nombre único de la empresa.}{NO}
+\dt{sector}{-}{sector\_empresa}{Sector económico al que pertenece la empresa.}{NO}
+\dt{activa}{-}{BOOLEAN}{Indica si la empresa se encuentra activa en el sistema.}{NO}
+\dt{creada\_en}{-}{TIMESTAMPTZ}{Fecha y hora de registro de la empresa.}{NO}
 \end{longtable}
 \endgroup
 
 \tabname{documentos}
-Descripción: Cada archivo .md de memoria anual o reporte de sostenibilidad, con su estado del pipeline síncrono (RF-015). El sha256 es el borde anti-duplicado de contenido y tamano\_bytes con CHECK garantiza el límite $\leq$ 50 MB.
+Descripción: Registra los documentos cargados para una empresa y controla su identificación, integridad y estado de procesamiento.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único del documento.}{NO}
-\dt{empresa\_id}{36}{UUID (FK)}{Empresa de origen $\rightarrow$ empresas.id (RN-022).}{NO}
-\dt{creada\_por}{36}{UUID (FK)}{Usuario que ingestó $\rightarrow$ usuarios.id.}{NO}
-\dt{anho}{5}{SMALLINT}{Año del documento; CHECK entre 2000 y 2100.}{NO}
-\dt{tipo}{-}{VARCHAR (CHECK)}{memoria\_anual \textbar{} reporte\_sostenibilidad.}{NO}
-\dt{nombre\_archivo}{255}{VARCHAR}{Nombre del .md; guard: sin espacios ni mayúsculas.}{NO}
-\dt{sha256}{64}{CHAR (UNIQUE)}{Huella criptográfica del archivo (RNF-011).}{NO}
-\dt{tamano\_bytes}{-}{BIGINT (CHECK $\leq$ 50 MB)}{Tamaño real del archivo (RN-015).}{NO}
-\dt{estado}{-}{estado\_ingesta (ENUM)}{indexado \textbar{} observado \textbar{} rechazado.}{NO}
-\dt{motivo\_rechazo}{-}{TEXT}{Texto exacto del guard en rechazo/observación.}{SÍ}
-\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de ingesta.}{NO}
-\end{longtable}
-\endgroup
-Restricciones: UNIQUE (empresa\_id, anho, tipo) parcial WHERE estado='indexado' (unicidad documental de documentos exitosos). Integridad atómica (RN-026/RN-026): documento rechazado $\rightarrow$ cero fragmentos, cero análisis; sin DELETE físico (sin borrado fisico).
-
-\tabname{fragmentos\_documento}
-Descripción: Fragmentos del documento con su embedding --- antes chunks\_embeddings. Es la tabla que consulta el AI Harness (Capa 5) en cada pregunta del chat y la fuente de las citas verificables.
-\begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
-\dicthead
-\dt{id}{36}{UUID (PK)}{Identificador único del fragmento (antes chunk\_id).}{NO}
-\dt{documento\_id}{36}{UUID (FK)}{Documento origen $\rightarrow$ documentos.id (ON DELETE CASCADE).}{NO}
-\dt{indice}{-}{INTEGER}{Posición correlativa del fragmento dentro del documento; UNIQUE (documento\_id, indice).}{NO}
-\dt{seccion}{500}{VARCHAR}{Encabezado markdown de la sección origen --- llave de la cita (RN-034).}{NO}
-\dt{texto}{-}{TEXT}{Transcripción del fragmento (sección o fila de tabla).}{NO}
-\dt{embedding}{(dim)}{VECTOR(dim)}{Vector devuelto por el servicio de embeddings por API del proveedor de IA; la dimensión depende del modelo (fijar en migración, p. ej. 1024). Índice HNSW cosine.}{NO}
-\dt{metadata}{(500)}{JSONB}{Empresa\_id, año, tipo doc, fila de tabla origen y otros contextos.}{NO}
-\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de indexación.}{NO}
+\dt{empresa\_id}{36}{UUID (FK)}{Empresa a la que pertenece el documento. Referencia a empresas.id.}{NO}
+\dt{creado\_por}{36}{UUID (FK)}{Usuario que registró el documento. Referencia a usuarios.id.}{NO}
+\dt{anio}{-}{SMALLINT}{Año al que corresponde el documento.}{NO}
+\dt{tipo}{-}{tipo\_documento}{Tipo de documento cargado.}{NO}
+\dt{nombre\_archivo}{255}{VARCHAR}{Nombre original del archivo cargado.}{NO}
+\dt{sha256}{64}{CHAR (UQ)}{Huella SHA-256 única utilizada para validar integridad y evitar duplicados.}{NO}
+\dt{tamanio\_bytes}{-}{BIGINT}{Tamaño del archivo expresado en bytes.}{NO}
+\dt{estado}{-}{estado\_documento}{Estado del documento dentro del flujo de ingesta y análisis.}{NO}
+\dt{motivo\_rechazo}{-}{TEXT}{Motivo del rechazo cuando el documento no puede ser procesado.}{SÍ}
+\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de registro del documento.}{NO}
 \end{longtable}
 \endgroup
 
-\addcontentsline{toc}{subsubsection}{Dominio: ANÁLISIS GRI}
-\domname{ANÁLISIS GRI}
 \tabname{catalogo\_gri}
-Descripción: El estándar --- catálogo precargado (seed) del GRI Universal + tópicos de las series 100/200/300/400. Define el criterio objetivo del indicador (el punto ``GRI ideal'' explicitado por el PO); la IA no decide el estándar.
+Descripción: Mantiene el catálogo versionado de estándares e indicadores GRI utilizados en el análisis documental.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
-\dt{codigo}{20}{VARCHAR (PK)}{Código GRI oficial (p. ej. GRI 403).}{NO}
-\dt{serie}{50}{VARCHAR}{Serie del estándar: 100 \textbar{} 200 \textbar{} 300 \textbar{} 400.}{NO}
-\dt{tema}{200}{VARCHAR}{Denominación del tema (p. ej. Seguridad y Salud).}{NO}
-\dt{descripcion}{-}{TEXT}{Descripción del indicador y su alcance.}{NO}
-\dt{elementos\_minimos}{-}{TEXT}{Checklist de elementos esperados para el estado OK (con el PO --- restaurado).}{NO}
-\dt{keywords}{-}{TEXT[]}{Palabras clave de evidencia del motor determinista (restaurado).}{NO}
-\dt{version\_catalogo}{30}{VARCHAR}{Versión del estándar referida (RS-11).}{NO}
+\dt{codigo}{20}{VARCHAR (PK*)}{Código del estándar GRI. Forma la clave primaria compuesta con version\_catalogo.}{NO}
+\dt{serie}{50}{VARCHAR}{Serie a la que pertenece el estándar GRI.}{NO}
+\dt{tema}{200}{VARCHAR}{Tema o denominación del estándar GRI.}{NO}
+\dt{descripcion}{-}{TEXT}{Descripción funcional del estándar o indicador.}{NO}
+\dt{keywords}{-}{TEXT ARRAY}{Palabras clave utilizadas para apoyar la identificación del estándar.}{NO}
+\dt{version\_catalogo}{30}{VARCHAR (PK*)}{Versión del catálogo. Forma la clave primaria compuesta con codigo.}{NO}
 \end{longtable}
 \endgroup
 
 \tabname{gri\_analisis}
-Descripción: La tabla del análisis --- fila por documento + código GRI (empresa y año se derivan del documento). Única tabla de resultados (UNIQUE documento+código). Se puebla automáticamente al terminar la ingesta; guarda la revisión del Administrador (validado\_por).
+Descripción: Almacena los resultados del análisis GRI identificados en cada documento y su eventual validación.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
-\dt{id}{36}{UUID (PK)}{Identificador único de la fila de análisis.}{NO}
-\dt{documento\_id}{36}{UUID (FK)}{Documento fuente $\rightarrow$ documentos.id (empresa/año derivables de él).}{NO}
-\dt{gri\_codigo}{20}{VARCHAR (FK)}{Código analizado $\rightarrow$ catalogo\_gri.codigo.}{NO}
-\dt{fragmento\_id}{36}{UUID (FK)}{Fragmento fuente de la cita textual (permite verificación de la evidencia).}{SÍ}
-\dt{cita\_textual}{-}{TEXT}{Transcripción textual verbatim del fragmento/documento.}{NO}
-\dt{estado}{-}{estado\_gri (ENUM)}{Estado del análisis: OK \textbar{} BAJA SUSTANCIA \textbar{} SUB-REPORTADO --- asignado manualmente por el Administrador (no existe estado\_sugerido).}{SÍ}
-\dt{validado\_por}{36}{UUID (FK)}{Administrador que asignó el estado (NULL = pendiente CU006).}{SÍ}
-\dt{version\_catalogo}{30}{VARCHAR}{Versión del catálogo al analizar (RS-11: snapshot fiel).}{NO}
-\dt{realizado\_en}{-}{TIMESTAMPTZ}{Fecha y hora del poblado automático.}{NO}
+\dt{id}{36}{UUID (PK)}{Identificador único del resultado de análisis GRI.}{NO}
+\dt{documento\_id}{36}{UUID (FK)}{Documento analizado. Referencia a documentos.id.}{NO}
+\dt{gri\_codigo}{20}{VARCHAR (FK*)}{Código GRI; integra la clave foránea compuesta hacia catalogo\_gri.}{NO}
+\dt{version\_catalogo}{30}{VARCHAR (FK*)}{Versión del catálogo; integra la clave foránea compuesta hacia catalogo\_gri.}{NO}
+\dt{fragmento\_id}{36}{UUID (REF)}{Referencia lógica al fragmento que sustenta el hallazgo en fragmentos\_documento.id.}{SÍ}
+\dt{cita\_textual}{-}{TEXT}{Texto del documento utilizado como evidencia del hallazgo.}{NO}
+\dt{estado}{-}{estado\_gri}{Estado de revisión o validación del resultado GRI.}{SÍ}
+\dt{validado\_por}{36}{UUID (FK)}{Usuario que validó el resultado. Referencia a usuarios.id.}{SÍ}
+\dt{actualizado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de la última actualización del resultado.}{NO}
 \end{longtable}
 \endgroup
-Restricción: UNIQUE parcial (documento\_id, gri\_codigo) --- una sola fila de resultados por documento/código (evita duplicados de análisis). El historial de cambios de estado se registra en auditoria con evento AJUSTE\_BRECHA.
 
 \tabname{sanciones}
-Descripción: Sanciones identificadas en los documentos --- negocio puro del reporte; siempre con cita verificable. La empresa y el año se derivan del documento.
+Descripción: Registra las sanciones detectadas en los documentos y conserva la evidencia textual asociada.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.2cm}|L{2.5cm}|L{6.6cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.4cm}|C{1.2cm}|L{2.6cm}|L{6.5cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único de la sanción.}{NO}
-\dt{documento\_id}{36}{UUID (FK)}{Documento que evidencia la sanción $\rightarrow$ documentos.id (empresa y año derivables).}{NO}
-\dt{fragmento\_id}{36}{UUID (FK)}{Fragmento citado (permite verificación de la evidencia).}{SÍ}
-\dt{autoridad\_emisora}{255}{VARCHAR}{Entidad o norma emisora de la sanción.}{NO}
-\dt{monto}{(14,2)}{NUMERIC}{Monto económico; NULL = monto no determinado --- nunca 0 por defecto (RN-031).}{SÍ}
-\dt{moneda}{10}{VARCHAR}{Código ISO de la moneda (si el monto cuantifica).}{SÍ}
-\dt{cita\_textual}{-}{TEXT}{Transcripción textual obligatoria de la evidencia.}{NO}
-\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de registro.}{NO}
+\dt{documento\_id}{36}{UUID (FK)}{Documento donde se identificó la sanción. Referencia a documentos.id.}{NO}
+\dt{fragmento\_id}{36}{UUID (REF)}{Referencia lógica al fragmento de evidencia en fragmentos\_documento.id.}{SÍ}
+\dt{entidad\_sancionadora}{255}{VARCHAR}{Nombre de la entidad que impuso la sanción.}{NO}
+\dt{monto}{14,2}{NUMERIC}{Importe monetario asociado a la sanción.}{SÍ}
+\dt{moneda}{10}{VARCHAR}{Código o denominación de la moneda del monto registrado.}{SÍ}
+\dt{cita\_textual}{-}{TEXT}{Texto del documento que sustenta la sanción identificada.}{NO}
+\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de registro de la sanción.}{NO}
 \end{longtable}
 \endgroup
 
-\addcontentsline{toc}{subsubsection}{Dominio: ASISTENTE RAG}
-\domname{ASISTENTE RAG}
 \tabname{consultas\_asistente}
-Descripción: Cada consulta al asistente IA (módulo Asistente --- RAG con citas). Sustituye a la tabla uso\_llm como medidor del free tier (RNF-027: COUNT por día/modelo vs env var LLM\_DAILY\_LIMIT).
+Descripción: Registra las preguntas realizadas al asistente RAG, sus respuestas y el contexto de consulta.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único de la consulta.}{NO}
-\dt{usuario\_id}{36}{UUID (FK)}{Administrador que consultó $\rightarrow$ usuarios.id.}{NO}
-\dt{empresa\_id}{36}{UUID (FK)}{Empresa activa en el momento de la consulta (NULL = sin empresa activa).}{SÍ}
-\dt{anho}{5}{SMALLINT}{Año de consulta (si aplica).}{SÍ}
-\dt{pregunta}{-}{TEXT}{Pregunta del usuario.}{NO}
+\dt{usuario\_id}{36}{UUID (FK)}{Usuario que realizó la consulta. Referencia a usuarios.id.}{NO}
+\dt{empresa\_id}{36}{UUID (FK)}{Empresa utilizada como contexto. Referencia a empresas.id.}{NO}
+\dt{anio}{-}{SMALLINT}{Año utilizado como filtro de la consulta.}{NO}
+\dt{pregunta}{-}{TEXT}{Pregunta formulada por el usuario.}{NO}
 \dt{respuesta}{-}{TEXT}{Respuesta generada por el asistente.}{NO}
-\dt{modelo}{100}{VARCHAR}{Modelo usado (p. ej. GLM-5.2 :free, respaldo).}{NO}
-\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora (motor del medidor).}{NO}
+\dt{modelo}{100}{VARCHAR}{Modelo de inteligencia artificial utilizado para generar la respuesta.}{NO}
+\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de ejecución de la consulta.}{NO}
 \end{longtable}
 \endgroup
 
 \tabname{consulta\_citas}
-Descripción: Citas · fuentes de cada respuesta --- constancia de la post-verificación de IDs citados (post-check). Cada cita debe existir en el contexto recuperado; si el LLM cita fuera del contexto, la cita no se inserta.
+Descripción: Relaciona cada respuesta del asistente con los fragmentos documentales utilizados como citas o evidencia.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único de la cita.}{NO}
-\dt{consulta\_id}{36}{UUID (FK)}{Consulta a la que pertenece $\rightarrow$ consultas\_asistente.id (ON DELETE CASCADE).}{NO}
-\dt{fragmento\_id}{36}{UUID (FK)}{Fragmento citado $\rightarrow$ fragmentos\_documento.id.}{NO}
-\dt{orden}{-}{SMALLINT}{Posición de la cita en la respuesta.}{NO}
-\dt{extracto}{-}{TEXT}{Extracto textual enlazado al fragmento.}{NO}
+\dt{consulta\_id}{36}{UUID (FK)}{Consulta a la que pertenece la cita. Referencia a consultas\_asistente.id.}{NO}
+\dt{fragmento\_id}{36}{UUID (REF)}{Referencia lógica al fragmento citado en fragmentos\_documento.id.}{NO}
+\dt{orden}{-}{SMALLINT}{Posición de la cita dentro de la respuesta.}{NO}
+\dt{extracto}{-}{TEXT}{Extracto presentado como evidencia en la respuesta.}{NO}
 \end{longtable}
 \endgroup
 
-\addcontentsline{toc}{subsubsection}{Dominio: REPORTES}
-\domname{REPORTES}
 \tabname{reportes\_prospeccion}
-Descripción: Entregables PDF inmutables --- fusiona reportes\_generados + reporte\_detalle\_snapshot del diseño v2 (detalle JSONB congelado + PDF inmutable con hash).
+Descripción: Almacena los reportes de prospección generados para cada empresa y año, junto con su contenido consolidado.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
-\dt{id}{36}{UUID (PK)}{Identificador del reporte.}{NO}
-\dt{empresa\_id}{36}{UUID (FK)}{Empresa reportada $\rightarrow$ empresas.id.}{NO}
-\dt{generado\_por}{36}{UUID (FK)}{Administrador que emitió el PDF $\rightarrow$ usuarios.id.}{NO}
-\dt{anho}{5}{SMALLINT}{Año analizado en el PDF.}{NO}
-\dt{pdf\_path}{500}{VARCHAR (UNIQUE)}{Ruta del PDF generado (WeasyPrint).}{NO}
-\dt{sha256}{64}{CHAR (UNIQUE)}{Hash del binario generado (auditoría de integridad).}{NO}
-\dt{contenido\_snapshot}{-}{JSONB}{Estado congelado al emitir: brechas con estado\_final + cita textual + sanciones con montos (RS-18).}{NO}
-\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de generación.}{NO}
+\dt{id}{36}{UUID (PK)}{Identificador único del reporte de prospección.}{NO}
+\dt{empresa\_id}{36}{UUID (FK/UQ*)}{Empresa del reporte. Forma una restricción única compuesta con anio.}{NO}
+\dt{generado\_por}{36}{UUID (FK)}{Usuario que generó el reporte. Referencia a usuarios.id.}{NO}
+\dt{anio}{-}{SMALLINT (UQ*)}{Año del reporte. Forma una restricción única compuesta con empresa\_id.}{NO}
+\dt{pdf\_path}{500}{VARCHAR}{Ruta de almacenamiento del archivo PDF generado.}{NO}
+\dt{sha256}{64}{CHAR (UQ)}{Huella SHA-256 única del reporte para verificar su integridad.}{NO}
+\dt{contenido\_snapshot}{-}{JSONB}{Instantánea de los datos utilizados para generar el reporte.}{NO}
+\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de generación del reporte.}{NO}
 \end{longtable}
 \endgroup
-Restricciones: UNIQUE parcial (empresa\_id, anho) --- RN-041. Reglas: cero LLM en la generación (RN-041); el PDF/snapshot es fiel a su fecha (RN-042).
 
-\addcontentsline{toc}{subsubsection}{Dominio: AUDITORÍA}
-\domname{AUDITORÍA}
 \tabname{auditoria}
-Descripción: Bitácora de eventos sensibles append-only --- la BD garantiza el append-only (REVOKE UPDATE/DELETE): la app solo puede INSERT/SELECT. El historial de cambios de estado vive aquí como evento AJUSTE\_BRECHA (sustituye a la tabla gri\_analisis\_historico).
+Descripción: Registra eventos relevantes del sistema para fines de trazabilidad, control y revisión.
 \begingroup\small
 \begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
 \dicthead
-\dt{id}{36}{UUID (PK)}{Identificador secuencial del evento.}{NO}
-\dt{usuario\_id}{36}{UUID (FK)}{Usuario implicado; nulo en eventos anónimos (p. ej. login fallido de correo inexistente).}{SÍ}
-\dt{empresa\_id}{36}{UUID (FK)}{Contexto de empresa opcional (FK visible en diagrama).}{SÍ}
-\dt{tipo\_evento}{-}{tipo\_evento\_auditoria (ENUM)}{LOGIN \textbar{} LOGIN\_FALLIDO \textbar{} CAMBIO\_ROL \textbar{} INGESTA \textbar{} INGESTA\_FALLIDA \textbar{} GEN\_REPORTE \textbar{} AJUSTE\_BRECHA \textbar{} DESCARGA.}{NO}
-\dt{detalle}{-}{JSONB}{Contexto por evento: hash, doc\_id, motivo, anterior$\rightarrow$nuevo, resultado de la operación (corregido: era VARCHAR(500)).}{NO}
-\dt{fecha\_hora\_utc}{-}{TIMESTAMPTZ}{Fecha y hora UTC (RNF-024 --- presentación America/Lima solo en la UI).}{NO}
+\dt{id}{36}{UUID (PK)}{Identificador único del evento de auditoría.}{NO}
+\dt{usuario\_id}{36}{UUID (FK)}{Usuario relacionado con el evento. Referencia a usuarios.id.}{SÍ}
+\dt{empresa\_id}{36}{UUID (FK)}{Empresa relacionada con el evento. Referencia a empresas.id.}{SÍ}
+\dt{tipo\_evento}{-}{tipo\_evento\_auditoria}{Clasificación del evento registrado.}{NO}
+\dt{detalle}{-}{JSONB}{Información adicional y estructurada del evento.}{SÍ}
+\dt{fecha\_hora\_utc}{-}{TIMESTAMPTZ}{Fecha y hora UTC en que ocurrió el evento.}{NO}
+\end{longtable}
+\endgroup
+
+\par\vspace{8pt}\noindent\textbf{Base de datos vectorial:}
+
+\tabname{fragmentos\_documento}
+Descripción: Almacena los fragmentos extraídos de los documentos, sus embeddings y metadatos para la recuperación semántica.
+\begingroup\small
+\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\dicthead
+\dt{id}{36}{UUID (PK)}{Identificador único del fragmento vectorial.}{NO}
+\dt{documento\_id}{36}{UUID (REF)}{Referencia lógica al documento de origen en documentos.id, ubicado en la base transaccional.}{NO}
+\dt{indice}{-}{INTEGER (UQ*)}{Posición del fragmento dentro del documento; es única en combinación con documento\_id.}{NO}
+\dt{seccion}{255}{VARCHAR}{Sección o encabezado del documento al que pertenece el fragmento.}{SÍ}
+\dt{texto}{-}{TEXT}{Contenido textual completo del fragmento.}{NO}
+\dt{embedding}{dim\_fija}{VECTOR}{Representación vectorial del texto generada por el proveedor de embeddings.}{NO}
+\dt{metadata}{-}{JSONB}{Metadatos estructurados asociados al fragmento.}{NO}
+\dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de creación del fragmento.}{NO}
 \end{longtable}
 \endgroup
 
 % ====================================================================
 \section{Volumen Estimado}
-Estimación preliminar para el escenario de fase 1 (3 usuarios; 1 organización). Cada empresa analizable define el volumen; crece con el área.
+La siguiente tabla presenta una estimación del volumen mensual de datos generado por cada módulo del sistema. Los valores son referenciales y permiten identificar los módulos con mayor demanda de almacenamiento y procesamiento.
 
 \begin{center}
-\begin{tabular}{|L{4.2cm}|C{3.0cm}|L{6.7cm}|}
+\begin{tabular}{|L{4.6cm}|C{3.0cm}|C{1.5cm}|L{5.6cm}|}
 \hline
-\thd{Tabla} & \thd{Filas estimadas} & \thd{Nota} \\
+\thd{Módulo} & \thd{Volumen estimado} & \thd{Nivel} & \thd{Justificación} \\
 \hline
-usuarios & 3 & 1 SuperAdmin + 2 Administradores (acta 4 · REQ-10). \\
+Autenticación y Gestión de Sesión & 170 registros & Medio & Considera aproximadamente 168 sesiones y 2 solicitudes de recuperación de contraseña al mes. \\
 \hline
-sesiones & $\sim$3--30 & Por cada login hasta el logout/revocación (inactiva no elimina). \\
+Gestión de Usuarios & 4 a 6 cuentas activas & Bajo & Referencia lógica al documento de origen en documentos.id, ubicado en la base transaccional. \\
 \hline
-tokens\_recuperacion & bajo & Uso ocasional (single-use). \\
+Catálogo de Empresas & 8 a 10 empresas & Bajo & Corresponde al registro progresivo de empresas habilitadas para el análisis. \\
 \hline
-empresas & 3-10 & Catálogo de empresas ingestadas en fase 1 (mínimo 3 sectores). \\
+Ingesta de Documentos & 42 documentos y 4,200 fragmentos & Alto & Cada documento se divide en aproximadamente 100 fragmentos con embeddings para su almacenamiento en la base vectorial. \\
 \hline
-documentos & 6--30 & Memorias anuales y reportes de sostenibilidad por empresa/año/tipo. \\
+Análisis y Validación de Brechas GRI & 425 registros & Medio & Considera aproximadamente 417 resultados de análisis y 8 sanciones identificadas. El catálogo de 40 códigos GRI permanece como información base. \\
 \hline
-fragmentos\_documento & 3k--8k & $\sim$800--1000 fragmentos por documento (filas de tabla con $\sim$800 chars por sección). \\
+Asistente de Inteligencia Artificial (RAG) & 1,670 registros & Alto & Considera aproximadamente 420 consultas y 1,250 citas, con un promedio de tres citas por respuesta. \\
 \hline
-catalogo\_gri & 40 & Catálogo cerrado del estándar (40 códigos GRI del catálogo vigente --- semilla del sistema). \\
+Generación de Reportes de Prospección & 8 a 10 reportes & Bajo & Los reportes se generan únicamente para empresas con información analizada y validada. \\
 \hline
-gri\_analisis & 40--400+ & Fila por documento/código (incluidos los OK). \\
-\hline
-sanciones & variable (bajo--medio) & Detección por patrones configurados en los documentos. \\
-\hline
-consultas\_asistente & 200/día & Free tier --- LLM\_DAILY\_LIMIT (200). \\
-\hline
-consulta\_citas & $\sim$4 por respuesta & k=4 (post-check constantes por IDs). \\
-\hline
-reportes\_prospeccion & 1--5 & UN reporte por empresa/año (RN-041). \\
-\hline
-auditoria & creciente & Participación mensual si el volumen crece; fase 1 = monolito simple sin particiones. \\
+Auditoría Funcional & 420 eventos & Medio & Registra accesos, cambios de usuarios, ingestas, rechazos de documentos y generación de reportes. \\
 \hline
 \end{tabular}
 \end{center}
 
 % ====================================================================
 \section{Diseño Arquitectónico}
-La solución se estructura en una arquitectura de solución por capas (siete capas): actores y roles, aplicación web (SPA React 18 + Vite), API FastAPI, servicios y lógica de negocio (Python 3.11), procesamiento y reglas por módulo, persistencia (SQLAlchemy Async) y base de datos PostgreSQL 16 + pgvector. La separación por capas y la modularidad interna se detallan en la sección 4. La figura siguiente muestra el diagrama de arquitectura de solución por capas.
+La solución se estructura como una arquitectura de solución por capas, con dependencias unidireccionales de arriba hacia abajo (cada capa invoca únicamente a la inmediata inferior). Las siete capas son: actores y roles; aplicación web (SPA React 18 + Vite); API REST (FastAPI); servicios y lógica de negocio (Python 3.11, monolito modular); procesamiento y reglas por módulo; persistencia (SQLAlchemy Async); y base de datos PostgreSQL 16 con la extensión pgvector. La separación por capas y la modularidad interna (principios SOLID, con un único servicio por módulo) se detallan en la sección 4. La figura siguiente presenta el diagrama de arquitectura de solución por capas.
 
 \begin{center}
-\includegraphics[width=0.95\textwidth]{img/im-061-040.png}
+\includegraphics[width=0.98\textwidth]{img/arquitectura-igualab.png}
 \end{center}
 
 \section{Prototipo}
-El prototipo navegable de la FASE 1 está disponible en \url{https://igualab.vercel.app/} e implementa las pantallas de los módulos descritos en este documento (autenticación, gestión de usuarios, catálogo de empresas e ingesta, asistente de IA, reportes de prospección y auditoría).
+El prototipo navegable de la FASE 1 está disponible e implementa las pantallas de los módulos descritos en este documento (autenticación, gestión de usuarios, catálogo de empresas e ingesta, asistente de IA, reportes de prospección y auditoría), organizadas por rol: el SuperAdmin accede a la gestión de usuarios, la ingesta y la auditoría; el Administrador, al asistente de IA, los reportes y las descargas.
 
 \section{Anexo}
 \subsection{Problemas identificados del proceso actual (AS-IS)}
 A partir del análisis del proceso actual (AS-IS) se identifican los siguientes problemas. El analista de Igualab debe buscar y descargar manualmente cada informe (memoria anual y/o reporte de sostenibilidad) de fuentes dispersas, lo que incrementa el riesgo de omitir documentos relevantes o descargar versiones desactualizadas. La revisión íntegra de documentos que suelen exceder las 100 páginas depende enteramente de su criterio individual, lo que genera variabilidad en la cobertura y profundidad del análisis entre distintas revisiones. No existe un catálogo estandarizado de indicadores GRI evaluables ni una metodología uniforme para asignar estados de cumplimiento, por lo que los criterios pueden variar de una empresa a otra. Una vez identificadas brechas, sanciones o hallazgos, el analista no registra la información en un sistema estructurado ni base de datos, ni hoja de cálculo, ni herramienta similar, por lo que los resultados quedan en su conocimiento implícito, sin posibilidad de consulta histórica, comparación entre empresas o trazabilidad. Tampoco se registra qué empresa revisó, en qué fecha ni con qué criterios, lo que impide validar la calidad del análisis o demostrar diligencia ante el cliente. La elaboración del documento de prospección se realiza en texto libre sin plantilla estandarizada, lo que genera formatos inconsistentes y omisión de información relevante. En conjunto, cada análisis parte de cero y no permite reutilizar resultados previos, comparar evolución año a año ni escalar el proceso a más empresas sin incrementar linealmente la carga de trabajo.
+
+\subsection{Matriz de trazabilidad (módulo · CU · RF · RN · RNF)}
+La matriz siguiente consolida la cobertura de cada módulo funcional: su caso de uso, los requerimientos funcionales que implementa y su respaldo en reglas de negocio y requerimientos no funcionales.
+
+\begin{center}
+\begingroup\small
+\begin{longtable}{|C{0.7cm}|L{3.8cm}|C{1.3cm}|L{4.6cm}|L{4.3cm}|}
+\hline
+\thd{\#} & \thd{Módulo} & \thd{CU} & \thd{Requerimientos Funcionales (RF)} & \thd{Respaldo (RN · RNF)} \\
+\hline
+\endhead
+1 & Autenticación y Gestión de Sesión & CU001 & RF-001…RF-005 & RN-004…RN-013 · RNF-001…RNF-009 \\
+\hline
+2 & Gestión de Usuarios & CU002 & RF-006…RF-009 & RN-001…RN-009 · RNF-012, RNF-013 \\
+\hline
+3 & Catálogo de Empresas & CU003 & RF-010, RF-011 & RN-014…RN-017 \\
+\hline
+4 & Ingesta de Documentos & CU003 & RF-012…RF-017 & RN-018…RN-026 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-029 \\
+\hline
+5 & Análisis y Validación de Brechas GRI & CU005 & RF-018…RF-022, RF-028 & RN-027…RN-032 · RNF-014, RNF-026, RNF-027 \\
+\hline
+6 & Asistente de IA (RAG) & CU004 & RF-023, RF-024 & RN-033…RN-037 · RNF-010, RNF-017, RNF-018, RNF-019 \\
+\hline
+7 & Generación de Reportes de Prospección & CU006 & RF-025…RF-027 & RN-038…RN-041 \\
+\hline
+8 & Auditoría Funcional & CU007 & RF-029, RF-030 & RN-042…RN-045 · RNF-022, RNF-023, RNF-024 \\
+\hline
+\end{longtable}
+\endgroup
+\end{center}

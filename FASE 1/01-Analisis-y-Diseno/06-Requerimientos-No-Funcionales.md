@@ -1,6 +1,6 @@
 # 06 · Requerimientos No Funcionales — FASE 1 (numeración vigente)
 
-> **Fuente única:** `analisis-diseno-latex/main.pdf`. 33 RNF categorizados; derivan de RN/RF (o transversales).
+> **Fuente única:** `analisis-diseno-latex/main.pdf`. 30 RNF categorizados; derivan de RN/RF (o transversales).
 
 | N° | Categoría | Descripción del Requerimiento No Funcional | Deriva de |
 |---|---|---|---|
@@ -31,9 +31,6 @@
 | RNF-025 | Trazabilidad | Todo fragmento indexado conserva la referencia a su documento de origen y a su ubicación dentro de él. | RF-016, RN-034 |
 | RNF-026 | Mantenibilidad | El catálogo de 40 códigos GRI se carga mediante un script de inicialización versionado, garantizando el mismo catálogo en todos los ambientes. | RN-027 |
 | RNF-027 | Mantenibilidad | El sistema integra al proveedor de IA mediante una interfaz estandarizada, de modo que cambiar de modelo o proveedor no obliga a rediseñar. | RF-023 |
-| RNF-028 | Compatibilidad | El sistema es compatible con navegadores modernos (Chromium, Firefox y Safari/WebKit, últimas dos versiones). | Transversal |
-| RNF-029 | Usabilidad | Durante la ingesta síncrona el sistema mantiene informado al usuario del progreso de la operación. | RF-015, RN-026 |
-| RNF-030 | Usabilidad | Los mensajes de estado y de rechazo se presentan en español claro y accionable, indicando el motivo. | RF-013 |
-| RNF-031 | Continuidad | Se realizan copias de seguridad diarias de la base de datos (incluido el índice vectorial) y de los documentos `.md` originales. | RF-016 |
-| RNF-032 | Privacidad | El sistema cumple los controles básicos de protección de datos personales (Ley 29733). | Transversal |
-| RNF-033 | Observabilidad | Los registros técnicos incluyen niveles y correlación por `request_id`; los errores no exponen trazas al usuario. | Transversal |
+| RNF-028 | Usabilidad | Durante la ingesta síncrona el sistema mantiene informado al usuario del progreso de la operación. | RF-015, RN-026 |
+| RNF-029 | Usabilidad | Los mensajes de estado y de rechazo se presentan en español claro y accionable, indicando el motivo. | RF-013 |
+| RNF-030 | Continuidad | Se realizan copias de seguridad diarias de la base de datos (incluido el índice vectorial) y de los documentos `.md` originales. | RF-016 |

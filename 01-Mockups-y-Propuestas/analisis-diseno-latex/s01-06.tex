@@ -39,34 +39,34 @@ El SuperAdmin concentra tanto la administración de accesos como la carga de inf
 
 % --------------------------------------------------------------------
 \section{Diseño Funcional Detallado}
-La solución consiste en una plataforma web de analítica de sostenibilidad que permite a Igualab procesar reportes de sostenibilidad y memorias anuales de empresas que cotizan en la Bolsa de Valores de Lima, identificar brechas en indicadores ASG mediante inteligencia artificial y generar reportes de prospección comercial. La plataforma se estructura como un \textbf{monolito modular} sobre dos roles SuperAdmin y Administrador, organizado en \textbf{ocho módulos funcionales} y un componente transversal de configuración.
+La solución consiste en una plataforma web de analítica de sostenibilidad que permite a Igualab procesar reportes de sostenibilidad y memorias anuales de empresas que cotizan en la Bolsa de Valores de Lima, identificar brechas en indicadores ASG mediante inteligencia artificial y generar reportes de prospección comercial. La plataforma se estructura como un \textbf{monolito modular} sobre dos roles SuperAdmin y Administrador, organizado en \textbf{ocho módulos funcionales}.
 
 
 \subsection{Catálogo de módulos funcionales}
-Cada módulo indica el servicio que lo implementa (SRP), su caso de uso y los requisitos que cubre.
+Cada módulo indica su caso de uso y los requisitos que cubre.
 
 \begin{center}
 \begingroup\small
 \begin{longtable}{|C{0.7cm}|L{4.4cm}|C{1.4cm}|L{7.8cm}|}
 \hline
-\thd{\#} & \thd{Módulo / Servicio (SRP)} & \thd{CU} & \thd{Requisitos (RF · RN · RNF)} \\
+\thd{\#} & \thd{Módulo} & \thd{CU} & \thd{Requisitos (RF · RN · RNF)} \\
 \hline
 \endhead
-1 & Autenticación y Gestión de Sesión --- auth\_service & CU001 & RN-001…RN-013 · RF-001…RF-005 · RNF-001…RNF-009 \\
+1 & Autenticación y Gestión de Sesión & CU001 & RN-001…RN-013 · RF-001…RF-005 · RNF-001…RNF-009 \\
 \hline
-2 & Gestión de Usuarios --- usuario\_service & CU002 & RN-001…RN-009 · RF-006…RF-009 · RNF-012, RNF-013 \\
+2 & Gestión de Usuarios & CU002 & RN-001…RN-009 · RF-006…RF-009 · RNF-012, RNF-013 \\
 \hline
-3 & Catálogo de Empresas --- empresa\_service & CU003 & RN-014…RN-017 · RF-010, RF-011 · --- \\
+3 & Catálogo de Empresas & CU003 & RN-014…RN-017 · RF-010, RF-011 · --- \\
 \hline
-4 & Ingesta de Documentos --- ingesta\_service & CU003 & RN-018…RN-026 · RF-012…RF-017 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-029, RNF-031 \\
+4 & Ingesta de Documentos & CU003 & RN-018…RN-026 · RF-012…RF-017 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-029 \\
 \hline
-5 & Análisis y Validación de Brechas GRI --- gri\_analisis\_service & CU005 & RN-027…RN-032 · RF-018…RF-022, RF-027 · RNF-014, RNF-026, RNF-027 \\
+5 & Análisis y Validación de Brechas GRI & CU005 & RN-027…RN-032 · RF-018…RF-022, RF-028 · RNF-014, RNF-026, RNF-027 \\
 \hline
-6 & Asistente de IA (RAG) --- rag\_chat\_service & CU004 & RN-033…RN-037 · RF-023, RF-024 · RNF-010, RNF-017, RNF-018, RNF-019 \\
+6 & Asistente de IA (RAG) & CU004 & RN-033…RN-037 · RF-023, RF-024 · RNF-010, RNF-017, RNF-018, RNF-019 \\
 \hline
-7 & Generación de Reportes de Prospección --- reportes\_pdf\_service & CU006 & RN-038…RN-041 · RF-025, RF-026 · --- \\
+7 & Generación de Reportes de Prospección & CU006 & RN-038…RN-041 · RF-025, RF-026 · --- \\
 \hline
-8 & Auditoría Funcional --- auditoria\_service & CU007 & RN-042…RN-045 · RF-028 · RNF-022, RNF-023, RNF-024 \\
+8 & Auditoría Funcional & CU007 & RN-042…RN-045 · RF-029, RF-030 · RNF-022, RNF-023, RNF-024 \\
 \hline
 \end{longtable}
 \endgroup
@@ -83,7 +83,7 @@ Controla el acceso a la plataforma mediante correo y contraseña, garantizando q
 Exclusivo del SuperAdmin: permite crear cuentas de Administrador, habilitarlas o deshabilitarlas invalidando de inmediato sus sesiones activas y transferir el rol SuperAdmin a una cuenta de Administrador existente y habilitada, con confirmación previa y ejecución atómica. El sistema garantiza en todo momento la existencia de exactamente una cuenta con rol SuperAdmin y no contempla eliminación permanente de cuentas, solo habilitación y deshabilitación, para preservar la trazabilidad de auditoría.
 
 \subsubsection{Módulo 3 --- Catálogo de Empresas}
-Exclusivo del SuperAdmin: registra las empresas sobre las cuales se realizará el análisis, exigiendo nombre y sector. El sector es un atributo de la empresa y pertenece a un conjunto cerrado de tres valores (Minería, Petróleo y Energía); las empresas de otros sectores no son elegibles para el análisis ni para la generación de reportes.
+Exclusivo del SuperAdmin: registra las empresas sobre las cuales se realizará el análisis, exigiendo nombre y sector. El sector es un atributo de la empresa y pertenece a un conjunto cerrado de tres valores (Minería, Petróleo y Gas, y Energía); las empresas de otros sectores no son elegibles para el análisis ni para la generación de reportes.
 
 \subsubsection{Módulo 4 --- Ingesta de Documentos}
 Exclusivo del SuperAdmin: carga memorias anuales y reportes de sostenibilidad GRI en formato Markdown (.md), asociados obligatoriamente a una empresa, un año y un tipo de documento. El sistema valida el tipo real del archivo en el servidor, calcula su hash SHA-256 para rechazar duplicados y verifica que contenga al menos un código GRI o una mención de sanción reconocible; en caso contrario, el documento se marca como observado en lugar de rechazarse por completo. El procesamiento es síncrono, con progreso visible al usuario, e incluye la indexación del contenido y la ejecución automática del análisis de brechas GRI como último paso de una ingesta exitosa. Ante rechazo o interrupción, el sistema revierte el procesamiento sin conservar contenido parcial.
@@ -117,7 +117,6 @@ En la situación propuesta (TO-BE), la plataforma articula internamente el proce
 \begin{center}
 \includegraphics[width=0.96\textwidth]{img/im-012-010.png}
 \end{center}
-\noindent Enlace del tablero del proceso: \href{https://miro.com/app/board/uXjVHq4p518=/}{https://miro.com/app/board/uXjVHq4p518=/}
 
 % --------------------------------------------------------------------
 \section{Reglas de Negocio}

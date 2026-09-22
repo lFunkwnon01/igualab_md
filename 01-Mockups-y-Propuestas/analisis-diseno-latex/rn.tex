@@ -2,7 +2,7 @@
 \hline
 \thd{RN} & \thd{NOMBRE DE LA REGLA} & \thd{DETALLE DE LA REGLA} \\
 \hline
-RN-001 & Conjunto cerrado de roles & SI una cuenta opera en la plataforma, ENTONCES el sistema le reconoce exactamente uno de dos roles SuperAdmin o Administrador y aplica únicamente los permisos de ese rol. SE APLICA A todas las cuentas y a todos los módulos y endpoints de la plataforma. SE BASA EN el modelo RBAC de dos roles acordado con el cliente y en el principio de mínimo privilegio. Y TIENE LA SIGUIENTE EXCEPCIÓ no se admiten roles adicionales (p. ej. «Usuario») ni cuentas sin rol asignado. \\
+RN-001 & Conjunto cerrado de roles & SI una cuenta opera en la plataforma, ENTONCES el sistema le reconoce exactamente uno de dos roles SuperAdmin o Administrador y aplica únicamente los permisos de ese rol. SE APLICA A todas las cuentas y a todos los módulos y endpoints de la plataforma. SE BASA EN el modelo RBAC de dos roles acordado con el cliente y en el principio de mínimo privilegio. Y TIENE LA SIGUIENTE EXCEPCIÓN no se admiten roles adicionales (p. ej. «Usuario») ni cuentas sin rol asignado. \\
 \hline
 RN-002 & Unicidad del SuperAdmin & SI se crea, habilita, deshabilita o transfiere una cuenta, ENTONCES el sistema garantiza que exista exactamente una cuenta con rol SuperAdmin en todo momento, con independencia de su estado de habilitación o de si mantiene una sesión abierta. SE APLICA A la creación de cuentas, la habilitación/deshabilitación y la transferencia de rol. SE BASA EN el principio de responsabilidad única sobre la administración del sistema y en el acuerdo del cliente. Y TIENE LA SIGUIENTE EXCEPCIÓN la cuenta SuperAdmin inicial se crea durante el despliegue y no puede crearse desde la aplicación. \\
 \hline

@@ -83,7 +83,7 @@
 | 2 | **Asistente IA (RAG simple)** | ★★★ | CU005 | Retrieval búsqueda pgvector cosine k=4 + prompt con citas para datos estructurados. |
 | 3 | **Análisis GRI / sanciones y supervisión de estados** | ★★★ (núcleo) | CU006 | Comparación contra `catalogo_gri` (reglas deterministas) → **asignación manual del estado por el Administrador** con historial. Toda brecha persiste (RN-015). |
 | 4 | **Generación de reportes PDF** | ★★★ (núcleo) | CU007 | Plantilla Jinja2 + WeasyPrint; variables dinámicas de BD; sin LLM: SELECT determinista a `gri_analisis` (poblado al terminar la ingesta) + plantilla. |
-| 5 | **RBAC + Usuarios + Configuración** | ★★ | CU001–3 | JWT + políticas de contraseña/bloqueo; transferencia de Superadmin atómica (RN-009, RNF-012). |
+| 5 | **RBAC + Usuarios** | ★★ | CU001–3 | JWT + políticas de contraseña/bloqueo; transferencia de Superadmin atómica (RN-009, RNF-012). |
 | 6 | **Auditoría** | ★★ | CU009 | append-only; consulta filtrable (solo lectura). |
 | — | Dashboards (KPIs ASG 0–100, etc.) | fase 2 | — | Tablas de agregación listas para GET (ver BD). |
 

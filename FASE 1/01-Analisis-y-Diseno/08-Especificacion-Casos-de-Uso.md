@@ -110,7 +110,7 @@
 | Campo | Detalle |
 |---|---|
 | Actores | Administrador; PO (Oscar) supervisa |
-| RF / RN | RF-018…RF-022, RF-027 / RN-027, RN-028, RN-029, RN-030, RN-031, RN-032 |
+| RF / RN | RF-018…RF-022, RF-028 / RN-027, RN-028, RN-029, RN-030, RN-031, RN-032 |
 | Precondición | Empresa con al menos un documento indexado; análisis GRI poblado al finalizar la ingesta. |
 | Postcondición | Estados confirmados en la tabla del análisis, con historial; listos para el reporte. |
 
@@ -136,7 +136,7 @@
 | Campo | Detalle |
 |---|---|
 | Actores | Administrador |
-| RF / RN | RF-025, RF-026 / RN-038, RN-039, RN-040, RN-041 |
+| RF / RN | RF-025, RF-026, RF-027 / RN-038, RN-039, RN-040, RN-041 |
 | Precondiciones | Empresa + un año seleccionados; todas las brechas con estado asignado; empresa con ≥ 1 documento indexado. |
 | Postcondición | PDF generado, **inmutable**, con snapshot congelado; evento auditado. |
 
@@ -159,7 +159,7 @@
 | Campo | Detalle |
 |---|---|
 | Actores | SuperAdmin (consulta); el sistema escribe |
-| RF / RN | RF-028 / RN-042, RN-043, RN-044, RN-045 |
+| RF / RN | RF-029, RF-030 / RN-042, RN-043, RN-044, RN-045 |
 | Precondición | Sesión SuperAdmin activa; existe al menos un evento. |
 | Postcondición | Eventos consultables; la consulta no modifica el registro. |
 
