@@ -4,10 +4,10 @@
 \section{Análisis de Requerimientos Funcional}
 
 \subsection{Actores}
-\textbf{SuperAdmin:} usuario con privilegios totales sobre la plataforma. Gestiona las cuentas (creación, habilitación, deshabilitación y asignación de roles) y es responsable del catálogo de empresas y de la ingesta de memorias anuales y reportes de sostenibilidad al sistema, incluida la validación de su correcta indexación.
+\textbf{SuperAdmin:} usuario responsable de la administración de la plataforma. Gestiona la creación, habilitación y deshabilitación de cuentas de Administrador, transfiere el rol SuperAdmin cuando corresponde, administra el catálogo de empresas y ejecuta la ingesta de documentos.
 
 \medskip
-\textbf{Administrador:} usuario operativo encargado de la explotación analítica del sistema. Consulta al asistente de IA (RAG) en lenguaje natural, revisa y valida las brechas GRI y sanciones por empresa, y genera reportes de prospección en PDF para apoyar el acercamiento comercial de Igualab.
+\textbf{Administrador:} usuario operativo responsable de consultar el asistente RAG, revisar las citas y resultados del análisis GRI, asignar manualmente los estados de los códigos detectados y generar reportes de prospección.
 
 \medskip
 \textbf{Proveedor de IA (Externo):} servicio externo consumido \emph{vía API} que sustenta el motor RAG: generación de \emph{embeddings} (indexación semántica) y generación de respuestas a las consultas del Administrador.
@@ -41,6 +41,8 @@ CU006 & Generación de Reportes de Prospección (PDF) & CU005 \\
 \hline
 CU007 & Auditoría de Eventos del Sistema & --- \\
 \hline
+CU008 & Gestión del Catálogo de Empresas & --- \\
+\hline
 \end{tabular}
 \end{center}
 
@@ -60,7 +62,7 @@ CU007 & Auditoría de Eventos del Sistema & --- \\
 \frow{Flujo Básico}{\textbf{Autenticación exitosa}\newline 1. El usuario accede a la URL de la plataforma. El sistema muestra el formulario de inicio de sesión.\newline 2. El usuario ingresa su correo electrónico y contraseña, y selecciona ``Iniciar sesión''.\newline 3. El sistema valida que la cuenta exista y se encuentre habilitada.\newline 4. El sistema valida que la contraseña corresponda a la cuenta registrada.\newline 5. El sistema identifica el rol de la cuenta (SuperAdmin o Administrador) y genera un token de autenticación firmado que incorpora la identidad y el rol vigente.\newline 6. El sistema establece la sesión activa y redirige al usuario a la vista principal correspondiente a su rol: panel de gestión para SuperAdmin, panel analítico para Administrador.}
 \frow{Flujo Alternativo}{\textbf{Credenciales inválidas}\newline En el paso 4, la contraseña no corresponde a la cuenta. El sistema muestra el mensaje ``Credenciales inválidas'' ---idéntico tanto si la cuenta no existe como si la contraseña es incorrecta--- y el usuario permanece en la pantalla de inicio, donde puede reintentar.\par\vspace{4pt}\textbf{Correo con formato inválido}\newline En el paso 2, el usuario ingresa un correo con formato inválido. El sistema muestra ``Ingrese un correo válido.'' y no procesa la solicitud.\par\vspace{4pt}\textbf{Cuenta deshabilitada}\newline En el paso 3, el sistema detecta que la cuenta está deshabilitada. Bloquea el acceso y muestra ``Usuario deshabilitado''. Contacte al administrador.''\par\vspace{4pt}\textbf{Bloqueo por intentos fallidos}\newline Tras 5 intentos fallidos consecutivos, el sistema bloquea temporalmente la cuenta durante 15 minutos, impide nuevos intentos y registra el evento en el módulo de auditoría.\par\vspace{4pt}\textbf{Recuperación de contraseña}\newline 1. Desde la pantalla de inicio, el usuario selecciona ``¿Olvidaste tu contraseña?'' e ingresa el correo asociado a la cuenta.\newline 2. El sistema muestra un mensaje idéntico para toda cuenta (``Si el correo está registrado en el sistema, recibirás un enlace de recuperación en los próximos minutos''), genera un enlace seguro con vigencia de 30 minutos y lo envía por correo.\newline 3. El usuario abre el enlace, que lo redirige a la pantalla de recuperación, e ingresa y confirma una nueva contraseña que cumpla la política de seguridad.\newline 4. El sistema actualiza la contraseña, invalida el enlace utilizado y redirige al formulario de inicio de sesión.\newline Variantes: si el enlace expiró, el sistema muestra ``El enlace de recuperación ha expirado.'' y solicita generar uno nuevo; si las contraseñas no coinciden, muestra ``Las contraseñas no coinciden.''; si la contraseña no cumple los requisitos, muestra el mensaje con la política mínima. En ningún caso se actualiza la contraseña.\par\vspace{4pt}\textbf{Cambio de contraseña con sesión activa}\newline Un usuario autenticado cambia su propia contraseña. El sistema aplica la misma política de complejidad y almacenamiento seguro que en el registro.\par\vspace{4pt}\textbf{Cierre de sesión y expiración por inactividad}\newline El usuario puede cerrar sesión manualmente, con lo que el sistema invalida la sesión activa. Además, tras 2 horas de inactividad el sistema expira la sesión y solicita reautenticación. Si la cuenta es deshabilitada, todas sus sesiones activas se invalidan de inmediato; tras una transferencia del rol SuperAdmin, la sesión aplica el rol vigente.}
 \frow{Post Condiciones}{-- Éxito: el usuario queda autenticado con una sesión activa y un token que refleja su rol vigente; solo se habilitan las funcionalidades correspondientes a su rol.\newline -- Fallo: el usuario permanece en la pantalla de inicio de sesión, sin acceso a la plataforma.}
-\frow{Restricciones}{-- Solo pueden autenticarse las cuentas registradas y habilitadas en el sistema.\newline -- El rol de la cuenta se obtiene exclusivamente del token firmado por el servidor, nunca de parámetros de la petición.\newline -- Las contraseñas se almacenan mediante una función de hash de un solo sentido con sal única por usuario; nunca se guardan en texto plano.\newline -- La autorización se evalúa en cada endpoint y la revocación de la sesión se verifica en cada petición.}
+\frow{Restricciones}{-- Solo pueden autenticarse las cuentas registradas y habilitadas en el sistema.\newline -- La identidad y la sesión se obtienen del token JWT firmado. El rol utilizado para autorizar la operación se consulta en la base de datos en cada petición, evitando utilizar un rol desactualizado almacenado en el token.\newline -- Las contraseñas se almacenan mediante una función de hash de un solo sentido con sal única por usuario; nunca se guardan en texto plano.\newline -- La autorización se evalúa en cada endpoint y la revocación de la sesión se verifica en cada petición.}
 \frow{Casos de Uso Padre}{Ninguno}
 }
 \figframe{Diagrama de caso de uso --- CU001}{\includegraphics[width=0.78\textwidth]{img/im-019-011.png}}
@@ -109,9 +111,9 @@ CU007 & Auditoría de Eventos del Sistema & --- \\
 \ficha{
 \frow{Descripción}{Este caso de uso permite al Administrador usar al agente de IA para hacerle consultas dependiendo de la empresa y sector específico, también eligiendo el año de los documentos a analizar. Este puede hablar en lenguaje natural con el asistente y responderá de acuerdo a la información de los documentos en el sistema.}
 \frow{Actores}{Administrador}
-\frow{Precondiciones}{-- El Administrador debe haber iniciado sesión exitosamente.\newline -- Debe encontrarse en el módulo correcto para Consulta de Asistente de IA}
+\frow{Precondiciones}{-- El Administrador debe haber iniciado sesión exitosamente.\newline -- Debe encontrarse en el módulo correcto para Consulta de Asistente de IA\newline -- Antes de enviar una consulta, el Administrador debe seleccionar el sector, la empresa y el año. Sin estos datos, el sistema mantiene deshabilitada la opción de consulta.}
 \frow{Flujo Básico}{\textbf{Consultas al Asistente de IA}\newline 1. El Administrador accede al módulo de Consulta de Asistente de IA.\newline 2. El Administrador debe elegir el sector, empresa y año para delimitar la información que va a usar el agente de IA. El sistema muestra un mensaje inicial sobre las empresas actualmente en el sistema, y da sugerencias de prompts en lenguaje natural.\newline 3. El Administrador debe ingresar su consulta en lenguaje natural pidiendo la información pertinente de la empresa.\newline 4. El agente de IA debe procesarla, buscando información dentro de los documentos en el sistema.\newline 5. El agente de IA devuelve la respuesta conteniendo la información pedida de la consulta junto con citas para evitar información inventada.}
-\frow{Flujo Alternativo}{\textbf{Información no encontrada}\newline Al devolver la información o respuesta pedida, si el documento o información pedida no existe, la IA deberá informar en su respuesta que no existe o no se encuentra, no inventarse información para cumplir con lo pedido.}
+\frow{Flujo Alternativo}{\textbf{Información no encontrada}\newline Al devolver la información o respuesta pedida, si el documento o información pedida no existe, la IA deberá informar en su respuesta que no existe o no se encuentra, no inventarse información para cumplir con lo pedido.\par\vspace{4pt}\textbf{Consulta fuera del dominio}\newline Si la pregunta no se relaciona con sostenibilidad empresarial, indicadores GRI, sanciones o el contenido de los documentos indexados, el asistente rechaza la consulta e informa que se encuentra fuera del alcance permitido.\par\vspace{4pt}\textbf{Proveedor de IA no disponible}\newline Si el proveedor externo no responde dentro del tiempo máximo establecido, el sistema informa temporalmente la indisponibilidad del asistente. Esta situación no impide utilizar los demás módulos de la plataforma.}
 \frow{Post Condiciones}{-- Éxito: En la respuesta del agente de IA debe responder a la consulta y devolver la información solicitada.\newline -- Fallo: En su respuesta del agente de IA debe informarle al Administrador que no se encuentra la información solicitada.}
 \frow{Restricciones}{-- Solo el rol Administrador tiene la capacidad de interactuar con el agente de IA.}
 \frow{Casos de Uso Padre}{---}
@@ -132,7 +134,6 @@ CU007 & Auditoría de Eventos del Sistema & --- \\
 \frow{Post Condiciones}{-- Éxito: los estados quedan validados en la tabla del análisis, con su historial, y el resultado queda listo para generar el reporte de prospección.\newline -- Fallo: no se altera la información previamente almacenada y se notifica el motivo.}
 \frow{Restricciones}{-- Solo el rol Administrador puede revisar y validar las brechas y sanciones.\newline -- El sistema no infiere ni calcula el estado; la asignación es 100\,\% manual (RN-029, RN-030).\newline -- Toda brecha y sanción reportada debe citar su fuente (documento y sección).\newline -- No se consultan fuentes externas al corpus del sistema.}
 \frow{Casos de Uso Padre}{CU003 --- Ingesta de Documentos (memorias y reportes GRI)}
-\frow{Casos de Uso Padre}{CU003 --- Ingesta de Documentos (memorias y reportes GRI)}
 }
 \figframe{Diagrama de caso de uso --- CU005}{\includegraphics[width=0.72\textwidth]{img/im-030-024.png}}
 \figframe{Prototipo --- CU005}{\includegraphics[width=0.9\textwidth]{img/im-031-025.png}}
@@ -142,13 +143,13 @@ CU007 & Auditoría de Eventos del Sistema & --- \\
 \subsubsection*{CU006: Generación de Reportes de Prospección (PDF)}
 \addcontentsline{toc}{subsubsection}{CU006: Generación de Reportes de Prospección (PDF)}
 \ficha{
-\frow{Descripción}{En este caso de uso el Administrador tiene la capacidad de generar reportes de prospección, los cuales contienen el código GRI, las sanciones de la empresa en dicho año y su puntaje ESG.}
+\frow{Descripción}{Este caso de uso permite al Administrador generar un reporte de prospección para una empresa y un año determinados. El reporte se construye a partir de los resultados GRI revisados y validados, las citas de respaldo, las sanciones identificadas y el puntaje ESG. La generación no invoca al proveedor de inteligencia artificial.}
 \frow{Actores}{Administrador}
-\frow{Precondiciones}{-- El Administrador debe haber iniciado sesión exitosamente.\newline -- Debe encontrarse en el módulo de reportes de prospección.\newline -- El documento del que se generará el reporte debe encontrarse en el sistema.}
+\frow{Precondiciones}{-- El Administrador debe mantener una sesión vigente.\newline -- La empresa y el año seleccionados deben contar con al menos un documento indexado.\newline -- Los resultados GRI requeridos para el reporte deben haber sido revisados y validados manualmente.\newline -- No debe existir otro reporte generado para la misma empresa y año.}
 \frow{Flujo Básico}{\textbf{Generar reportes de prospección}\newline 1. El Administrador accede al módulo de reportes de prospección.\newline 2. Es necesario llenar los datos del sector, empresa y año del cual se generará dicho documento.\newline 3. Tiene la capacidad de hacer una vista previa del documento previa a la generación y descarga del documento.\newline 4. Puede generar y descargar el documento de reporte de prospección.}
-\frow{Flujo Alternativo}{\textbf{Generar reporte de un año que no haya documento}\newline El sistema no habilita la vista previa, generación o descarga del documento ya que no hay posibilidad de hacerlo.\par\vspace{4pt}\textbf{Generar un reporte de un documento previamente usado}\newline El sistema no permitirá generar un reporte de un documento del cual ya se haya hecho un reporte.}
+\frow{Flujo Alternativo}{\textbf{Generar reporte de un año que no haya documento}\newline El sistema no habilita la vista previa, generación o descarga del documento ya que no hay posibilidad de hacerlo.\par\vspace{4pt}\textbf{Reporte existente}\newline Si ya existe un reporte para la misma empresa y año, el sistema no genera uno nuevo y permite visualizar o descargar el reporte existente.}
 \frow{Post Condiciones}{-- Éxito: El documento es generado, capaz de visualizarse y descargarse.\newline -- Fallo: El documento no es capaz de ser generado si el documento no existe.}
-\frow{Restricciones}{-- Solo el rol Administrador puede acceder a este módulo.\newline -- El documento del cual se hará el reporte debe existir en el sistema.\newline -- No es posible generar un documento del mismo año, empresa y sector.}
+\frow{Restricciones}{-- Solo el rol Administrador puede acceder a este módulo.\newline -- El documento del cual se hará el reporte debe existir en el sistema.\newline -- Solo puede existir un reporte de prospección por combinación de empresa y año.}
 \frow{Casos de Uso Padre}{CU005 --- Detección de Brechas GRI y Sanciones}
 }
 \figframe{Diagrama de caso de uso --- CU006}{\includegraphics[width=0.85\textwidth]{img/im-032-027.png}}
@@ -202,6 +203,8 @@ CU007 & Auditoría de Eventos del Sistema & --- \\
 \clearpage
 \subsection{Requerimientos Funcionales}
 Los requerimientos funcionales se redactan de forma atómica, verificable, comprensible y libre de implementación, y cada uno se deriva de una o varias reglas de negocio (RN). Se detallan a continuación.
+
+La numeración de los requerimientos funcionales presentada en esta versión constituye la línea base vigente del proyecto. Cualquier artefacto anterior, caso de prueba o elemento del backlog deberá actualizar sus referencias para mantener la trazabilidad con esta versión.
 
 \begingroup\small
 \input{rf.tex}

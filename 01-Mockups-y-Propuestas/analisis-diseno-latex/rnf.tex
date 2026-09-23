@@ -16,7 +16,7 @@ RNF-002 & Seguridad & Las contraseñas se almacenan mediante una función de has
 \hline
 RNF-003 & Seguridad & La identidad de la cuenta se obtiene exclusivamente del token firmado (JWT), nunca de parámetros de la petición. & RF-001, RF-004, RN-003 \\
 \hline
-RNF-004 & Seguridad & La clave de firma de los tokens se almacena fuera del código fuente y se rota sin redespliegue de la aplicación. & RF-001 \\
+RNF-004 & Seguridad & La clave utilizada para firmar los tokens JWT se almacena fuera del código fuente mediante variables de entorno o secretos del ambiente. Su rotación no requiere modificar el código y se aplica mediante una actualización segura de la configuración y un reinicio controlado del servicio. & RF-001 \\
 \hline
 RNF-005 & Seguridad & La autorización se evalúa en cada endpoint, con independencia de lo que exponga la interfaz. & RN-003 \\
 \hline
@@ -40,9 +40,9 @@ RNF-014 & Integridad & El modelo de datos distingue entre un valor no determinad
 \hline
 RNF-015 & Integridad & El contenido de los documentos se procesa y almacena en UTF-8, preservando tildes y la letra «ñ» sin alteración. & RF-012, RF-016 \\
 \hline
-RNF-016 & Rendimiento & La ingesta e indexación de un documento de tamaño máximo (50 MB) se completa en menos de 120 segundos. & RF-015 \\
+RNF-016 & Rendimiento & El sistema debe procesar la ingesta e indexación de un documento de hasta 50 MB dentro del tiempo máximo validado mediante pruebas de rendimiento, considerando la latencia y los límites del proveedor externo de embeddings. & RF-015 \\
 \hline
-RNF-017 & Rendimiento & El asistente entrega una respuesta en un máximo de 15 segundos bajo condiciones normales, excluyendo la latencia del proveedor externo. & RF-023 \\
+RNF-017 & Rendimiento & El sistema debe registrar por separado el tiempo de procesamiento interno y el tiempo de respuesta del proveedor externo. Bajo condiciones normales, la respuesta completa del asistente no debe superar el límite definido durante las pruebas de rendimiento. & RF-023 \\
 \hline
 RNF-018 & Rendimiento & Las llamadas al proveedor de IA tienen un tiempo máximo de espera de 1 minuto, tras el cual la operación se reporta como indisponible. & RF-023 \\
 \hline

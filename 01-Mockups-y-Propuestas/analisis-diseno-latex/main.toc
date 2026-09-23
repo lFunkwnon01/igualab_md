@@ -12,7 +12,7 @@
 \contentsline {subsubsection}{\numberline {4.2.3}Módulo 3 --- Catálogo de Empresas}{10}{subsubsection.4.2.3}%
 \contentsline {subsubsection}{\numberline {4.2.4}Módulo 4 --- Ingesta de Documentos}{10}{subsubsection.4.2.4}%
 \contentsline {subsubsection}{\numberline {4.2.5}Módulo 5 --- Análisis y Validación de Brechas GRI}{10}{subsubsection.4.2.5}%
-\contentsline {subsubsection}{\numberline {4.2.6}Módulo 6 --- Asistente de Inteligencia Artificial (RAG)}{10}{subsubsection.4.2.6}%
+\contentsline {subsubsection}{\numberline {4.2.6}Módulo 6 --- Asistente de Inteligencia Artificial (RAG)}{11}{subsubsection.4.2.6}%
 \contentsline {subsubsection}{\numberline {4.2.7}Módulo 7 --- Generación de Reportes de Prospección}{11}{subsubsection.4.2.7}%
 \contentsline {subsubsection}{\numberline {4.2.8}Módulo 8 --- Auditoría Funcional}{11}{subsubsection.4.2.8}%
 \contentsline {section}{\numberline {5}Diagrama del Proceso}{11}{section.5}%
@@ -21,8 +21,8 @@
 \contentsline {section}{\numberline {6}Reglas de Negocio}{13}{section.6}%
 \contentsline {section}{\numberline {7}Análisis de Requerimientos Funcional}{20}{section.7}%
 \contentsline {subsection}{\numberline {7.1}Actores}{20}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Diagrama Caso de Uso y su Especificación}{21}{subsection.7.2}%
-\contentsline {subsubsection}{\numberline {7.2.1}Listado de casos de uso}{21}{subsubsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2}Diagrama Caso de Uso y su Especificación}{20}{subsection.7.2}%
+\contentsline {subsubsection}{\numberline {7.2.1}Listado de casos de uso}{20}{subsubsection.7.2.1}%
 \contentsline {subsubsection}{CU001: Autenticación y Gestión de Sesión}{22}{subsubsection.7.2.1}%
 \contentsline {subsubsection}{CU002: Gestión de Usuarios}{26}{table.3}%
 \contentsline {subsubsection}{CU003: Ingesta de Documentos (memorias y reportes GRI)}{30}{table.4}%
@@ -40,12 +40,12 @@
 \contentsline {subsection}{\numberline {7.4}Requerimientos Funcionales}{48}{subsection.7.4}%
 \contentsline {subsection}{\numberline {7.5}Requerimientos No Funcionales}{49}{subsection.7.5}%
 \contentsline {section}{\numberline {8}Modelo de Datos}{52}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Resumen del modelo}{52}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.1}Resumen del modelo}{53}{subsection.8.1}%
 \contentsline {subsection}{\numberline {8.2}Distribución física de las bases de datos}{53}{subsection.8.2}%
 \contentsline {subsection}{\numberline {8.3}Base de datos transaccional}{54}{subsection.8.3}%
-\contentsline {subsection}{\numberline {8.4}Base de datos vectorial}{54}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.4}Base de datos vectorial}{55}{subsection.8.4}%
 \contentsline {subsection}{\numberline {8.5}Relaciones físicas y referencias lógicas}{55}{subsection.8.5}%
-\contentsline {subsection}{\numberline {8.6}Entidades y relaciones del modelo}{55}{subsection.8.6}%
+\contentsline {subsection}{\numberline {8.6}Entidades y relaciones del modelo}{56}{subsection.8.6}%
 \contentsline {subsection}{\numberline {8.7}Diagrama Entidad-Relación}{56}{subsection.8.7}%
 \contentsline {section}{\numberline {9}Diccionario de Datos}{58}{section.9}%
 \contentsline {section}{\numberline {10}Volumen Estimado}{64}{section.10}%

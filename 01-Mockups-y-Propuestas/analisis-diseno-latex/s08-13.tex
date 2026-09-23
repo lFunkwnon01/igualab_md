@@ -374,20 +374,6 @@ la información en la capa de servicios.
 
 \subsection{Entidades y relaciones del modelo}
 
-La cadena principal del negocio se representa de la siguiente manera:
-
-\begin{center}
-empresa
-$\rightarrow$
-documento
-$\rightarrow$
-fragmentos\_documento
-$\rightarrow$
-gri\_analisis
-$\rightarrow$
-reporte\_prospeccion
-\end{center}
-
 Las principales relaciones del modelo son:
 
 \begin{enumerate}
@@ -687,11 +673,11 @@ La siguiente tabla presenta una estimación del volumen mensual de datos generad
 \hline
 Autenticación y Gestión de Sesión & 170 registros & Medio & Considera aproximadamente 168 sesiones y 2 solicitudes de recuperación de contraseña al mes. \\
 \hline
-Gestión de Usuarios & 4 a 6 cuentas activas & Bajo & Referencia lógica al documento de origen en documentos.id, ubicado en la base transaccional. \\
+Gestión de Usuarios & 3 a 4 cuentas activas & Bajo & El sistema será utilizado inicialmente por aproximadamente 3 o 4 personas y contará con un único SuperAdmin. La creación de nuevas cuentas será ocasional. \\
 \hline
 Catálogo de Empresas & 8 a 10 empresas & Bajo & Corresponde al registro progresivo de empresas habilitadas para el análisis. \\
 \hline
-Ingesta de Documentos & 42 documentos y 4,200 fragmentos & Alto & Cada documento se divide en aproximadamente 100 fragmentos con embeddings para su almacenamiento en la base vectorial. \\
+Ingesta de Documentos & 42 documentos y 4,200 fragmentos & Alto & Se estima la carga de aproximadamente 42 documentos mensuales, considerando que una empresa puede registrar memorias anuales y reportes de sostenibilidad correspondientes a diferentes años. Cada documento puede generar aproximadamente 100 fragmentos vectoriales. \\
 \hline
 Análisis y Validación de Brechas GRI & 425 registros & Medio & Considera aproximadamente 417 resultados de análisis y 8 sanciones identificadas. El catálogo de 40 códigos GRI permanece como información base. \\
 \hline
@@ -706,14 +692,16 @@ Auditoría Funcional & 420 eventos & Medio & Registra accesos, cambios de usuari
 
 % ====================================================================
 \section{Diseño Arquitectónico}
-La solución se estructura como una arquitectura de solución por capas, con dependencias unidireccionales de arriba hacia abajo (cada capa invoca únicamente a la inmediata inferior). Las siete capas son: actores y roles; aplicación web (SPA React 18 + Vite); API REST (FastAPI); servicios y lógica de negocio (Python 3.13, monolito modular); procesamiento y reglas por módulo; persistencia (SQLAlchemy Async); y base de datos PostgreSQL 16 con la extensión pgvector. La separación por capas y la modularidad interna (principios SOLID, con un único servicio por módulo) se detallan en la sección 4. La figura siguiente presenta el diagrama de arquitectura de solución por capas.
+La solución utiliza una arquitectura monolítica modular organizada en cuatro niveles principales: frontend web, API y servicios, procesos funcionales y datos. El frontend se implementa con React 18 y Vite; la API y la lógica de negocio se desarrollan con FastAPI y Python 3.13; el acceso a datos utiliza SQLAlchemy Async y AsyncPG. La persistencia se distribuye entre una base de datos transaccional PostgreSQL 16 con doce tablas y una base de datos vectorial PostgreSQL 16 con pgvector y una tabla. Las dependencias entre los niveles son descendentes y controladas por la aplicación.
+
+FastAPI mantiene conexiones independientes con ambas bases de datos y coordina las operaciones que requieren información transaccional y vectorial. Las bases de datos no se comunican directamente entre sí. Sus registros se relacionan mediante referencias lógicas UUID validadas por la aplicación.
 
 \begin{center}
 \includegraphics[width=0.98\textwidth]{img/arquitectura-igualab.png}
 \end{center}
 
 \section{Prototipo}
-El prototipo navegable de la FASE 1 está disponible e implementa las pantallas de los módulos descritos en este documento (autenticación, gestión de usuarios, catálogo de empresas e ingesta, asistente de IA, reportes de prospección y auditoría), organizadas por rol: el SuperAdmin accede a la gestión de usuarios, la ingesta y la auditoría; el Administrador, al asistente de IA, los reportes y las descargas.
+El prototipo navegable de la Fase 1 presenta las pantallas correspondientes a autenticación, gestión de usuarios, catálogo de empresas, ingesta de documentos, análisis y validación GRI, asistente RAG, reportes de prospección y auditoría. Las opciones visibles se organizan según el rol autenticado, sin reemplazar las validaciones de autorización realizadas por el backend.
 
 \section{Anexo}
 \subsection{Problemas identificados del proceso actual (AS-IS)}
@@ -733,13 +721,13 @@ La matriz siguiente consolida la cobertura de cada módulo funcional: su caso de
 \hline
 2 & Gestión de Usuarios & CU002 & RF-006…RF-009 & RN-001…RN-009 · RNF-012, RNF-013 \\
 \hline
-3 & Catálogo de Empresas & CU003 & RF-010, RF-011 & RN-014…RN-017 \\
+3 & Catálogo de Empresas & CU008 & RF-010, RF-011 & RN-014…RN-017 \\
 \hline
 4 & Ingesta de Documentos & CU003 & RF-012…RF-017 & RN-018…RN-026 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-029 \\
 \hline
 5 & Análisis y Validación de Brechas GRI & CU005 & RF-018…RF-022, RF-028 & RN-027…RN-032 · RNF-014, RNF-026, RNF-027 \\
 \hline
-6 & Asistente de IA (RAG) & CU004 & RF-023, RF-024 & RN-033…RN-037 · RNF-010, RNF-017, RNF-018, RNF-019 \\
+6 & Asistente de IA (RAG) & CU004 & RF-023, RF-024 & RN-033…RN-037 · RNF-010, RNF-017, RNF-018, RNF-019, RNF-027 \\
 \hline
 7 & Generación de Reportes de Prospección & CU006 & RF-025…RF-027 & RN-038…RN-041 \\
 \hline

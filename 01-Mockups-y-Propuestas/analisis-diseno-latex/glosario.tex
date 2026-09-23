@@ -9,7 +9,7 @@
 \newcommand{\glos}[2]{\par\vspace{4pt}\noindent\textbf{#1}: #2\par}
 \newcommand{\grupo}[1]{\par\vspace{10pt}\noindent\textbf{\underline{#1}}\par\vspace{2pt}}
 \glos{ASG (Ambiental, Social y Gobernanza)}{Dimensiones que evalúan el desempeño en sostenibilidad de una empresa.}
-\glos{Brecha GRI}{Situación en la que un código o indicador GRI aplicable al sector de una empresa no se encuentra reportado, o se reporta con evidencia insuficiente.}
+\glos{Brecha GRI}{Resultado de la revisión de un código GRI detectado en los documentos de una empresa cuya evidencia ha sido clasificada por el Administrador como Baja sustancia o Sub-reportado. El sistema identifica códigos y citas, pero no determina automáticamente el estado de la brecha.}
 \glos{DEI / RSE}{Diversidad e Inclusión / Responsabilidad Social Empresarial, ámbitos de trabajo de Igualab.}
 \glos{Estándar GRI (Global Reporting Initiative)}{Marco internacional de reportes de sostenibilidad, organizado en códigos por área temática (ej. GRI 400 = laboral/social).}
 \glos{Memoria anual}{Documento financiero obligatorio para las empresas que cotizan en la Bolsa de Valores de Lima.}
@@ -28,7 +28,7 @@
 \glos{Embedding}{Representación numérica (vector) de un fragmento de texto, generada por un modelo de IA, que permite medir la similitud semántica entre textos para habilitar la búsqueda del motor RAG.}
 \glos{Hash SHA-256}{Algoritmo criptográfico utilizado para calcular una huella digital única de cada documento cargado, con el fin de detectar y rechazar duplicados.}
 \glos{Ingesta}{Proceso de cargar al sistema las memorias anuales y reportes GRI, incluyendo su validación, indexación y disparo automático del análisis de brechas.}
-\glos{JWT (JSON Web Token)}{Token firmado por el servidor que incorpora la identidad de la cuenta y su rol vigente, utilizado para mantener la sesión autenticada.}
+\glos{JWT (JSON Web Token)}{Token firmado por el servidor que permite identificar a la cuenta y la sesión autenticada. El rol vigente no se obtiene exclusivamente del token, sino que se consulta en la base de datos en cada petición protegida.}
 \glos{Markdown (.md)}{Formato de texto estructurado en el que deben ingresar los documentos fuente al sistema; el sistema no realiza conversión de formatos, por lo que el cliente entrega los documentos ya convertidos.}
 \glos{Motor RAG (Retrieval-Augmented Generation)}{Componente de inteligencia artificial que responde consultas en lenguaje natural recuperando primero los fragmentos relevantes del corpus indexado, y generando luego una respuesta fundamentada exclusivamente en ellos.}
 \glos{Estado OBSERVADO}{Estado que se asigna a un documento ingestado cuando no contiene ningún código GRI ni mención de sanción reconocible; el documento no se rechaza por completo, pero tampoco se indexa hasta corregirse.}
