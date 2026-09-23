@@ -41,22 +41,17 @@
 \contentsline {subsection}{\numberline {7.5}Requerimientos No Funcionales}{49}{subsection.7.5}%
 \contentsline {section}{\numberline {8}Modelo de Datos}{52}{section.8}%
 \contentsline {subsection}{\numberline {8.1}Resumen del modelo}{52}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}El modelo por dominios (6 dominios --- refleja el ERD vigente)}{53}{subsection.8.2}%
-\contentsline {subsection}{\numberline {8.3}Entidades y relaciones (modelo conceptual)}{53}{subsection.8.3}%
-\contentsline {subsection}{\numberline {8.4}Diagrama Entidad--Relación (ERD vigente)}{54}{subsection.8.4}%
-\contentsline {subsection}{\numberline {8.5}Restricciones clave (UNIQUE y reglas BD)}{54}{subsection.8.5}%
-\contentsline {subsection}{\numberline {8.6}Tablas retiradas (se quitaron módulos)}{55}{subsection.8.6}%
-\contentsline {subsection}{\numberline {8.7}Decisiones del modelo}{55}{subsection.8.7}%
-\contentsline {section}{\numberline {9}Diccionario de Datos}{56}{section.9}%
-\contentsline {subsubsection}{Dominio: IDENTIDAD Y ACCESO}{56}{section*.3}%
-\contentsline {subsubsection}{Dominio: EMPRESAS E INGESTA}{57}{table.15}%
-\contentsline {subsubsection}{Dominio: ANÁLISIS GRI}{59}{table.18}%
-\contentsline {subsubsection}{Dominio: ASISTENTE RAG}{61}{table.21}%
-\contentsline {subsubsection}{Dominio: REPORTES}{62}{table.23}%
-\contentsline {subsubsection}{Dominio: AUDITORÍA}{62}{table.24}%
-\contentsline {section}{\numberline {10}Volumen Estimado}{63}{section.10}%
-\contentsline {section}{\numberline {11}Diseño Arquitectónico}{64}{section.11}%
-\contentsline {section}{\numberline {12}Prototipo}{65}{section.12}%
-\contentsline {section}{\numberline {13}Anexo}{65}{section.13}%
-\contentsline {subsection}{\numberline {13.1}Problemas identificados del proceso actual (AS-IS)}{65}{subsection.13.1}%
+\contentsline {subsection}{\numberline {8.2}Distribución física de las bases de datos}{53}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Base de datos transaccional}{54}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Base de datos vectorial}{54}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}Relaciones físicas y referencias lógicas}{55}{subsection.8.5}%
+\contentsline {subsection}{\numberline {8.6}Entidades y relaciones del modelo}{55}{subsection.8.6}%
+\contentsline {subsection}{\numberline {8.7}Diagrama Entidad-Relación}{56}{subsection.8.7}%
+\contentsline {section}{\numberline {9}Diccionario de Datos}{58}{section.9}%
+\contentsline {section}{\numberline {10}Volumen Estimado}{64}{section.10}%
+\contentsline {section}{\numberline {11}Diseño Arquitectónico}{66}{section.11}%
+\contentsline {section}{\numberline {12}Prototipo}{66}{section.12}%
+\contentsline {section}{\numberline {13}Anexo}{67}{section.13}%
+\contentsline {subsection}{\numberline {13.1}Problemas identificados del proceso actual (AS-IS)}{67}{subsection.13.1}%
+\contentsline {subsection}{\numberline {13.2}Matriz de trazabilidad (módulo · CU · RF · RN · RNF)}{67}{subsection.13.2}%
 \contentsfinish 
