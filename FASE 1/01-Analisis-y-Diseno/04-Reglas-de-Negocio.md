@@ -2,7 +2,6 @@
 
 > **Fuente única:** documento de Análisis y Diseño (`analisis_y_diseno_oficial.pdf`).
 > 45 RN agrupadas por dominio, con la estructura `SI … ENTONCES … SE APLICA A … SE BASA EN … EXCEPCIÓN`.
-> Versión anterior (39 RN): `99-Archivo/versiones/04-Reglas-de-Negocio_v39_2026-09-20.md`.
 
 | RN | Nombre de la regla | Detalle de la regla |
 |---|---|---|

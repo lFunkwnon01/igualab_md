@@ -10,11 +10,10 @@
 1. `01-Mockups-y-Propuestas/Igualab - Plan de proyecto.docx (1).pdf` — **Plan de Proyecto v1.2** (línea base aprobada).
 2. **`01-Mockups-y-Propuestas/analisis-diseno-latex/analisis_y_diseno_oficial.pdf`** — **A&D vigente** (nuevo). Fuente editable en `analisis-diseno-latex/` (`main.tex` + `rn.tex`/`rf.tex`/`rnf.tex`). Compila con `tectonic -X compile main.tex`.
 3. `FASE 1/` — desarrollo del análisis, arquitectura, BD, stack, frontend y API (RN/RF/RNF replicados en `01-Analisis-y-Diseno/`).
-4. `01-Mockups-y-Propuestas/Análisis y Diseño - Igualab.pdf` — A&D **original** (referencia histórica).
 
 > Toda desviación de alcance se registra por **acta (REQ)**; el Plan firmado no se re-versiona. Ver [[21 Actas de Reunión y Acuerdos]].
 
-> 📄 Auditoría del A&D (LaTeX): `MEJORAS-A&D/AUDITORIA-A&D-V2-2026-09-22.md` · 📄 Auditoría del vault completo: `MEJORAS-A&D/AUDITORIA-VAULT-COMPLETO-2026-09-22.md` · 🏗️ Infraestructura y flujo Git: [[INFRAESTRUCTURA-Y-FLUJO-GIT]].
+> 📄 Auditoría de salud del vault: `MEJORAS-A&D/AUDITORIA-SALUD-VAULT-post-alineacion.md` · 🏗️ Infraestructura y flujo Git: [[INFRAESTRUCTURA-Y-FLUJO-GIT]].
 
 ---
 
@@ -34,7 +33,6 @@
 - `05-Requerimientos-Funcionales.md` — **RF-001…RF-030** (atómicos + Analista).
 - `06-Requerimientos-No-Funcionales.md` — **RNF-001…RNF-030** (categorizados).
 - `07-Casos-de-Uso-Diagrama.md` · `08-Especificacion-Casos-de-Uso.md` — **CU001…CU008** + especificaciones.
-- `09-Revision-A&D-v2-vs-FASE1.md` · `10-Contexto-Embeddings-y-Auditoria-AyD.md` — bitácora histórica (el doc 10, Parte 1, fija la decisión de **embeddings/LLM por API**).
 
 ### 2 · Arquitectura de Solución — `FASE 1/02-Arquitectura-de-Solucion/`
 - `01-Arquitectura-de-Solucion-FASE-1.md` — **arquitectura por capas (7 capas, `arquitecturasolution.jpeg`)**, RAG simple **sin MCP**.
@@ -42,7 +40,6 @@
 - `03-Diccionario-de-Datos.md` — diccionario (**13 tablas**).
 - `04-Comparacion-RAG-simple-vs-MCP.md` · `05-Analisis-Por-que-Existen-las-Tablas.md`.
 - `06-Diseño-Arquitectonico.md` — informe de diseño arquitectónico (**7 capas**, 2 bases).
-- `07-Modelo-de-Datos-Informe.md` — informe completo del modelo de datos (**13 tablas**, conceptual → lógico → físico).
 
 ### 3 · Stack y demás capas
 - `FASE 1/03-Stack-Tecnologico/01-Stack-Tecnologico.md` — stack + LLM gratuito y variables de entorno.
@@ -55,7 +52,7 @@
 - [[11 Stakeholders y Contactos]] — cliente, equipo SCRUM y equipo académico.
 
 ### 5 · Diseño, prototipo y recursos
-- `diseno/stitch_.../` — mockups de **Stitch (diseño histórico, numeración CU antigua)**. La **fuente viva del diseño es el mock desplegado** <https://igualab.vercel.app/> (SuperAdmin: Usuarios, Ingesta, Auditoría · Administrador: Asistente IA, Reportes, Descargas; **sin Configuración**). Pantallas fuera de alcance en `99-Archivo/`.
+- **Fuente viva del diseño:** mock desplegado <https://igualab.vercel.app/> (SuperAdmin: Usuarios, Ingesta, Auditoría · Administrador: Asistente IA, Reportes, Descargas; **sin Configuración**).
 - Mockup navegable **desplegado**: <https://igualab.vercel.app/>.
 - `06-Desarrollo/FE-IGUALAB` y `06-Desarrollo/BCK-IGUALAB` — repos de desarrollo (submódulos).
 - `01-Mockups-y-Propuestas/` — Plan, A&D, actas firmadas y organigrama.
@@ -79,7 +76,7 @@ Igualab necesita una **plataforma de analítica de sostenibilidad con IA (RAG)**
 2. **A&D reescrito en LaTeX (21/09):** 13 secciones completas, con **45 RN** (plantilla del profesor), **30 RF** atómicos y **30 RNF** categorizados; modelo y diccionario (**13 tablas**, incl. `sanciones`).
 3. **Trazabilidad:** RN/RF/RNF citan actas cuando aplica; la cita `CS3081-00N-2026` mapea 1 a 1 al archivo del acta.
 4. **Numeración CU unificada** a la del A&D (CU001 auth · CU002 usuarios · CU003 ingesta · CU004 IA · CU005 brechas · CU006 reportes · CU007 auditoría · CU008 catálogo de empresas), con dependencias reales.
-5. **Limpieza del vault:** archivos ajenos/duplicados fuera; media pesada fuera de Git; pantallas/BPMN fuera de alcance archivados; auditorías históricas.
+5. **Limpieza del vault:** contenido redundante/obsoleto eliminado; media pesada fuera de Git.
 6. **Desarrollo:** `BCK-IGUALAB` + `FE-IGUALAB` por `development → qa → uat → main` ([[INFRAESTRUCTURA-Y-FLUJO-GIT]]).
 
 > Última actualización del vault: **2026-09-22**.
