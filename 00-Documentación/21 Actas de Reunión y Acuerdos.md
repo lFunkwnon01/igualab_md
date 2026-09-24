@@ -192,12 +192,12 @@ Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Ow
 | REQ-24 | Despliegue del avance en los entornos de la universidad | Demo | Alta | ✅ Registrado |
 | REQ-25 | Demostración del módulo de autenticación | Demo | Alta | ✅ Registrado |
 | REQ-26 | Configuración de envío de correos con Gmail (SMTP/API) para recuperación de contraseña; cuenta a compartir por el PO | Cambio | Alta | ⏳ Pendiente |
-| REQ-27 | Presentación/entrega del Análisis y Diseño (A&D) por correo | Documento | Alta | 🔄 En proceso |
+| REQ-27 | Presentación/entrega del Análisis y Diseño (A&D) por correo | Documento | Alta | ✅ Registrado (22/09) |
 
 ### Compromisos
 - PO (Oscar): **compartir una cuenta de correo** para la configuración (⏳ pendiente).
 - Juan Marcelo (Backend): **obtener la API/configuración de Gmail** y configurar el envío de correos (⏳ pendiente).
-- PM/Analistas: **enviar el A&D por correo** (🔄 en proceso, 22/09) y **enviar el acta 7** (✅ 22/09).
+- PM/Analistas: **enviar el A&D por correo** (✅ enviado 22/09) y **enviar el acta 7** (✅ 22/09).
 
 **Próxima reunión:** por definir (cadencia de 2 reuniones/semana).
 

@@ -42,7 +42,7 @@
 - `03-Diccionario-de-Datos.md` — diccionario (**13 tablas**).
 - `04-Comparacion-RAG-simple-vs-MCP.md` · `05-Analisis-Por-que-Existen-las-Tablas.md`.
 - `06-Diseño-Arquitectonico.md` — informe de diseño arquitectónico (**7 capas**, 2 bases).
-- `06-Modelo-de-Datos-Informe.md` — informe completo del modelo de datos (**13 tablas**, conceptual → lógico → físico).
+- `07-Modelo-de-Datos-Informe.md` — informe completo del modelo de datos (**13 tablas**, conceptual → lógico → físico).
 
 ### 3 · Stack y demás capas
 - `FASE 1/03-Stack-Tecnologico/01-Stack-Tecnologico.md` — stack + LLM gratuito y variables de entorno.

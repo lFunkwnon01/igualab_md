@@ -18,6 +18,8 @@ El sistema se estructura en **7 capas** con flujo unidireccional (de arriba haci
 
 **Reglas de dependencia:** cada capa solo conoce la capa inmediatamente inferior — no se salta capas ni hay dependencias circulares.
 
+> **Nota de mapeo con el A&D V2 (§11):** el A&D describe la solución en **4 niveles macro** (frontend web · API y servicios · procesos funcionales · datos). Las **7 capas** de este informe son el **desglose detallado** de esos 4 niveles: *Actores/Roles + Aplicación web* → **frontend**; *API/endpoints + Servicios + Procesamiento* → **API y servicios / procesos**; *Persistencia + Base de datos* → **datos**. Ambos niveles de descripción son consistentes.
+
 ## 1.1 Capa 1 — Actores y Roles
 
 | Actor | Alcance |

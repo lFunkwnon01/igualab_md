@@ -17,8 +17,9 @@
 
 # LaTeX: figuras extraídas y artefactos de compilación (el contenido vive en los .tex)
 01-Mockups-y-Propuestas/analisis-diseno-latex/img/
-01-Mockups-y-Propuestas/analisis-diseno-latex/analisis_y_diseno_oficial.pdf
 01-Mockups-y-Propuestas/analisis-diseno-latex/comparativa-original-vs-latex.pdf
+# El A&D V2 SÍ se indexa (es la fuente de verdad); graphify no lee .tex, por eso se usa su PDF.
+# 01-Mockups-y-Propuestas/analisis-diseno-latex/analisis_y_diseno_oficial.pdf
 
 # Material del curso CS3081 (no es contenido del proyecto)
 software_pdf/
