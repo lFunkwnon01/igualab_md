@@ -1,17 +1,17 @@
 # 02 · Base de Datos — Diagrama ERD, Diseño detallado y Reglas Semánticas (FASE 1)
 
-> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
-> Fuente de verdad: **Plan de Proyecto v1.2** + actas 4/5 · Norma: **GES/GAP** (conceptual → lógico → físico) · Escenario: 3 usuarios (1 Superadmin + 2 Administradores) · **13 tablas — modelo de destino alineado a la arquitectura por capas (`arquitecturasolution.jpeg`, capas 6–7)**.
+> Fuente de verdad: **Plan de Proyecto v1.2** + actas 4/5 · Norma: **GES/GAP** (conceptual → lógico → físico) · Escenario: 3 usuarios (1 Superadmin + 2 Administradores) · **2 bases PostgreSQL 16 — transaccional (12 tablas) + vectorial (1 tabla: `fragmentos_documento`), 13 tablas en total — alineadas a la arquitectura por capas (`arquitecturasolution.jpeg`, capas 6–7)**.
 
-## ✅ v3 · MODELO DE DATOS DEPURADO (vigente — 13 tablas)
+## ✅ v3 · MODELO DE DATOS DEPURADO (vigente — 2 bases, 13 tablas: 12 transaccionales + 1 vectorial)
 
 > Adopta el ERD «modelo de datos depurado» entregado por el equipo, con las **correcciones aplicadas** tras su revisión (los puntos marcados con ⚙ en la especificación). Las decisiones D-01…D-05 quedaron **cerradas**:
 > - **D-01** → autenticación **sessionizada**: `sesiones` + `tokens_recuperacion` como tablas (refleja Capa 6: `Sesión (TokenRecuperación)`).
-> - **D-02** → `uso_llm` **retirada**: el medidor del asistente se deriva de `consultas_asistente` (COUNT por día/modelo); límites por variables de entorno (`LLM_DAILY_LIMIT`, `UPLOAD_MAX_MB` → doc `03-Stack` §4).
+> - **D-02** → medidor del asistente derivado de `consultas_asistente` (COUNT por día/modelo); límites por variables de entorno (`LLM_DAILY_LIMIT`, `UPLOAD_MAX_MB` → doc `03-Stack` §4).
 > - **D-03** → `fragmentos_documento` como **tabla independiente** (texto · embedding vector(dim) NOT NULL · metadata), compatible con índice HNSW y búsqueda cosine k=4.
 > - **D-04** → sin `vw_puntaje_esg` como objeto del ERD: el puntaje se calcula desde `gri_analisis` cuando el negocio lo pida (fase 2 dashboard GET-only).
-> - **D-05** → nombres normalizados: ORM `CatalogoGRI` / `GRIAnalisis` · tabla `auditoria` (antes `auditoria_eventos`; coherente con Capa 6).
+> - **D-05** → nombres normalizados: ORM `CatalogoGRI` / `GRIAnalisis` · tabla `auditoria` (coherente con Capa 6).
 > - **D-06 (nueva, resuelta)** → `reportes_prospeccion` con **UNIQUE parcial (empresa_id, anho)** — cumple RN-041 (un solo reporte por empresa/año; no hay versiones).
 
 ### Tablas retiradas y su justificación (se quitaron módulos)
@@ -20,10 +20,10 @@
 |---|---|
 | `roles` | El conjunto cerrado queda como **UNIQUE parcial en `usuarios.rol`** (un solo Superadmin) + CHECK/ENUM `rol_usuario`; catálogo de 2 filas sin valor referencial en fase 1 |
 | `configuracion` | Se quitó el **módulo Configuración**; umbrales operativos viven en variables de entorno (doc Stack §4) |
-| `uso_llm` | Consumo derivable de `consultas_asistente`; no corresponde a un RF/RNF confirmado en el alcance vigente |
-| `gri_analisis_historico` | Los cambios de estado sensibles quedan en `auditoria` (evento `AJUSTE_BRECHA` con detalle JSONB) |
+| Medidor LLM separado | Consumo derivable de `consultas_asistente`; no corresponde a un RF/RNF confirmado en el alcance vigente |
+| Histórico GRI separado | Los cambios de estado sensibles quedan en `auditoria` (evento `AJUSTE_BRECHA` con detalle JSONB) |
 | `reporte_detalle_snapshot` | Sustituida por `contenido_snapshot` JSONB en la propia fila de `reportes_prospeccion` + PDF inmutable |
-
+| `reporte_detalle_snapshot` | Sustituida por `contenido_snapshot` JSONB en la propia fila de `reportes_prospeccion` + PDF inmutable |
 ### Cadena principal del negocio
 
 **empresa → documento (`.md`) → fragmentos (vectorizados) → análisis GRI/sanciones → consulta asistente (RAG con citas) → reporte PDF → auditoría** (todo con usuario responsable).
@@ -32,13 +32,15 @@
 
 1. Un **usuario** crea **sesiones** y **tokens_recuperacion** (1:N en ambos).
 2. Una **empresa** tiene muchos **documentos**; un usuario crea documentos (`creada_por`).
-3. Un **documento** se vectoriza en muchos **fragmentos_documento**; de un fragmento provienen `cita_textual` de **gri_analisis** y **sanciones** (FK `fragmento_id` NULL = cita directa del doc).
+3. Un **documento** se vectoriza en muchos **fragmentos_documento** (base vectorial; referencia lógica UUID validada por la app); de un fragmento provienen `cita_textual` de **gri_analisis** y **sanciones** (referencia lógica `fragmento_id` NULL = cita directa del doc).
 4. El **catalogo_gri** referencia cada fila de **gri_analisis** (UNIQUE documento+código: una sola tabla de resultados).
-5. Una **consulta_asistente** registra sus **citas** (`consulta_citas` → fragmentos) — citas · fuentes de la Capa 6.
+5. Una **consulta_asistente** registra sus **citas** (`consulta_citas` → referencias lógicas a fragmentos) — citas · fuentes de la Capa 6.
 6. Un reporte pertenece a una empresa (UNIQUE empresa+anho — RN-041); su **snapshot** se congela a la fecha de emisión.
-7. Todo evento sensible va a **auditoria** (append-only; FK usuario/empresa NULL).
+7. Todo evento sensible va a **auditoria** (append-only; referencias lógicas usuario/empresa NULL).
 
 ## Modelo lógico — ER (mermaid)
+
+> Las relaciones hacia `fragmentos_documento` (base vectorial) son **referencias lógicas UUID** validadas por la app, **sin claves foráneas físicas** entre bases.
 
 ```mermaid
 erDiagram
@@ -50,7 +52,7 @@ erDiagram
     empresas ||--o{ documentos : tiene
     empresas ||--o{ reportes_prospeccion : recibe
     empresas ||--o{ consultas_asistente : contextualiza
-    documentos ||--o{ fragmentos_documento : vectoriza
+    documentos ||--o{ fragmentos_documento : vectoriza (base vectorial, ref lógica)
     documentos ||--o{ gri_analisis : produce
     documentos ||--o{ sanciones : cita
     catalogo_gri ||--o{ gri_analisis : referencia
@@ -219,8 +221,8 @@ erDiagram
 - **Restricciones**: ⚙ **UNIQUE parcial `(empresas_id, anho, tipo) WHERE estado='indexado'`** (unicidad documental por empresa/año/tipo de documentos exitosos — RN-026/033).
 - **RS**: integridad atómica (RN-026/RN-026): documento rechazado → **cero fragmentos y cero análisis** (operación transaccional completa con rollback); solo queda el registro con `estado='rechazado'` y motivo, sin DELETE físico (RNF-019).
 
-#### 2.3 `fragmentos_documento` (BD vectorizada — núcleo del RAG)
-- **Qué**: fragmento del documento con su embedding (antes `chunks_embeddings`).
+#### 2.3 `fragmentos_documento` (BD vectorial — núcleo del RAG)
+- **Qué**: fragmento del documento con su embedding (base vectorial, acceso por `VECTOR_DATABASE_URL`).
 - **Columnas**: `id UUID PK` · `documento_id UUID REFERENCES documentos(id) ON DELETE CASCADE` · `indice INT NOT NULL` ⚙ **UNIQUE `(documento_id, indice)`** (combinado, no global — un índice es posición dentro del documento) · `seccion VARCHAR(500)` (encabezado markdown — llave de la cita RN-034) · `texto TEXT NOT NULL` ⚙ **CORREGIDO: es NOT NULL** — un fragmento sin texto no es buscable ni citable · `embedding VECTOR(N) NOT NULL` (pgvector; **la dimensión depende del modelo de embeddings del proveedor** — fijar en migración: p. ej. 1024) · `metadata JSONB NOT NULL` (empresa_id, año, tipo doc, fila de tabla origen) · `creado_en TIMESTAMPTZ`.
 - **Físico**: ⚙ **índice HNSW obligatorio**: `CREATE INDEX idx_frag_hnsw ON fragmentos_documento USING hnsw (embedding vector_cosine_ops) WITH (m=16, ef_construction=64);` — búsqueda `ORDER BY embedding <=> :q LIMIT 4` (k=4 cosine).
 - **RS**: consultado por el AI Harness (Capa 5); provee las citas verificables (doc/empresa/año/sección deducibles de la propia fila + joins).
@@ -236,7 +238,7 @@ erDiagram
 - **Qué**: **la tabla del análisis** — fila por documento + código GRI (empresa/año se derivan del documento); incluye los OK.
 - **Columnas**: `id UUID PK` · `documento_id UUID REFERENCES documentos(id)` · `gri_codigo VARCHAR(20) REFERENCES catalogo_gri(codigo)` · `fragmento_id UUID NULL REFERENCES fragmentos_documento(id)` — cita textual proviene del fragmento (verificable) · `cita_textual TEXT NOT NULL` (transcripción textual del fragmento/doc) · `estado estado_gri NULL` (ENUM: `OK | BAJA SUSTANCIA | SUB-REPORTADO`) — **asignado manualmente por el Administrador**, sin `estado_sugerido` (RS-13/RN-029) · `validado_por UUID NULL REFERENCES usuarios(id)` (NULL = pendiente CU006) · ⚙ **`version_catalogo VARCHAR(30) NOT NULL` — RESTAURADA (RS-11)**: snapshot de la versión del catálogo al analizar; si el estándar cambia, el registro queda fiel a su fecha · `realizado_en TIMESTAMPTZ`.
 - **Restricciones**: ⚙ **UNIQUE parcial `(documento_id, gri_codigo)`** — una sola fila de resultados por doc/código (evita duplicados de análisis).
-- **RS**: el reporte solo lee estados **validados** (`validado_por IS NOT NULL` y `estado IS NOT NULL` — RS-12/RN-027). El estado del análisis se llena automáticamente al terminar la ingesta (pipeline síncrono) y queda pendiente CU006. **El historial de cambios** de estado se registra en `auditoria` (`AJUSTE_BRECHA` con detalle JSONB: analisis_id, anterior→nuevo, observación — sustituye a `gri_analisis_historico`).
+- **RS**: el reporte solo lee estados **validados** (`validado_por IS NOT NULL` y `estado IS NOT NULL` — RS-12/RN-027). El estado del análisis se llena automáticamente al terminar la ingesta (pipeline síncrono) y queda pendiente CU006. **El historial de cambios** de estado se registra en `auditoria` (`AJUSTE_BRECHA` con detalle JSONB: analisis_id, anterior→nuevo, observación).
 
 #### 3.3 `sanciones`
 - **Qué**: sanciones identificadas en los documentos — negocio puro del reporte.
@@ -248,27 +250,27 @@ erDiagram
 #### 4.1 `consultas_asistente` — **NUEVA**
 - **Qué**: cada consulta al asistente IA (Capa 6: `ConsultaAsistente`) — el RAG ahora persiste.
 - **Columnas**: `id UUID PK` · `usuario_id UUID REFERENCES usuarios(id)` · `empresa_id UUID NULL REFERENCES empresas(id)` (NULL = consulta sin empresa activa) · `anho SMALLINT NULL` · `pregunta TEXT NOT NULL` · `respuesta TEXT NOT NULL` · `modelo VARCHAR(100) NOT NULL` (GLM-5.2 :free, respaldo…) · `creado_en TIMESTAMPTZ`.
-- **RS**: **sustituye a `uso_llm` como medidor del free tier** (D-02): consumo diario = `COUNT(*) GROUP BY date(creado_en), modelo` vs `LLM_DAILY_LIMIT` (env var) — RNF-027.
+- **RS**: **medidor del free tier** (D-02): consumo diario = `COUNT(*) GROUP BY date(creado_en), modelo` vs `LLM_DAILY_LIMIT` (env var) — RNF-027.
 
 #### 4.2 `consulta_citas` — **NUEVA**
 - **Qué**: citas · fuentes de cada respuesta (constancia de la post-verificación de IDs citados).
-- **Columnas**: `id UUID PK` · `consulta_id UUID REFERENCES consultas_asistente(id) ON DELETE CASCADE` · `fragmento_id UUID REFERENCES fragmentos_documento(id)` — FK al fragmento citado (uuid, correcto) · `orden SMALLINT NOT NULL` (posición en la respuesta) · `extracto TEXT NOT NULL`.
+- **Columnas**: `id UUID PK` · `consulta_id UUID REFERENCES consultas_asistente(id) ON DELETE CASCADE` · `fragmento_id UUID` (referencia lógica al fragmento citado — base vectorial, sin FK física) · `orden SMALLINT NOT NULL` (posición en la respuesta) · `extracto TEXT NOT NULL`.
 - **RS**: cada cita debe existir en el contexto recuperado (post-check ids — si el LLM cita fuera del contexto, la cita no se inserta).
 
 ### 5 · REPORTES
 
 #### 5.1 `reportes_prospeccion`
-- **Qué**: entregables PDF inmutables (antes `reportes_generados` + `reporte_detalle_snapshot` fusionados).
+- **Qué**: entregables PDF inmutables.
 - **Columnas**: `id UUID PK` · `empresa_id UUID REFERENCES empresas(id)` · `generado_por UUID REFERENCES usuarios(id)` · `anho SMALLINT NOT NULL` · `pdf_path VARCHAR(500) NOT NULL UNIQUE` (WeasyPrint) · `sha256 CHAR(64) NOT NULL UNIQUE` (integridad del binario) · `contenido_snapshot JSONB NOT NULL` (estado consolidado congelado: brechas con `estado_final` + **cita textual** + sanciones con montos — sustituye la tabla normalizada) · `creado_en TIMESTAMPTZ`.
 - **Restricciones**: ⚙ **UNIQUE parcial `(empresa_id, anho)` — RESTAURADO (RN-041)**: no se generan dos reportes de la misma empresa/año (si cambia el análisis → RNF: consultar regla con PO antes de habilitar regeneración).
 - **RS**: el PDF no se invoca al LLM; todo dato proviene de SELECT determinista a `gri_analisis`(validado) + `sanciones` (RN-040/026). El snapshot es fiel a su fecha: cambios posteriores de estados no afectan el PDF emitido (RN-042).
 
 ### 6 · AUDITORÍA
 
-#### 6.1 `auditoria` (antes `auditoria_eventos`)
+#### 6.1 `auditoria`
 - **Qué**: bitácora **append-only** de eventos sensibles (Capa 7: `solo INSERT`).
 - **Columnas**: `id UUID PK` · `usuario_id UUID NULL REFERENCES usuarios(id)` (NULL = evento anónimo, p. ej. login fallido de correo inexistente) · `empresa_id UUID NULL REFERENCES empresas(id)` (contexto opcional — ⚙ FK visibles aquí) · `tipo_evento tipo_evento_auditoria NOT NULL` (ENUM: `LOGIN | LOGIN_FALLIDO | CAMBIO_ROL | INGESTA | INGESTA_FALLIDA | GEN_REPORTE | AJUSTE_BRECHA | DESCARGA`) · `detalle JSONB NOT NULL` ⚙ **CORREGIDO: era VARCHAR(500)** — contexto por evento (hash, doc_id, motivo, rol anterior→nuevo, resultado de la operación, análisis_id para AJUSTE_BRECHA) · `fecha_hora_utc TIMESTAMPTZ NOT NULL DEFAULT now()` **(RNF-024: UTC; presentación en America/Lima solo en la UI)**.
-- **Físico**: ⚙ **REVOKE UPDATE, DELETE** al rol de la app — la BD garantiza el append-only (RN-043/RS-19): los eventos de `AJUSTE_BRECHA` sustituyen el historial de estado de `gri_analisis_historico`.
+- **Físico**: ⚙ **REVOKE UPDATE, DELETE** al rol de la app — la BD garantiza el append-only (RN-043/RS-19): los eventos de `AJUSTE_BRECHA` sustituyen el historial de estado de `gri_analisis`.
 - **Nota** ⚙: sin columna `ip` en el modelo depurado (la IP queda opcional en fase 2; el entorno es académico de 3 usuarios).
 
 ## Reglas semánticas globales (v3)

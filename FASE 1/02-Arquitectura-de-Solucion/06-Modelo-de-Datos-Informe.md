@@ -1,7 +1,7 @@
 # MODELO DE DATOS — IGUALAB (Informe completo)
 
-> PostgreSQL 16 + pgvector · Monolito modular · **13 tablas — modelo de destino**
-> Alineado a la arquitectura de solución por capas (`arquitecturasolution.jpeg`, capas 6–7) y al A&D v6 (fuente única de RN/RF/RNF).
+> PostgreSQL 16 + pgvector · Monolito modular · **13 tablas (2 bases: transaccional 12 + vectorial 1) — modelo de destino**
+> Alineado a la arquitectura de solución por capas (`arquitecturasolution.jpeg`, capas 6–7) y al A&D V2 (LaTeX) (fuente única de RN/RF/RNF).
 > Norma del curso: **GES/GAP** (modelo conceptual → modelo lógico → modelo físico semántico).
 
 ---
@@ -12,12 +12,13 @@
 
 | Propiedad         | Valor                                                                                                                                                                           |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Motor             | **PostgreSQL 16 + extensión pgvector** (base de datos vectorizada que sustenta el RAG)                                                                                          |
-| Driver / acceso   | **AsyncPG** (motor async de SQLAlchemy hacia PostgreSQL)                                                                                                                        |
-| Arquitectura      | **Monolito modular**                                                                                                                                                            |
-| Total de tablas   | **13**                                                                                                                                                                          |
+| Motor             | **PostgreSQL 16 + extensión pgvector** — 2 bases: transaccional (12 tablas) + vectorial (1 tabla) |
+| Driver / acceso   | **Python 3.13 · FastAPI · SQLAlchemy Async + AsyncPG**                                                                                                                        |
+| Arquitectura      | **Monolito modular** · **2 bases PostgreSQL 16**: transaccional (12 tablas, `DATABASE_URL`) + vectorial (1 tabla `fragmentos_documento`, `VECTOR_DATABASE_URL`);**sin claves foráneas físicas entre bases** (referencias lógicas UUID validadas por la app) |
+| Total de tablas   | **13** (transaccional 12 · vectorial 1) |
+| Bases de datos    | **2 PostgreSQL 16**: transaccional (`DATABASE_URL`) · vectorial (`VECTOR_DATABASE_URL`, tabla `fragmentos_documento`); sin claves foráneas físicas entre bases (UUID lógicos validados por la app) |
 | Origen del diseño | ERD «Diagrama Entidad–Relación · IGUALAB — Modelo de Datos Depurado» entregado por el equipo, con las correcciones aplicadas tras su revisión (puntos ⚙ anotados en cada ficha) |
-| Alcance retirado  | Se quitaron módulos (Configuración, catálogo de roles, medidor LLM separado) → se retiraron 5 tablas del diseño v2 y se añadieron 4 nuevas                                      |
+| Alcance retirado  | Se quitaron módulos (Configuración, catálogo de roles, medidor LLM separado) → el modelo quedó en **2 bases / 13 tablas** |
 
 ## 1.2 El modelo por dominios (6 dominios — refleja el ERD vigente)
 
@@ -27,7 +28,7 @@
 | **EMPRESAS E INGESTA** | `empresas` · `documentos` · `fragmentos_documento` | Cadena de contenido fuente: catálogo de empresas, pipeline de ingesta `.md` y fragmentos vectorizados. |
 | **ANÁLISIS GRI**       | `catalogo_gri` · `gri_analisis` · `sanciones`      | El estándar GRI (referencia) y la tabla única de resultados del análisis (códigos, citas, sanciones).  |
 | **ASISTENTE RAG**      | `consultas_asistente` · `consulta_citas`           | Persistencia de cada consulta al RAG con sus citas · fuentes (post-verificación de IDs).               |
-| **REPORTES**           | `reportes_prospeccion`                             | Entregable PDF inmutable + snapshot JSONB congelado a la fecha de emisión.                             |
+| **REPORTES**           | `reportes_prospeccion`                             | Entregable PDF inmutable + snapshot JSONB congelado a la fecha de emisión (en 2 bases, sin FK físicas entre ellas). |
 | **AUDITORÍA**          | `auditoria`                                        | Bitácora **append-only** de eventos sensibles (solo INSERT; UTC).                                      |
 
 ## 1.3 Entidades y relaciones (modelo conceptual)
@@ -78,8 +79,8 @@ Relaciones (todas 1:N salvo indicación):
 |---|---|
 | `roles` | Catálogo cerrado de 2 filas — sustituido por ENUM `rol_usuario` + UNIQUE parcial en `usuarios.rol`. |
 | `configuracion` | El módulo Configuración fue quitado → umbrales por variables de entorno (doc Stack §4). |
-| `uso_llm` | El consumo diario se deriva de `consultas_asistente` (COUNT por día/modelo). |
-| `gri_analisis_historico` | Los cambios sensibles quedan en `auditoria` (`AJUSTE_BRECHA` detalle JSONB). |
+| Medidor LLM separado | El consumo diario se deriva de `consultas_asistente` (COUNT por día/modelo). |
+| Histórico GRI separado | Los cambios sensibles quedan en `auditoria` (`AJUSTE_BRECHA` detalle JSONB). |
 | `reporte_detalle_snapshot` | Sustituida por `contenido_snapshot` JSONB + PDF inmutable con hash. |
 
 ## 1.7 Decisiones del modelo
@@ -173,7 +174,7 @@ Descripción: Cada archivo `.md` de memoria anual o reporte de sostenibilidad, c
 Restricciones: UNIQUE `(empresa_id, anho, tipo)` parcial `WHERE estado='indexado'` (unicidad documental de documentos exitosos). Integridad atómica (RN-026/RN-026): documento rechazado → cero fragmentos, cero análisis; sin DELETE físico (RNF-019).
 
 ## Tabla: `fragmentos_documento` (BD vectorizada — núcleo del RAG)
-Descripción: Fragmentos del documento con su embedding — antes `chunks_embeddings`. Es la tabla que consulta el AI Harness (Capa 5) en cada pregunta del chat y la fuente de las citas verificables.
+Descripción: Fragmentos del documento con su embedding — **base vectorial**. Es la tabla que consulta el AI Harness (Capa 5) en cada pregunta del chat y la fuente de las citas verificables.
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -221,7 +222,7 @@ Restricción: **UNIQUE parcial `(documento_id, gri_codigo)`** — una sola fila 
 ## Dominio: ASISTENTE RAG
 
 ## Tabla: `consultas_asistente` — **NUEVA**
-Descripción: Cada consulta al asistente IA (módulo Asistente — RAG con citas). Sustituye a la tabla `uso_llm` como medidor del free tier (RNF-027: COUNT por día/modelo vs env var `LLM_DAILY_LIMIT`).
+Descripción: Cada consulta al asistente IA (módulo Asistente — RAG con citas). Medidor del free tier (RNF-027: COUNT por día/modelo vs env var `LLM_DAILY_LIMIT`).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -248,7 +249,7 @@ Descripción: Citas · fuentes de cada respuesta — constancia de la post-verif
 ## Dominio: REPORTES
 
 ## Tabla: `reportes_prospeccion`
-Descripción: Entregables PDF inmutables — fusiona `reportes_generados` + `reporte_detalle_snapshot` del diseño v2 (detalle JSONB congelado + PDF inmutable con hash).
+Descripción: Entregables PDF inmutables — `contenido_snapshot` JSONB congelado + PDF inmutable con hash.
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -265,8 +266,8 @@ Restricciones: UNIQUE parcial `(empresa_id, anho)` — RN-041. Reglas: cero LLM 
 
 ## Dominio: AUDITORÍA
 
-## Tabla: `auditoria` (antes `auditoria_eventos`)
-Descripción: Bitácora de eventos sensibles **append-only** — la BD garantiza el append-only (REVOKE UPDATE/DELETE): la app solo puede INSERT/SELECT. El historial de cambios de estado vive aquí como evento `AJUSTE_BRECHA` (sustituye a la tabla `gri_analisis_historico`).
+## Tabla: `auditoria`
+Descripción: Bitácora de eventos sensibles **append-only** — la BD garantiza el append-only (REVOKE UPDATE/DELETE): la app solo puede INSERT/SELECT. El historial de cambios de estado vive aquí como evento `AJUSTE_BRECHA` (campo `detalle` JSONB).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -303,7 +304,7 @@ Descripción: Bitácora de eventos sensibles **append-only** — la BD garantiza
 
 # 4 · PENDIENTES DE IMPLEMENTACIÓN (Próximos pasos)
 
-- [ ] Congelar diseño (acuerdo del equipo sobre las tablas retiradas y el UNIQUE de reportes).
-- ⚙ DDL físico de los 3 **dominios** en migración (fijar dimension de embeddings p. ej. `vector(1024)`, trigger del append-only en auditoría).
+- [ ] Congelar diseño (acuerdo del equipo y el UNIQUE de reportes).
+- ⚙ DDL físico de los dominios en **2 bases** de migración (transaccional + vectorial; fijar dimension de embeddings p. ej. `vector(1024)`, trigger del append-only en auditoría).
 - **VOLUMEN ESTIMADO** se completa la carga (3 usuarios, escenario académico).
 - **PROTOTIPO / DISEÑO ARQUITECTÓNICO** → prototipo (mock vivo) y el estado de la BD. documento correlato del mock vivo.

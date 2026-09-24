@@ -40,13 +40,13 @@ RNF-014 & Integridad & El modelo de datos distingue entre un valor no determinad
 \hline
 RNF-015 & Integridad & El contenido de los documentos se procesa y almacena en UTF-8, preservando tildes y la letra «ñ» sin alteración. & RF-012, RF-016 \\
 \hline
-RNF-016 & Rendimiento & El sistema debe procesar la ingesta e indexación de un documento de hasta 50 MB dentro del tiempo máximo validado mediante pruebas de rendimiento, considerando la latencia y los límites del proveedor externo de embeddings. & RF-015 \\
+RNF-016 & Rendimiento & El sistema debe procesar la ingesta e indexación de un documento de hasta 50 MB en un tiempo máximo de 15 minutos, considerando la latencia y los límites del proveedor externo de embeddings. & RF-015 \\
 \hline
-RNF-017 & Rendimiento & El sistema debe registrar por separado el tiempo de procesamiento interno y el tiempo de respuesta del proveedor externo. Bajo condiciones normales, la respuesta completa del asistente no debe superar el límite definido durante las pruebas de rendimiento. & RF-023 \\
+RNF-017 & Rendimiento & El sistema debe registrar por separado el tiempo de procesamiento interno y el tiempo de respuesta del proveedor externo. Bajo una carga de hasta 5 usuarios concurrentes y un corpus de hasta 4,200 fragmentos, la respuesta completa del asistente no debe superar los 90 segundos. & RF-023 \\
 \hline
 RNF-018 & Rendimiento & Las llamadas al proveedor de IA tienen un tiempo máximo de espera de 1 minuto, tras el cual la operación se reporta como indisponible. & RF-023 \\
 \hline
-RNF-019 & Disponibilidad & La indisponibilidad del proveedor de IA no degrada los módulos de gestión, ingesta, reportes de prospección ni auditoría. & RF-024, RN-033 \\
+RNF-019 & Disponibilidad & La indisponibilidad del proveedor de IA se limita al asistente RAG y a la indexación durante la ingesta; no degrada la autenticación ni la gestión de usuarios, el catálogo de empresas, la generación de reportes de prospección ni la auditoría. & RF-024, RN-033 \\
 \hline
 RNF-020 & Capacidad & El sistema admite y procesa documentos de hasta 50 MB por cada operación de ingesta. & RF-013, RN-021 \\
 \hline

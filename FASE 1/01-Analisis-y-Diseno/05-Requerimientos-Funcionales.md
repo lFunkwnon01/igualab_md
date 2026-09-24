@@ -1,12 +1,12 @@
 # 05 · Requerimientos Funcionales — FASE 1 (numeración vigente)
 
-> **Fuente única:** `analisis-diseno-latex/main.pdf`. 30 RF atómicos, cada uno derivado de una o varias RN.
+> **Fuente única:** `analisis_y_diseno_oficial.pdf`. 30 RF atómicos, cada uno derivado de una o varias RN.
 
 | N° | Descripción del Requerimiento Funcional | Reglas de Negocio | Prioridad | Analista |
 |---|---|---|---|---|
-| RF-001 | Autenticar a los usuarios con correo y contraseña. | RN-004, RN-007, RN-011 | MUST HAVE | C. Ordinola |
+| RF-001 | Autenticar a los usuarios con correo y contraseña. | RN-004, RN-011 | MUST HAVE | C. Ordinola |
 | RF-002 | Permitir la recuperación de contraseña mediante un enlace seguro de un solo uso. | RN-010, RN-011 | MUST HAVE | C. Ordinola |
-| RF-003 | Permitir al usuario cambiar su propia contraseña estando autenticado. | RN-011 | NICE TO HAVE | L. Millones |
+| RF-003 | Permitir al usuario cambiar su propia contraseña estando autenticado. | RN-011 | MUST HAVE | L. Millones |
 | RF-004 | Gestionar la sesión del usuario (expiración por inactividad, cierre de sesión y rol vigente). | RN-005, RN-013 | MUST HAVE | L. Millones |
 | RF-005 | Bloquear temporalmente la cuenta tras 5 intentos fallidos consecutivos. | RN-012 | MUST HAVE | C. Ordinola |
 | RF-006 | Crear cuentas de Administrador con nombre, correo y contraseña. | RN-002, RN-007, RN-008 | MUST HAVE | C. Ordinola |
@@ -25,7 +25,7 @@
 | RF-019 | Permitir al Administrador asignar manualmente el estado de cada código GRI. | RN-029, RN-030 | MUST HAVE | L. Millones |
 | RF-020 | Identificar las sanciones mencionadas en los documentos. | RN-031 | MUST HAVE | C. Ordinola |
 | RF-021 | Calcular el puntaje ESG de una empresa y un año. | RN-032 | MUST HAVE | C. Ordinola |
-| RF-022 | Consultar el listado de documentos ingestados con su estado. | RN-022, RN-025 | NICE TO HAVE | L. Millones |
+| RF-022 | Consultar el listado de documentos ingestados con su estado. | RN-022, RN-025 | MUST HAVE | L. Millones |
 | RF-023 | Consultar al asistente en lenguaje natural sobre el corpus indexado. | RN-033, RN-034, RN-037 | MUST HAVE | C. Ordinola |
 | RF-024 | Recibir respuestas con citas y con el dominio restringido a sostenibilidad. | RN-034, RN-035, RN-036 | MUST HAVE | L. Millones |
 | RF-025 | Generar el reporte de prospección en PDF a partir de los resultados validados. | RN-038, RN-039, RN-040 | MUST HAVE | C. Ordinola |

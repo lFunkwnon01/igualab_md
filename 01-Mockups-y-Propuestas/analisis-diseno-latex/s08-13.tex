@@ -31,6 +31,7 @@ La solución utiliza una base de datos transaccional con doce tablas y una
 base de datos vectorial con una tabla. En total, el modelo contiene trece
 tablas.
 
+\setcounter{table}{0}
 \begin{table}[H]
 \centering
 \caption{Resumen del modelo de datos}
@@ -435,7 +436,7 @@ dos bases de datos.
         keepaspectratio
     ]{img/erd-igualab.png}
 
-    \caption{Modelo de datos de Igualab}
+    \textbf{Modelo de datos de Igualab}
 \end{figure}
 
 La separación de las bases de datos permite mantener responsabilidades
@@ -464,7 +465,7 @@ El modelo contiene 12 tablas en la base de datos transaccional y 1 tabla en la b
 \tabname{usuarios}
 Descripción: Almacena las cuentas de usuario, sus credenciales, rol y estado de acceso al sistema.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único del usuario.}{NO}
 \dt{nombre}{200}{VARCHAR}{Nombre completo del usuario.}{NO}
@@ -477,11 +478,12 @@ Descripción: Almacena las cuentas de usuario, sus credenciales, rol y estado de
 \dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de creación de la cuenta.}{NO}
 \end{longtable}
 \endgroup
+Reglas semánticas: el sistema garantiza una única fila con rol SUPERADMIN mediante un índice único parcial sobre la columna rol, conforme a RN-002 y RNF-013. La deshabilitación no elimina la fila, que se conserva para la trazabilidad de auditoría (RN-005).
 
 \tabname{sesiones}
 Descripción: Registra las sesiones iniciadas por los usuarios y permite controlar su actividad y revocación.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único de la sesión.}{NO}
 \dt{usuario\_id}{36}{UUID (FK)}{Usuario propietario de la sesión. Referencia a usuarios.id.}{NO}
@@ -494,7 +496,7 @@ Descripción: Registra las sesiones iniciadas por los usuarios y permite control
 \tabname{tokens\_recuperacion}
 Descripción: Almacena los tokens de recuperación de contraseña y controla su vigencia y utilización.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único del token de recuperación.}{NO}
 \dt{usuario\_id}{36}{UUID (FK)}{Usuario que solicitó la recuperación. Referencia a usuarios.id.}{NO}
@@ -509,7 +511,7 @@ Reglas semánticas: expirado o ya usado deriva a inválido. La contraseña nueva
 \tabname{empresas}
 Descripción: Contiene las empresas evaluadas por la plataforma y la información básica de su clasificación.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único de la empresa.}{NO}
 \dt{nombre}{200}{VARCHAR (UQ)}{Nombre único de la empresa.}{NO}
@@ -522,7 +524,7 @@ Descripción: Contiene las empresas evaluadas por la plataforma y la informació
 \tabname{documentos}
 Descripción: Registra los documentos cargados para una empresa y controla su identificación, integridad y estado de procesamiento.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único del documento.}{NO}
 \dt{empresa\_id}{36}{UUID (FK)}{Empresa a la que pertenece el documento. Referencia a empresas.id.}{NO}
@@ -537,11 +539,12 @@ Descripción: Registra los documentos cargados para una empresa y controla su id
 \dt{creado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de registro del documento.}{NO}
 \end{longtable}
 \endgroup
+Reglas semánticas: restricción de unicidad compuesta (empresa\_id, anio, tipo), conforme a RN-023; el campo sha256 es único por contenido (RN-024).
 
 \tabname{catalogo\_gri}
 Descripción: Mantiene el catálogo versionado de estándares e indicadores GRI utilizados en el análisis documental.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{codigo}{20}{VARCHAR (PK*)}{Código del estándar GRI. Forma la clave primaria compuesta con version\_catalogo.}{NO}
 \dt{serie}{50}{VARCHAR}{Serie a la que pertenece el estándar GRI.}{NO}
@@ -555,7 +558,7 @@ Descripción: Mantiene el catálogo versionado de estándares e indicadores GRI 
 \tabname{gri\_analisis}
 Descripción: Almacena los resultados del análisis GRI identificados en cada documento y su eventual validación.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único del resultado de análisis GRI.}{NO}
 \dt{documento\_id}{36}{UUID (FK)}{Documento analizado. Referencia a documentos.id.}{NO}
@@ -568,11 +571,12 @@ Descripción: Almacena los resultados del análisis GRI identificados en cada do
 \dt{actualizado\_en}{-}{TIMESTAMPTZ}{Fecha y hora de la última actualización del resultado.}{NO}
 \end{longtable}
 \endgroup
+Reglas semánticas: unicidad compuesta (documento\_id, gri\_codigo, version\_catalogo) para no duplicar detecciones; cada cambio de estado se registra como evento de auditoría conservando el estado anterior y el nuevo en el detalle (RN-042).
 
 \tabname{sanciones}
 Descripción: Registra las sanciones detectadas en los documentos y conserva la evidencia textual asociada.
 \begingroup\small
-\begin{longtable}{|L{2.4cm}|C{1.2cm}|L{2.6cm}|L{6.5cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.4cm}|C{1.4cm}|L{2.6cm}|L{6.3cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único de la sanción.}{NO}
 \dt{documento\_id}{36}{UUID (FK)}{Documento donde se identificó la sanción. Referencia a documentos.id.}{NO}
@@ -588,7 +592,7 @@ Descripción: Registra las sanciones detectadas en los documentos y conserva la 
 \tabname{consultas\_asistente}
 Descripción: Registra las preguntas realizadas al asistente RAG, sus respuestas y el contexto de consulta.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único de la consulta.}{NO}
 \dt{usuario\_id}{36}{UUID (FK)}{Usuario que realizó la consulta. Referencia a usuarios.id.}{NO}
@@ -604,7 +608,7 @@ Descripción: Registra las preguntas realizadas al asistente RAG, sus respuestas
 \tabname{consulta\_citas}
 Descripción: Relaciona cada respuesta del asistente con los fragmentos documentales utilizados como citas o evidencia.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único de la cita.}{NO}
 \dt{consulta\_id}{36}{UUID (FK)}{Consulta a la que pertenece la cita. Referencia a consultas\_asistente.id.}{NO}
@@ -617,7 +621,7 @@ Descripción: Relaciona cada respuesta del asistente con los fragmentos document
 \tabname{reportes\_prospeccion}
 Descripción: Almacena los reportes de prospección generados para cada empresa y año, junto con su contenido consolidado.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único del reporte de prospección.}{NO}
 \dt{empresa\_id}{36}{UUID (FK/UQ*)}{Empresa del reporte. Forma una restricción única compuesta con anio.}{NO}
@@ -633,7 +637,7 @@ Descripción: Almacena los reportes de prospección generados para cada empresa 
 \tabname{auditoria}
 Descripción: Registra eventos relevantes del sistema para fines de trazabilidad, control y revisión.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único del evento de auditoría.}{NO}
 \dt{usuario\_id}{36}{UUID (FK)}{Usuario relacionado con el evento. Referencia a usuarios.id.}{SÍ}
@@ -649,7 +653,7 @@ Descripción: Registra eventos relevantes del sistema para fines de trazabilidad
 \tabname{fragmentos\_documento}
 Descripción: Almacena los fragmentos extraídos de los documentos, sus embeddings y metadatos para la recuperación semántica.
 \begingroup\small
-\begin{longtable}{|L{2.3cm}|C{1.3cm}|L{2.7cm}|L{6.4cm}|C{1.0cm}|}
+\begin{longtable}{|L{2.3cm}|C{1.4cm}|L{2.7cm}|L{6.27cm}|C{1.0cm}|}
 \dicthead
 \dt{id}{36}{UUID (PK)}{Identificador único del fragmento vectorial.}{NO}
 \dt{documento\_id}{36}{UUID (REF)}{Referencia lógica al documento de origen en documentos.id, ubicado en la base transaccional.}{NO}
@@ -664,10 +668,11 @@ Descripción: Almacena los fragmentos extraídos de los documentos, sus embeddin
 
 % ====================================================================
 \section{Volumen Estimado}
-La siguiente tabla presenta una estimación del volumen mensual de datos generado por cada módulo del sistema. Los valores son referenciales y permiten identificar los módulos con mayor demanda de almacenamiento y procesamiento.
+La siguiente tabla presenta una estimación del volumen de datos generado por cada módulo del sistema. Los valores son referenciales y permiten identificar los módulos con mayor demanda de almacenamiento y procesamiento.
 
+\begingroup\small
 \begin{center}
-\begin{tabular}{|L{4.6cm}|C{3.0cm}|C{1.5cm}|L{5.6cm}|}
+\begin{tabular}{|L{4.6cm}|C{3.0cm}|C{1.5cm}|L{5.57cm}|}
 \hline
 \thd{Módulo} & \thd{Volumen estimado} & \thd{Nivel} & \thd{Justificación} \\
 \hline
@@ -677,7 +682,7 @@ Gestión de Usuarios & 3 a 4 cuentas activas & Bajo & El sistema será utilizado
 \hline
 Catálogo de Empresas & 8 a 10 empresas & Bajo & Corresponde al registro progresivo de empresas habilitadas para el análisis. \\
 \hline
-Ingesta de Documentos & 42 documentos y 4,200 fragmentos & Alto & Se estima la carga de aproximadamente 42 documentos mensuales, considerando que una empresa puede registrar memorias anuales y reportes de sostenibilidad correspondientes a diferentes años. Cada documento puede generar aproximadamente 100 fragmentos vectoriales. \\
+Ingesta de Documentos & 42 documentos y 4,200 fragmentos & Alto & Corresponde a la carga inicial de las 8 a 10 empresas del catálogo: cada una puede aportar una memoria anual y un reporte de sostenibilidad por cada año de ejercicio analizado. Cada documento puede generar aproximadamente 100 fragmentos vectoriales. \\
 \hline
 Análisis y Validación de Brechas GRI & 425 registros & Medio & Considera aproximadamente 417 resultados de análisis y 8 sanciones identificadas. El catálogo de 40 códigos GRI permanece como información base. \\
 \hline
@@ -689,6 +694,7 @@ Auditoría Funcional & 420 eventos & Medio & Registra accesos, cambios de usuari
 \hline
 \end{tabular}
 \end{center}
+\endgroup
 
 % ====================================================================
 \section{Diseño Arquitectónico}
@@ -703,6 +709,8 @@ FastAPI mantiene conexiones independientes con ambas bases de datos y coordina l
 \section{Prototipo}
 El prototipo navegable de la Fase 1 presenta las pantallas correspondientes a autenticación, gestión de usuarios, catálogo de empresas, ingesta de documentos, análisis y validación GRI, asistente RAG, reportes de prospección y auditoría. Las opciones visibles se organizan según el rol autenticado, sin reemplazar las validaciones de autorización realizadas por el backend.
 
+El prototipo está disponible en: \url{https://igualab.vercel.app/}
+
 \section{Anexo}
 \subsection{Problemas identificados del proceso actual (AS-IS)}
 A partir del análisis del proceso actual (AS-IS) se identifican los siguientes problemas. El analista de Igualab debe buscar y descargar manualmente cada informe (memoria anual y/o reporte de sostenibilidad) de fuentes dispersas, lo que incrementa el riesgo de omitir documentos relevantes o descargar versiones desactualizadas. La revisión íntegra de documentos que suelen exceder las 100 páginas depende enteramente de su criterio individual, lo que genera variabilidad en la cobertura y profundidad del análisis entre distintas revisiones. No existe un catálogo estandarizado de indicadores GRI evaluables ni una metodología uniforme para asignar estados de cumplimiento, por lo que los criterios pueden variar de una empresa a otra. Una vez identificadas brechas, sanciones o hallazgos, el analista no registra la información en un sistema estructurado ni base de datos, ni hoja de cálculo, ni herramienta similar, por lo que los resultados quedan en su conocimiento implícito, sin posibilidad de consulta histórica, comparación entre empresas o trazabilidad. Tampoco se registra qué empresa revisó, en qué fecha ni con qué criterios, lo que impide validar la calidad del análisis o demostrar diligencia ante el cliente. La elaboración del documento de prospección se realiza en texto libre sin plantilla estandarizada, lo que genera formatos inconsistentes y omisión de información relevante. En conjunto, cada análisis parte de cero y no permite reutilizar resultados previos, comparar evolución año a año ni escalar el proceso a más empresas sin incrementar linealmente la carga de trabajo.
@@ -712,20 +720,20 @@ La matriz siguiente consolida la cobertura de cada módulo funcional: su caso de
 
 \begin{center}
 \begingroup\small
-\begin{longtable}{|C{0.7cm}|L{3.8cm}|C{1.3cm}|L{4.6cm}|L{4.3cm}|}
+\begin{longtable}{|C{0.7cm}|L{3.8cm}|C{1.3cm}|L{4.2cm}|L{4.3cm}|}
 \hline
 \thd{\#} & \thd{Módulo} & \thd{CU} & \thd{Requerimientos Funcionales (RF)} & \thd{Respaldo (RN · RNF)} \\
 \hline
 \endhead
-1 & Autenticación y Gestión de Sesión & CU001 & RF-001…RF-005 & RN-004…RN-013 · RNF-001…RNF-009 \\
+1 & Autenticación y Gestión de Sesión & CU001 & RF-001…RF-005 & RN-004…RN-013 · RNF-001…RNF-006, RNF-008, RNF-009 \\
 \hline
 2 & Gestión de Usuarios & CU002 & RF-006…RF-009 & RN-001…RN-009 · RNF-012, RNF-013 \\
 \hline
 3 & Catálogo de Empresas & CU008 & RF-010, RF-011 & RN-014…RN-017 \\
 \hline
-4 & Ingesta de Documentos & CU003 & RF-012…RF-017 & RN-018…RN-026 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-029 \\
+4 & Ingesta de Documentos & CU003 & RF-012…RF-017, RF-022 & RN-018…RN-026 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-028, RNF-029, RNF-030 \\
 \hline
-5 & Análisis y Validación de Brechas GRI & CU005 & RF-018…RF-022, RF-028 & RN-027…RN-032 · RNF-014, RNF-026, RNF-027 \\
+5 & Análisis y Validación de Brechas GRI & CU005 & RF-018…RF-021, RF-028 & RN-027…RN-032 · RNF-014, RNF-026 \\
 \hline
 6 & Asistente de IA (RAG) & CU004 & RF-023, RF-024 & RN-033…RN-037 · RNF-010, RNF-017, RNF-018, RNF-019, RNF-027 \\
 \hline

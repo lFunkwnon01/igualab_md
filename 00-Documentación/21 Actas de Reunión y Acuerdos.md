@@ -2,7 +2,7 @@
 
 Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Owner). Formato CS3081 (Ingeniería de Software). Los PDF firmados están en `01-Mockups-y-Propuestas/`.
 
-> ⚠️ **Estado:** Actas 1 y 2 **firmadas** · Acta 3 firmada por cliente y PM (firma del docente por confirmar) · **Acta 4 (08-09) realizada y firmada** (`CS3081-004-2026_Acta_Reunion4.pdf`) · **Acta 5 (11-09) aprobada** (`CS3081-005-2026_Acta_Reunion5.pdf`, Plan v1.2 conformado + decisiones de alcance). Guía de generación en [[23 Guía de Generación de Actas]].
+> ⚠️ **Estado:** Actas 1 y 2 **firmadas** · Acta 3 firmada por cliente y PM (firma del docente por confirmar) · **Acta 4 (08-09) realizada y firmada** · **Acta 5 (11-09) aprobada** (Plan v1.2 conformado + decisiones de alcance) · **Acta 6 (15-09) registrada** · **Acta 7 (21-09) registrada** (avance desplegado + autenticación + configuración de correo Gmail + envío del A&D por correo). Guía de generación en [[23 Guía de Generación de Actas]].
 
 ---
 
@@ -172,6 +172,34 @@ Registro oficial de las interacciones con el cliente (Oscar Baldeón, Product Ow
 | REQ-21 | Conformidad del PO con RN/RF/RNF remitidos por correo | Documento | Por registrar |
 | REQ-22 | Presentación y aprobación del rediseño del mockup | Documento | Por registrar |
 | REQ-23 | Cierre del Análisis y Diseño (A&D) con trazabilidad final | Documento | En proceso |
+
+---
+
+## 📝 Acta 7 — CS3081-007-2026 · lun 21-09-2026 · 10:00–10:30 · Virtual 🚧 Por firmar
+
+**Proyecto:** Proyecto Igualab — Plataforma de analítica de sostenibilidad (RAG) · **Fase:** Avance desplegado en los entornos de la universidad (módulo de autenticación), configuración de correo Gmail y presentación del A&D por correo.
+**Archivos:** `01-Mockups-y-Propuestas/CS3081-007-2026_Acta_Reunion7.tex` (+ `CS3081-007-2026_Acta_Reunion7.pdf`).
+**Asistentes:** Oscar Baldeón (PO) · Fabricio Ladera (PM) · Luis Millones (Analista) · Juan Marcelo Ferreyra (Backend) · Alonso Benites (Tester).
+
+### Temas tratados
+1. **Avance desplegado en los entornos de la universidad** y demostración del **módulo de autenticación** (inicio de sesión y control de acceso por roles).
+2. **Configuración de envío de correos con Gmail (SMTP/API)** para el flujo de recuperación de contraseña ("olvidé contraseña"); el PO **compartirá una cuenta** de correo para la configuración.
+3. **Presentación del Análisis y Diseño (A&D) por correo** para **conformidad del PO** (cierre de la revisión).
+
+### Requerimientos capturados (acta)
+| ID | Requisito | Tipo | Prioridad | Estado |
+|---|---|---|---|---|
+| REQ-24 | Despliegue del avance en los entornos de la universidad | Demo | Alta | ✅ Registrado |
+| REQ-25 | Demostración del módulo de autenticación | Demo | Alta | ✅ Registrado |
+| REQ-26 | Configuración de envío de correos con Gmail (SMTP/API) para recuperación de contraseña; cuenta a compartir por el PO | Cambio | Alta | ⏳ Pendiente |
+| REQ-27 | Presentación/entrega del Análisis y Diseño (A&D) por correo | Documento | Alta | 🔄 En proceso |
+
+### Compromisos
+- PO (Oscar): **compartir una cuenta de correo** para la configuración (⏳ pendiente).
+- Juan Marcelo (Backend): **obtener la API/configuración de Gmail** y configurar el envío de correos (⏳ pendiente).
+- PM/Analistas: **enviar el A&D por correo** (🔄 en proceso, 22/09) y **enviar el acta 7** (✅ 22/09).
+
+**Próxima reunión:** por definir (cadencia de 2 reuniones/semana).
 
 ---
 

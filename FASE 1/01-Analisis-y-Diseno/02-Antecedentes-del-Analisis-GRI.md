@@ -1,6 +1,6 @@
 # 02 · Análisis GRI: antecedentes, qué es una brecha y cómo se califica
 
-> **Numeración = A&D vigente** (`01-Mockups-y-Propuestas/analisis-diseno-latex/main.pdf`).
+> **Numeración = A&D vigente** (`01-Mockups-y-Propuestas/analisis_y_diseno_oficial.pdf`).
 
 >Detalle solicitado por el PO (Oscar) en las interacciones previas (actas 1–5): entender con precisión qué son las **memorias anuales**, los **reportes de sostenibilidad (GRI)**, qué es una “brecha” y cómo se determina el estado de un indicador.
 

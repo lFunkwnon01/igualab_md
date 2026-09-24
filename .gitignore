@@ -8,3 +8,15 @@ graphify-out/
 
 # Material del curso CS3081 (referencia, no contenido del proyecto)
 software_pdf/
+
+# Artefactos de compilación LaTeX (no versionar)
+*.aux
+*.log
+*.fls
+*.xdv
+*.toc
+*.out
+*.fdb_latexmk
+*.synctex.gz
+*.swp
+*.kate-swp

@@ -1,16 +1,16 @@
 # 03 · Diccionario de Datos — FASE 1 (norma GES/GAP · completo)
 
-> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Formato por ficha: **Campo · Tamaño · Tipo de Dato · Descripción · NULL**.
-> Diseño de origen: `02-Base-de-Datos-Diagrama-y-Diseno.md` · Estado: **COMPLETADO — Modelo de Datos Depurado (13 tablas)**, alineado a la arquitectura de solución por capas (`arquitecturasolution.jpeg`, capas 6–7).
-> Motor: PostgreSQL 16 + pgvector (`embedding VECTOR(dim)`, índice HNSW cosine).
-> Cambios vs ERD v2 (14 tablas): **quitan las fichas de** `roles` · `configuracion` · `uso_llm` · `gri_analisis_historico` · `reporte_detalle_snapshot` · **se renombra** `chunks_embeddings`→`fragmentos_documento` y `reportes_generados`→`reportes_prospeccion` · **se agregan** `sesiones` · `tokens_recuperacion` · `consultas_asistente` · `consulta_citas`.
+> Diseño de origen: `02-Base-de-Datos-Diagrama-y-Diseno.md` · Estado: **COMPLETADO — Modelo de Datos (2 bases, 13 tablas)**, alineado a la arquitectura de solución por capas (`arquitecturasolution.jpeg`, capas 6–7).
+> Motor: PostgreSQL 16 + pgvector (`embedding VECTOR(dim)`, índice HNSW cosine) · **2 bases**: transaccional (12 tablas, `DATABASE_URL`) + vectorial (1 tabla: `fragmentos_documento`, `VECTOR_DATABASE_URL`).
+> **Sin claves foráneas físicas entre bases** (referencias lógicas UUID validadas por la app).
 
 ## 1 · IDENTIDAD Y ACCESO
 
 ## Tabla: `usuarios`
-Descripción: usuarios de la plataforma (3 en fase 1: 1 Superadmin + 2 Administradores). Roles cerrados por ENUM (sustituye a la tabla `roles`).
+Descripción: usuarios de la plataforma (3 en fase 1: 1 Superadmin + 2 Administradores). Roles cerrados por ENUM.
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -79,13 +79,13 @@ Descripción: cada archivo `.md` ingestado (memoria anual o reporte de sostenibi
 
 Restricciones: UNIQUE parcial (empresa_id, anho, tipo) WHERE estado='indexado'.
 
-## Tabla: `fragmentos_documento` (antes `chunks_embeddings` — BD vectorizada)
+## Tabla: `fragmentos_documento` (BD vectorial)
 Descripción: fragmentos del documento con su embedding para búsqueda semántica; núcleo del RAG.
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
-| id | 36 | UUID (PK) | Identificador único del fragmento (antes chunk_id). | NO |
-| documento_id | 36 | UUID (FK) | Documento origen → documentos.id (ON DELETE CASCADE). | NO |
+| id | 36 | UUID (PK) | Identificador único del fragmento. | NO |
+| documento_id | 36 | UUID (FK) | Documento origen → documentos.id (referencia lógica UUID validada por la app, sin FK física entre bases). | NO |
 | indice | - | INTEGER | Posición dentro del documento; UNIQUE (documento_id, indice). | NO |
 | seccion | 500 | VARCHAR | Encabezado markdown de la sección origen (llave de la cita RN-034). | NO |
 | texto | - | TEXT | Fragmento de texto (sección o fila de tabla). | NO |
@@ -116,7 +116,7 @@ Descripción: **la tabla del análisis** — fila por documento + código GRI (e
 | id | 36 | UUID (PK) | Identificador único de la fila de análisis. | NO |
 | documento_id | 36 | UUID (FK) | Documento fuente → documentos.id. | NO |
 | gri_codigo | 20 | VARCHAR (FK) | Código analizado → catalogo_gri.codigo (RN-027). | NO |
-| fragmento_id | 36 | UUID (FK) | Fragmento citado → fragmentos_documento.id (permite verificación de la cita). | SÍ |
+| fragmento_id | 36 | UUID (FK) | Fragmento citado → fragmentos_documento.id (referencia lógica UUID validada por la app, sin FK física entre bases). | SÍ |
 | cita_textual | - | TEXT | Cita textual extraída del fragmento/documento (verificable). | NO |
 | estado | - | estado_gri (ENUM) | Asignado **manualmente**: OK \| BAJA SUSTANCIA \| SUB-REPORTADO (3 únicos — RN-029). Solo útil validado. | SÍ |
 | validado_por | 36 | UUID (FK) | Administrador que validó (NULL = pendiente CU006 — RS-12). | SÍ |
@@ -124,7 +124,7 @@ Descripción: **la tabla del análisis** — fila por documento + código GRI (e
 | realizado_en | - | TIMESTAMPTZ | Fecha del análisis/poblado automático. | NO |
 
 Restricciones: UNIQUE parcial (documento_id, gri_codigo) — una sola fila de resultados por doc/código. ❗ Sin `estado_sugerido` (asignación manual).
-Historial: cambios de estado → `auditoria` (evento `AJUSTE_BRECHA` con detalle JSONB; sustituye a `gri_analisis_historico`).
+Historial: cambios de estado → `auditoria` (evento `AJUSTE_BRECHA` con detalle JSONB).
 
 ## Tabla: `sanciones`
 Descripción: sanciones identificadas en los documentos — negocio puro del reporte; siempre con cita verificable.
@@ -143,7 +143,7 @@ Descripción: sanciones identificadas en los documentos — negocio puro del rep
 ## 4 · ASISTENTE RAG
 
 ## Tabla: `consultas_asistente` — **NUEVA**
-Descripción: cada consulta al asistente IA (Capa 6 `ConsultaAsistente`). Sustituye a `uso_llm` como medidor del free tier (RNF-027: COUNT por día/modelo vs `LLM_DAILY_LIMIT`).
+Descripción: cada consulta al asistente IA (Capa 6 `ConsultaAsistente`). Medidor del free tier (RNF-027: COUNT por día/modelo vs `LLM_DAILY_LIMIT`).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -163,14 +163,14 @@ Descripción: citas · fuentes de cada respuesta del asistente — constan la po
 |---|---|---|---|---|
 | id | 36 | UUID (PK) | Identificador de la cita. | NO |
 | consulta_id | 36 | UUID (FK) | Consulta a la que pertenece → consultas_asistente.id (ON DELETE CASCADE). | NO |
-| fragmento_id | 36 | UUID (FK) | Fragmento citado → fragmentos_documento.id. | NO |
+| fragmento_id | 36 | UUID (FK) | Fragmento citado → fragmentos_documento.id (referencia lógica UUID validada por la app). | NO |
 | orden | - | SMALLINT | Posición de la cita en la respuesta. | NO |
 | extracto | - | TEXT | Extracto textual citado del fragmento. | NO |
 
 ## 5 · REPORTES
 
 ## Tabla: `reportes_prospeccion`
-Descripción: entregables PDF inmutables — fusiona `reportes_generados` + `reporte_detalle_snapshot` (contenido JSONB congelado).
+Descripción: entregables PDF inmutables — `contenido_snapshot` JSONB congelado + PDF inmutable con hash.
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |
 |---|---|---|---|---|
@@ -188,7 +188,7 @@ Reglas: cero LLM en la generación (RN-041); el PDF/snapshot es fiel a su fecha 
 
 ## 6 · AUDITORÍA
 
-## Tabla: `auditoria` (antes `auditoria_eventos`)
+## Tabla: `auditoria`
 Descripción: bitácora append-only de eventos sensibles — la app solo INSERT/SELECT (REVOKE UPDATE/DELETE). UTC (RNF-024).
 
 | Campo | Tamaño | Tipo de Dato | Descripción | NULL |

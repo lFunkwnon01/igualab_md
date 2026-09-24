@@ -1,6 +1,6 @@
 # 04 · Comparación: RAG simple vs RAG + MCP (decisión de FASE 1)
 
-> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Conclusión previa: **FASE 1 usa solo RAG simple (sin MCP/function calling)** — corrección al acta-arquitectura anterior (mi error al proponerlo). El diagrama vigente de la arquitectura de solución es **IGUALAB · "Arquitectura de Solución por Capas"** (`arquitecturasolution.jpeg`, 7 capas). Este documento justifica la decisión y guarda la comparación para re-evaluarla en el futuro.
 

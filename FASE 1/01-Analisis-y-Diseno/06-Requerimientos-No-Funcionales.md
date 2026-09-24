@@ -1,13 +1,13 @@
 # 06 · Requerimientos No Funcionales — FASE 1 (numeración vigente)
 
-> **Fuente única:** `analisis-diseno-latex/main.pdf`. 30 RNF categorizados; derivan de RN/RF (o transversales).
+> **Fuente única:** `analisis_y_diseno_oficial.pdf`. 30 RNF categorizados; derivan de RN/RF (o transversales).
 
 | N° | Categoría | Descripción del Requerimiento No Funcional | Deriva de |
 |---|---|---|---|
 | RNF-001 | Seguridad | Las contraseñas deben tener un mínimo de 8 caracteres, con al menos una mayúscula, una minúscula, un dígito y un carácter especial, y no pueden coincidir con el correo de la cuenta. | RF-001, RN-011 |
 | RNF-002 | Seguridad | Las contraseñas se almacenan mediante una función de hash de un solo sentido con sal única por usuario, nunca en texto plano. | RF-001, RN-011 |
 | RNF-003 | Seguridad | La identidad de la cuenta se obtiene exclusivamente del token firmado (JWT), nunca de parámetros de la petición. | RF-001, RF-004, RN-003 |
-| RNF-004 | Seguridad | La clave de firma de los tokens se almacena fuera del código fuente y se rota sin redespliegue de la aplicación. | RF-001 |
+| RNF-004 | Seguridad | La clave utilizada para firmar los tokens JWT se almacena fuera del código fuente mediante variables de entorno o secretos del ambiente. Su rotación no requiere modificar el código y se aplica mediante una actualización segura de la configuración y un reinicio controlado del servicio. | RF-001 |
 | RNF-005 | Seguridad | La autorización se evalúa en cada endpoint, con independencia de lo que exponga la interfaz. | RN-003 |
 | RNF-006 | Seguridad | La revocación de la sesión y la vigencia del rol se verifican en cada petición. | RF-004, RN-005, RN-013 |
 | RNF-007 | Seguridad | El tipo real del archivo se valida en el servidor, sin confiar en la extensión declarada. | RF-013, RN-018 |
@@ -19,10 +19,10 @@
 | RNF-013 | Integridad | La unicidad del SuperAdmin se garantiza mediante una restricción de integridad en la base de datos, además de la validación en la aplicación. | RN-002 |
 | RNF-014 | Integridad | El modelo de datos distingue entre un valor no determinado y un valor igual a cero. | RN-031, RN-032 |
 | RNF-015 | Integridad | El contenido de los documentos se procesa y almacena en UTF-8, preservando tildes y la letra «ñ» sin alteración. | RF-012, RF-016 |
-| RNF-016 | Rendimiento | La ingesta e indexación de un documento de tamaño máximo (50 MB) se completa en menos de 120 segundos. | RF-015 |
-| RNF-017 | Rendimiento | El asistente entrega una respuesta en un máximo de 15 segundos bajo condiciones normales, excluyendo la latencia del proveedor externo. | RF-023 |
+| RNF-016 | Rendimiento | El sistema debe procesar la ingesta e indexación de un documento de hasta 50 MB en un tiempo máximo de 15 minutos, considerando la latencia y los límites del proveedor externo de embeddings. | RF-015 |
+| RNF-017 | Rendimiento | El sistema debe registrar por separado el tiempo de procesamiento interno y el tiempo de respuesta del proveedor externo. Bajo una carga de hasta 5 usuarios concurrentes y un corpus de hasta 4,200 fragmentos, la respuesta completa del asistente no debe superar los 90 segundos. | RF-023 |
 | RNF-018 | Rendimiento | Las llamadas al proveedor de IA tienen un tiempo máximo de espera de 1 minuto, tras el cual la operación se reporta como indisponible. | RF-023 |
-| RNF-019 | Disponibilidad | La indisponibilidad del proveedor de IA no degrada los módulos de gestión, ingesta, reportes de prospección ni auditoría. | RF-024, RN-033 |
+| RNF-019 | Disponibilidad | La indisponibilidad del proveedor de IA se limita al asistente RAG y a la indexación durante la ingesta; no degrada la autenticación ni la gestión de usuarios, el catálogo de empresas, la generación de reportes de prospección ni la auditoría. | RF-024, RN-033 |
 | RNF-020 | Capacidad | El sistema admite y procesa documentos de hasta 50 MB por cada operación de ingesta. | RF-013, RN-021 |
 | RNF-021 | Disponibilidad | El sistema ofrece una disponibilidad de al menos el 95 % en horario laboral (lun–vie, 8:00–20:00, hora de Perú). | Transversal |
 | RNF-022 | Trazabilidad | Los registros de auditoría se almacenan en estructuras de solo inserción (*append-only*), sin actualización ni eliminación. | RN-044 |

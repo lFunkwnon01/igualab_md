@@ -52,17 +52,17 @@ Cada módulo indica su caso de uso y los requisitos que cubre.
 \thd{\#} & \thd{Módulo} & \thd{CU} & \thd{Requisitos (RF · RN · RNF)} \\
 \hline
 \endhead
-1 & Autenticación y Gestión de Sesión & CU001 & RN-001…RN-013 · RF-001…RF-005 · RNF-001…RNF-009 \\
+1 & Autenticación y Gestión de Sesión & CU001 & RN-004…RN-013 · RF-001…RF-005 · RNF-001…RNF-006, RNF-008, RNF-009 \\
 \hline
 2 & Gestión de Usuarios & CU002 & RN-001…RN-009 · RF-006…RF-009 · RNF-012, RNF-013 \\
 \hline
 3 & Catálogo de Empresas & CU008 & RN-014…RN-017 · RF-010, RF-011 · --- \\
 \hline
-4 & Ingesta de Documentos & CU003 & RN-018…RN-026 · RF-012…RF-017 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-029 \\
+4 & Ingesta de Documentos & CU003 & RN-018…RN-026 · RF-012…RF-017, RF-022 · RNF-007, RNF-011, RNF-015, RNF-016, RNF-020, RNF-025, RNF-028, RNF-029, RNF-030 \\
 \hline
-5 & Análisis y Validación de Brechas GRI & CU005 & RN-027…RN-032 · RF-018…RF-022, RF-028 · RNF-014, RNF-026, RNF-027 \\
+5 & Análisis y Validación de Brechas GRI & CU005 & RN-027…RN-032 · RF-018…RF-021, RF-028 · RNF-014, RNF-026 \\
 \hline
-6 & Asistente de IA (RAG) & CU004 & RN-033…RN-037 · RF-023, RF-024 · RNF-010, RNF-017, RNF-018, RNF-019 \\
+6 & Asistente de IA (RAG) & CU004 & RN-033…RN-037 · RF-023, RF-024 · RNF-010, RNF-017, RNF-018, RNF-019, RNF-027 \\
 \hline
 7 & Generación de Reportes de Prospección & CU006 & RN-038…RN-041 · RF-025…RF-027 · --- \\
 \hline
@@ -80,10 +80,10 @@ Cada módulo indica su caso de uso y los requisitos que cubre.
 Controla el acceso a la plataforma mediante correo y contraseña, garantizando que solo cuentas registradas y habilitadas puedan operar el sistema. Contempla la recuperación de contraseña por enlace temporal de un solo uso, el cambio de contraseña estando autenticado, la expiración de sesión por inactividad, el cierre de sesión manual y el bloqueo temporal de la cuenta tras 5 intentos fallidos consecutivos. La sesión se soporta mediante un token JWT firmado que identifica a la cuenta y a la sesión activa. En cada petición protegida, el sistema verifica la vigencia de la sesión, el estado de la cuenta y el rol actual almacenado en la base de datos.
 
 \subsubsection{Módulo 2 --- Gestión de Usuarios}
-Exclusivo del SuperAdmin: permite crear cuentas de Administrador con una contraseña temporal para el primer acceso. El usuario deberá cambiar esta contraseña antes de utilizar las demás funcionalidades del sistema. También permite habilitar o deshabilitar cuentas, invalidar sus sesiones activas y transferir el rol SuperAdmin a una cuenta de Administrador existente y habilitada, con confirmación previa y ejecución atómica. El sistema garantiza en todo momento la existencia de exactamente una cuenta con rol SuperAdmin y no contempla eliminación permanente de cuentas, solo habilitación y deshabilitación, para preservar la trazabilidad de auditoría.
+Exclusivo del SuperAdmin: permite crear cuentas de Administrador asignando una contraseña inicial. El Administrador puede cambiar su contraseña cuando lo desee, tanto desde su sesión activa como mediante la recuperación de acceso con «¿Olvidaste tu contraseña?»; el sistema no exige un cambio de contraseña en el primer acceso. También permite habilitar o deshabilitar cuentas, invalidar sus sesiones activas y transferir el rol SuperAdmin a una cuenta de Administrador existente y habilitada, con confirmación previa y ejecución atómica. El sistema garantiza en todo momento la existencia de exactamente una cuenta con rol SuperAdmin y no contempla eliminación permanente de cuentas, solo habilitación y deshabilitación, para preservar la trazabilidad de auditoría.
 
 \subsubsection{Módulo 3 --- Catálogo de Empresas}
-Exclusivo del SuperAdmin: registra las empresas sobre las cuales se realizará el análisis, exigiendo nombre y sector. El sector es un atributo de la empresa y pertenece a un conjunto cerrado de tres valores (Minería, Petróleo y Energía); las empresas de otros sectores no son elegibles para el análisis ni para la generación de reportes.
+Exclusivo del SuperAdmin: registra las empresas sobre las cuales se realizará el análisis, exigiendo nombre y sector. El sector es un atributo de la empresa y pertenece a un conjunto cerrado de tres valores (Minería, Petróleo y Gas, Energía); las empresas de otros sectores no son elegibles para el análisis ni para la generación de reportes.
 
 \subsubsection{Módulo 4 --- Ingesta de Documentos}
 Exclusivo del SuperAdmin: carga memorias anuales y reportes de sostenibilidad GRI en formato Markdown (.md), asociados obligatoriamente a una empresa, un año y un tipo de documento. El sistema valida el tipo real del archivo en el servidor, calcula su hash SHA-256 para rechazar duplicados y verifica que contenga al menos un código GRI o una mención de sanción reconocible; en caso contrario, el documento se marca como observado en lugar de rechazarse por completo. El procesamiento es síncrono, con progreso visible al usuario, e incluye la indexación del contenido y la ejecución automática del análisis de brechas GRI como último paso de una ingesta exitosa. Ante rechazo o interrupción, el sistema revierte el procesamiento sin conservar contenido parcial.

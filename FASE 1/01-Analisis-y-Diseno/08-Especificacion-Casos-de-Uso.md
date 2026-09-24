@@ -1,6 +1,6 @@
 # 08 · Especificación de Casos de Uso — FASE 1
 
-> **Numeración = A&D vigente** (`analisis-diseno-latex/main.pdf`, sección 7.2). Casos de uso **CU001…CU007**.
+> **Numeración = A&D vigente** (`analisis_y_diseno_oficial.pdf`, sección 7.2). Casos de uso **CU001…CU008**.
 > Formato: Actores · Precondiciones · Flujo básico · Flujos alternativos · Postcondición · RF/RN asociados.
 
 ---
@@ -171,3 +171,24 @@
 **Flujos alternativos**
 - **A1 · Sin coincidencias:** informa que no hay eventos para el criterio.
 - **A2 · Acceso no autorizado:** un rol distinto de SuperAdmin es denegado (HTTP 403) y el intento queda registrado.
+
+---
+
+## CU008 · Gestión del catálogo de empresas
+
+| Campo | Detalle |
+|---|---|
+| Actores | SuperAdmin |
+| RF / RN | RF-010, RF-011 / RN-014, RN-015, RN-016, RN-017 |
+| Precondición | Sesión SuperAdmin activa. |
+| Postcondición | Empresa registrada y asociada a un sector habilitado del conjunto cerrado (RN-015); el catálogo conserva su vigencia (activa/inactiva). |
+
+**Flujo básico**
+1. El SuperAdmin accede al catálogo de empresas.
+2. Registra una empresa indicando nombre y sector.
+3. El sistema valida el nombre (único) y el sector permitido, y persiste la empresa.
+4. El SuperAdmin puede activar o desactivar empresas del catálogo (RN-017).
+
+**Flujos alternativos**
+- **A1 · Nombre duplicado:** el sistema rechaza el registro (RN-016).
+- **A2 · Sector no habilitado:** el sistema no admite sectores distintos de los del conjunto cerrado (RN-015).

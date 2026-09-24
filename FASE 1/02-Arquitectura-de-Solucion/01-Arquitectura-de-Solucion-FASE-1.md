@@ -1,6 +1,6 @@
 # 01 · Arquitectura de Solución — FASE 1 (a medida)
 
-> **Numeración alineada al A&D v6 (14/09)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
+> **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Fuente de verdad: **Plan de Proyecto v1.2** (aprobado 11/09) · acta 5 · **RAG simple, sin MCP ni function calling** · modelos `:free` sin costo.
 
@@ -13,10 +13,10 @@
 1. **Actores y Roles** — Superadmin (usuario · empresas · ingesta · auditoría) y Administrador (validación GRI · consultas RAG · reportes). **USA** ↓
 2. **Aplicación Web** — SPA **React 18 + Vite**: React Router · fetch/axios · HTML5/CSS3 — gestión, carga, análisis, RAG, reportes y auditoría.
 3. **API y Endpoints — HTTPS · JSON · JWT** — **FastAPI**: Pydantic · Uvicorn · REST · HTTPS · JSON · OpenAPI; módulos Auth/Usuarios, Empresas/Documentos, Análisis GRI, Consultas RAG, Reportes, Auditoría. **DELEGA** ↓
-4. **Servicios y Lógica de Negocio — Python 3.11** — Gestión de sesiones y usuarios (login, logout, JWT · sesiones · roles · estado) · Catálogo de empresas e ingesta documental (operaciones **síncronas y atómicas** · estado rechazo y registro) · Análisis y validación GRI (GRI · evidencias · sanciones · estado manual) · Asistente IA — RAG (recuperación · contexto · respuesta fundamentada con citas) · Reportes de prospección (PDF determinista e inmutable) · Auditoría funcional. **APLICA REGLAS / PROCESA / ANALIZA / RECUPERA Y GENERA** ↓
+4. **Servicios y Lógica de Negocio — Python 3.13** — Gestión de sesiones y usuarios (login, logout, JWT · sesiones · roles · estado) · Catálogo de empresas e ingesta documental (operaciones **síncronas y atómicas** · estado rechazo y registro) · Análisis y validación GRI (GRI · evidencias · sanciones · estado manual) · Asistente IA — RAG (recuperación · contexto · respuesta fundamentada con citas) · Reportes de prospección (PDF determinista e inmutable) · Auditoría funcional. **APLICA REGLAS / PROCESA / ANALIZA / RECUPERA Y GENERA** ↓
 5. **Procesamiento y reglas de cada módulo** — Accesos y cuentas (login · JWT · sesiones · roles y permisos · cambio y recuperación de contraseña · hash bcrypt · token expirable) · Flujo de ingesta (guard `.md` ≤ 50 MB + pipes + sha256 → segmentación por filas de tabla (chunks ~800, solape 100) → embeddings dim 1024) · Diagnóstico GRI (40 códigos del catálogo vigente · detección por citas/patrones · estado manual **OK/Baja/Sub** pendiente → aprobado) · AI Harness — RAG (búsqueda pgvector cosine k=4 · embeddings · citas · contenido tratado solo como datos) · HTML → PDF (solo datos de BD: GRI y sanciones · snapshot · hash · JS deshabilitado · historial accesible) · Eventos sensibles (login/deshabilitación de cuenta · registro responsable · fecha UTC · **solo INSERT**) **PERSISTE** ↓
-6. **Persistencia y modelos ORM — SQLAlchemy Async · AsyncSession** — Usuario/Sesión (TokenRecuperación) · Empresa/Documento (FragmentoDocumento) · CatalogoGRI/GRIAnalisys (Sanc) · ConsultaAsistente (Citas · Fuentes) · ReporteProspección (snapshot inmutable) · EventoAuditoría (**append-only**). **MAPEA** ↓
-7. **Base de Datos — PostgreSQL 16 + PGVector · AsyncPG** — `usuarios · sesiones` (tokens_recuperación) · `empresas · documentos` (fragmentos · documento_vector · hash por documento) · `catalogo_gri · gri_analisis` (sanciones) · `consultas_asistente` (citas · fuentes) · `reportes_prospeccion` (PDF · snapshot · hash) · `auditoria_eventos` (**solo INSERT**).
+6. **Persistencia y modelos ORM — SQLAlchemy Async · AsyncSession (2 engines: transaccional + vectorial)** — Usuario/Sesión (TokenRecuperación) · Empresa/Documento (FragmentoDocumento) · CatalogoGRI/GRIAnalisys (Sanc) · ConsultaAsistente (Citas · Fuentes) · ReporteProspección (snapshot inmutable) · EventoAuditoría (**append-only**). **MAPEA** ↓
+7. **Base de Datos — 2× PostgreSQL 16 + PGVector · AsyncPG** — **Transaccional** (`DATABASE_URL`, 12 tablas): `usuarios` · `sesiones` · `tokens_recuperacion` · `empresas` · `documentos` · `catalogo_gri` · `gri_analisis` · `sanciones` · `consultas_asistente` · `consulta_citas` · `reportes_prospeccion` (PDF · snapshot · hash) · `auditoria` (**solo INSERT**). **Vectorial** (`VECTOR_DATABASE_URL`, 1 tabla): `fragmentos_documento` (pgvector). Sin claves foráneas físicas entre bases (referencias lógicas UUID).
 
 ---
 
@@ -24,7 +24,7 @@
 
 ## 1. Vista general POR CAPAS (FASE 1) — refleja `arquitecturasolution.jpeg`
 
-**Recorrido de capas:** Capa 1 · Actores y Roles → Capa 2 · Aplicación Web (SPA React 18 + Vite) → Capa 3 · API FastAPI (REST · HTTPS · JSON · JWT · OpenAPI) → Capa 4 · Servicios y Lógica de Negocio (Python 3.11) → Capa 5 · Procesamiento y reglas de cada módulo → Capa 6 · Persistencia (SQLAlchemy Async · AsyncSession) → Capa 7 · PostgreSQL 16 + PGVector (AsyncPG)
+**Recorrido de capas:** Capa 1 · Actores y Roles → Capa 2 · Aplicación Web (SPA React 18 + Vite) → Capa 3 · API FastAPI (REST · HTTPS · JSON · JWT · OpenAPI) → Capa 4 · Servicios y Lógica de Negocio (Python 3.13) → Capa 5 · Procesamiento y reglas de cada módulo → Capa 6 · Persistencia (SQLAlchemy Async · AsyncSession) → Capa 7 · PostgreSQL 16 + PGVector (AsyncPG)
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -43,7 +43,7 @@
 │ Auth/Usuarios · Empresas/Documentos · Análisis GRI ·               │
 │ Consultas RAG · Reportes · Auditoría                      DELEGA ▼ │
 ├────────────────────────────────────────────────────────────────────┤
-│ CAPA 4 · SERVICIOS Y LÓGICA DE NEGOCIO — Python 3.11               │
+│ CAPA 4 · SERVICIOS Y LÓGICA DE NEGOCIO — Python 3.13               │
 │ gestión de sesiones y usuarios (login·logout·JWT·roles·estado) ·   │
 │ catálogo de empresas e ingesta documental (síncrono·atómico) ·     │
 │ análisis y validación GRI · asistente IA — RAG (citas) ·           │
@@ -64,14 +64,16 @@
 │ ConsultaAsistente (Citas·Fuentes) | ReporteProspección             │
 │ (snapshot inmutable) | EventoAuditoría (append-only)     MAPEA ▼   │
 ├────────────────────────────────────────────────────────────────────┤
-│ CAPA 7 · BASE DE DATOS — PostgreSQL 16 + PGVector · AsyncPG        │
-│ usuarios·sesiones | empresas·documentos | catalogo_gri·            │
-│ gri_analisis | consultas_asistente | reportes_prospeccion |        │
-│ auditoria_eventos (solo INSERT)                                    │
+│ CAPA 7 · BASES DE DATOS — 2× PostgreSQL 16 + PGVector · AsyncPG    │
+│ transaccional (DATABASE_URL, 12 tablas): usuarios · sesiones ·     │
+│ tokens_recuperacion · empresas · documentos · catalogo_gri ·       │
+│ gri_analisis · sanciones · consultas_asistente · consulta_citas ·  │
+│ reportes_prospeccion · auditoria (solo INSERT)                     │
+│ vectorial (VECTOR_DATABASE_URL, 1 tabla): fragmentos_documento     │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-> Nota: el LLM (GLM-5.2 `:free` vía OpenRouter) y el servicio de embeddings por API del proveedor se consumen desde las **capas 4–5**; su consumo de cuota se registra en `uso_llm` (RNF-027).
+> Nota: el LLM (GLM-5.2 `:free` vía OpenRouter) y el servicio de embeddings por API del proveedor se consumen desde las **capas 4–5**; su consumo de cuota se controla con rate limit en el middleware de FastAPI (RNF-027), sin tabla de uso.
 
 ---
 
@@ -79,12 +81,12 @@
 
 | # | Módulo | Prioridad | CU | Resumen técnico |
 |---|---|---|---|---|
-| 1 | **Ingesta de documentos** | ★★★ (núcleo) | CU004 | Guard (.md + pipes + 50 MB + sha256) → chunking (~800 chars por sección/fila de tabla) → embeddings por API → upsert pgvector. **Síncrono** (1 superadmin, sin colas). |
-| 2 | **Asistente IA (RAG simple)** | ★★★ | CU005 | Retrieval búsqueda pgvector cosine k=4 + prompt con citas para datos estructurados. |
-| 3 | **Análisis GRI / sanciones y supervisión de estados** | ★★★ (núcleo) | CU006 | Comparación contra `catalogo_gri` (reglas deterministas) → **asignación manual del estado por el Administrador** con historial. Toda brecha persiste (RN-015). |
-| 4 | **Generación de reportes PDF** | ★★★ (núcleo) | CU007 | Plantilla Jinja2 + WeasyPrint; variables dinámicas de BD; sin LLM: SELECT determinista a `gri_analisis` (poblado al terminar la ingesta) + plantilla. |
-| 5 | **RBAC + Usuarios** | ★★ | CU001–3 | JWT + políticas de contraseña/bloqueo; transferencia de Superadmin atómica (RN-009, RNF-012). |
-| 6 | **Auditoría** | ★★ | CU009 | append-only; consulta filtrable (solo lectura). |
+| 1 | **Ingesta de documentos** | ★★★ (núcleo) | CU003 | Guard (.md + pipes + 50 MB + sha256) → chunking (~800 chars por sección/fila de tabla) → embeddings por API → upsert pgvector. **Síncrono** (1 superadmin, sin colas). |
+| 2 | **Asistente IA (RAG simple)** | ★★★ | CU004 | Retrieval búsqueda pgvector cosine k=4 + prompt con citas para datos estructurados. |
+| 3 | **Análisis GRI / sanciones y supervisión de estados** | ★★★ (núcleo) | CU005 | Comparación contra `catalogo_gri` (reglas deterministas) → **asignación manual del estado por el Administrador** con historial. Toda brecha persiste (RN-015). |
+| 4 | **Generación de reportes PDF** | ★★★ (núcleo) | CU006 | Plantilla Jinja2 + WeasyPrint; variables dinámicas de BD; sin LLM: SELECT determinista a `gri_analisis` (poblado al terminar la ingesta) + plantilla. |
+| 5 | **RBAC + Usuarios** | ★★ | CU001–CU002 | JWT + políticas de contraseña/bloqueo; transferencia de Superadmin atómica (RN-009, RNF-012). |
+| 6 | **Auditoría** | ★★ | CU007 | append-only; consulta filtrable (solo lectura). |
 | — | Dashboards (KPIs ASG 0–100, etc.) | fase 2 | — | Tablas de agregación listas para GET (ver BD). |
 
 ## 3. Detalle del pipeline RAG (a medida, RAG simple que sirve)
@@ -102,21 +104,21 @@
 6. pregunta del Administrador + contexto de sesión (empresa activa si la hay) → embedding **por API** de la pregunta → búsqueda pgvector cosine **k=4** (+ filtro por empresa cuando aplica).
 7. **RAG simple, sin agentes**: el LLM (GLM-5.2 :free) recibe el contexto de los chunks y redacta la respuesta — no hay tools ni function calling en fase 1 (decisión: evitar desarrollo extra).
 8. **Respuesta con citas**: modelo obligado a incluir `[doc_id:seccion]`; post-verificación de los IDs citados (si cita algo fuera del contexto recuperado, se elimina esa cita).
-9. **Rate limit**: contadores en `uso_llm` (RNF-027, 200/día); si se agota, la respuesta se mide en estado de cola y avisa («sin cuota hoy»).
+9. **Rate limit**: contadores en el middleware del backend, derivados de `consultas_asistente` (RNF-027, 200/día), sin tabla `uso_llm`; si se agota, la respuesta se mide en estado de cola y avisa («sin cuota hoy»).
 
 ## 4. Generación de reportes (cero LLM — la cadena determinista)
 
-El análisis GRI/sanciones **se ejecuta automáticamente al terminar cada ingesta** y se persiste en la tabla del análisis (`gri_analisis` + `gri_analisis_historico`); con ello, la generación de un reporte es **un SELECT + plantilla**:
+El análisis GRI/sanciones **se ejecuta automáticamente al terminar cada ingesta** y se persiste en la tabla del análisis (`gri_analisis`); los cambios de estado quedan registrados en `auditoria` (evento `AJUSTE_BRECHA`); con ello, la generación de un reporte es **un SELECT + plantilla**:
 
 ```
 [Proceso de ingesta (.md) al terminar] 
    → detección de códigos GRI presentes (catálogo de 40) + extracción de la cita textual → INSERT en gri_analisis (sin estado: queda pendiente de asignación manual)
-[CU006: el Administrador asigna manualmente el estado (OK/Baja/Sub) revisando la cita → historial]
-[CU007 generar reporte]
+[CU005: el Administrador asigna manualmente el estado (OK/Baja/Sub) revisando la cita → historial]
+[CU006 generar reporte]
    → SELECT sobre gri_analisis (estado final validado) + sanciones
    → variables dinámicas (conteos por estado, montos, sector, año) para la plantilla
-   → Jinja2 → WeasyPrint → PDF + reporte_detalle_snapshot (misma transacción)
-   → reportes_generados → auditoria_eventos
+   → Jinja2 → WeasyPrint → PDF + contenido_snapshot (misma transacción)
+   → reportes_prospeccion → auditoria
 ```
 
 - **El reporte no invoca al LLM** (ni en el resumen ejecutivo): todo dato del PDF proviene de la BD — el resumen sale de plantilla con conteos (brechas por estado, total de sanciones, cita principal).

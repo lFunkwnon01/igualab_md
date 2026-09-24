@@ -1,7 +1,7 @@
 # 07 · Casos de Uso — Diagrama y Listado (FASE 1)
 
-> **Numeración = A&D vigente** (`01-Mockups-y-Propuestas/analisis-diseno-latex/main.pdf`, sección 7.2).
-> Casos de uso de la **v1 (FASE 1)**: **CU001…CU007**. Se eliminaron los CU fuera de alcance (Bolsa, LinkedIn, chatbot/portal).
+> **Numeración = A&D vigente** (`01-Mockups-y-Propuestas/analisis_y_diseno_oficial.pdf`, sección 7.2).
+> Casos de uso de la **v1 (FASE 1)**: **CU001…CU008**. Se eliminaron los CU fuera de alcance (Bolsa, LinkedIn, chatbot/portal).
 
 ## 7.1 Actores
 
@@ -28,9 +28,10 @@ flowchart LR
     CU005["CU005 · Detección de brechas GRI y sanciones"]
     CU006["CU006 · Generación de reportes de prospección (PDF)"]
     CU007["CU007 · Auditoría de eventos"]
+    CU008["CU008 · Gestión del catálogo de empresas"]
   end
 
-  SU --> CU001 & CU002 & CU003 & CU007
+  SU --> CU001 & CU002 & CU003 & CU007 & CU008
   AD --> CU001 & CU004 & CU005 & CU006
   CU001 -. recuperación .-> MAIL
   CU003 -. embeddings por API .-> IA
@@ -49,6 +50,7 @@ flowchart LR
 | **CU005** | Detección de brechas GRI y sanciones | CU003 | Administrador | Incluido |
 | **CU006** | Generación de reportes de prospección (PDF) | CU005 | Administrador | Incluido |
 | **CU007** | Auditoría de eventos del sistema | — | SuperAdmin | Incluido |
+| **CU008** | Gestión del catálogo de empresas | — | SuperAdmin | Incluido |
 | ~~CU (Bolsa)~~ | ~~Dashboards de Bolsa de Valores~~ | — | — | **Eliminado** (acta 5 · REQ-16/19) |
 | ~~CU (LinkedIn)~~ | ~~Búsqueda vía LinkedIn~~ | — | — | **Eliminado** (acta 5 · REQ-17) |
 | CU (portal) | Portal público · chatbot inclusivo | — | — | **FASE 2 (v2)** |
@@ -127,4 +129,13 @@ flowchart LR
   SA(("SuperAdmin")) --> CU007((CU007))
   CU007 -.->|include| FILT((Filtrar por usuario,<br/>fecha y tipo))
   CU007 -.->|extend| READ((Solo lectura · append-only))
+```
+
+### CU008 — Gestión del catálogo de empresas
+
+```mermaid
+flowchart LR
+  SA(("SuperAdmin")) --> CU008((CU008))
+  CU008 -.->|include| EMP((Registrar empresa:<br/>nombre + sector))
+  CU008 -.->|extend| VIG((Activar / desactivar<br/>RN-017))
 ```

@@ -1,6 +1,6 @@
 # 03 · Diagramas de Procesos TO-BE — FASE 1 (formato BPMN)
 
-> **Numeración = A&D vigente** (`01-Mockups-y-Propuestas/analisis-diseno-latex/main.pdf`).
+> **Numeración = A&D vigente** (`01-Mockups-y-Propuestas/analisis_y_diseno_oficial.pdf`).
 
 > Proceso to-be según el A&D actualizado y ajustado al plan de proyecto v1.2 + actas 4/5: **sin dashboard, sin Bolsa, sin LinkedIn**. Todos los flujos corresponden 1:1 con el mock fidelizado <https://igualab.vercel.app/>.
 > El BPMN fuente está en `diagramas-BPMN/proceso_tobe_fase1.bpmn` (visualizable en `00-Documentación/bpmn/visor_bpmn.html`). Aquí se incluye versión mermaid para lectura rápida.
@@ -16,7 +16,7 @@ flowchart LR
     A4 -- No --> A5["Audita rechazo y muestra motivo en la UI"]
     A4 -- Sí --> A6["Chunking por secciones y filas de tabla"]
     A6 --> A7["Embeddings por API + upsert en pgvector"]
-    A7 --> A8[("documentos y chunks_embeddings")]
+    A7 --> A8[("documentos y fragmentos_documento")]
   end
   subgraph EXPL["Línea analítica · Administrador"]
     B1["Consulta al asistente IA con citación de fuentes"] --> B2["Revisa brechas GRI y sanciones detectadas"]
@@ -27,8 +27,8 @@ flowchart LR
   A8 --> B1
   A8 -. alimenta .-> B2
   A8 -. alimenta .-> B4
-  B4 -- registra --> R[("reportes_generados")]
-  A3 -. registra .-> ACC[("auditoria_eventos")]
+  B4 -- registra --> R[("reportes_prospeccion")]
+  A3 -. registra .-> ACC[("auditoria")]
 ```
 
 ```mermaid
@@ -39,7 +39,7 @@ flowchart TD
     G1 -- ok --> P1["2 Parseo markdown: encabezados y filas de tablas normalizadas"]
     P1 --> P2["3 Chunking por sección/fila ~800 chars con metadata: empresa, año, código GRI"]
     P2 --> P3["4 Embeddings por APIes: servicio de embeddings del proveedor (p. ej. NVIDIA NIM / Google AI Studio)"]
-    P3 --> P4["5 Upsert en chunks_embeddings con sha256 anti-duplicado"]
+    P3 --> P4["5 Upsert en fragmentos_documento con sha256 anti-duplicado"]
     P4 --> ANA["6 Detección GRI: códigos presentes (catálogo de 40) + cita textual → INSERT en tabla del análisis SIN estado (lo asigna el humano en CU006)"]
     ANA --> AUD["7 Audita ingesta: usuario, archivo, hash, estado, tiempos"]
     AUD --> RESP["Éxito: respuesta con fichas de chunks ingestados y brechas detectadas listas para revision humana"]
@@ -56,7 +56,7 @@ flowchart TD
     HUM -- Cambia --> REG["Historial: guarda estado, quién, cuándo, anterior → nuevo"]
     HUM -- Confirma --> GEN
     REG --> GEN["Generar PDF: SELECT determinista a gri_analisis con estados validados y sanciones → Jinja2 → WeasyPrint — sin llamar al LLM"]
-    GEN --> AUD2[("auditoria_eventos: generación de reporte")]
+    GEN --> AUD2[("auditoria: generación de reporte")]
     GEN --> DL["Descarga del reporte en la UI"]
 ```
 
@@ -68,7 +68,7 @@ flowchart TD
 | Login (demoAccounts) | Proceso 1 · autenticación |
 | Usuarios y roles (Superadmin) | Proceso 1 · gestión (RN-002, RN-003, RN-005) |
 | Ingesta de documentos | Proceso 2 completo |
-| Auditoría de accesos | Consulta de `auditoria_eventos` |
+| Auditoría de accesos | Consulta de `auditoria` |
 | Asistente de IA (chat) | Proceso 3 (análisis y consulta) |
 | Reportes de prospección / Descargar | Proceso 3 (generación y entregables) |
 
