@@ -71,20 +71,20 @@ gitGraph
 
 ---
 
-## 3. Estado actual de los repos (2026-09-17)
+## 3. Estado actual de los repos (2026-10-14)
 
 | Repo | `development` | `qa` | `uat` | `main` |
 |---|---|---|---|---|
-| `BCK-IGUALAB` | activo (código) | existe | = `main` (release actual) | solo `README.md` |
-| `FE-IGUALAB` | activo (código) | existe | = `main` (release actual) | solo `README.md` |
+| `BCK-IGUALAB` | `78e614a` (activo) | existe | existe | release |
+| `FE-IGUALAB` | `705cc78` (activo) | existe | existe | release |
 
 - Las 4 ramas existen en ambos repos. ✅
-- `main` y `uat` apuntan al mismo commit (release actual publicado). `development` va por delante.
-- No hay evidencia de Pull Requests ni de pipeline CI en los repos: **pendiente** validar con los TA's.
+- `development` va por delante; `uat`/`main` quedan rezagadas tras cada `pull`.
+- El vault registra los submódulos como submódulos Git (`06-Desarrollo/BCK-IGUALAB`, `06-Desarrollo/FE-IGUALAB`).
 
-### Contenido detectado en `development`
-- **Backend (`BCK-IGUALAB`):** FastAPI · `app/{main,config,database,dependencies,security,audit,email_service,logging_config,request_id,exception_handlers}.py` · `app/routers/{auth,usuarios}.py` · `app/services/{auth_service,usuario_service}.py` · `app/models/{usuarios,auditoria}.py` · `tests/` (pytest) · `Dockerfile` + `docker-compose.yml` · `scripts/` (crear tablas, superadmin).
-- **Frontend (`FE-IGUALAB`):** React + Vite + TypeScript + Tailwind · `src/pages/{Login,Asistente,Ingesta,Reportes,Descargas,Auditoria,Usuarios,MiCuenta,Restablecer}.tsx` · `src/api/{auth,usuarios,client}.ts` · `src/auth/`, `src/components/`, `src/lib/` · `Dockerfile` + `nginx.conf` + `.env.{development,qa,uat}.example`.
+### Contenido detectado en `development` (real, `@78e614a` / `@705cc78`)
+- **Backend (`BCK-IGUALAB`):** FastAPI · `app/` ≈ 12.771 líneas · `app/main.py` (lifespan de 6 pasos) · `app/config.py` · `app/routers/{auth,usuarios,empresas,documentos,analisis_gri}.py` (**27 endpoints**) · `app/services/{auth,usuario,empresa}` + `app/services/ingesta/` (ingesta .md, MinIO, OCI embeddings, detección GRI/sanciones) + `app/services/analisis_gri/` · `app/models/*` (**14 tablas**) · `app/migraciones/{transaccional,vectorial}` · `tests/` (**~1.197 tests**) · `Dockerfile` + `docker-compose.yml`.
+- **Frontend (`FE-IGUALAB`):** React 18 + Vite + TypeScript (strict) + Tailwind · `src/{api,auth,components,data,lib,pages}` + `App.tsx` · `src/pages/` (**11 páginas; 7 conectadas + 4 mock**) · `src/api/{client,auth,usuarios,empresas,documentos,analisis}.ts` · `src/lib/` · tests Vitest (solo lógica) · `Dockerfile` + `nginx.conf`.
 
 ---
 

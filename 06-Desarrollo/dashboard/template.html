@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Igualab · Tablero de Avance (OpenProject)</title>
+<style>
+  :root{
+    --bg:#080d1a; --bg2:#0c1426; --card:#111c33; --card2:#152238;
+    --line:#22304d; --text:#e6edf7; --muted:#8ea0bd; --dim:#64748b;
+    --accent:#10b981; --accent2:#38bdf8; --warn:#f59e0b; --danger:#ef4444; --violet:#a855f7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 700px at 15% -10%, #14284a 0%, transparent 55%),
+               radial-gradient(1000px 600px at 100% 0%, #132a33 0%, transparent 50%),
+               var(--bg);
+    color:var(--text); font-family:"Segoe UI",Roboto,Helvetica,Arial,system-ui,sans-serif;
+    min-height:100vh; padding:28px 22px 60px; line-height:1.45;
+  }
+  .wrap{max-width:1240px;margin:0 auto}
+  header.top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:26px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+        display:grid;place-items:center;font-weight:800;font-size:20px;color:#04211a;box-shadow:0 8px 24px rgba(16,185,129,.25)}
+  h1{font-size:22px;margin:0;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:13px;margin-top:2px}
+  .stamp{color:var(--dim);font-size:12px;text-align:right}
+  .stamp code{background:#0c1526;border:1px solid var(--line);padding:2px 7px;border-radius:6px;color:#a7c0e0}
+
+  .grid{display:grid;gap:18px}
+  .hero{grid-template-columns:340px 1fr;align-items:stretch}
+  @media(max-width:900px){.hero{grid-template-columns:1fr}}
+
+  .card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);
+        border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:0 0 16px;font-weight:700}
+
+  /* Donut */
+  .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .donut{position:relative;width:210px;height:210px}
+  .donut svg{transform:rotate(-90deg)}
+  .donut .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .donut .val b{font-size:44px;font-weight:800;letter-spacing:-1px;line-height:1}
+  .donut .val span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em;margin-top:6px}
+  .legend-inline{display:flex;gap:16px;color:var(--muted);font-size:12px;margin-top:6px}
+  .legend-inline i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+
+  .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .kpi{background:#0d1729;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .kpi .num{font-size:28px;font-weight:800;letter-spacing:-.5px}
+  .kpi .lbl{color:var(--muted);font-size:12px;margin-top:4px}
+  .kpi .bar{height:6px;border-radius:6px;background:#1d2a44;margin-top:12px;overflow:hidden}
+  .kpi .bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .kpi.warn .bar i{background:linear-gradient(90deg,var(--warn),#f97316)}
+  .kpi.violet .bar i{background:linear-gradient(90deg,var(--violet),#6366f1)}
+
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .cmp .row{background:#0d1729;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .cmp .row .t{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:9px}
+  .cmp .row .t b{color:var(--text);font-size:15px}
+  .track{height:10px;border-radius:8px;background:#1d2a44;overflow:hidden}
+  .track i{display:block;height:100%;border-radius:8px}
+  .fill-real{background:linear-gradient(90deg,#059669,#34d399)}
+  .fill-plan{background:linear-gradient(90deg,#0369a1,#38bdf8)}
+
+  .section{margin-top:26px}
+  .section-title{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+  .section-title h3{margin:0;font-size:16px}
+  .section-title .hint{color:var(--dim);font-size:12px}
+
+  /* Sprints */
+  .sprints{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .sprint{background:#0d1729;border:1px solid var(--line);border-radius:14px;padding:15px 16px}
+  .sprint .head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .sprint .nm{font-weight:700;font-size:14px}
+  .sprint .dt{color:var(--dim);font-size:11px;margin-top:3px}
+  .badge{font-size:10.5px;padding:3px 9px;border-radius:999px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+  .b-cerrado{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.35)}
+  .b-en_curso{background:rgba(245,158,11,.14);color:#fbbf24;border:1px solid rgba(245,158,11,.35)}
+  .b-sin_iniciar{background:rgba(148,163,184,.12);color:#94a3b8;border:1px solid rgba(148,163,184,.3)}
+  .b-futuro{background:rgba(56,189,248,.12);color:#7dd3fc;border:1px solid rgba(56,189,248,.3)}
+  .sprint .line{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:12px 0 5px}
+  .sprint .mini{height:7px;border-radius:6px;background:#1d2a44;overflow:hidden;margin-bottom:8px}
+  .sprint .mini i{display:block;height:100%;border-radius:6px}
+  .sprint .counts{font-size:11.5px;color:var(--dim);margin-top:6px}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+     padding:10px 12px;border-bottom:1px solid var(--line)}
+  td{padding:11px 12px;border-bottom:1px solid #172238;vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#0e1a2f}
+  .bar-cell{min-width:150px}
+  .bar-cell .b{height:8px;border-radius:6px;background:#1d2a44;overflow:hidden}
+  .bar-cell .b i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .bar-cell .n{font-size:11px;color:var(--muted);margin-top:4px}
+  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+  .two{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+  @media(max-width:900px){.two{grid-template-columns:1fr}}
+
+  /* Status dist */
+  .srow{display:grid;grid-template-columns:150px 1fr 46px;gap:12px;align-items:center;margin-bottom:11px;font-size:12.5px}
+  .srow .nm{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .srow .tr{height:9px;border-radius:6px;background:#1d2a44;overflow:hidden}
+  .srow .tr i{display:block;height:100%;border-radius:6px}
+  .srow .ct{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  /* People */
+  .person{display:flex;align-items:center;gap:12px;margin-bottom:13px}
+  .ava{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:13px;
+       background:linear-gradient(135deg,#1e3a8a,#0e7490);color:#dbeafe;flex:0 0 auto}
+  .person .info{flex:1;min-width:0}
+  .person .info .t{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+  .person .info .t .r{color:var(--muted)}
+  .person .info .b{height:7px;border-radius:6px;background:#1d2a44;overflow:hidden}
+  .person .info .b i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--accent2))}
+
+  footer{margin-top:34px;color:var(--dim);font-size:12px;text-align:center;line-height:1.8}
+  footer code{background:#0c1526;border:1px solid var(--line);padding:3px 8px;border-radius:6px;color:#a7c0e0}
+  .gap-note{margin-top:12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:12px;
+            padding:12px 14px;font-size:12.5px;color:#fca5a5}
+  .gap-note b{color:#fecaca}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">Ig</div>
+      <div>
+        <h1>Igualab · Tablero de Avance</h1>
+        <div class="sub">OpenProject · proyecto <b id="pid">igualab</b> · datos en vivo de la API v3</div>
+      </div>
+    </div>
+    <div class="stamp">
+      Generado: <b id="gen"></b><br>
+      <code>python3 generar_dashboard.py</code> para actualizar
+    </div>
+  </header>
+
+  <div class="grid hero">
+    <div class="card donut-wrap">
+      <h2 style="align-self:flex-start">Avance total del proyecto</h2>
+      <div class="donut">
+        <svg width="210" height="210" viewBox="0 0 210 210">
+          <circle cx="105" cy="105" r="88" fill="none" stroke="#1b2740" stroke-width="20"/>
+          <circle id="arc" cx="105" cy="105" r="88" fill="none" stroke="url(#g)" stroke-width="20"
+                  stroke-linecap="round" stroke-dasharray="0 999" />
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#10b981"/>
+              <stop offset="100%" stop-color="#38bdf8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="val"><b id="donutVal">0%</b><span>real (estados)</span></div>
+      </div>
+      <div class="legend-inline">
+        <span><i style="background:#10b981"></i>Cerrado</span>
+        <span><i style="background:#f59e0b"></i>En curso</span>
+        <span><i style="background:#64748b"></i>Sin iniciar</span>
+      </div>
+      <div id="gapNote" class="gap-note" style="width:100%"></div>
+    </div>
+
+    <div class="card">
+      <h2>Indicadores clave</h2>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="num" id="kModClosed">0%</div>
+          <div class="lbl">Módulos cerrados (<span id="kModRatio">0/0</span>)</div>
+          <div class="bar"><i id="bModClosed" style="width:0%"></i></div>
+        </div>
+        <div class="kpi">
+          <div class="num" id="kWpClosed">0%</div>
+          <div class="lbl">Tareas cerradas (<span id="kWpRatio">0/0</span>)</div>
+          <div class="bar"><i id="bWpClosed" style="width:0%"></i></div>
+        </div>
+        <div class="kpi warn">
+          <div class="num" id="kInProg">0</div>
+          <div class="lbl">Tareas en progreso</div>
+          <div class="bar"><i id="bInProg" style="width:0%"></i></div>
+        </div>
+        <div class="kpi violet">
+          <div class="num" id="kLeft">0</div>
+          <div class="lbl">Días restantes (hasta <span id="kEnd"></span>)</div>
+          <div class="bar"><i id="bLeft" style="width:0%"></i></div>
+        </div>
+      </div>
+      <div class="cmp">
+        <div class="row">
+          <div class="t"><span>Avance real (por estados)</span><b id="cReal">0%</b></div>
+          <div class="track"><i class="fill-real" id="cRealBar" style="width:0%"></i></div>
+        </div>
+        <div class="row">
+          <div class="t"><span>Avance por cronograma</span><b id="cPlan">0%</b></div>
+          <div class="track"><i class="fill-plan" id="cPlanBar" style="width:0%"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><h3>Avance por Sprint</h3>
+      <span class="hint">barra verde = avance real · barra azul = tiempo transcurrido del sprint</span></div>
+    <div class="sprints" id="sprints"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><h3>Módulos y entregables</h3>
+      <span class="hint">un módulo se marca «cerrado» cuando todas sus tareas están cerradas</span></div>
+    <div class="card" style="padding:8px 6px">
+      <table>
+        <thead>
+          <tr><th>Módulo / entregable</th><th>Sprint</th><th>Tipo</th><th>Responsable</th>
+              <th>WPs</th><th>Cerradas</th><th class="bar-cell">Avance</th><th>Estado</th></tr>
+        </thead>
+        <tbody id="modBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section two">
+    <div class="card">
+      <h2>Distribución por estado</h2>
+      <div id="statusDist"></div>
+    </div>
+    <div class="card">
+      <h2>Avance por persona</h2>
+      <div id="people"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="card">
+      <h2>Avance por tipo de work package</h2>
+      <div id="types"></div>
+    </div>
+  </div>
+
+  <footer>
+    Fuente: OpenProject API v3 · proyecto <b id="fpid">igualab</b> · <span id="fgen"></span><br>
+    El % real se calcula con el <i>done ratio</i> de cada estado (Nuevo=0, En especificación=10, En pruebas=80, Cerrado=100…).<br>
+    «Lo que no está en OpenProject, no se entregó.» — mantener los estados actualizados refleja el avance real.
+  </footer>
+</div>
+
+<script>
+const DATA = /*__DATA__*/;
+const $ = (id)=>document.getElementById(id);
+const stateLabel = {cerrado:"Cerrado", en_curso:"En curso", sin_iniciar:"Sin iniciar"};
+const stateClass = {cerrado:"b-cerrado", en_curso:"b-en_curso", sin_iniciar:"b-sin_iniciar"};
+
+function initials(name){
+  if(!name||name==="Sin asignar") return "—";
+  return name.split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+}
+
+// header
+$("pid").textContent = DATA.project.identifier;
+$("fpid").textContent = DATA.project.identifier;
+$("gen").textContent = DATA.generatedAt;
+$("fgen").textContent = "generado " + DATA.generatedAt;
+
+const O = DATA.overall;
+
+// donut
+const R = 88, CIRC = 2*Math.PI*R;
+const arc = $("arc");
+arc.style.strokeDasharray = `0 ${CIRC}`;
+setTimeout(()=>{ arc.style.transition="stroke-dasharray 1.1s cubic-bezier(.22,.61,.36,1)";
+  arc.style.strokeDasharray = `${O.real/100*CIRC} ${CIRC}`; }, 150);
+$("donutVal").textContent = O.real + "%";
+
+// kpis
+$("kModClosed").textContent = O.modulesClosedPct + "%";
+$("kModRatio").textContent = O.closedModules + "/" + O.totalModules;
+$("bModClosed").style.width = O.modulesClosedPct + "%";
+$("kWpClosed").textContent = O.closedPct + "%";
+$("kWpRatio").textContent = O.closed + "/" + O.totalLeaves;
+$("bWpClosed").style.width = O.closedPct + "%";
+$("kInProg").textContent = O.inProgress;
+$("bInProg").style.width = (O.totalLeaves? O.inProgress/O.totalLeaves*100:0) + "%";
+$("kLeft").textContent = O.daysLeft;
+$("kEnd").textContent = O.end;
+$("bLeft").style.width = Math.max(0,Math.min(100,O.planned)) + "%";
+
+$("cReal").textContent = O.real + "%";
+$("cRealBar").style.width = O.real + "%";
+$("cPlan").textContent = O.planned + "%";
+$("cPlanBar").style.width = O.planned + "%";
+
+// gap note
+const gap = (O.planned - O.real).toFixed(1);
+if(O.real < O.planned - 5){
+  $("gapNote").innerHTML = `⚠️ El avance real (<b>${O.real}%</b>) va <b>${gap} pts</b> por debajo del cronograma (<b>${O.planned}%</b>). Actualiza los estados de las tareas en OpenProject.`;
+}else{
+  $("gapNote").innerHTML = `✅ Avance real (<b>${O.real}%</b>) alineado con el cronograma (<b>${O.planned}%</b>).`;
+}
+
+// sprints
+const spr = $("sprints");
+DATA.sprints.forEach(s=>{
+  const isFuture = s.timePct <= 0 && s.progress === 0;
+  const cls = isFuture ? "b-futuro" : stateClass[s.state];
+  const lbl = isFuture ? "Por venir" : stateLabel[s.state];
+  const el = document.createElement("div");
+  el.className = "sprint";
+  el.innerHTML = `
+    <div class="head">
+      <div><div class="nm">${s.name}</div><div class="dt">${s.start||"—"} → ${s.end||"—"}</div></div>
+      <span class="badge ${cls}">${lbl}</span>
+    </div>
+    <div class="line"><span>Avance real</span><b>${s.progress}%</b></div>
+    <div class="mini"><i style="width:${s.progress}%;background:linear-gradient(90deg,#059669,#34d399)"></i></div>
+    <div class="line"><span>Cronograma</span><b>${s.timePct}%</b></div>
+    <div class="mini"><i style="width:${s.timePct}%;background:linear-gradient(90deg,#0369a1,#38bdf8)"></i></div>
+    <div class="counts">${s.total} work packages · ${s.closed} cerradas</div>`;
+  spr.appendChild(el);
+});
+
+// modules
+const modBody = $("modBody");
+DATA.modules.forEach(m=>{
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td><b>${m.name}</b></td>
+    <td style="color:var(--muted)">${m.sprint||"—"}</td>
+    <td style="color:var(--muted)">${m.type||"—"}</td>
+    <td style="color:var(--muted)">${m.owner||"—"}</td>
+    <td>${m.total}</td>
+    <td>${m.closed}</td>
+    <td class="bar-cell">
+      <div class="b"><i style="width:${m.progress}%"></i></div>
+      <div class="n">${m.progress}%</div>
+    </td>
+    <td><span class="badge ${stateClass[m.state]}">${stateLabel[m.state]}</span></td>`;
+  modBody.appendChild(tr);
+});
+
+// status distribution
+const sd = $("statusDist");
+const maxc = Math.max(...DATA.statuses.map(s=>s.count),1);
+DATA.statuses.forEach(s=>{
+  const row = document.createElement("div");
+  row.className="srow";
+  row.innerHTML = `<div class="nm"><span class="dot" style="background:${s.color}"></span>${s.name}</div>
+    <div class="tr"><i style="width:${s.count/maxc*100}%;background:${s.color}"></i></div>
+    <div class="ct">${s.count}</div>`;
+  sd.appendChild(row);
+});
+
+// people
+const pp = $("people");
+DATA.people.forEach(p=>{
+  const row = document.createElement("div");
+  row.className="person";
+  row.innerHTML = `
+    <div class="ava">${initials(p.name)}</div>
+    <div class="info">
+      <div class="t"><span>${p.name}</span><span class="r">${p.progress}% · ${p.closed}/${p.total}</span></div>
+      <div class="b"><i style="width:${p.progress}%"></i></div>
+    </div>`;
+  pp.appendChild(row);
+});
+
+// types
+const ty = $("types");
+DATA.types.forEach(t=>{
+  const row = document.createElement("div");
+  row.className="srow";
+  row.innerHTML = `<div class="nm">${t.name}</div>
+    <div class="tr"><i style="width:${t.progress}%;background:linear-gradient(90deg,#10b981,#38bdf8)"></i></div>
+    <div class="ct">${t.progress}%</div>`;
+  ty.appendChild(row);
+});
+</script>
+</body>
+</html>

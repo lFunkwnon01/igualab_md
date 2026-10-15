@@ -9,6 +9,17 @@ graphify-out/
 # Material del curso CS3081 (referencia, no contenido del proyecto)
 software_pdf/
 
+# Tablero de avance — credencial de OpenProject (PRIVADO — nunca subir)
+06-Desarrollo/dashboard/.env
+06-Desarrollo/dashboard/.cache_*.json
+
+# Test de API keys (PRIVADO — nunca subir)
+06-Desarrollo/test/.env
+06-Desarrollo/test/.env.local
+06-Desarrollo/test/.last_*.json
+06-Desarrollo/test/.t_*.json
+06-Desarrollo/test/.k_*.json
+
 # Artefactos de compilación LaTeX (no versionar)
 *.aux
 *.log

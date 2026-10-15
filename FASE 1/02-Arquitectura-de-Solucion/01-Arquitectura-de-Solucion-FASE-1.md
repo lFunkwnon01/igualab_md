@@ -1,5 +1,15 @@
 # 01 · Arquitectura de Solución — FASE 1 (a medida)
 
+> ## ⚠️ NOTA AS-BUILT (2026-10-14 · `BCK-IGUALAB@78e614a` + `FE-IGUALAB@705cc78`) — el código es la fuente de verdad
+> Este documento describe el **diseño por capas**. La implementación real (verificada en código) difiere en:
+> - **Tablas:** **14 reales** (no 13). `gri_analisis`/`sanciones` → `analisis_gri_*` (4 tablas) + `documentos.analisis` (JSONB); `catalogo_gri` es **archivo JSON** (**48 entradas / 44 códigos únicos**, v`2026-10-07.2`; ⚠️ declara **no** ser el «catálogo corporativo de 40» de RN-027); se añadieron `operaciones_ingesta` y `cierres_documento`; **no existen** `consultas_asistente`, `consulta_citas`, `reportes_prospeccion`. `documentos` tiene **37 columnas** (🔴 partición pendiente).
+> - **Embeddings:** **OCI Generative AI `cohere.embed-v4.0`** (1536 dims) vía `app/services/ingesta/proveedor_oci.py` — no "servicio genérico del proveedor" ni NVIDIA/Google.
+> - **Almacenamiento de originales:** **MinIO/S3** (`app/services/ingesta/almacenamiento_s3.py`) — no disco local.
+> - **LLM de chat / Asistente RAG:** **no implementado**. `config.py` declara `DEEPSEEK_*` pero **nadie los usa**; no hay servicio de asistente ni endpoint RAG. GLM-5.2/OpenRouter es diseño.
+> - **RAG:** existe `buscar_similares` (coseno **exacto**, sin índice HNSW) en `app/services/ingesta/fragmentos_vectoriales.py`, **no expuesto por HTTP**.
+> - **Reportes (PDF), Auditoría de lectura y Descargas:** **no implementados**; el frontend los muestra como mock.
+> - **Endpoints reales:** 27 en `app/routers/` (auth, usuarios, empresas, documentos, analisis_gri) + `/health`. Ver [Auditoría Completa](../../MEJORAS-A&D/AUDITORIA-COMPLETA-CODIGO-2026-10.md) §7.
+
 > **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Fuente de verdad: **Plan de Proyecto v1.2** (aprobado 11/09) · acta 5 · **RAG simple, sin MCP ni function calling** · modelos `:free` sin costo.
@@ -14,7 +24,7 @@
 2. **Aplicación Web** — SPA **React 18 + Vite**: React Router · fetch/axios · HTML5/CSS3 — gestión, carga, análisis, RAG, reportes y auditoría.
 3. **API y Endpoints — HTTPS · JSON · JWT** — **FastAPI**: Pydantic · Uvicorn · REST · HTTPS · JSON · OpenAPI; módulos Auth/Usuarios, Empresas/Documentos, Análisis GRI, Consultas RAG, Reportes, Auditoría. **DELEGA** ↓
 4. **Servicios y Lógica de Negocio — Python 3.13** — Gestión de sesiones y usuarios (login, logout, JWT · sesiones · roles · estado) · Catálogo de empresas e ingesta documental (operaciones **síncronas y atómicas** · estado rechazo y registro) · Análisis y validación GRI (GRI · evidencias · sanciones · estado manual) · Asistente IA — RAG (recuperación · contexto · respuesta fundamentada con citas) · Reportes de prospección (PDF determinista e inmutable) · Auditoría funcional. **APLICA REGLAS / PROCESA / ANALIZA / RECUPERA Y GENERA** ↓
-5. **Procesamiento y reglas de cada módulo** — Accesos y cuentas (login · JWT · sesiones · roles y permisos · cambio y recuperación de contraseña · hash bcrypt · token expirable) · Flujo de ingesta (guard `.md` ≤ 50 MB + pipes + sha256 → segmentación por filas de tabla (chunks ~800, solape 100) → embeddings dim 1024) · Diagnóstico GRI (40 códigos del catálogo vigente · detección por citas/patrones · estado manual **OK/Baja/Sub** pendiente → aprobado) · AI Harness — RAG (búsqueda pgvector cosine k=4 · embeddings · citas · contenido tratado solo como datos) · HTML → PDF (solo datos de BD: GRI y sanciones · snapshot · hash · JS deshabilitado · historial accesible) · Eventos sensibles (login/deshabilitación de cuenta · registro responsable · fecha UTC · **solo INSERT**) **PERSISTE** ↓
+5. **Procesamiento y reglas de cada módulo** — Accesos y cuentas (login · JWT · sesiones · roles y permisos · cambio y recuperación de contraseña · hash bcrypt · token expirable) · Flujo de ingesta (guard `.md` ≤ 50 MB + pipes + sha256 → segmentación por filas de tabla (chunks ~800, solape 100) → embeddings dim 1536) · Diagnóstico GRI (40 códigos del catálogo vigente · detección por citas/patrones · estado manual **OK/Baja/Sub** pendiente → aprobado) · AI Harness — RAG (búsqueda pgvector cosine k=4 · embeddings · citas · contenido tratado solo como datos) · HTML → PDF (solo datos de BD: GRI y sanciones · snapshot · hash · JS deshabilitado · historial accesible) · Eventos sensibles (login/deshabilitación de cuenta · registro responsable · fecha UTC · **solo INSERT**) **PERSISTE** ↓
 6. **Persistencia y modelos ORM — SQLAlchemy Async · AsyncSession (2 engines: transaccional + vectorial)** — Usuario/Sesión (TokenRecuperación) · Empresa/Documento (FragmentoDocumento) · CatalogoGRI/GRIAnalisys (Sanc) · ConsultaAsistente (Citas · Fuentes) · ReporteProspección (snapshot inmutable) · EventoAuditoría (**append-only**). **MAPEA** ↓
 7. **Base de Datos — 2× PostgreSQL 16 + PGVector · AsyncPG** — **Transaccional** (`DATABASE_URL`, 12 tablas): `usuarios` · `sesiones` · `tokens_recuperacion` · `empresas` · `documentos` · `catalogo_gri` · `gri_analisis` · `sanciones` · `consultas_asistente` · `consulta_citas` · `reportes_prospeccion` (PDF · snapshot · hash) · `auditoria` (**solo INSERT**). **Vectorial** (`VECTOR_DATABASE_URL`, 1 tabla): `fragmentos_documento` (pgvector). Sin claves foráneas físicas entre bases (referencias lógicas UUID).
 
@@ -52,7 +62,7 @@
 ├────────────────────────────────────────────────────────────────────┤
 │ CAPA 5 · PROCESAMIENTO Y REGLAS DE CADA MÓDULO                     │
 │ accesos y cuentas (JWT·bcrypt·token expirable) ·                   │
-│ flujo de ingesta (guard .md ≤50MB+sha256→chunks 800→emb 1024) ·    │
+│ flujo de ingesta (guard .md ≤50MB+sha256→chunks 800→emb 1536) ·    │
 │ diagnóstico GRI (40 códigos·estado manual OK/Baja/Sub) ·           │
 │ AI Harness RAG (pgvector k=4·citas·datos no instrucciones) ·       │
 │ HTML→PDF (solo BD·snapshot·hash·JS deshabilitado) ·                │
@@ -96,7 +106,7 @@
 1. **Guard** (FastAPI endpoint, RN-020/RN-022): extensión `.md`; tamaño ≤ 50 MB; ≥ 1 sección GRI/sanciones (RN-020); antidad sha256 duplicado (RNF-011). Rechazo con motivo textual para el cliente.
 2. **Parseo** (markdown-it-py): se preserva la **jerarquía de encabezados**; las **tablas con pipes** se convierten en filas normalizadas, cada fila hereda el contexto (empresa, año, código GRI del encabezado de la tabla).
 3. **Chunking**: por sección/token window (~800 chars, solape 100); chunks de **tabla por fila** (uno por empresa-indicador-valor) con metadata `{doc_id, empresa_id, año, gri_code?, tabla_origen, seccion}` — el metadata es lo que hace posible las citas y las tablas del reporte.
-4. **Embeddings**: llamada al **servicio de embeddings por API del proveedor** (dimensión según modelo: p. ej. 1024) → columna `vector(N)` con índice HNSW en pgvector.
+4. **Embeddings**: llamada al **servicio de embeddings por API del proveedor** (dimensión según modelo: **1536** — `cohere.embed-v4.0`) → columna `vector(N)` con índice HNSW en pgvector.
 5. **Persistencia**: upsert idempotente (chunk_id = sha256 del chunk) — permite re-ingesta sin duplicar.
 
 **Consulta (chat):**

@@ -1,5 +1,15 @@
 # 01 · Stack tecnológico — FASE 1
 
+> ## ⚠️ NOTA AS-BUILT (2026-10-14 · `BCK-IGUALAB@78e614a` + `FE-IGUALAB@705cc78`)
+> El stack **real** del código difiere del diseño en estos puntos (el código manda):
+> - **Backend:** FastAPI 0.115 · SQLAlchemy 2.0 async · **PostgreSQL 16** · Python **3.13**. ✓
+> - **Embeddings (real):** **OCI Generative AI** con `cohere.embed-v4.0` (**1536 dims**) — `app/services/ingesta/proveedor_oci.py`. (No NVIDIA/Google.)
+> - **LLM de chat (real):** **no implementado**. `config.py` define `DEEPSEEK_API_KEY/BASE_URL/MODEL` pero **no se usan en ningún servicio** (config muerta, pendiente M6). GLM-5.2/OpenRouter es diseño, no código.
+> - **Almacenamiento de originales (real):** **MinIO/S3** (boto3) — `app/services/ingesta/almacenamiento_s3.py`. (No disco local.)
+> - **Parseo Markdown (real):** parser propio mínimo `app/services/ingesta/markdown.py`. (No markdown-it-py.)
+> - **Reportes (real):** **no implementados** (Jinja2/WeasyPrint es diseño).
+> - **BD (real):** 14 objetos en repo (`documentos` con 37 columnas 🔴); **sin índice HNSW** (coseno exacto).
+
 > **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Decisión avalada por el PO en el acta 5 (REQ-18: «stack a elección libre del equipo»). Complemento del diagrama `arquitecturasolution.jpeg` — **arquitectura de solución por capas (7 capas)** — y del A&D.
@@ -13,13 +23,13 @@
 | Backend | **FastAPI (Python 3.13)** + **SQLAlchemy Async · AsyncSession** + Pydantic v2 | 0.11x | tipos, async, OpenAPI automático |
 | Driver/method BD | **AsyncPG** (motor async de SQLAlchemy hacia PostgreSQL) | — | capa 6–7 del diagrama por capas |
 | Motor de ejecución | FastAPI BackgroundTasks (patrón sync-guarda) | — | RF-015 sin colas |
-| BD | **2× PostgreSQL 16 + pgvector** — transaccional (`DATABASE_URL`, 12 tablas) + vectorial (`VECTOR_DATABASE_URL`, 1 tabla `fragmentos_documento`, HNSW cosine) | pgvector ≥ 0.6 | RAG simple sin infraextra |
-| Pipeline | **markdown-it-py** · PyMuPDF de respaldo (PDF del cliente ya convertido) | — | RN-009/010 |
-| Embeddings | **Servicio de embeddings por API del proveedor de IA** (NVIDIA NIM `nv-embed` o Google `gemini-embedding`, free tier) — **sin modelo local** | — | $0 con free tier; **consume cuota** (ver RNF-027) |
-| LLM chat/agente | **GLM-5.2 `:free`** (Z.ai) vía **OpenRouter** (OpenAI-compatible, RAG simple sin function calling) — router `openrouter/free` como failover | — | $0, 200–1000 req/día |
-| Reportes | **Jinja2 + WeasyPrint** | — | variables dinámicas de BD |
+| BD | **2× PostgreSQL 16 + pgvector** — transaccional (`DATABASE_URL`) + vectorial (`VECTOR_DATABASE_URL`) | pgvector ≥ 0.6 | RAG simple sin infraextra |
+| Pipeline | Parser Markdown propio (`app/services/ingesta/markdown.py`) | — | RN-009/010 |
+| Embeddings | **OCI Generative AI · `cohere.embed-v4.0`** (1536 dims) vía `proveedor_oci.py` | — | embeddings reales del código |
+| LLM chat/agente | **No implementado aún** (`DEEPSEEK_*` en config, sin uso) — pendiente Módulo 6 (RAG) | — | diseño: GLM-5.2 `:free`/OpenRouter |
+| Reportes | **No implementado aún** (diseño: Jinja2 + WeasyPrint) | — | pendiente Módulo 7 |
 | Despliegue | Docker compose (backend + postgres + pgvector) en server universidad; mock en Vercel | — | plan §10 |
-| Testing | pytest (backend), vitest (frontend), Postman/Newman del cronograma de pruebas del plan §7 | — | UAT 16/11 |
+| Testing | pytest (**~1.197 tests**), vitest (frontend, solo lógica) | — | UAT 16/11 |
 
 ## 2. LLM gratuito — detalles de la elección
 
@@ -46,22 +56,49 @@
 | RN-041 (variables de BD) | queries SQL directas en servicio reportes + Jinja2 |
 | RNF-027 (free tier) | rate limit en middleware FastAPI, derivado de `consultas_asistente` (sin tabla de uso) |
 
-## 4. Variables de entorno (resumen)
+## 4. Variables de entorno (reales — `app/config.py`)
+
+> Verificadas contra `BCK-IGUALAB@78e614a`. `JWT_SECRET_KEY` es **obligatoria** (`os.environ[...]`): sin ella la app no arranca.
 
 ```
+# Aplicación
+APP_ENV=development
+BACKEND_URL=http://localhost:8000
+FRONTEND_URL=http://localhost:5173
+CORS_ORIGINS=...                      # CSV; por defecto = FRONTEND_URL
+FRONTEND_RESET_URL=...                # por defecto {FRONTEND_URL}/restablecer
+
+# Base de datos (2 motores; VECTOR_DATABASE_URL sin valor por defecto)
 DATABASE_URL=postgresql+asyncpg://igualab:***@host:5432/igualab
-VECTOR_DATABASE_URL=postgresql+asyncpg://igualab:***@host:5432/igualab   # vectorial (pgvector); por defecto, misma instancia que DATABASE_URL
-EMBEDDING_BASE_URL=https://integrate.api.nvidia.com/v1   # o generativelanguage.googleapis.com
-EMBEDDING_API_KEY=***                 # credenciales del proveedor de IA
-EMBEDDING_MODEL=nvidia/nv-embedqa-e5-v5                   # según proveedor
-LLM_BASE_URL=https://openrouter.ai/api/v1
-LLM_API_KEY=***                      # free key
-LLM_MODEL=z-ai/glm-5.2:free
-LLM_FALLBACK_MODEL=openrouter/free
-LLM_DAILY_LIMIT=200
-JWT_SECRET=***
-SESSION_IDLE_MINUTES=30
-UPLOAD_MAX_MB=50
+VECTOR_DATABASE_URL=postgresql+asyncpg://igualab:***@host:5432/igualab_vectorial
+
+# JWT y sesión
+JWT_SECRET_KEY=***                    # OBLIGATORIA
+JWT_ALGORITHM=HS256
+SESSION_INACTIVITY_HOURS=2
+PASSWORD_RESET_TOKEN_EXPIRE_MINUTES=30
+MAX_LOGIN_ATTEMPTS=5
+LOGIN_LOCKOUT_MINUTES=15
+
+# Correo (Gmail SMTP) — opcional; el arranque NO debe depender de estas (bug P0 email_service.py)
+MAIL_USERNAME=***
+MAIL_PASSWORD=***                     # contraseña de aplicación
+MAIL_FROM=***
+
+# Almacenamiento de originales (MinIO/S3)
+MINIO_ENDPOINT_URL=...  MINIO_BUCKET=...  MINIO_REGION=...
+MINIO_ACCESS_KEY=***    MINIO_SECRET_KEY=***
+
+# Embeddings (OCI Generative AI)
+OCI_REGION=us-chicago-1
+OCI_COMPARTMENT_ID=...
+OCI_EMBED_MODEL=cohere.embed-v4.0
+OCI_EMBED_DIMENSIONS=1536
+OCI_CONFIG_FILE=~/.oci/config   OCI_CONFIG_PROFILE=svc-embeddings
+OCI_USER_OCID=...  OCI_FINGERPRINT=...  OCI_TENANCY_OCID=...  OCI_KEY_PEM_B64=...
+
+# LLM de chat (config presente pero SIN USO — pendiente Módulo 6)
+DEEPSEEK_API_KEY=***  DEEPSEEK_BASE_URL=https://api.deepseek.com  DEEPSEEK_MODEL=deepseek-flash
 ```
 
 ## 5. ¿Cómo se solicita la API del LLM gratuito? (GLM-5.2)

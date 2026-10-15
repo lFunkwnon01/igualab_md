@@ -6,6 +6,19 @@ info:
     Contrato mock para la FASE 1 (plan de proyecto v1.2 + acta 5).
     Los campos simulan datos del mock fidelizado (ai/igualab.vercel.app) para
     probar integración antes del backend real.
+
+
+    ⚠️ NOTA AS-BUILT (2026-10-14 · BCK-IGUALAB@78e614a): este archivo es el CONTRATO MOCK de diseño.
+    El backend REAL expone 27 endpoints en app/routers/ + /health:
+      /auth      → POST /login · POST /logout · POST /recuperar-contrasena · POST /restablecer-contrasena · PATCH /mi-contrasena
+      /usuarios  → POST "" · GET "" · PATCH /{id}/habilitar · PATCH /{id}/deshabilitar · POST /transferir-superadmin
+      /empresas  → POST "" · GET "" · GET /{id} · PATCH /{id} · PATCH /{id}/activar · PATCH /{id}/desactivar
+      /documentos→ POST /operaciones · POST /operaciones/{id}/ingesta · GET /operaciones/{id} ·
+                   POST /operaciones/{id}/reintentar-publicacion · GET "" · GET /{id}
+      /analisis-gri → GET /empresas/{empresa}/anios/{anio} · PUT .../codigos/{identidad}/estado ·
+                      GET .../historial · POST .../validacion
+    NO existen (mock no implementado): /rag/chat (M6), /reportes (M7), /auditoria lectura (M8), descargas.
+    El detector real usa catálogo de 48 códigos (no 40) y estados OK/BAJA_SUSTANCIA/SUB_REPORTADO.
 servers:
   - url: https://igualab.vercel.app
     description: Mock fidelizado (solo interfaces)

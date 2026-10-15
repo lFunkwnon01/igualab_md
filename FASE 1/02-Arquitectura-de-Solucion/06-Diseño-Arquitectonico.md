@@ -1,5 +1,8 @@
 # 06 · Diseño Arquitectónico — Igualab (Informe)
 
+> ## ⚠️ NOTA AS-BUILT (2026-10-14 · `BCK-IGUALAB@78e614a`)
+> Este informe describe el **diseño** (13 tablas, HNSW, RAG/reportes como servicios). La implementación real: **14 tablas** (ver `03-Diccionario-de-Datos.md`), **sin índice HNSW** (coseno exacto), y los servicios de **RAG, reportes y auditoría de lectura aún no están implementados** (frontend mock). Embeddings reales por **OCI Cohere embed-v4.0**; almacenamiento de originales en **MinIO/S3**.
+
 > Escenario: monolito modular + Python 3.13 · **2 bases PostgreSQL 16** (transaccional + vectorial con pgvector) · Modelo por capas.
 
 ## 1. Visión arquitectónica

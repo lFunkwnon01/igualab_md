@@ -1,5 +1,17 @@
 # 02 · Base de Datos — Diagrama ERD, Diseño detallado y Reglas Semánticas (FASE 1)
 
+> ## ⚠️ NOTA AS-BUILT (2026-10-14 · `BCK-IGUALAB@78e614a`) — este documento es el DISEÑO; el código es la fuente de verdad
+> El modelo **implementado** diverge de este diseño. Realidad verificada en `BCK-IGUALAB@78e614a`:
+> **14 tablas reales** (no 13) · `documentos` con **37 atributos** (🔴 no viable → partición en 4 tablas de ≤20) ·
+> `fragmentos_documento` con **21 atributos** (otro esquema: `texto_literal`, `ruta_encabezados`, `embedding_*`) ·
+> `gri_analisis` + `sanciones` **reemplazadas** por `analisis_gri_control/estados/historial/validaciones` +
+> `documentos.analisis` (JSONB) · `catalogo_gri` **ya no es tabla** (archivo JSON con **48 entradas / 44 códigos únicos**, versión `2026-10-07.2`; declara **no** ser el «catálogo corporativo de 40» — brecha con RN-027) · nuevas: `operaciones_ingesta`,
+> `cierres_documento` · **no implementadas**: `consultas_asistente`, `consulta_citas`, `reportes_prospeccion`.
+> El `auditoria` real tiene **5 columnas** (`detalle` es `VARCHAR(500)`, no JSONB; sin `empresa_id`). **Sin índice HNSW**: búsqueda exacta por coseno.
+> ✅ **Diccionario as-built vigente:** [`03-Diccionario-de-Datos.md`](03-Diccionario-de-Datos.md) ·
+> 🧾 **Auditoría completa:** [`MEJORAS-A&D/AUDITORIA-COMPLETA-CODIGO-2026-10.md`](../../MEJORAS-A&D/AUDITORIA-COMPLETA-CODIGO-2026-10.md)
+> **Lo siguiente de este documento es el diseño de referencia (histórico).**
+
 > **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Fuente de verdad: **Plan de Proyecto v1.2** + actas 4/5 · Norma: **GES/GAP** (conceptual → lógico → físico) · Escenario: 3 usuarios (1 Superadmin + 2 Administradores) · **2 bases PostgreSQL 16 — transaccional (12 tablas) + vectorial (1 tabla: `fragmentos_documento`), 13 tablas en total — alineadas a la arquitectura por capas (`arquitecturasolution.jpeg`, capas 6–7)**.
@@ -22,7 +34,6 @@
 | `configuracion` | Se quitó el **módulo Configuración**; umbrales operativos viven en variables de entorno (doc Stack §4) |
 | Medidor LLM separado | Consumo derivable de `consultas_asistente`; no corresponde a un RF/RNF confirmado en el alcance vigente |
 | Histórico GRI separado | Los cambios de estado sensibles quedan en `auditoria` (evento `AJUSTE_BRECHA` con detalle JSONB) |
-| `reporte_detalle_snapshot` | Sustituida por `contenido_snapshot` JSONB en la propia fila de `reportes_prospeccion` + PDF inmutable |
 | `reporte_detalle_snapshot` | Sustituida por `contenido_snapshot` JSONB en la propia fila de `reportes_prospeccion` + PDF inmutable |
 ### Cadena principal del negocio
 
@@ -223,7 +234,7 @@ erDiagram
 
 #### 2.3 `fragmentos_documento` (BD vectorial — núcleo del RAG)
 - **Qué**: fragmento del documento con su embedding (base vectorial, acceso por `VECTOR_DATABASE_URL`).
-- **Columnas**: `id UUID PK` · `documento_id UUID REFERENCES documentos(id) ON DELETE CASCADE` · `indice INT NOT NULL` ⚙ **UNIQUE `(documento_id, indice)`** (combinado, no global — un índice es posición dentro del documento) · `seccion VARCHAR(500)` (encabezado markdown — llave de la cita RN-034) · `texto TEXT NOT NULL` ⚙ **CORREGIDO: es NOT NULL** — un fragmento sin texto no es buscable ni citable · `embedding VECTOR(N) NOT NULL` (pgvector; **la dimensión depende del modelo de embeddings del proveedor** — fijar en migración: p. ej. 1024) · `metadata JSONB NOT NULL` (empresa_id, año, tipo doc, fila de tabla origen) · `creado_en TIMESTAMPTZ`.
+- **Columnas**: `id UUID PK` · `documento_id UUID REFERENCES documentos(id) ON DELETE CASCADE` · `indice INT NOT NULL` ⚙ **UNIQUE `(documento_id, indice)`** (combinado, no global — un índice es posición dentro del documento) · `seccion VARCHAR(500)` (encabezado markdown — llave de la cita RN-034) · `texto TEXT NOT NULL` ⚙ **CORREGIDO: es NOT NULL** — un fragmento sin texto no es buscable ni citable · `embedding VECTOR(N) NOT NULL` (pgvector; **la dimensión depende del modelo de embeddings del proveedor** — fijar en migración: **1536** (`cohere.embed-v4.0`)) · `metadata JSONB NOT NULL` (empresa_id, año, tipo doc, fila de tabla origen) · `creado_en TIMESTAMPTZ`.
 - **Físico**: ⚙ **índice HNSW obligatorio**: `CREATE INDEX idx_frag_hnsw ON fragmentos_documento USING hnsw (embedding vector_cosine_ops) WITH (m=16, ef_construction=64);` — búsqueda `ORDER BY embedding <=> :q LIMIT 4` (k=4 cosine).
 - **RS**: consultado por el AI Harness (Capa 5); provee las citas verificables (doc/empresa/año/sección deducibles de la propia fila + joins).
 

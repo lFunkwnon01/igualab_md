@@ -1,0 +1,54 @@
+Type,Subject,Parent,Version,Assignee,Start date,Due date,Estimated time,Priority,Description
+Epic,M1 · Autenticación y Gestión de Sesión,,,Fabricio Ladera,16/09/2026,27/09/2026,,Normal,CU001 · RF-001…005
+Epic,M2 · Gestión de Usuarios,,,Fabricio Ladera,16/09/2026,28/09/2026,,Normal,CU002 · RF-006…009
+Epic,M3 · Catálogo de Empresas,,,Fabricio Ladera,25/09/2026,28/09/2026,,Normal,"CU008 · RF-010,011"
+Epic,M4 · Ingesta de Documentos,,,Juan Marcelo Ferreyra,19/09/2026,02/10/2026,,Immediate,"CU003 · RF-012…017,022"
+Epic,M5 · Análisis y Validación de Brechas GRI,,,Juan Marcelo Ferreyra,28/09/2026,15/10/2026,,Immediate,"CU005 · RF-018…021,028"
+Epic,M6 · Asistente de IA (RAG),,,Juan Marcelo Ferreyra,26/09/2026,15/10/2026,,Immediate,"CU004 · RF-023,024"
+Epic,M7 · Generación de Reportes de Prospección,,,Juan Marcelo Ferreyra,06/10/2026,21/10/2026,,High,CU006 · RF-025…027
+Epic,M8 · Auditoría Funcional,,,Juan Marcelo Ferreyra,29/10/2026,02/11/2026,,High,"CU007 · RF-029,030"
+Epic,Transversal · Análisis y Diseño,,,Luis Millones,03/09/2026,21/09/2026,,High,Fase Análisis y Diseño
+Epic,Transversal · Integración y Calidad,,,Mauricio Gonzalez,22/09/2026,07/11/2026,,High,Pruebas y calidad
+Epic,Transversal · Cierre,,,Fabricio Ladera,08/11/2026,20/11/2026,,High,Fase Cierre
+Task,GAP AS-IS/TO-BE y detección de brechas,Transversal · Análisis y Diseño,Sprint 1,Luis Millones,03/09/2026,06/09/2026,16,Normal,A6
+Task,Requerimientos funcionales y no funcionales (RF/RNF),Transversal · Análisis y Diseño,Sprint 1,Carlos Ordinola,03/09/2026,16/09/2026,40,High,A7 · RF-001…030 / RNF-001…030
+Task,Backlog detallado + story points,Transversal · Análisis y Diseño,Sprint 1,Fabricio Ladera,03/09/2026,17/09/2026,24,High,A8
+Task,Casos de uso CU001…CU008 y especificación,Transversal · Análisis y Diseño,Sprint 1,Luis Millones,04/09/2026,17/09/2026,32,High,A9
+Task,Prototipado de interfaces (mock),Transversal · Análisis y Diseño,Sprint 1,Juan Renato Flores,05/09/2026,18/09/2026,32,Normal,A10
+Task,Arquitectura del sistema,Transversal · Análisis y Diseño,Sprint 1,Juan Marcelo Ferreyra,07/09/2026,16/09/2026,24,High,A12
+Task,Diseño de base de datos (13 tablas),Transversal · Análisis y Diseño,Sprint 1,Juan Marcelo Ferreyra,07/09/2026,20/09/2026,32,High,A13
+Task,Plan de pruebas,Transversal · Análisis y Diseño,Sprint 1,Mauricio Gonzalez,08/09/2026,19/09/2026,24,Normal,A14
+Task,Validación con el cliente (reqs/arq/prototipo),Transversal · Análisis y Diseño,Sprint 1,Fabricio Ladera,13/09/2026,21/09/2026,16,High,A15
+Task,Diseño del flujo de autenticación,M1 · Autenticación y Gestión de Sesión,Sprint 2,Luis Millones,16/09/2026,17/09/2026,8,Normal,CU001
+Task,"Backend auth (login, JWT, sesiones, recuperación, bloqueo 5 intentos)",M1 · Autenticación y Gestión de Sesión,Sprint 2,Juan Marcelo Ferreyra,18/09/2026,24/09/2026,32,High,CU001 · RF-001…005
+Task,Frontend login / recuperación / mi cuenta,M1 · Autenticación y Gestión de Sesión,Sprint 2,Juan Renato Flores,20/09/2026,25/09/2026,32,High,CU001
+Task,Pruebas de autenticación,M1 · Autenticación y Gestión de Sesión,Sprint 2,Alonso Benites,26/09/2026,27/09/2026,12,Normal,"RNF-001…009,023…026"
+Task,"Backend usuarios (crear, habilitar, transferir atómico)",M2 · Gestión de Usuarios,Sprint 2,Juan Marcelo Ferreyra,20/09/2026,25/09/2026,28,High,CU002 · RF-006…009
+Task,"Frontend usuarios (listar, crear, transferir)",M2 · Gestión de Usuarios,Sprint 2,Juan Renato Flores,23/09/2026,26/09/2026,24,High,CU002
+Task,Pruebas de usuarios,M2 · Gestión de Usuarios,Sprint 2,Alonso Benites,27/09/2026,28/09/2026,8,Normal,"RNF-012,013"
+Task,"Backend empresas (nombre, sector, activo)",M3 · Catálogo de Empresas,Sprint 2,Juan Marcelo Ferreyra,25/09/2026,27/09/2026,16,Normal,"CU008 · RF-010,011"
+Task,Frontend catálogo de empresas,M3 · Catálogo de Empresas,Sprint 2,Juan Renato Flores,26/09/2026,28/09/2026,16,Normal,CU008
+Task,Pruebas de catálogo/sectores,M3 · Catálogo de Empresas,Sprint 2,Mauricio Gonzalez,28/09/2026,28/09/2026,4,Low,RN-019
+Task,"Backend ingesta (guard .md, ≤50 MB, sha256, chunking, embeddings API, pgvector)",M4 · Ingesta de Documentos,Sprint 2,Juan Marcelo Ferreyra,19/09/2026,28/09/2026,48,Immediate,CU003 · RF-012…017
+Task,"Frontend ingesta (drag&drop, progreso síncrono)",M4 · Ingesta de Documentos,Sprint 2,Juan Renato Flores,23/09/2026,01/10/2026,32,High,CU003
+Task,"Pruebas de ingesta (duplicados, observado/rechazado, rollback)",M4 · Ingesta de Documentos,Sprint 2,Alonso Benites,01/10/2026,02/10/2026,12,High,"RF-013,014,022 · RNF-010,014,017"
+Task,"Backend análisis GRI (detección + cita, estados manuales, sanciones, ESG)",M5 · Análisis y Validación de Brechas GRI,Sprint 3,Juan Marcelo Ferreyra,28/09/2026,10/10/2026,48,Immediate,"CU005 · RF-018…021,028"
+Task,Frontend revisión/validación de estados GRI,M5 · Análisis y Validación de Brechas GRI,Sprint 3,Juan Renato Flores,02/10/2026,12/10/2026,32,High,CU005
+Task,"Pruebas del análisis GRI (3 estados, no disponible)",M5 · Análisis y Validación de Brechas GRI,Sprint 3,Alonso Benites,13/10/2026,15/10/2026,12,High,RF-021 · RN-030
+Task,"Backend RAG (retrieval k=4, citas, dominio, timeout)",M6 · Asistente de IA (RAG),Sprint 3,Juan Marcelo Ferreyra,26/09/2026,05/10/2026,32,Immediate,"CU004 · RF-023,024"
+Task,Frontend chat RAG,M6 · Asistente de IA (RAG),Sprint 3,Juan Renato Flores,03/10/2026,10/10/2026,28,High,CU004
+Task,"Pruebas del asistente RAG (citas, dominio, prompt-as-data)",M6 · Asistente de IA (RAG),Sprint 3,Mauricio Gonzalez,13/10/2026,15/10/2026,12,High,"RNF-010,017,018,019,027"
+Task,"Backend reportes (Jinja2/WeasyPrint, snapshot, inmutabilidad)",M7 · Generación de Reportes de Prospección,Sprint 3,Juan Marcelo Ferreyra,06/10/2026,15/10/2026,36,High,CU006 · RF-025…027
+Task,"Frontend reportes (vista previa, historial, descarga)",M7 · Generación de Reportes de Prospección,Sprint 3,Juan Renato Flores,09/10/2026,17/10/2026,28,High,CU006
+Task,"Pruebas de reportes (determinismo, 1 PDF/empresa-año)",M7 · Generación de Reportes de Prospección,Sprint 3,Alonso Benites,16/10/2026,19/10/2026,12,High,"RN-040,041"
+Task,Cierre de reportes de prospección,M7 · Generación de Reportes de Prospección,Sprint 4,Juan Marcelo Ferreyra,20/10/2026,21/10/2026,8,Normal,A19 fin
+Task,Integración de módulos (FE↔API↔BD E2E),Transversal · Integración y Calidad,Sprint 4,Fabricio Ladera,22/10/2026,28/10/2026,32,High,A20
+Task,"Backend auditoría (append-only, filtros, UTC)",M8 · Auditoría Funcional,Sprint 5,Juan Marcelo Ferreyra,29/10/2026,31/10/2026,20,High,"CU007 · RF-029,030"
+Task,Frontend auditoría (panel + filtros),M8 · Auditoría Funcional,Sprint 5,Juan Renato Flores,30/10/2026,01/11/2026,20,High,CU007
+Task,Pruebas de auditoría (inmutabilidad),M8 · Auditoría Funcional,Sprint 5,Alonso Benites,02/11/2026,02/11/2026,8,Normal,"RNF-022,023,024"
+Task,"Pruebas de funcionalidad y calidad (SonarQube, cobertura)",Transversal · Integración y Calidad,Sprint 5,Mauricio Gonzalez,03/11/2026,07/11/2026,40,High,A22
+Task,Despliegue del sistema (entornos universidad),Transversal · Cierre,Sprint 6,Juan Marcelo Ferreyra,08/11/2026,12/11/2026,32,High,A23
+Task,Validación final con el cliente (UAT),Transversal · Cierre,Sprint 6,Fabricio Ladera,12/11/2026,16/11/2026,28,High,A24
+Task,Documentación final y cierre,Transversal · Cierre,Sprint 6,Luis Millones,16/11/2026,17/11/2026,12,Normal,A25
+Task,Capacitación al equipo de Igualab,Transversal · Cierre,Sprint 6,Fabricio Ladera,17/11/2026,18/11/2026,12,Normal,A26
+Task,Entrega final y acta,Transversal · Cierre,Sprint 6,Fabricio Ladera,19/11/2026,20/11/2026,12,High,A27

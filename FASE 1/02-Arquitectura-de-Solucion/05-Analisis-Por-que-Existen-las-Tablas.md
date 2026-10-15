@@ -1,5 +1,14 @@
 # 05 · Análisis de Alto Nivel — Por qué existe cada tabla (y por qué NO sobra)
 
+> ## ⚠️ NOTA AS-BUILT (2026-10-14 · `BCK-IGUALAB@78e614a`)
+> Este documento justifica el **diseño de 13 tablas**. La **implementación real es de 14 tablas** y difiere:
+> `gri_analisis`/`sanciones` fueron reemplazadas por `analisis_gri_*` (4 tablas) + `documentos.analisis` (JSONB);
+> `catalogo_gri` pasó a archivo JSON (**48 entradas / 44 códigos únicos**, versión `2026-10-07.2`; ⚠️ declara **no** ser el «catálogo corporativo de 40» de RN-027); se añadieron `operaciones_ingesta` y `cierres_documento`;
+> `consultas_asistente`, `consulta_citas` y `reportes_prospeccion` **aún no existen**.
+> El razonamiento de "una responsabilidad por tabla" sigue vigente y es la base de la **partición de `documentos`
+> (37 atributos → 4 tablas de ≤20)**. Ver [`03-Diccionario-de-Datos.md`](03-Diccionario-de-Datos.md) §7 y la
+> [Auditoría Completa](../../MEJORAS-A&D/AUDITORIA-COMPLETA-CODIGO-2026-10.md).
+
 > **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 
 > Cuestionamiento legítimo del equipo: "¿son necesarias todas las tablas?". Respuesta corta: **sí, y ahora son menos**: la arquitectura por capas quitó módulos y el modelo quedó en **2 bases con 13 tablas** (transaccional 12 + vectorial 1) — cada una sigue respondiendo a la cadena del negocio, a una regla de negocio (RN) o a un propietario distinto del dato (regla oro: nunca dos tablas contienen lo mismo).
@@ -77,4 +86,4 @@ Estas fusiones respondieron de una vez a las candidatas plausibles: una capacida
 
 > Cada tabla existe por un hecho de negocio (actas/plan/RN) y un dueño único del dato. Ahora son **13** (2 bases): las capacidades fusionadas cambiaron la forma del modelo, no la regla de diseño.
 
-**Referencias:** diseño completo → `02-Base-de-Datos-Diagrama-y-Diseno.md` · diccionario campo a campo → `03-Diccionario-de-Datos.md` · diagrama vigente: **ERD «Modelo de Datos Depurado» (13 tablas)** — `Diagrama_bd.png` queda como histórico.
+**Referencias:** diseño completo → `02-Base-de-Datos-Diagrama-y-Diseno.md` · diccionario campo a campo → `03-Diccionario-de-Datos.md` · diagrama vigente: **ERD «Modelo de Datos Depurado» (13 tablas, diseño)** — el as-built es el diccionario (14 tablas).

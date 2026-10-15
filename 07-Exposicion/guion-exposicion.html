@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Igualab · Guion de Exposición</title>
+<style>
+  :root{
+    --ink:#12203a; --muted:#5b6b86; --line:#d7dfeb; --soft:#f4f7fc;
+    --brand:#0e7c66; --brand2:#1668b3; --accent:#c2410c; --gold:#b45309;
+  }
+  *{box-sizing:border-box}
+  @page{ size:A4; margin:15mm 14mm 16mm; }
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); font-size:10.6pt; line-height:1.5;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  h1,h2,h3,h4{margin:0;line-height:1.25}
+  p{margin:0 0 7px}
+  code{background:#eef2f8;border:1px solid var(--line);border-radius:4px;padding:0 4px;font-size:.9em}
+  .small{font-size:9pt;color:var(--muted)}
+
+  .cover{
+    background:linear-gradient(135deg,#0b3b31 0%,#0e5f66 45%,#15558c 100%);
+    color:#fff; border-radius:16px; padding:34px 34px 30px; position:relative; overflow:hidden;
+  }
+  .cover:after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%)}
+  .cover .eyebrow{font-size:9.5pt;letter-spacing:.28em;text-transform:uppercase;color:#bfe6dd;margin-bottom:14px}
+  .cover h1{font-size:27pt;font-weight:800;letter-spacing:-.5px}
+  .cover h2{font-size:12.5pt;font-weight:500;color:#d6ece6;margin-top:8px;max-width:560px}
+  .cover .tags{margin-top:20px;display:flex;flex-wrap:wrap;gap:7px}
+  .cover .tag{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:999px;
+    padding:4px 11px;font-size:8.6pt}
+  .cover .foot{margin-top:24px;font-size:9pt;color:#cfe7e1;border-top:1px solid rgba(255,255,255,.25);padding-top:12px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+
+  .intro{margin-top:16px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .intro h3{font-size:11pt;color:var(--brand);margin-bottom:6px}
+  .timeline{width:100%;border-collapse:collapse;margin-top:8px;font-size:9.3pt}
+  .timeline th,.timeline td{border:1px solid var(--line);padding:5px 8px;text-align:left}
+  .timeline th{background:#eaf1f9;color:var(--ink)}
+  .timeline td.t{white-space:nowrap;font-weight:700;color:var(--brand2);width:70px}
+
+  .part{margin-top:22px;padding:9px 14px;border-radius:10px;
+    background:linear-gradient(90deg,#0e7c66,#1668b3);color:#fff;font-weight:700;font-size:11.5pt;
+    display:flex;justify-content:space-between;align-items:center}
+  .part span{font-weight:500;font-size:9pt;opacity:.9}
+
+  .slide{border:1px solid var(--line);border-radius:12px;padding:0;margin-top:12px;overflow:hidden;page-break-inside:avoid;break-inside:avoid}
+  .slide-head{background:#eef4fb;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;justify-content:space-between;align-items:center}
+  .slide-head .n{font-size:8.6pt;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand2)}
+  .slide-head .ttl{font-size:12pt;font-weight:800;color:var(--ink)}
+  .slide-head .dur{font-size:8.6pt;background:#dbe7f6;color:#1d4e89;border-radius:999px;padding:3px 10px;white-space:nowrap;font-weight:700}
+  .slide-body{padding:12px 14px 14px}
+  .row{display:grid;grid-template-columns:1fr;gap:8px}
+  .block{border-left:3px solid var(--line);padding-left:10px}
+  .block .lab{font-size:8.4pt;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
+  .script{background:#fbfdff;border:1px dashed #bcd0e8;border-radius:9px;padding:10px 12px}
+  .script .lab{color:var(--brand2)}
+  .script p{font-style:italic}
+  .visual .lab{color:var(--accent)}
+  .key{background:#fff8ec;border:1px solid #f0d9ab;border-radius:9px;padding:9px 12px}
+  .key .lab{color:var(--gold)}
+  .key b{color:#7c3a06}
+  ul{margin:4px 0 7px 18px;padding:0}
+  li{margin-bottom:3px}
+
+  .team-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  .person{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff}
+  .person .nm{font-weight:800;font-size:10.3pt}
+  .person .rl{font-size:8.7pt;color:var(--brand);font-weight:700;margin:1px 0 4px}
+  .person .dq{font-size:9pt;color:var(--muted);font-style:italic}
+
+  .faq{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:9px;page-break-inside:avoid;break-inside:avoid}
+  .faq .q{font-weight:800;color:var(--brand2);margin-bottom:3px}
+  .faq .a{color:var(--ink)}
+
+  .tips li{margin-bottom:5px}
+  .note{background:#eef7f3;border:1px solid #bfe0d4;border-radius:10px;padding:10px 13px;margin-top:10px;font-size:9.6pt}
+  .danger{background:#fdeeea;border:1px solid #f3c6ba;border-radius:10px;padding:10px 13px;margin-top:10px;font-size:9.6pt}
+
+  .footnote{margin-top:18px;border-top:1px solid var(--line);padding-top:8px;font-size:8.4pt;color:var(--muted);text-align:center}
+  .pb{page-break-before:always;break-before:page}
+</style>
+</head>
+<body>
+
+<!-- ======================= PORTADA ======================= -->
+<section class="cover">
+  <div class="eyebrow">CS3081 · Proyecto de Software · Equipo Igualab</div>
+  <h1>Igualab: analítica de sostenibilidad con IA</h1>
+  <h2>Guion de exposición para presentar el proyecto a una audiencia que no lo conoce:
+      qué es Igualab, qué problema resolvemos, cómo funciona y quién es el equipo.</h2>
+  <div class="tags">
+    <span class="tag">ONG sin fines de lucro · Perú</span>
+    <span class="tag">Inclusión social · DEI</span>
+    <span class="tag">Consultoría de sostenibilidad</span>
+    <span class="tag">Inteligencia Artificial · RAG</span>
+    <span class="tag">Cliente: Igualab (Oscar Baldeón)</span>
+  </div>
+  <div class="foot">
+    <span>Equipo de 7 personas · metodología SCRUM</span>
+    <span>Duración objetivo: 13–15 min + preguntas</span>
+  </div>
+</section>
+
+<!-- ======================= CÓMO USAR ======================= -->
+<section class="intro">
+  <h3>Cómo usar este guion</h3>
+  <p>Cada bloque tiene <b>qué mostrar</b> en la diapositiva, el <b>guion</b> sugerido (lo que dice el expositor, en tono natural),
+  la <b>duración</b> y una <b>frase clave</b> para memorizar. No es para leer textual: adáptenlo a su forma de hablar.</p>
+  <table class="timeline">
+    <tr><th>Tiempo</th><th>Bloque</th><th>Idea central</th></tr>
+    <tr><td class="t">0:00–1:00</td><td>Apertura y equipo</td><td>Quiénes somos y qué vamos a presentar</td></tr>
+    <tr><td class="t">1:00–3:30</td><td>La organización y el problema</td><td>Qué es Igualab (ONG) y por qué necesita esto</td></tr>
+    <tr><td class="t">3:30–6:00</td><td>La solución</td><td>Qué construimos y cómo funciona</td></tr>
+    <tr><td class="t">6:00–9:00</td><td>Profundización</td><td>Brechas GRI, roles y alcance</td></tr>
+    <tr><td class="t">9:00–11:00</td><td>Técnico</td><td>Arquitectura, stack y seguridad</td></tr>
+    <tr><td class="t">11:00–12:00</td><td>Metodología y avance</td><td>SCRUM, estado real y demo</td></tr>
+    <tr><td class="t">12:00–13:30</td><td>Cierre</td><td>Impacto, próximos pasos y preguntas</td></tr>
+  </table>
+</section>
+
+<!-- ======================= BLOQUE 1 ======================= -->
+<div class="part">Bloque 1 · Apertura y equipo <span>≈ 1 min</span></div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 1</div><div class="ttl">Portada: quiénes somos</div></div><div class="dur">1 min</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Logo/nombre del proyecto, los 7 integrantes con su rol y el nombre del cliente (Igualab, ONG peruana). Una sola imagen, sin texto denso.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«Buenos días. Somos el equipo <b>Igualab</b>, un grupo de 7 estudiantes de la carrera. Durante este ciclo
+        trabajamos con un cliente real: <b>Igualab</b>, una <b>ONG peruana</b> que trabaja por la <b>inclusión social</b>
+        y que, además, da <b>consultoría</b> a empresas. Hoy les vamos a contar, en simple: <b>qué es Igualab,
+        qué problema tiene, qué solución construimos con inteligencia artificial y cómo lo estamos haciendo</b>.
+        Empecemos.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Trabajamos para una ONG real y hoy verán un problema real con una solución real.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= BLOQUE 2 ======================= -->
+<div class="part">Bloque 2 · La organización y el problema <span>≈ 2 min 30 s</span></div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 2</div><div class="ttl">¿Qué es Igualab? (la ONG)</div></div><div class="dur">1 min</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Insignia «ONG · sin fines de lucro · Perú (2016)». Tres columnas: <b>Fin social</b> (educación y cultura) ·
+        <b>Inclusión social / DEI</b> (género, discapacidad, LGTBIQ+, interculturalidad, juventudes, adultos mayores) ·
+        <b>Consultoría</b> (DEI, sostenibilidad ASG, comunicación estratégica). Sello <b>EPD</b> y 2 premios internacionales.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«Igualab es una <b>organización sin fines de lucro —una ONG— 100 % peruana</b>, fundada en <b>2016</b>.
+        Su <b>fin social es la educación y la cultura</b>, y trabaja por la <b>inclusión social y la equidad</b>:
+        igualdad de género, personas con discapacidad, comunidad LGTBIQ+, interculturalidad, juventudes y adultos
+        mayores. Pero no solo hace labor social: <b>también es una consultora</b> que ayuda a las empresas a mejorar
+        en <b>Diversidad e Inclusión (DEI)</b>, en sostenibilidad (<b>ASG</b>) y en comunicación estratégica.
+        Además, al ser <b>Entidad Perceptora de Donaciones</b>, las empresas que la apoyan obtienen
+        <b>beneficios tributarios</b>. Por eso ha recibido reconocimientos internacionales, como
+        <b>mejor firma consultora de DEI del Perú</b> en 2025.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Igualab es una ONG peruana de inclusión social que, además, hace consultoría de DEI y sostenibilidad.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 3</div><div class="ttl">El modelo de doble impacto (clave para entender todo)</div></div><div class="dur">45 s</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Diagrama de flujo circular: <b>Empresas contratan consultoría</b> → <b>genera ingresos</b> →
+        <b>financian los programas sociales</b> (educación, cultura, inclusión). Etiqueta: «Doble impacto».</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«Aquí está la clave para entender todo el proyecto. Igualab es una ONG, pero <b>no vive solo de
+        donaciones</b>: <b>su motor de ingresos es la consultoría</b>. Cada empresa que contrata sus servicios
+        <b>financia directamente sus programas sociales</b> de educación, cultura e inclusión. Es un
+        <b>modelo de doble impacto</b>: la empresa mejora su sostenibilidad y, a la vez, se financia impacto social
+        real. La consecuencia es directa: <b>más clientes de consultoría = más impacto social</b>.
+        Y ahí es donde entra nuestro proyecto.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«No es caridad: es consultoría que financia inclusión. Más clientes, más impacto social.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 4</div><div class="ttl">El problema que resolvemos</div></div><div class="dur">45 s</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Dos columnas: <b>HOY (reactivo)</b> «esperan a que la empresa llegue sola» vs <b>META (proactivo)</b>
+        «salir a buscar clientes con datos». Debajo, una flecha: «más clientes → más impacto social».</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«El problema es comercial. Hoy el área de consultoría de Igualab trabaja de forma <b>reactiva</b>:
+        espera que las empresas la contacten solas, sin una herramienta que le diga <b>a quién le conviene
+        acercarse y por qué</b>. Pero existe una mina de información pública: las empresas que cotizan en la
+        Bolsa de Valores están obligadas a publicar <b>memorias anuales</b>, y muchas publican
+        <b>reportes de sostenibilidad GRI</b> revisados por auditores internacionales. Ahí está —en blanco y
+        negro— qué reportan bien, qué reportan mal y qué <b>sanciones</b> tienen. El problema es que nadie tiene
+        tiempo de leer cientos de documentos para encontrar esa oportunidad. Si no la aprovechan, pierden clientes
+        y, con ellos, <b>recursos para su labor social</b>. <b>Eso es exactamente lo que automatizamos.</b>»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«La información para vender ya es pública; nosotros la convertimos en clientes… y los clientes en impacto social.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= BLOQUE 3 ======================= -->
+<div class="part">Bloque 3 · La solución <span>≈ 2 min 30 s</span></div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 5</div><div class="ttl">Qué construimos</div></div><div class="dur">1 min</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Mock de la plataforma (igualab.vercel.app) con las 4 grandes funciones: <b>Ingesta · Asistente IA · Brechas GRI · Reportes PDF</b>.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«Construimos una <b>plataforma web de analítica de sostenibilidad con inteligencia artificial</b>.
+        Hace cuatro cosas grandes:
+        <b>uno</b>, ingiere los documentos de las empresas (memorias y reportes GRI);
+        <b>dos</b>, un asistente de IA que responde preguntas <b>solo con esos documentos y citando la fuente</b>;
+        <b>tres</b>, detecta automáticamente las <b>brechas GRI y las sanciones</b> de cada empresa;
+        y <b>cuatro</b>, genera un <b>reporte de prospección en PDF</b> para que el área comercial se acerque a la empresa.»
+        </p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Ingesta, asistente con IA que cita fuentes, detección de brechas y reportes de venta en PDF.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 6</div><div class="ttl">Cómo funciona, paso a paso</div></div><div class="dur">1 min 30 s</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Flujo horizontal con 4 cajas: <b>1) Documento .md</b> → <b>2) Se divide en fragmentos y se guarda (embeddings)</b>
+        → <b>3) La IA busca y responde con citas</b> → <b>4) El humano valida y sale el PDF</b>.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«En simple, funciona así. Primero se <b>sube el documento</b> en formato de texto estructurado.
+        Segundo, el sistema lo <b>corta en pedacitos</b> y los guarda en una base de datos especial que entiende
+        el <b>significado</b> de cada texto, no solo las palabras. Tercero, cuando el usuario pregunta algo, la IA
+        <b>busca los pedacitos más relevantes</b> y responde <b>citando de dónde salió cada dato</b>: si no hay
+        evidencia, lo dice. Y cuarto —y esto es clave— <b>la IA no decide sola</b>: un <b>administrador humano
+        revisa y valida</b> las brechas detectadas antes de generar el reporte. La IA acelera; el humano decide.»
+        </p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«La IA propone y cita; el humano valida y firma.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= BLOQUE 4 ======================= -->
+<div class="part">Bloque 4 · Profundización <span>≈ 3 min</span></div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 7</div><div class="ttl">¿Qué es una “brecha GRI”?</div></div><div class="dur">1 min</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Tabla con los 3 estados y un ejemplo por fila (usar los ejemplos del mock: GRI 306 OK, GRI 413 Baja sustancia, GRI 401 Sub-reportado).</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«Una <b>brecha GRI</b> es la diferencia entre <b>lo que el estándar pide reportar</b> y <b>lo que la
+        empresa realmente reporta</b>. La clasificamos en tres estados: <b>OK</b> —reporta completo y con metas—,
+        <b>Baja sustancia</b> —menciona el tema pero sin datos de impacto— y <b>Sub-reportado</b> —falta información
+        clave. Por ejemplo: una minera que dice que "consultó a las comunidades" pero no da ningún número,
+        eso es <b>Baja sustancia</b>. Ese hallazgo, para Igualab, es <b>una razón concreta para llamar a esa empresa</b>.»
+        </p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Una brecha es una debilidad pública de la empresa… y una oportunidad de negocio para Igualab.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 8</div><div class="ttl">¿Quién usa el sistema? (2 roles)</div></div><div class="dur">45 s</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Dos tarjetas: <b>SuperAdmin</b> (1 persona) y <b>Administrador</b> (2 personas) con sus permisos. Mencionar que son 3 usuarios en total.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«El sistema es para <b>3 usuarios con 2 roles</b>. El <b>SuperAdmin</b> —que es el dueño, Oscar— se encarga
+        de crear usuarios, <b>subir los documentos</b> y revisar la auditoría; no usa la IA. Los <b>Administradores</b>
+        —2 personas del área comercial— usan el <b>asistente de IA</b>, <b>validan las brechas</b> y generan los
+        <b>reportes</b>. Cada rol ve solo lo que le corresponde, por seguridad.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Dos roles, responsabilidades separadas: quien carga los datos no es quien los explota.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 9</div><div class="ttl">Alcance: qué entra y qué no</div></div><div class="dur">1 min 15 s</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Dos listas: <b>EN ALCANCE (Fase 1)</b> y <b>FUERA DE ALCANCE (Fase 2)</b>. Sectores: Minería, Energía, Petróleo y Gas.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«Ser claros con el alcance es parte de ser buenos ingenieros. Esta es la <b>Fase 1</b>, la primera versión,
+        y cubre <b>tres sectores</b>: Minería, Energía y Petróleo y Gas. Quedó <b>fuera</b> —por decisión conjunta con
+        el cliente— los <b>dashboards</b> de indicadores, el módulo de la Bolsa de Valores, la búsqueda por LinkedIn
+        y el chatbot de voz; todo eso es <b>Fase 2</b>. Decidir qué <b>no</b> hacer es lo que permite <b>terminar
+        bien</b> lo importante.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Hacer menos, pero bien: el alcance de Fase 1 está cerrado y aprobado con el cliente.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= BLOQUE 5 ======================= -->
+<div class="part">Bloque 5 · Lo técnico (sin marear a la audiencia) <span>≈ 2 min</span></div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 10</div><div class="ttl">Arquitectura y tecnologías</div></div><div class="dur">2 min</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>El diagrama <b>por capas (7 niveles)</b>: Actores → App web → API → Servicios → Procesamiento → Persistencia → Base de datos.
+        Al lado, los logos del stack.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«La arquitectura está organizada <b>por capas</b>, de arriba hacia abajo: los <b>usuarios</b>, la
+        <b>aplicación web</b>, la <b>API</b>, la <b>lógica de negocio</b>, el <b>procesamiento</b>, la <b>persistencia</b>
+        y las <b>bases de datos</b>. En tecnología: el frontend es <b>React</b>; el backend es <b>FastAPI en Python</b>;
+        usamos <b>dos bases de datos PostgreSQL</b> —una normal y una <b>vectorial</b> que es la que permite que la IA
+        busque por significado—; el modelo de IA es <b>gratuito</b>, y los reportes se generan con <b>plantillas</b>,
+        sin IA, para que sean <b>100 % reproducibles</b>. Dos detalles que nos enorgullecen: el sistema <b>cita la
+        fuente</b> de cada respuesta, y el reporte <b>no lo escribe la IA</b>, lo arma una plantilla con datos de la
+        base de datos — así el cliente puede auditar cada número.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Buscamos por significado, citamos la fuente y generamos reportes auditables — todo con IA gratuita.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= BLOQUE 6 ======================= -->
+<div class="part">Bloque 6 · Metodología y avance <span>≈ 1 min</span></div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 11</div><div class="ttl">Cómo trabajamos y cómo vamos</div></div><div class="dur">1 min</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Cronograma de <b>11 sprints</b> (S0–S10) y el tablero de avance (captura del dashboard HTML). Mostrar avance por sprint.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«Trabajamos con <b>SCRUM</b>, en <b>sprints</b> de una semana, con reuniones de seguimiento y
+        documentación de cada acuerdo en <b>actas firmadas</b>. Todo el avance se registra en <b>OpenProject</b>,
+        donde el cliente y el profesor pueden ver el estado en tiempo real. Actualmente ya está desplegado el
+        <b>avance de autenticación y el correo</b>, y vamos entrando a los módulos de análisis GRI, asistente y
+        reportes según el cronograma.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Cada acuerdo queda en un acta, cada tarea en OpenProject: el avance es visible y verificable.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= BLOQUE 7 ======================= -->
+<div class="part">Bloque 7 · Demo y cierre <span>≈ 2 min</span></div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 12</div><div class="ttl">Demostración en vivo</div></div><div class="dur">1 min 30 s</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>La app funcionando (o el mock si algo falla). Ruta sugerida: subir un documento → preguntar al asistente → ver una brecha validada → generar el PDF.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«Vamos a mostrarlo en vivo. Aquí el SuperAdmin <b>sube el reporte de una empresa</b>… el sistema lo
+        procesa… ahora le preguntamos al asistente: "¿qué brechas tiene esta minera en temas de comunidades?"…
+        y vean que responde <b>citando el documento exacto</b>. Luego el Administrador <b>valida el estado</b> de
+        esa brecha y, con un clic, se genera el <b>reporte de prospección en PDF</b>. Todo en menos de lo que
+        toma leer una sola página del reporte original.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Lo que antes eran horas de lectura, ahora son segundos y un PDF listo para vender.»</b></p>
+        <p class="small">Consejo: tener un plan B grabado en video por si falla internet o el servidor.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-head"><div><div class="n">Diapositiva 13</div><div class="ttl">Impacto y próximos pasos</div></div><div class="dur">45 s</div></div>
+  <div class="slide-body">
+    <div class="row">
+      <div class="block visual"><div class="lab">Qué mostrar</div>
+        <p>Tres beneficios: <b>Ahorro de tiempo</b>, <b>Decisiones con datos</b>, <b>Más recursos para el impacto social</b>. Y la hoja de ruta de Fase 2.</p></div>
+      <div class="block script"><div class="lab">Guion</div>
+        <p>«En resumen, el impacto es triple: Igualab <b>ahorra tiempo</b> en análisis que hoy es manual, toma
+        <b>decisiones comerciales con datos</b> y no con intuición, y —lo más importante— <b>consigue más clientes
+        de consultoría, que financian directamente su labor social</b>. Como próximos pasos, dejamos listo el
+        terreno para la <b>Fase 2</b>: dashboards, más usuarios y una pasarela de pago. Muchas gracias,
+        quedamos atentos a sus preguntas.»</p></div>
+      <div class="block key"><div class="lab">Frase clave</div>
+        <p><b>«Convertimos información pública en clientes — y esos clientes en más inclusión social.»</b></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= ANEXO: EQUIPO ======================= -->
+<div class="part pb">Anexo A · El equipo <span>presentación individual</span></div>
+<p class="small">Sugerencia: cada integrante dice una frase al presentarse. El proyecto tiene <b>7 roles</b>.</p>
+<div class="team-grid">
+  <div class="person"><div class="nm">Fabricio Ladera</div><div class="rl">Jefe de Proyecto (PM / Scrum Master)</div>
+    <div class="dq">«Yo coordino el plan, los sprints y la relación con el cliente.»</div></div>
+  <div class="person"><div class="nm">Carlos Ordinola</div><div class="rl">Analista Funcional</div>
+    <div class="dq">«Yo traduje las necesidades del cliente en requerimientos y casos de uso.»</div></div>
+  <div class="person"><div class="nm">Luis Millones</div><div class="rl">Analista Funcional</div>
+    <div class="dq">«Yo documenté el sistema y fui el puente entre el cliente y el equipo técnico.»</div></div>
+  <div class="person"><div class="nm">Juan Ferreyra</div><div class="rl">Desarrollador Backend</div>
+    <div class="dq">«Yo construí la lógica, la IA y la seguridad del servidor.»</div></div>
+  <div class="person"><div class="nm">Juan Flores</div><div class="rl">Desarrollador Frontend</div>
+    <div class="dq">«Yo diseñé la interfaz web y la experiencia del usuario.»</div></div>
+  <div class="person"><div class="nm">Mauricio Gonzalez</div><div class="rl">Tester / QA</div>
+    <div class="dq">«Yo defino las pruebas y valido que todo funcione antes de entregarlo.»</div></div>
+  <div class="person"><div class="nm">Alonso Benites</div><div class="rl">Tester / QA</div>
+    <div class="dq">«Yo pruebo integración, rendimiento y seguridad del sistema.»</div></div>
+</div>
+<div class="note"><b>Cómo explicar el equipo a la audiencia:</b> no basta con listar roles; digan
+<b>qué hizo cada uno y cómo se conecta</b> (por ejemplo: «los analistas definieron el qué, los desarrolladores el cómo,
+y los testers verificaron que el resultado sirviera»). Eso muestra que es un <b>equipo integrado</b>, no personas sueltas.</div>
+
+<!-- ======================= ANEXO: FAQ ======================= -->
+<div class="part pb">Anexo B · Preguntas frecuentes y respuestas sugeridas</div>
+
+<div class="faq"><div class="q">¿Igualab es una ONG o una empresa?</div>
+  <div class="a">Es una <b>organización sin fines de lucro (ONG) 100 % peruana</b>, fundada en 2016, cuyos fines
+  sociales son la <b>educación y la cultura</b>. <b>También ofrece consultoría</b> (DEI, ASG y comunicación
+  estratégica), y esos ingresos <b>financian sus programas sociales</b>. Es el modelo de <b>doble impacto</b>.</div></div>
+
+<div class="faq"><div class="q">Si es una ONG, ¿por qué necesita una herramienta comercial?</div>
+  <div class="a">Porque su <b>motor de ingresos es la consultoría</b>. Si consigue <b>más clientes</b>, tiene
+  <b>más recursos</b> para su labor social de educación, cultura e inclusión. El sistema hace que esa búsqueda de
+  clientes sea <b>proactiva y con datos</b>, no al azar.</div></div>
+
+<div class="faq"><div class="q">¿En qué se diferencia de un ChatGPT normal?</div>
+  <div class="a">ChatGPT responde con lo que sabe de internet y puede inventar. Nuestro sistema responde
+  <b>solo con los documentos de la empresa</b> que se cargaron, y <b>cita la fuente</b>. Si no encuentra evidencia, lo dice.
+  Eso se llama <b>RAG</b> (generación aumentada por recuperación).</div></div>
+
+<div class="faq"><div class="q">¿La IA decide si una empresa reporta mal?</div>
+  <div class="a">No. La IA solo <b>detecta la presencia</b> de cada tema y <b>extrae la cita</b>.
+  El <b>estado</b> (OK / Baja sustancia / Sub-reportado) lo asigna <b>manualmente un administrador</b>.
+  La IA acelera; el humano decide y queda registrado quién cambió qué.</div></div>
+
+<div class="faq"><div class="q">¿De dónde sacan los documentos?</div>
+  <div class="a">De fuentes públicas: <b>memorias anuales</b> de empresas que cotizan en la Bolsa de Valores de Lima
+  (obligatorias) y <b>reportes de sostenibilidad GRI</b> (voluntarios, validados por auditores). El cliente los
+  convierte a texto estructurado antes de subirlos.</div></div>
+
+<div class="faq"><div class="q">¿Usan inteligencia artificial de pago?</div>
+  <div class="a">No. Usamos un <b>modelo gratuito</b> y servicios de embeddings gratuitos. El diseño prioriza
+  <b>costo cero</b> en la Fase 1, con control de cuota para no depender de créditos.</div></div>
+
+<div class="faq"><div class="q">¿Por qué solo tres sectores?</div>
+  <div class="a">Minería, Energía y Petróleo y Gas fueron los sectores priorizados <b>junto con el cliente</b>.
+  Limitar el alcance en Fase 1 asegura <b>calidad</b>; se amplía en Fase 2.</div></div>
+
+<div class="faq"><div class="q">¿Qué pasa con los datos sensibles y la seguridad?</div>
+  <div class="a">Hay <b>autenticación con JWT</b>, contraseñas con <b>hash</b>, <b>roles y permisos</b>,
+  bloqueo por intentos fallidos y un <b>registro de auditoría</b> de solo inserción para los eventos importantes.</div></div>
+
+<div class="faq"><div class="q">¿El proyecto ya funciona o solo está en papel?</div>
+  <div class="a">Ya hay <b>despliegue</b> con autenticación y correo, y avance en los módulos. La exposición
+  incluye una <b>demostración en vivo</b>.</div></div>
+
+<!-- ======================= ANEXO: TIPS ======================= -->
+<div class="part">Anexo C · Tips para exponer y errores a evitar</div>
+<div class="slide"><div class="slide-body">
+  <div class="row">
+    <div class="block"><div class="lab">Sí hacer</div>
+      <ul class="tips">
+        <li><b>Abrir con el problema, no con la tecnología.</b> A la audiencia le importa «¿qué dolor resuelve?».</li>
+        <li><b>Explicar bien que Igualab es una ONG</b> y su modelo de doble impacto: es la parte que más impacta.</li>
+        <li><b>Traducir la jerga:</b> GRI, RAG, embeddings → explíquenlos con analogías («RAG es como buscar en la biblioteca antes de responder»).</li>
+        <li><b>Una idea por diapositiva</b>, poco texto, y que cada quien hable de su parte (así se ve el equipo).</li>
+        <li><b>Mostrar, no contar:</b> la demo vale más que 10 diapositivas.</li>
+        <li><b>Practicar los tiempos</b> al menos dos veces con cronómetro.</li>
+        <li><b>Cerrar con impacto</b> y agradecer; dejar la puerta abierta a preguntas.</li>
+      </ul></div>
+    <div class="block"><div class="lab">Evitar</div>
+      <div class="danger">
+        <ul class="tips">
+          <li><b>Decir que Igualab es «solo una consultora»</b>: es una ONG que también consulta.</li>
+          <li><b>Leer las diapositivas</b> en voz alta: se pierde el contacto visual.</li>
+          <li><b>Empezar por el stack</b> (React, FastAPI…) antes de explicar el valor.</li>
+          <li><b>Prometer Fase 2</b> como si ya estuviera hecha.</li>
+          <li><b>Decir «la IA decide»</b>: contradice el diseño (el humano valida).</li>
+          <li><b>Improvisar la demo</b> sin plan B grabado.</li>
+          <li>Hablar todos a la vez o que <b>solo uno</b> exponga todo.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="footnote">
+  Guion de exposición · Proyecto Igualab (CS3081) · Elaborado a partir del vault del proyecto
+  (Plan v1.2, A&amp;D oficial, actas CS3081, OpenProject) y del sitio oficial de la organización
+  (igualab.org — ONG sin fines de lucro fundada en 2016).
+</div>
+
+</body>
+</html>

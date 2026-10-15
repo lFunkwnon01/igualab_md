@@ -1,7 +1,7 @@
 # 📌 Igualab — Vault de Proyecto
 
 > **Plataforma de analítica de sostenibilidad (RAG)** — Igualab / cliente Oscar Baldeón (PO).
-> Estado: 🟢 **A&D reescrito en LaTeX y auditado** · **Plan v1.2 aprobado** (acta 5, 11/09) · **RN-001…RN-045 · RF-001…RF-030 · RNF-001…RNF-030** · secciones **1–13** completas.
+> Estado: 🟢 **A&D reescrito en LaTeX y auditado** · **Plan v1.2 aprobado** (acta 5, 11/09) · **RN-001…RN-045 · RF-001…RF-030 · RNF-001…RNF-030** · secciones **1–13** completas · 🧾 **Auditoría completa de código 2026-10-14** (`BCK@78e614a` + `FE@705cc78`; vault alineado al código as-built).
 > Alcance: **3 usuarios / 2 roles** (1 SuperAdmin + 2 Administradores) · sin Bolsa de Valores, sin LinkedIn, dashboards → fase 2, ingesta solo **`.md`** con tablas de pipes · **RAG simple, sin MCP** · sectores: **Minería, Petróleo y Gas, Energía**.
 > Mock de referencia (fuente viva del diseño): <https://igualab.vercel.app/>
 
@@ -10,10 +10,11 @@
 1. `01-Mockups-y-Propuestas/Igualab - Plan de proyecto.docx (1).pdf` — **Plan de Proyecto v1.2** (línea base aprobada).
 2. **`01-Mockups-y-Propuestas/analisis-diseno-latex/analisis_y_diseno_oficial.pdf`** — **A&D vigente** (nuevo). Fuente editable en `analisis-diseno-latex/` (`main.tex` + `rn.tex`/`rf.tex`/`rnf.tex`). Compila con `tectonic -X compile main.tex`.
 3. `FASE 1/` — desarrollo del análisis, arquitectura, BD, stack, frontend y API (RN/RF/RNF replicados en `01-Analisis-y-Diseno/`).
+4. **`06-Desarrollo/BCK-IGUALAB` + `06-Desarrollo/FE-IGUALAB`** — **código = fuente única y verdadera del sistema implementado**. Toda discrepancia con el vault se resuelve a favor del código (auditoría 2026-10-13).
 
 > Toda desviación de alcance se registra por **acta (REQ)**; el Plan firmado no se re-versiona. Ver [[21 Actas de Reunión y Acuerdos]].
 
-> 📄 Auditoría de salud del vault: `MEJORAS-A&D/AUDITORIA-SALUD-VAULT-post-alineacion.md` · 🏗️ Infraestructura y flujo Git: [[INFRAESTRUCTURA-Y-FLUJO-GIT]].
+> 📄 **Auditoría completa de código (2026-10-14):** `MEJORAS-A&D/AUDITORIA-COMPLETA-CODIGO-2026-10.md` · 🏗️ Infraestructura y flujo Git: [[INFRAESTRUCTURA-Y-FLUJO-GIT]].
 
 ---
 
@@ -23,7 +24,7 @@
 - `main.tex` (+ `portada.tex`, `frontmatter.tex`, `glosario.tex`, `s01-06.tex`, `s07.tex`, `s08-13.tex`) — documento completo.
 - `rn.tex` (45 RN) · `rf.tex` (30 RF) · `rnf.tex` (30 RNF) — tablas de requisitos.
 - `img/` — figuras extraídas del A&D original.
-- `analisis_y_diseno_oficial.pdf` — **PDF compilado** · `comparativa-original-vs-latex.pdf` — comparación lado a lado.
+- `analisis_y_diseno_oficial.pdf` — **PDF compilado**.
 
 ### 1 · Análisis y Diseño — `FASE 1/01-Analisis-y-Diseno/`
 - `01-Antecedentes-y-Objetivos.md` — qué es Igualab, objetivo general y representación de **FASE 1 (v1)**.
@@ -36,8 +37,8 @@
 
 ### 2 · Arquitectura de Solución — `FASE 1/02-Arquitectura-de-Solucion/`
 - `01-Arquitectura-de-Solucion-FASE-1.md` — **arquitectura por capas (7 capas, `arquitecturasolution.jpeg`)**, RAG simple **sin MCP**.
-- `02-Base-de-Datos-Diagrama-y-Diseno.md` — ERD (**2 bases PostgreSQL 16: transaccional + vectorial, pgvector**) y reglas semánticas.
-- `03-Diccionario-de-Datos.md` — diccionario (**13 tablas**).
+- `02-Base-de-Datos-Diagrama-y-Diseno.md` — ERD (**2 bases PostgreSQL 16: transaccional + vectorial, pgvector**) y reglas semánticas. ⚠️ **Diseño de referencia** — ver nota as-built al inicio.
+- `03-Diccionario-de-Datos.md` — **diccionario AS-BUILT (2026-10-14): 14 tablas reales** + rediseño de `documentos` (37 → 4 tablas de ≤20 atributos).
 - `04-Comparacion-RAG-simple-vs-MCP.md` · `05-Analisis-Por-que-Existen-las-Tablas.md`.
 - `06-Diseño-Arquitectonico.md` — informe de diseño arquitectónico (**7 capas**, 2 bases).
 
@@ -73,10 +74,20 @@ Igualab necesita una **plataforma de analítica de sostenibilidad con IA (RAG)**
 ## ✅ Estado y próximos pasos
 
 1. **Plan v1.2 aprobado** (acta 5, 11/09) — línea base vigente.
-2. **A&D reescrito en LaTeX (21/09):** 13 secciones completas, con **45 RN** (plantilla del profesor), **30 RF** atómicos y **30 RNF** categorizados; modelo y diccionario (**13 tablas**, incl. `sanciones`).
+2. **A&D reescrito en LaTeX (21/09):** 13 secciones completas, con **45 RN** (plantilla del profesor), **30 RF** atómicos y **30 RNF** categorizados.
 3. **Trazabilidad:** RN/RF/RNF citan actas cuando aplica; la cita `CS3081-00N-2026` mapea 1 a 1 al archivo del acta.
 4. **Numeración CU unificada** a la del A&D (CU001 auth · CU002 usuarios · CU003 ingesta · CU004 IA · CU005 brechas · CU006 reportes · CU007 auditoría · CU008 catálogo de empresas), con dependencias reales.
 5. **Limpieza del vault:** contenido redundante/obsoleto eliminado; media pesada fuera de Git.
 6. **Desarrollo:** `BCK-IGUALAB` + `FE-IGUALAB` por `development → qa → uat → main` ([[INFRAESTRUCTURA-Y-FLUJO-GIT]]).
+7. 🧾 **Auditoría completa de código (2026-10-14):** código auditado como fuente única tras `pull` de `development` (`BCK@78e614a` + `FE@705cc78`); vault alineado (diccionario **as-built** corregido: enums, tipos y nulabilidad verificados). Hallazgos críticos:
+   - 🔴 **`documentos` = 37 atributos** (no viable) → **rediseño a 4 tablas de ≤20** propuesto (migración 0005 pendiente de aprobación del PO).
+   - 🔴 **`email_service.py` rompe el arranque** sin `MAIL_*` (bug P0, arreglo inmediato).
+   - 🟡 `fragmentos_documento` = 21 atributos → extraer `fragmentos_embeddings` (→17).
+   - 🟡 Frontend: 4 módulos aún mock (Asistente, Reportes, Descargas, Auditoría); bug `details.errors` en `client.ts`.
 
-> Última actualización del vault: **2026-09-22**.
+### 🔜 Decisiones pendientes del PO (auditoría §9)
+1. **Aprobar la partición de `documentos`** (37 → 4 tablas de ≤20 atributos): ¿migración 0005 ahora (recomendado, pre-producción) o postergar?
+2. **`fragmentos_documento` (21 cols):** ¿extraer `fragmentos_embeddings` (→17) o aceptar 21 por ser la tabla del RAG?
+3. **Módulos mock (Asistente/Reportes/Descargas/Auditoría):** ¿backend este sprint o mantener como demo con banner?
+
+> Última actualización del vault: **2026-10-13** (auditoría completa de código).
