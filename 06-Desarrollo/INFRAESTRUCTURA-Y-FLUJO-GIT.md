@@ -83,7 +83,7 @@ gitGraph
 - El vault registra los submódulos como submódulos Git (`06-Desarrollo/BCK-IGUALAB`, `06-Desarrollo/FE-IGUALAB`).
 
 ### Contenido detectado en `development` (real, `@78e614a` / `@705cc78`)
-- **Backend (`BCK-IGUALAB`):** FastAPI · `app/` ≈ 12.771 líneas · `app/main.py` (lifespan de 6 pasos) · `app/config.py` · `app/routers/{auth,usuarios,empresas,documentos,analisis_gri}.py` (**27 endpoints**) · `app/services/{auth,usuario,empresa}` + `app/services/ingesta/` (ingesta .md, MinIO, OCI embeddings, detección GRI/sanciones) + `app/services/analisis_gri/` · `app/models/*` (**14 tablas**) · `app/migraciones/{transaccional,vectorial}` · `tests/` (**~1.197 tests**) · `Dockerfile` + `docker-compose.yml`.
+- **Backend (`BCK-IGUALAB`):** FastAPI · `app/` ≈ 69 archivos .py · `app/main.py` (lifespan de 6 pasos) · `app/core/` (config, database, security, exceptions, logging, email) · `app/modules/` (`auth`, `usuarios`, `empresas`, `ingesta`, `analisis_gri`, `auditoria` — cada uno con router/service/schemas y capas `application`/`domain`/`infrastructure` en ingesta) (**27 endpoints**) · `app/models/` (**14 tablas**) · `app/migraciones/{transaccional,vectorial}` · `tests/` (**2311 tests con BD local**) · `Dockerfile` + `docker-compose.yml`.
 - **Frontend (`FE-IGUALAB`):** React 18 + Vite + TypeScript (strict) + Tailwind · `src/{api,auth,components,data,lib,pages}` + `App.tsx` · `src/pages/` (**11 páginas; 7 conectadas + 4 mock**) · `src/api/{client,auth,usuarios,empresas,documentos,analisis}.ts` · `src/lib/` · tests Vitest (solo lógica) · `Dockerfile` + `nginx.conf`.
 
 ---

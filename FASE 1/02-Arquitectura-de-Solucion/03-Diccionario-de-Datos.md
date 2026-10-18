@@ -298,11 +298,11 @@ Descripción: cierre lógico que impide escrituras tardías tras compensar.
 
 | Concepto | Diseño anterior | Estado real |
 |---|---|---|
-| `catalogo_gri` (tabla) | Catálogo precargado GRI | 📄 **Archivo versionado** `app/services/ingesta/datos/catalogo_gri.json` (**48 entradas · 44 códigos únicos**, versión `2026-10-07.2`) — no es tabla. ⚠️ El JSON declara que **no** es el «catálogo corporativo de 40 códigos»: brecha abierta con **RN-027/RNF-026** (que citan 40). |
+| `catalogo_gri` (tabla) | Catálogo precargado GRI | 📄 **Archivo versionado** `app/modules/ingesta/datos/catalogo_gri.json` (**48 entradas · 44 códigos únicos**, versión `2026-10-07.2`) — no es tabla. ⚠️ El JSON declara que **no** es el «catálogo corporativo de 40 códigos»: brecha abierta con **RN-027/RNF-026** (que citan 40). |
 | `sanciones` (tabla) | Sanciones por documento | 📄 Dentro de `documentos.analisis` (JSONB) + detector `deteccion_sanciones.py` |
 | `consultas_asistente` + `consulta_citas` | RAG/chat con citas | ❌ **No implementadas** — Asistente del frontend es mock |
 | `reportes_prospeccion` | PDFs inmutables | ❌ **No implementada** — Reportes/Descargas son mock (`window.print()`) |
-| Exposición de auditoría | `GET /auditoria` | ❌ Solo escritura interna (`app/audit.py`) |
+| Exposición de auditoría | `GET /auditoria` | ❌ Solo escritura interna (`app/modules/auditoria/service.py`) |
 
 ---
 

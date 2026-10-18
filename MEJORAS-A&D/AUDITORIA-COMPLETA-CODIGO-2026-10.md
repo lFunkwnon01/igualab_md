@@ -121,7 +121,7 @@ El vault describía un modelo **diseñado** (13 tablas) que **no coincide** con 
 | `documentos` (11 campos) | `documentos` (**37**) | Esquema totalmente distinto |
 | `fragmentos_documento` (8 campos: `seccion`, `texto`, `metadata` JSONB) | `fragmentos_documento` (**21**: `texto_literal`, `contexto`, `ruta_encabezados`, `embedding_*`…) | Otro esquema |
 | `gri_analisis` + `sanciones` (tablas) | `analisis_gri_control/estados/historial/validaciones` (4 tablas) + análisis embebido en `documentos.analisis` (JSONB) | Diseño reemplazado |
-| `catalogo_gri` (tabla) | `catalogo_gri.json` (archivo versionado en `app/services/ingesta/datos/`) | Cambió de naturaleza |
+| `catalogo_gri` (tabla) | `catalogo_gri.json` (archivo versionado en `app/modules/ingesta/datos/`) | Cambió de naturaleza |
 | `consultas_asistente`, `consulta_citas`, `reportes_prospeccion` | **No existen** en backend | Diseño aún no implementado |
 | — | `operaciones_ingesta` (12), `cierres_documento` (3) | **Nuevas, no documentadas** |
 | `empresas.activo` / `anho` | `empresas.activa` / `anio` | Nombres distintos |
@@ -253,9 +253,9 @@ El JSONB del análisis GRI/sanciones **no cuenta como columnas de tabla** (es co
 
 ### 5.1 🔴 CRÍTICO — `email_service.py` rompe el arranque
 
-`app/email_service.py:5-16` crea el `ConnectionConfig` de fastapi-mail **en el import del módulo**. Con `MAIL_USERNAME`/`MAIL_FROM` vacíos, importar el módulo lanza `pydantic ValidationError`. Como `app/services/auth_service.py:9` lo importa → `routers/auth.py` → `app/main.py`, **toda la API no arranca**, aunque el correo solo se use para recuperar contraseña.
+`app/core/email_service.py:5-16` crea el `ConnectionConfig` de fastapi-mail **en el import del módulo**. Con `MAIL_USERNAME`/`MAIL_FROM` vacíos, importar el módulo lanza `pydantic ValidationError`. Como `app/modules/auth/service.py:9` lo importa → `routers/auth.py` → `app/main.py`, **toda la API no arranca**, aunque el correo solo se use para recuperar contraseña.
 
-- Contradice `app/config.py:47-54`, donde `MAIL_*` es opcional.
+- Contradice `app/core/config.py:47-54`, donde `MAIL_*` es opcional.
 - Los tests lo esquivan forzando `MAIL_*` en `tests/conftest.py:8-10`; el `Jenkinsfile:32` también.
 - **Arreglo propuesto:** construir el `ConnectionConfig` de forma perezosa (dentro de `enviar_correo_recuperacion`) y responder 503/omitir la función si el correo no está configurado.
 
@@ -283,7 +283,7 @@ Cambiar el formato de tabla exige tocar tres lógicas paralelas → riesgo de di
 
 ### 5.5 🟡 MEDIA — configuración y arranque frágil
 
-- `app/config.py:29` → `os.environ["JWT_SECRET_KEY"]` lanza `KeyError` sin mensaje accionable si falta la variable.
+- `app/core/config.py:29` → `os.environ["JWT_SECRET_KEY"]` lanza `KeyError` sin mensaje accionable si falta la variable.
 - `scripts/crear_superadmin_inicial.py:24-26` → `os.environ["SUPERADMIN_*"]` puede romper el paso 2/6 del arranque con `KeyError` crudo.
 - **Config muerta:** `DEEPSEEK_API_KEY/BASE_URL/MODEL` (`config.py:83-85`) no se usa en ningún servicio. `openai>=1.30.0` está en `requirements.txt` pero jamás se importa.
 
@@ -383,12 +383,12 @@ Cambiar el formato de tabla exige tocar tres lógicas paralelas → riesgo de di
 
 | P | Acción | Archivos | Esfuerzo |
 |---|---|---|---|
-| **P0** | Corregir `email_service.py` (lazy init; la API debe arrancar sin MAIL_*) | `app/email_service.py` | Bajo |
+| **P0** | Corregir `email_service.py` (lazy init; la API debe arrancar sin MAIL_*) | `app/core/email_service.py` | Bajo |
 | **P0** | Aprobar rediseño de `documentos` (§4) y crear migración 0005 de partición vertical | `app/models/`, `app/migraciones/transaccional/0005_*.sql` | Alto |
-| **P1** | Partir `documento_service.py` según las nuevas tablas | `app/services/ingesta/` | Alto |
+| **P1** | Partir `documento_service.py` según las nuevas tablas | `app/modules/ingesta/` | Alto |
 | **P1** | Actualizar diccionario de datos as-built (✅ hecho con esta auditoría) | `03-Diccionario-de-Datos.md` | — |
 | **P1** | Bug FE: `details.errors` en `client.ts` + test de contrato | `FE/src/api/client.ts` | Bajo |
-| **P2** | Unificar parseo Markdown en módulo compartido | `app/services/ingesta/` | Medio |
+| **P2** | Unificar parseo Markdown en módulo compartido | `app/modules/ingesta/` | Medio |
 | **P2** | Extraer `fragmentos_embeddings` (21 → 17) | migración vectorial | Medio |
 | **P2** | FE: partir `AnalisisGri.tsx` / `Ingesta.tsx`; unificar `Campo`, `fechaCorta`; quitar cast de `Ingesta.tsx:414` | `FE/src/` | Medio |
 | **P3** | Retirar config muerta (`DEEPSEEK_*`, `openai`); actualizar docstrings; limpiar `models/__init__.py` | backend | Bajo |

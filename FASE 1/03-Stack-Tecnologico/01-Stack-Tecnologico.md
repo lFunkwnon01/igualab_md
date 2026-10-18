@@ -3,10 +3,10 @@
 > ## ⚠️ NOTA AS-BUILT (2026-10-14 · `BCK-IGUALAB@78e614a` + `FE-IGUALAB@705cc78`)
 > El stack **real** del código difiere del diseño en estos puntos (el código manda):
 > - **Backend:** FastAPI 0.115 · SQLAlchemy 2.0 async · **PostgreSQL 16** · Python **3.13**. ✓
-> - **Embeddings (real):** **OCI Generative AI** con `cohere.embed-v4.0` (**1536 dims**) — `app/services/ingesta/proveedor_oci.py`. (No NVIDIA/Google.)
+> - **Embeddings (real):** **OCI Generative AI** con `cohere.embed-v4.0` (**1536 dims**) — `app/modules/ingesta/infrastructure/proveedor_oci.py`. (No NVIDIA/Google.)
 > - **LLM de chat (real):** **no implementado**. `config.py` define `DEEPSEEK_API_KEY/BASE_URL/MODEL` pero **no se usan en ningún servicio** (config muerta, pendiente M6). GLM-5.2/OpenRouter es diseño, no código.
-> - **Almacenamiento de originales (real):** **MinIO/S3** (boto3) — `app/services/ingesta/almacenamiento_s3.py`. (No disco local.)
-> - **Parseo Markdown (real):** parser propio mínimo `app/services/ingesta/markdown.py`. (No markdown-it-py.)
+> - **Almacenamiento de originales (real):** **MinIO/S3** (boto3) — `app/modules/ingesta/infrastructure/almacenamiento_s3.py`. (No disco local.)
+> - **Parseo Markdown (real):** parser propio mínimo `app/modules/ingesta/domain/markdown.py`. (No markdown-it-py.)
 > - **Reportes (real):** **no implementados** (Jinja2/WeasyPrint es diseño).
 > - **BD (real):** 14 objetos en repo (`documentos` con 37 columnas 🔴); **sin índice HNSW** (coseno exacto).
 
@@ -24,7 +24,7 @@
 | Driver/method BD | **AsyncPG** (motor async de SQLAlchemy hacia PostgreSQL) | — | capa 6–7 del diagrama por capas |
 | Motor de ejecución | FastAPI BackgroundTasks (patrón sync-guarda) | — | RF-015 sin colas |
 | BD | **2× PostgreSQL 16 + pgvector** — transaccional (`DATABASE_URL`) + vectorial (`VECTOR_DATABASE_URL`) | pgvector ≥ 0.6 | RAG simple sin infraextra |
-| Pipeline | Parser Markdown propio (`app/services/ingesta/markdown.py`) | — | RN-009/010 |
+| Pipeline | Parser Markdown propio (`app/modules/ingesta/domain/markdown.py`) | — | RN-009/010 |
 | Embeddings | **OCI Generative AI · `cohere.embed-v4.0`** (1536 dims) vía `proveedor_oci.py` | — | embeddings reales del código |
 | LLM chat/agente | **No implementado aún** (`DEEPSEEK_*` en config, sin uso) — pendiente Módulo 6 (RAG) | — | diseño: GLM-5.2 `:free`/OpenRouter |
 | Reportes | **No implementado aún** (diseño: Jinja2 + WeasyPrint) | — | pendiente Módulo 7 |
@@ -56,7 +56,7 @@
 | RN-041 (variables de BD) | queries SQL directas en servicio reportes + Jinja2 |
 | RNF-027 (free tier) | rate limit en middleware FastAPI, derivado de `consultas_asistente` (sin tabla de uso) |
 
-## 4. Variables de entorno (reales — `app/config.py`)
+## 4. Variables de entorno (reales — `app/core/config.py`)
 
 > Verificadas contra `BCK-IGUALAB@78e614a`. `JWT_SECRET_KEY` es **obligatoria** (`os.environ[...]`): sin ella la app no arranca.
 

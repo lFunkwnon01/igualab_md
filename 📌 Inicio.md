@@ -56,6 +56,13 @@
 - **Fuente viva del diseño:** mock desplegado <https://igualab.vercel.app/> (SuperAdmin: Usuarios, Ingesta, Auditoría · Administrador: Asistente IA, Reportes, Descargas; **sin Configuración**).
 - Mockup navegable **desplegado**: <https://igualab.vercel.app/>.
 - `06-Desarrollo/FE-IGUALAB` y `06-Desarrollo/BCK-IGUALAB` — repos de desarrollo (submódulos).
+- `06-Desarrollo/GUIA-BASE-DE-DATOS-Y-PGADMIN.md` — **motor ORM (SQLAlchemy 2.0 async ≈ Hibernate/JPA), 2 bases, y cómo ver las tablas con pgAdmin**.
+- `06-Desarrollo/ARQUITECTURA-DE-CARPETAS-Y-MODULARIZACION.md` — **arquitectura objetivo de carpetas (monolito modular por feature)** y plan de migración.
+- `06-Desarrollo/ARQUITECTURA-BACKEND-OBJETIVO.md` — **backend objetivo detallado** (capas internas por módulo + desglose de `ingesta` por etapas). ✅ **APLICADO 2026-10-14** (`core/` + `modules/`, 1955 tests verdes, 0 duplicados).
+- `06-Desarrollo/IMPLEMENTACION-M6-M7.md` — **M6 Asistente RAG + M7 Reportes de prospección (PDF LaTeX)** implementados con tests y Swagger (M8 pendiente).
+- `06-Desarrollo/GRANULARIZACION-ESTRUCTURA-PROYECTO.md` — **cómo granular todo el código por procesos** (árbol completo, nombres/subnombres, y cómo partir los archivos de +1000 líneas).
+- `06-Desarrollo/PLAN-MIGRACION-DOCUMENTOS-37-5.md` — **plan de migración** de la tabla `documentos` (37 → 5 tablas) + plan de ejecución por fases.
+- `06-Desarrollo/MANUAL-DESARROLLADOR-IGUALAB.pdf` — **manual técnico en LaTeX** (arquitectura, granularización, los 8 procesos, pipeline de ingesta, RAG, reportes + inventario de las 586 funciones). Fuente en `manual-codigo-latex/`.
 - `01-Mockups-y-Propuestas/` — Plan, A&D, actas firmadas y organigrama.
 - `02-Recursos-Media/` · `03-Transcripciones/` · `00-Documentación/bpmn/`.
 

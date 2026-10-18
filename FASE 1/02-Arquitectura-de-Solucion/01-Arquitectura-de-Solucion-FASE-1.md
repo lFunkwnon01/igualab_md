@@ -3,12 +3,12 @@
 > ## ⚠️ NOTA AS-BUILT (2026-10-14 · `BCK-IGUALAB@78e614a` + `FE-IGUALAB@705cc78`) — el código es la fuente de verdad
 > Este documento describe el **diseño por capas**. La implementación real (verificada en código) difiere en:
 > - **Tablas:** **14 reales** (no 13). `gri_analisis`/`sanciones` → `analisis_gri_*` (4 tablas) + `documentos.analisis` (JSONB); `catalogo_gri` es **archivo JSON** (**48 entradas / 44 códigos únicos**, v`2026-10-07.2`; ⚠️ declara **no** ser el «catálogo corporativo de 40» de RN-027); se añadieron `operaciones_ingesta` y `cierres_documento`; **no existen** `consultas_asistente`, `consulta_citas`, `reportes_prospeccion`. `documentos` tiene **37 columnas** (🔴 partición pendiente).
-> - **Embeddings:** **OCI Generative AI `cohere.embed-v4.0`** (1536 dims) vía `app/services/ingesta/proveedor_oci.py` — no "servicio genérico del proveedor" ni NVIDIA/Google.
-> - **Almacenamiento de originales:** **MinIO/S3** (`app/services/ingesta/almacenamiento_s3.py`) — no disco local.
+> - **Embeddings:** **OCI Generative AI `cohere.embed-v4.0`** (1536 dims) vía `app/modules/ingesta/infrastructure/proveedor_oci.py` — no "servicio genérico del proveedor" ni NVIDIA/Google.
+> - **Almacenamiento de originales:** **MinIO/S3** (`app/modules/ingesta/infrastructure/almacenamiento_s3.py`) — no disco local.
 > - **LLM de chat / Asistente RAG:** **no implementado**. `config.py` declara `DEEPSEEK_*` pero **nadie los usa**; no hay servicio de asistente ni endpoint RAG. GLM-5.2/OpenRouter es diseño.
-> - **RAG:** existe `buscar_similares` (coseno **exacto**, sin índice HNSW) en `app/services/ingesta/fragmentos_vectoriales.py`, **no expuesto por HTTP**.
+> - **RAG:** existe `buscar_similares` (coseno **exacto**, sin índice HNSW) en `app/modules/ingesta/infrastructure/fragmentos_vectoriales.py`, **no expuesto por HTTP**.
 > - **Reportes (PDF), Auditoría de lectura y Descargas:** **no implementados**; el frontend los muestra como mock.
-> - **Endpoints reales:** 27 en `app/routers/` (auth, usuarios, empresas, documentos, analisis_gri) + `/health`. Ver [Auditoría Completa](../../MEJORAS-A&D/AUDITORIA-COMPLETA-CODIGO-2026-10.md) §7.
+> - **Endpoints reales:** 27 en `app/modules/` (auth, usuarios, empresas, documentos, analisis_gri) + `/health`. Ver [Auditoría Completa](../../MEJORAS-A&D/AUDITORIA-COMPLETA-CODIGO-2026-10.md) §7.
 
 > **Numeración alineada al A&D V2 (LaTeX)**: los códigos RN/RF/RNF de este documento siguen la numeración del Análisis y Diseño (fuente única).
 

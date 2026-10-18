@@ -10,7 +10,7 @@
 |---|---|
 | `01-Analisis-y-Diseno/` | antecedentes y objetivos · análisis GRI · **diagramas de procesos TO-BE (BPMN + mermaid)** · **reglas de negocio (45)** · **requerimientos funcionales (30)** · **no funcionales (30)** — numeración = **A&D vigente (LaTeX)** · **casos de uso (CU001–CU008 + mermaid)** · especificaciones · bitácora de conciliación con el A&D (docs 09–10) |
 | `02-Arquitectura-de-Solucion/` | **arquitectura de solución POR CAPAS (7 capas, ver `arquitecturasolution.jpeg`)** · arquitectura por módulos (**RAG simple, sin MCP**) + compara RAG vs MCP · **diseño de la base de datos (2 bases PostgreSQL 16: transaccional + vectorial con pgvector; diseño 13 tablas → as-built 14)** · diccionario de datos (**AS-BUILT: 14 tablas reales**) · **`06-Diseño-Arquitectonico.md`** (informe de diseño arquitectónico por capas) |
-| `03-Stack-Tecnologico/` | stack decidido + variables de entorno **reales** (`app/config.py`); ⚠️ LLM GLM/OpenRouter es diseño — el código aún no implementa el asistente (embeddings reales: OCI Cohere embed-v4.0) |
+| `03-Stack-Tecnologico/` | stack decidido + variables de entorno **reales** (`app/core/config.py`); ⚠️ LLM GLM/OpenRouter es diseño — el código aún no implementa el asistente (embeddings reales: OCI Cohere embed-v4.0) |
 | `04-Frontend-React/` | arquitectura React 18 + Vite, mapeo 1:1 con el mock, comportamientos por RN |
 | `05-api-endpoints-mock/` | swagger/OpenAPI mock con peticiones y respuestas simuladas (estados de ingesta, chat con citas, transferencia de rol) |
 

@@ -95,7 +95,7 @@ python test_llm.py
 ✅ Si imprime `OK: OK` → la key y el modelo funcionan end-to-end.
 
 ## Paso 5 — Verificarlo desde TU backend
-1. Añade a `app/config.py`:
+1. Añade a `app/core/config.py`:
    ```python
    LLM_BASE_URL: str = os.getenv("LLM_BASE_URL", "")
    LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
