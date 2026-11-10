@@ -22,6 +22,12 @@ npm run build
 npm run start
 ```
 
+## Despliegue
+
+- **Producción:** https://dashboard-progreso.vercel.app
+- Conectado por **Vercel Git** al repo `lFunkwnon01/igualab_md` (Root Directory: `06-Desarrollo/dashboard-progreso`).
+- Cada push a `main` despliega automáticamente. Para refrescar datos antes del push: `npm run sync:all`.
+
 ## Vistas
 
 | Vista | Qué muestra |
