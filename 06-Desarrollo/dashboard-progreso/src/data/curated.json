@@ -1,0 +1,1261 @@
+{
+  "meta": {
+    "generadoEn": "2026-11-05",
+    "codigo": {
+      "bck": "8bcbabe",
+      "fe": "1d36b8a",
+      "rama": "development"
+    },
+    "fuente": "API de OpenProject 2026-11-05 + auditoría de clasificación bug/ACT",
+    "nota": "OpenProject en vivo: 133 WPs, 101 cerrados (76%). Bugs = defectos reales; ACT = feedback del cliente y alcance extra (doble check, deshabilitar ingestas, buscadores, etc.)."
+  },
+  "global": {
+    "proyecto": 76,
+    "desarrollo": 100,
+    "testeo": 73,
+    "analisis": 78,
+    "uat": 50,
+    "cierre": 30
+  },
+  "historial": {
+    "anterior": {
+      "fecha": "2026-10-29",
+      "wps": 114,
+      "cerrados": 83,
+      "bugsAbiertos": 12,
+      "actAbiertas": 11,
+      "nota": "Corte anterior: 114 WPs y 83 cerrados. Bugs/ACT abiertos se recalculan con la clasificación actual (defectos reales vs feedback del cliente)."
+    }
+  },
+  "clasificacion": {
+    "nota": "ACT = feedback del cliente o alcance extra, no un defecto. Se suman a los WP con prefijo ACT- los siguientes IDs tipados como Bug en OpenProject.",
+    "actExtra": [558, 719, 720, 721, 722, 723, 724, 752, 753, 754],
+    "moduloWp": {
+      "558": "M6",
+      "719": "M4",
+      "720": "M3",
+      "721": "M3",
+      "722": "M8",
+      "723": "M6",
+      "724": "M7",
+      "742": "M3",
+      "743": "M4",
+      "744": "M6",
+      "745": "M6",
+      "746": "M4",
+      "747": "M4",
+      "748": "M4",
+      "749": "M7",
+      "750": "M4",
+      "751": "M6",
+      "752": "M4",
+      "753": "M4",
+      "754": "M6",
+      "761": "M7",
+      "762": "M7"
+    }
+  },
+  "modulos": [
+    {
+      "id": "M1",
+      "nombre": "Autenticación y sesión",
+      "sprint": "S3",
+      "codigo": 100,
+      "auto": 95,
+      "manual": 95,
+      "uat": 80,
+      "evidencia": "Documentada (CP01–CP12)",
+      "estado": "Probado",
+      "nota": "CP01–CP12 ejecutados; 4 bugs de sesión cerrados. Sin pendientes.",
+      "opTotal": 4,
+      "opClosed": 4,
+      "bugsOpen": 0,
+      "bugsClosed": 4,
+      "act": 0
+    },
+    {
+      "id": "M2",
+      "nombre": "Gestión de usuarios",
+      "sprint": "S3",
+      "codigo": 100,
+      "auto": 95,
+      "manual": 90,
+      "uat": 60,
+      "evidencia": "Documentada (CP13–CP19)",
+      "estado": "Validado",
+      "nota": "CP13–CP19 ejecutados; CP16 y ACT-01 (confirmar contraseña) cerrados.",
+      "opTotal": 4,
+      "opClosed": 4,
+      "bugsOpen": 0,
+      "bugsClosed": 2,
+      "act": 0
+    },
+    {
+      "id": "M3",
+      "nombre": "Catálogo de empresas",
+      "sprint": "S4",
+      "codigo": 100,
+      "auto": 85,
+      "manual": 90,
+      "uat": 40,
+      "evidencia": "Documentada (CP20–CP26)",
+      "estado": "Probado; mejoras ACT",
+      "nota": "Casos documentados en v1.8; ACT-12 (sector “Otros”) y buscador en curso.",
+      "opTotal": 4,
+      "opClosed": 4,
+      "bugsOpen": 0,
+      "bugsClosed": 1,
+      "act": 2
+    },
+    {
+      "id": "M4",
+      "nombre": "Ingesta de documentos",
+      "sprint": "S4",
+      "codigo": 100,
+      "auto": 85,
+      "manual": 90,
+      "uat": 40,
+      "evidencia": "Documentada (CP27–CP33)",
+      "estado": "Probado; 2 bugs + 4 ACT",
+      "nota": "Bugs cerrados de ingesta; quedan contador N/N y filtros de estado. ACT: 1 memoria/reporte, deshabilitar ingesta y doble check (FE/BE).",
+      "opTotal": 4,
+      "opClosed": 4,
+      "bugsOpen": 2,
+      "bugsClosed": 3,
+      "act": 4
+    },
+    {
+      "id": "M5",
+      "nombre": "Análisis y validación GRI",
+      "sprint": "S5",
+      "codigo": 100,
+      "auto": 90,
+      "manual": 90,
+      "uat": 50,
+      "evidencia": "Documentada (CP34–CP40)",
+      "estado": "Probado; coherencia RAG",
+      "nota": "Bugs de condición de carrera y SonarQube cerrados; queda la coherencia GRI 1 entre análisis y asistente.",
+      "opTotal": 4,
+      "opClosed": 4,
+      "bugsOpen": 1,
+      "bugsClosed": 1,
+      "act": 3
+    },
+    {
+      "id": "M6",
+      "nombre": "Asistente IA (RAG)",
+      "sprint": "S6",
+      "codigo": 100,
+      "auto": 85,
+      "manual": 80,
+      "uat": 40,
+      "evidencia": "Documentada (CP41–CP51)",
+      "estado": "Probado; RAG en evaluación",
+      "nota": "Bugs de citas y evidencia cerrados; quedan deduplicación y salto de layout. ACT: traducción, historial, prompts ESG, tooltips, etc.",
+      "opTotal": 4,
+      "opClosed": 4,
+      "bugsOpen": 2,
+      "bugsClosed": 5,
+      "act": 8
+    },
+    {
+      "id": "M7",
+      "nombre": "Reportes de prospección",
+      "sprint": "S7",
+      "codigo": 100,
+      "auto": 85,
+      "manual": 85,
+      "uat": 40,
+      "evidencia": "Documentada (CP52–CP57)",
+      "estado": "Probado; versionado en curso",
+      "nota": "Bugs de RN y año cerrados; queda el versionado del reporte tras revalidar GRI. ACT-18 y descripción de sanciones abiertas.",
+      "opTotal": 4,
+      "opClosed": 4,
+      "bugsOpen": 1,
+      "bugsClosed": 3,
+      "act": 2
+    },
+    {
+      "id": "M8",
+      "nombre": "Auditoría funcional",
+      "sprint": "S9",
+      "codigo": 100,
+      "auto": 85,
+      "manual": 80,
+      "uat": 30,
+      "evidencia": "Documentada (CP58–CP61)",
+      "estado": "Probado; 1 ACT de usabilidad",
+      "nota": "Bugs de auditoría cerrados; se pide mostrar empresa/documento en lugar de IDs (ACT de usabilidad).",
+      "opTotal": 4,
+      "opClosed": 4,
+      "bugsOpen": 0,
+      "bugsClosed": 2,
+      "act": 1
+    }
+  ],
+  "sprints": [
+    {
+      "id": "S0",
+      "nombre": "Inicial",
+      "total": 6,
+      "cerrados": 6,
+      "codigo": 100,
+      "pruebas": 100,
+      "estado": "Cerrado",
+      "opPct": 100
+    },
+    {
+      "id": "S1",
+      "nombre": "Análisis",
+      "total": 7,
+      "cerrados": 7,
+      "codigo": 100,
+      "pruebas": 100,
+      "estado": "Cerrado",
+      "opPct": 100
+    },
+    {
+      "id": "S2",
+      "nombre": "Diseño",
+      "total": 6,
+      "cerrados": 6,
+      "codigo": 100,
+      "pruebas": 100,
+      "estado": "Cerrado",
+      "opPct": 100
+    },
+    {
+      "id": "S3",
+      "nombre": "Auth + Usuarios",
+      "total": 10,
+      "cerrados": 10,
+      "codigo": 100,
+      "pruebas": 90,
+      "estado": "Probado con observaciones",
+      "opPct": 100
+    },
+    {
+      "id": "S4",
+      "nombre": "Catálogo + Ingesta",
+      "total": 10,
+      "cerrados": 10,
+      "codigo": 100,
+      "pruebas": 65,
+      "estado": "Automatizado/API; manual sin evidencia",
+      "opPct": 100
+    },
+    {
+      "id": "S5",
+      "nombre": "Análisis GRI",
+      "total": 5,
+      "cerrados": 5,
+      "codigo": 100,
+      "pruebas": 70,
+      "estado": "Probado por PO",
+      "opPct": 100
+    },
+    {
+      "id": "S6",
+      "nombre": "Asistente RAG",
+      "total": 5,
+      "cerrados": 5,
+      "codigo": 100,
+      "pruebas": 55,
+      "estado": "Funcional; RAG en evaluación",
+      "opPct": 100
+    },
+    {
+      "id": "S7",
+      "nombre": "Reportes",
+      "total": 5,
+      "cerrados": 5,
+      "codigo": 100,
+      "pruebas": 60,
+      "estado": "Probado; bugs abiertos",
+      "opPct": 100
+    },
+    {
+      "id": "S8",
+      "nombre": "Integración",
+      "total": 3,
+      "cerrados": 3,
+      "codigo": 100,
+      "pruebas": 100,
+      "estado": "Cerrado",
+      "opPct": 100
+    },
+    {
+      "id": "S9",
+      "nombre": "Auditoría + Calidad",
+      "total": 8,
+      "cerrados": 7,
+      "codigo": 100,
+      "pruebas": 55,
+      "estado": "Auditoría cerrada; calidad pendiente",
+      "opPct": 88
+    },
+    {
+      "id": "S10",
+      "nombre": "Cierre",
+      "total": 6,
+      "cerrados": 1,
+      "codigo": 100,
+      "pruebas": 25,
+      "estado": "Pendiente: despliegue/UAT/entrega",
+      "opPct": 17
+    },
+    {
+      "id": "—",
+      "nombre": "Bugs y ACT",
+      "total": 62,
+      "cerrados": 36,
+      "codigo": 0,
+      "pruebas": 35,
+      "estado": "Feedback del cliente: bugs + ACT",
+      "opPct": 58
+    }
+  ],
+  "testing": {
+    "automatizado": {
+      "pytest": 1727,
+      "vitest": 145,
+      "playwright": 68,
+      "integracion": 158,
+      "e2e": 73,
+      "zap": true,
+      "trivy": true,
+      "cobertura": "Alta"
+    },
+    "manual": {
+      "casosDocumentados": 61,
+      "casosFaltantes": [],
+      "modulosDocumentados": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "modulosEjecutadosSinEvidencia": [],
+      "modulosParciales": [],
+      "cobertura": "Alta",
+      "nota": "El documento v1.8 (21/10) cubre CP01–CP61 e incluye capturas en el PDF. Los 61 CPs tienen evidencia archivada."
+    },
+    "uat": {
+      "estado": "Parcial",
+      "nota": "El PO validó los flujos principales; sus observaciones se separaron en bugs (6 abiertos) y ACT (20 abiertas) para no mezclar defectos con alcance extra."
+    },
+    "rag": {
+      "estado": "Parcial",
+      "nota": "CP41–CP51 documentados; bugs de citas cerrados en su mayoría. Quedan deduplicación, coherencia GRI 1 y las ACT de traducción/historial."
+    },
+    "manualVsIA": {
+      "estado": "No iniciado",
+      "nota": "Falta comparar análisis manual histórico contra la automatización."
+    }
+  },
+  "bugs": {
+    "todos": [
+      {
+        "id": 357,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Cierre por inactividad en el frontend",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M1"
+      },
+      {
+        "id": 510,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP 05 Error en recuperacion de contraseña",
+        "sprint": null,
+        "responsable": null,
+        "modulo": "M1"
+      },
+      {
+        "id": 511,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP09 Expiracion de sesion por inactividad",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M1"
+      },
+      {
+        "id": 512,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP15 Validacion de datos y politica de contraseña",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M2"
+      },
+      {
+        "id": 515,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP12 Cambio de contraseña estando autenticado",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M1"
+      },
+      {
+        "id": 516,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP21 Registrar empresa sin nombre o sin sector",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M3"
+      },
+      {
+        "id": 529,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "[E2E] Flujos E/F/G (Reportes, Asistente, Auditoría) añadidos — ejecutar tras desplegar M6/M7/M8",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "Integración"
+      },
+      {
+        "id": 530,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "[BD] Tabla `documentos` con 37 atributos: la partición por responsabilidad rompe la integridad",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M4"
+      },
+      {
+        "id": 557,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Remover RN del documento generado de reporte",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M7"
+      },
+      {
+        "id": 559,
+        "tipo": "Bug",
+        "estado": "Developed",
+        "asunto": "Detallar mejor que significa o que se esta mostrando en el documento de Reporte",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M7"
+      },
+      {
+        "id": 560,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "El chat bot no devuelve respuesta",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M6"
+      },
+      {
+        "id": 561,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Agente IA - Aparece como opcion años en los que no hay datos, pero permite seleccionar",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M6"
+      },
+      {
+        "id": 562,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Remover espacio en blanco innecesario debajo del chat con el Agente de IA",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M6"
+      },
+      {
+        "id": 563,
+        "tipo": "Bug",
+        "estado": "Developed",
+        "asunto": "Issue en SonarQube sobre backtracking",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "Calidad"
+      },
+      {
+        "id": 565,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "En ingesta de documento, al momento de ver el documento hay doble carga",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M4"
+      },
+      {
+        "id": 566,
+        "tipo": "Bug",
+        "estado": "Developed",
+        "asunto": "Issue en SonarQube, el error es mas dificil de leer si no se hace el cambio",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "Calidad"
+      },
+      {
+        "id": 567,
+        "tipo": "Bug",
+        "estado": "Developed",
+        "asunto": "Issue en SonarQube Reduce calidad de testing",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "Calidad"
+      },
+      {
+        "id": 570,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Eliminar texto en la seccion de Auditoria",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M8"
+      },
+      {
+        "id": 635,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Definir colores para error y advertencia",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M8"
+      },
+      {
+        "id": 636,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "Reportes GRI no registra correctamente la empresa y sector",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M7"
+      },
+      {
+        "id": 658,
+        "tipo": "Bug",
+        "estado": "New",
+        "asunto": "Contraseña visible, sin opción mostrar/ocultar",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M2"
+      },
+      {
+        "id": 659,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "Caracteres Markdown/HTML sin renderizar en las citas",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 660,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "Evidencia duplicada y texto truncado en \"Ver evidencia más\"",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 661,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "Fuentes citadas repetidas N veces",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 662,
+        "tipo": "Bug",
+        "estado": "New",
+        "asunto": "Se pierde toda la consulta al cambiar de pestaña",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 663,
+        "tipo": "Bug",
+        "estado": "New",
+        "asunto": "Inconsistencia: \"no se encontró evidencia\" para GRI 1 aunque el análisis sí lo detectó",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M5"
+      },
+      {
+        "id": 664,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Error al cambiar estados GRI rápido (condición de carrera en el recálculo)",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M5"
+      },
+      {
+        "id": 665,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Año en Reportes de prospección lista 2020–2026 sin datos",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M7"
+      },
+      {
+        "id": 666,
+        "tipo": "Bug",
+        "estado": "New",
+        "asunto": "ACT-01 · Confirmación de contraseña en el registro",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M2"
+      },
+      {
+        "id": 667,
+        "tipo": "Feature",
+        "estado": "In progress",
+        "asunto": "ACT-02 · Regla: 1 memoria + 1 reporte de sostenibilidad por empresa/año",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M4"
+      },
+      {
+        "id": 669,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-04 · Traducción al español de citas y respuestas",
+        "sprint": null,
+        "responsable": "Fabricio Ladera",
+        "modulo": "M6"
+      },
+      {
+        "id": 670,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-05 · Botom de poder guardar el historial de consulta",
+        "sprint": null,
+        "responsable": "Fabricio Ladera",
+        "modulo": "M6"
+      },
+      {
+        "id": 671,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-06 · Catálogo de advertencias del sistema",
+        "sprint": null,
+        "responsable": "Alonso Benites",
+        "modulo": "M5"
+      },
+      {
+        "id": 672,
+        "tipo": "Feature",
+        "estado": "In progress",
+        "asunto": "ACT-07 · Vista previa de reportes: solo imagen, sin descarga",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M7"
+      },
+      {
+        "id": 673,
+        "tipo": "Task",
+        "estado": "New",
+        "asunto": "ACT-08 · Definir/clarificar la lógica de “Sanciones identificadas”",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M5"
+      },
+      {
+        "id": 674,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-09 · Nivel de restricción del asistente y manejo de falsos positivos/negativos",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 675,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-10 · Épica: estándar de citación del RAG (agrupadora)",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 676,
+        "tipo": "Feature",
+        "estado": "In progress",
+        "asunto": "ACT-11 · Tooltip explicativo (ícono “?”) en la etiqueta “Requiere revisión” y sus advertencias GRI",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M5"
+      }
+    ],
+    "soloBugs": [
+      {
+        "id": 357,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Cierre por inactividad en el frontend",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M1"
+      },
+      {
+        "id": 510,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP 05 Error en recuperacion de contraseña",
+        "sprint": null,
+        "responsable": null,
+        "modulo": "M1"
+      },
+      {
+        "id": 511,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP09 Expiracion de sesion por inactividad",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M1"
+      },
+      {
+        "id": 512,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP15 Validacion de datos y politica de contraseña",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M2"
+      },
+      {
+        "id": 515,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP12 Cambio de contraseña estando autenticado",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M1"
+      },
+      {
+        "id": 516,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "CP21 Registrar empresa sin nombre o sin sector",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M3"
+      },
+      {
+        "id": 529,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "[E2E] Flujos E/F/G (Reportes, Asistente, Auditoría) añadidos — ejecutar tras desplegar M6/M7/M8",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "Integración"
+      },
+      {
+        "id": 530,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "[BD] Tabla `documentos` con 37 atributos: la partición por responsabilidad rompe la integridad",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M4"
+      },
+      {
+        "id": 557,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Remover RN del documento generado de reporte",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M7"
+      },
+      {
+        "id": 559,
+        "tipo": "Bug",
+        "estado": "Developed",
+        "asunto": "Detallar mejor que significa o que se esta mostrando en el documento de Reporte",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M7"
+      },
+      {
+        "id": 560,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "El chat bot no devuelve respuesta",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M6"
+      },
+      {
+        "id": 561,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Agente IA - Aparece como opcion años en los que no hay datos, pero permite seleccionar",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M6"
+      },
+      {
+        "id": 562,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Remover espacio en blanco innecesario debajo del chat con el Agente de IA",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M6"
+      },
+      {
+        "id": 563,
+        "tipo": "Bug",
+        "estado": "Developed",
+        "asunto": "Issue en SonarQube sobre backtracking",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "Calidad"
+      },
+      {
+        "id": 565,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "En ingesta de documento, al momento de ver el documento hay doble carga",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M4"
+      },
+      {
+        "id": 566,
+        "tipo": "Bug",
+        "estado": "Developed",
+        "asunto": "Issue en SonarQube, el error es mas dificil de leer si no se hace el cambio",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "Calidad"
+      },
+      {
+        "id": 567,
+        "tipo": "Bug",
+        "estado": "Developed",
+        "asunto": "Issue en SonarQube Reduce calidad de testing",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "Calidad"
+      },
+      {
+        "id": 570,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Eliminar texto en la seccion de Auditoria",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M8"
+      },
+      {
+        "id": 635,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Definir colores para error y advertencia",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M8"
+      },
+      {
+        "id": 636,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "Reportes GRI no registra correctamente la empresa y sector",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M7"
+      },
+      {
+        "id": 658,
+        "tipo": "Bug",
+        "estado": "New",
+        "asunto": "Contraseña visible, sin opción mostrar/ocultar",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M2"
+      },
+      {
+        "id": 659,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "Caracteres Markdown/HTML sin renderizar en las citas",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 660,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "Evidencia duplicada y texto truncado en \"Ver evidencia más\"",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 661,
+        "tipo": "Bug",
+        "estado": "In progress",
+        "asunto": "Fuentes citadas repetidas N veces",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 662,
+        "tipo": "Bug",
+        "estado": "New",
+        "asunto": "Se pierde toda la consulta al cambiar de pestaña",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 663,
+        "tipo": "Bug",
+        "estado": "New",
+        "asunto": "Inconsistencia: \"no se encontró evidencia\" para GRI 1 aunque el análisis sí lo detectó",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M5"
+      },
+      {
+        "id": 664,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Error al cambiar estados GRI rápido (condición de carrera en el recálculo)",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M5"
+      },
+      {
+        "id": 665,
+        "tipo": "Bug",
+        "estado": "Closed",
+        "asunto": "Año en Reportes de prospección lista 2020–2026 sin datos",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M7"
+      }
+    ],
+    "act": [
+      {
+        "id": 666,
+        "tipo": "Bug",
+        "estado": "New",
+        "asunto": "ACT-01 · Confirmación de contraseña en el registro",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M2"
+      },
+      {
+        "id": 667,
+        "tipo": "Feature",
+        "estado": "In progress",
+        "asunto": "ACT-02 · Regla: 1 memoria + 1 reporte de sostenibilidad por empresa/año",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M4"
+      },
+      {
+        "id": 669,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-04 · Traducción al español de citas y respuestas",
+        "sprint": null,
+        "responsable": "Fabricio Ladera",
+        "modulo": "M6"
+      },
+      {
+        "id": 670,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-05 · Botom de poder guardar el historial de consulta",
+        "sprint": null,
+        "responsable": "Fabricio Ladera",
+        "modulo": "M6"
+      },
+      {
+        "id": 671,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-06 · Catálogo de advertencias del sistema",
+        "sprint": null,
+        "responsable": "Alonso Benites",
+        "modulo": "M5"
+      },
+      {
+        "id": 672,
+        "tipo": "Feature",
+        "estado": "In progress",
+        "asunto": "ACT-07 · Vista previa de reportes: solo imagen, sin descarga",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M7"
+      },
+      {
+        "id": 673,
+        "tipo": "Task",
+        "estado": "New",
+        "asunto": "ACT-08 · Definir/clarificar la lógica de “Sanciones identificadas”",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M5"
+      },
+      {
+        "id": 674,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-09 · Nivel de restricción del asistente y manejo de falsos positivos/negativos",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 675,
+        "tipo": "Feature",
+        "estado": "New",
+        "asunto": "ACT-10 · Épica: estándar de citación del RAG (agrupadora)",
+        "sprint": null,
+        "responsable": "Juan Ferreyra",
+        "modulo": "M6"
+      },
+      {
+        "id": 676,
+        "tipo": "Feature",
+        "estado": "In progress",
+        "asunto": "ACT-11 · Tooltip explicativo (ícono “?”) en la etiqueta “Requiere revisión” y sus advertencias GRI",
+        "sprint": null,
+        "responsable": "Juan Flores",
+        "modulo": "M5"
+      }
+    ]
+  },
+  "cambiosA&D": [
+    {
+      "id": "RN-041",
+      "artefacto": "Inmutabilidad y visualización del reporte",
+      "tipo": "RN",
+      "analisis": "Un solo reporte por empresa/año; no se genera un segundo reporte (UNIQUE empresa + año).",
+      "implementacion": "Varias versiones inmutables por empresa/año, una por validación GRI; UNIQUE(empresa, año, version).",
+      "concordancia": "No concuerda",
+      "accion": "Reescribir RN-041 como inmutabilidad + versionado y actualizar modelo/CU006.",
+      "evidencia": "BCK 6e78c81 · migraciones 0006/0007 · informe B.2",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RN-040",
+      "artefacto": "Determinismo y generación sin IA",
+      "tipo": "RN",
+      "analisis": "Dos generaciones sobre los mismos datos producen el mismo resultado.",
+      "implementacion": "Mismo snapshot produce mismo contenido/texto; los bytes del PDF no se garantizan; nueva validación = nueva versión.",
+      "concordancia": "Parcial",
+      "accion": "Aclarar la excepción: determinismo por snapshot, no igualdad byte a byte.",
+      "evidencia": "Informe B.1 · reportes/service.py",
+      "prioridad": "Media"
+    },
+    {
+      "id": "RN-038",
+      "artefacto": "Precondición del reporte",
+      "tipo": "RN",
+      "analisis": "La empresa debe tener al menos un documento indexado.",
+      "implementacion": "Exige documentos elegibles y validación vigente; bloquea si falta revisión o validación.",
+      "concordancia": "Parcial",
+      "accion": "Añadir “validación vigente” a la precondición.",
+      "evidencia": "Informe B.6 · CU006",
+      "prioridad": "Media"
+    },
+    {
+      "id": "RN-039",
+      "artefacto": "Contenido del reporte",
+      "tipo": "RN",
+      "analisis": "Consolida estados GRI, sanciones y resumen ejecutivo; no incluye información sin respaldo.",
+      "implementacion": "Añade versión y fecha de emisión; sanciones con montos/advertencias y snapshot validado.",
+      "concordancia": "Parcial",
+      "accion": "Actualizar redacción: versión/fecha y tratamiento de sanciones.",
+      "evidencia": "Informe B.5 · plantilla del reporte",
+      "prioridad": "Media"
+    },
+    {
+      "id": "RF-025",
+      "artefacto": "Generar reporte de prospección",
+      "tipo": "RF",
+      "analisis": "Generar el reporte en PDF a partir de los resultados validados.",
+      "implementacion": "Emite una versión nueva por validación; si esa validación ya tiene versión, la reutiliza (201/200).",
+      "concordancia": "No concuerda",
+      "accion": "Reescribir RF-025 como emisión versionada e idempotente por validación.",
+      "evidencia": "POST /reportes · FE 597558d · BCK 6e78c81",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RF-026",
+      "artefacto": "Historial de reportes",
+      "tipo": "RF",
+      "analisis": "Visualizar el historial de reportes de prospección.",
+      "implementacion": "Historial de versiones con estado: actualizado, actualización pendiente, requiere revisar/validar.",
+      "concordancia": "Parcial",
+      "accion": "Actualizar RF-026 para incluir versiones y estado de actualización.",
+      "evidencia": "GET /reportes/vigente · TablaReportes",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RF-027",
+      "artefacto": "Descarga de reportes",
+      "tipo": "RF",
+      "analisis": "Descargar el historial de reportes de prospección.",
+      "implementacion": "Descarga la versión vigente solo si está actualizada y cualquier versión histórica por identificador.",
+      "concordancia": "Parcial",
+      "accion": "Actualizar RF-027: descarga actualizada + histórica.",
+      "evidencia": "GET /reportes/vigente/archivo · GET /reportes/{id}/archivo",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "MODELO",
+      "artefacto": "Tabla reportes_prospeccion",
+      "tipo": "Modelo",
+      "analisis": "UNIQUE(empresa_id, anio); sin columnas version ni validacion_id.",
+      "implementacion": "version, validacion_id, UNIQUE(empresa, año, version), UNIQUE(validacion_id), FKs y disparador de validación.",
+      "concordancia": "No concuerda",
+      "accion": "Actualizar diccionario, diagrama y restricciones; migraciones 0006/0007.",
+      "evidencia": "0006_reportes_versionados.sql · 0007_integridad_de_reportes.sql",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "CU006",
+      "artefacto": "Generación de reportes de prospección",
+      "tipo": "CU",
+      "analisis": "A3: si el reporte ya existe, no se genera otro.",
+      "implementacion": "Nueva validación → nueva versión; misma validación → reutiliza; sin validación → bloquea; histórico se conserva.",
+      "concordancia": "No concuerda",
+      "accion": "Actualizar precondiciones, flujo básico, alternativos, postcondiciones y restricciones.",
+      "evidencia": "Informe B.6",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "M7",
+      "artefacto": "Módulo 7 · Reportes de prospección",
+      "tipo": "Módulo",
+      "analisis": "Reporte único e inmutable.",
+      "implementacion": "Versiones inmutables, historial, estado de actualización y descarga histórica.",
+      "concordancia": "No concuerda",
+      "accion": "Actualizar la descripción del módulo en el A&D.",
+      "evidencia": "Informe B.5",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "GLOSARIO",
+      "artefacto": "Glosario y estados del reporte",
+      "tipo": "Glosario",
+      "analisis": "No define versión, validación, reporte actualizado ni actualización pendiente.",
+      "implementacion": "Agrega ACTUALIZACION_PENDIENTE y distingue versión, validación, actualizado e histórico.",
+      "concordancia": "No concuerda",
+      "accion": "Agregar definiciones y el nuevo estado.",
+      "evidencia": "reportes/schemas.py · dominio.ts",
+      "prioridad": "Media"
+    },
+    {
+      "id": "API",
+      "artefacto": "Contratos HTTP de reportes",
+      "tipo": "API",
+      "analisis": "POST/GET /reportes, vista previa y descarga de una versión.",
+      "implementacion": "Agrega /reportes/vigente, /vigente/archivo y /disponibilidad; nuevos campos y códigos 409.",
+      "concordancia": "Parcial",
+      "accion": "Actualizar OpenAPI, Postman, E2E y alcance ZAP.",
+      "evidencia": "reportes/router.py · pruebas-http",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "FE-762",
+      "artefacto": "Frontend de reportes (#762)",
+      "tipo": "Frontend",
+      "analisis": "Asume que “ya existe un reporte” impide generar otro.",
+      "implementacion": "Usa puede_generar/actualizacion_pendiente, muestra “Generar nueva versión” e historial v1/v2.",
+      "concordancia": "Parcial",
+      "accion": "Desplegar FE 597558d y verificar #762 con Yanacocha 2025; la vista previa candidata no debe decir “Emitido”.",
+      "evidencia": "FE 597558d · OP #762",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "PRUEBAS",
+      "artefacto": "CP52–CP57 y E2E de reportes",
+      "tipo": "Pruebas",
+      "analisis": "Casos de prueba orientados a un reporte único.",
+      "implementacion": "Faltan casos de v2, reutilización por validación, sin validación, descarga histórica y concurrencia.",
+      "concordancia": "Parcial",
+      "accion": "Actualizar CP52–CP57 y agregar CPs/E2E del versionado.",
+      "evidencia": "e2e/reportes.spec.ts · pruebas-http/README.md",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RNF-031",
+      "artefacto": "Integridad y concurrencia del versionado",
+      "tipo": "RNF",
+      "analisis": "No existe un RNF que formalice numeración, idempotencia y concurrencia.",
+      "implementacion": "Candado asesor, UNIQUE, reintentos y 409 ante conflicto; una validación respalda como máximo un reporte.",
+      "concordancia": "Parcial",
+      "accion": "Agregar RNF-031 o mapearlo a RNF-012/022/023.",
+      "evidencia": "reportes/versionado.py · service.py",
+      "prioridad": "Media"
+    }
+  ],
+  "analysisGaps": [
+    {
+      "tema": "Doble check de ingesta (ACT)",
+      "detalle": "Se separó como alcance extra, no como bug: FE #752 y BE #753. Falta formalizar la advertencia y la decisión del Superadmin en RN/RF (acta 8, REQ-31).",
+      "prioridad": "Alta"
+    },
+    {
+      "tema": "Deshabilitar una ingesta mal subida (ACT-13)",
+      "detalle": "#743: definir estados OBSERVADO/RECHAZADO/EN_REVISION, bloqueo y anulación lógica; evitar borrado físico por embeddings.",
+      "prioridad": "Alta"
+    },
+    {
+      "tema": "Regla 1 memoria + 1 reporte por empresa/año (ACT-02)",
+      "detalle": "#667: si el tipo ya fue cargado para el año, deshabilitar la opción del selector y bloquear duplicados.",
+      "prioridad": "Alta"
+    },
+    {
+      "tema": "Sector “Otros” (ACT-12)",
+      "detalle": "#742: agregar “Otros” al conjunto de sectores y definir si es elegible para análisis GRI.",
+      "prioridad": "Alta"
+    },
+    {
+      "tema": "Versionado de reportes (ACT-18)",
+      "detalle": "Implementación versionada (FE 597558d · BCK 6e78c81) vs A&D con RN-041 de reporte único. Mapeado en Cambios A&D: RN-040/041, RF-025/026/027, modelo, CU006, glosario, API, FE #762 y pruebas. #761 implementa; #762 es el bug de frontend a verificar.",
+      "prioridad": "Alta"
+    },
+    {
+      "tema": "Ingesta de matrices (Perenco)",
+      "detalle": "El PDF de observaciones indica que Perenco reporta GRI pero no ingesta correctamente por ser matrices; falta caso/ajuste.",
+      "prioridad": "Alta"
+    },
+    {
+      "tema": "Trazabilidad RN/RF",
+      "detalle": "Matriz RN/RF ↔ módulo ↔ código ↔ caso de prueba ↔ WP.",
+      "prioridad": "Media"
+    },
+    {
+      "tema": "Evidencia complementaria",
+      "detalle": "El PDF v1.8 incluye capturas de 61/61 CPs; las observaciones del PO se siguen como bugs (defectos) y ACT (feedback/alcance extra).",
+      "prioridad": "Media"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+[
+  {"id":"P01","tipo":"Funcional y Unitarias","modulo":"Autenticación y control de accesos (RBAC)","inicio":"2026-09-24","fin":"2026-09-26","avance":100},
+  {"id":"P02","tipo":"Funcional y Unitarias","modulo":"Ingesta de datos y motor RAG","inicio":"2026-10-01","fin":"2026-10-04","avance":100},
+  {"id":"P03","tipo":"Funcional y Unitarias","modulo":"Módulos de análisis (brechas GRI + sanciones)","inicio":"2026-10-16","fin":"2026-10-19","avance":100},
+  {"id":"P04","tipo":"Funcional y Unitarias","modulo":"Chatbot analítico y reportes PDF","inicio":"2026-10-18","fin":"2026-10-22","avance":100},
+  {"id":"P05","tipo":"Pruebas de Integración","modulo":"Integración completa del sistema","inicio":"2026-10-24","fin":"2026-10-28","avance":100},
+  {"id":"P06","tipo":"Funcional y Unitarias","modulo":"Sistema de auditoría","inicio":"2026-10-31","fin":"2026-11-02","avance":100},
+  {"id":"P07","tipo":"Rendimiento / Estrés","modulo":"Pruebas de carga (consultas RAG simultáneas)","inicio":"2026-11-03","fin":"2026-11-05","avance":0},
+  {"id":"P08","tipo":"Pruebas de Aceptación (UAT)","modulo":"MVP completo (end-to-end con Product Owner)","inicio":"2026-11-12","fin":"2026-11-16","avance":60}
+]
