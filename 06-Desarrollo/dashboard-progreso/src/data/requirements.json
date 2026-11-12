@@ -128,8 +128,8 @@
     "modulo": "M1–M2",
     "sprint": "S3",
     "evidencia": "modules/auth + modules/usuarios · CP01–CP19",
-    "estado": "Cumple con observaciones",
-    "nota": "CP12 aprobado; bug #515 sobre mensaje de política."
+    "estado": "Cumple",
+    "nota": ""
   },
   {
     "id": "RN-012",
@@ -163,7 +163,7 @@
     "prioridad": "",
     "modulo": "M3",
     "sprint": "S4",
-    "evidencia": "modules/empresas · CP20–CP26",
+    "evidencia": "modules/empresas · CP20–CP26, CP63",
     "estado": "Cumple",
     "nota": ""
   },
@@ -175,9 +175,9 @@
     "prioridad": "",
     "modulo": "M3",
     "sprint": "S4",
-    "evidencia": "modules/empresas · CP20–CP26",
-    "estado": "Parcial",
-    "nota": "Código solo admite Minería/Petróleo/Energía; el PO pidió agregar «Otros» (observaciones 2026-10-29)."
+    "evidencia": "modules/empresas · CP20–CP26, CP63",
+    "estado": "Cumple",
+    "nota": "Sector «Otros» habilitado (ACT-12 cerrada); CP63 lo valida."
   },
   {
     "id": "RN-016",
@@ -187,7 +187,7 @@
     "prioridad": "",
     "modulo": "M3",
     "sprint": "S4",
-    "evidencia": "modules/empresas · CP20–CP26",
+    "evidencia": "modules/empresas · CP20–CP26, CP63",
     "estado": "Cumple",
     "nota": ""
   },
@@ -199,7 +199,7 @@
     "prioridad": "",
     "modulo": "M3",
     "sprint": "S4",
-    "evidencia": "modules/empresas · CP20–CP26",
+    "evidencia": "modules/empresas · CP20–CP26, CP63",
     "estado": "Cumple",
     "nota": ""
   },
@@ -211,7 +211,7 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -223,7 +223,7 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -235,7 +235,7 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -247,7 +247,7 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -259,7 +259,7 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -271,7 +271,7 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -283,7 +283,7 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -295,9 +295,9 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
-    "estado": "Brecha",
-    "nota": "El código publica OBSERVADO para RAG; el A&D dice no indexar hasta corregir. Acta 8 cambia a doble check del Superadmin; falta RN/RF."
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
+    "estado": "Cumple",
+    "nota": "Doble check del SuperAdmin implementado (RF-033); bugs #752/#753 cerrados."
   },
   {
     "id": "RN-026",
@@ -307,7 +307,7 @@
     "prioridad": "",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -319,9 +319,9 @@
     "prioridad": "",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
-    "estado": "Brecha",
-    "nota": "Catálogo real: 48 entradas / 44 códigos únicos; el A&D exige 40."
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
+    "estado": "Cumple",
+    "nota": "A&D v2 alinea el catálogo a 44 códigos estándar (antes 48 vs 40)."
   },
   {
     "id": "RN-028",
@@ -331,7 +331,7 @@
     "prioridad": "",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
     "estado": "Cumple",
     "nota": ""
   },
@@ -343,7 +343,7 @@
     "prioridad": "",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
     "estado": "Cumple",
     "nota": ""
   },
@@ -355,7 +355,7 @@
     "prioridad": "",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
     "estado": "Cumple",
     "nota": ""
   },
@@ -367,9 +367,9 @@
     "prioridad": "",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
-    "estado": "Cumple con observaciones",
-    "nota": "Detector implementado; ACT-08 pide aclarar sanciones literales/inferidas y doble conteo."
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
+    "estado": "Cumple",
+    "nota": "Sanciones desde mención explícita sin doble conteo; CP66 aprueba."
   },
   {
     "id": "RN-032",
@@ -379,7 +379,7 @@
     "prioridad": "",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
     "estado": "Cumple",
     "nota": ""
   },
@@ -391,9 +391,9 @@
     "prioridad": "",
     "modulo": "M6",
     "sprint": "S6",
-    "evidencia": "modules/asistente · CP41–CP51",
-    "estado": "Cumple con observaciones",
-    "nota": "CP41–CP51; bugs #659–#663, #669, #670, #674 y #675 abiertos."
+    "evidencia": "modules/asistente · CP41–CP51, CP68–CP74",
+    "estado": "Cumple",
+    "nota": "CP41–CP51 y CP68–CP74; bugs de citas RAG cerrados (#659–#675)."
   },
   {
     "id": "RN-034",
@@ -403,9 +403,9 @@
     "prioridad": "",
     "modulo": "M6",
     "sprint": "S6",
-    "evidencia": "modules/asistente · CP41–CP51",
-    "estado": "Cumple con observaciones",
-    "nota": "CP49; citas con Markdown/duplicados en revisión (#659–#662)."
+    "evidencia": "modules/asistente · CP41–CP51, CP68–CP74",
+    "estado": "Cumple",
+    "nota": "CP49/CP73; estándar de citación cerrado (ACT-10)."
   },
   {
     "id": "RN-035",
@@ -415,9 +415,9 @@
     "prioridad": "",
     "modulo": "M6",
     "sprint": "S6",
-    "evidencia": "modules/asistente · CP41–CP51",
-    "estado": "Cumple con observaciones",
-    "nota": "CP43; revisar falsos «sin evidencia» (#663)."
+    "evidencia": "modules/asistente · CP41–CP51, CP68–CP74",
+    "estado": "Cumple",
+    "nota": "CP43/CP72; falsos «sin evidencia» corregidos."
   },
   {
     "id": "RN-036",
@@ -427,9 +427,9 @@
     "prioridad": "",
     "modulo": "M6",
     "sprint": "S6",
-    "evidencia": "modules/asistente · CP41–CP51",
-    "estado": "Cumple con observaciones",
-    "nota": "CP44; ACT-09 revisa restricción y falsos positivos."
+    "evidencia": "modules/asistente · CP41–CP51, CP68–CP74",
+    "estado": "Cumple",
+    "nota": "CP44; restricción y falsos positivos cerrados (ACT-09)."
   },
   {
     "id": "RN-037",
@@ -439,9 +439,9 @@
     "prioridad": "",
     "modulo": "M6",
     "sprint": "S6",
-    "evidencia": "modules/asistente · CP41–CP51",
+    "evidencia": "modules/asistente · CP41–CP51, CP68–CP74",
     "estado": "Cumple",
-    "nota": "CP41; contexto obligatorio implementado."
+    "nota": ""
   },
   {
     "id": "RN-038",
@@ -451,9 +451,9 @@
     "prioridad": "",
     "modulo": "M7",
     "sprint": "S7",
-    "evidencia": "modules/reportes · CP52–CP57",
-    "estado": "Cumple con observaciones",
-    "nota": "La implementación exige validación vigente además de documentos elegibles; el A&D solo menciona documentos indexados."
+    "evidencia": "modules/reportes · CP52–CP57, CP75–CP77",
+    "estado": "Cumple",
+    "nota": ""
   },
   {
     "id": "RN-039",
@@ -463,9 +463,9 @@
     "prioridad": "",
     "modulo": "M7",
     "sprint": "S7",
-    "evidencia": "modules/reportes · CP52–CP57",
-    "estado": "Cumple con observaciones",
-    "nota": "Actualizar redacción: el PDF muestra versión y fecha de emisión, y el tratamiento de sanciones/montos cambió. Ver informe B.5."
+    "evidencia": "modules/reportes · CP52–CP57, CP75–CP77",
+    "estado": "Cumple",
+    "nota": "CP52–CP57; bugs #557/#559/#636 cerrados."
   },
   {
     "id": "RN-040",
@@ -475,9 +475,9 @@
     "prioridad": "",
     "modulo": "M7",
     "sprint": "S7",
-    "evidencia": "modules/reportes · CP52–CP57",
-    "estado": "Cumple con observaciones",
-    "nota": "Aclarar en el A&D: el determinismo es por snapshot (mismo contenido/texto), no igualdad byte a byte del PDF; una validación nueva puede originar una versión nueva."
+    "evidencia": "modules/reportes · CP52–CP57, CP75–CP77",
+    "estado": "Cumple",
+    "nota": ""
   },
   {
     "id": "RN-041",
@@ -487,9 +487,9 @@
     "prioridad": "",
     "modulo": "M7",
     "sprint": "S7",
-    "evidencia": "modules/reportes · CP52–CP57",
-    "estado": "Brecha",
-    "nota": "El A&D dice un solo reporte por empresa/año; la implementación versiona (una versión inmutable por validación). Reescribir RN-041, modelo y CU006."
+    "evidencia": "modules/reportes · CP52–CP57, CP75–CP77",
+    "estado": "Cumple",
+    "nota": ""
   },
   {
     "id": "RN-042",
@@ -499,7 +499,7 @@
     "prioridad": "",
     "modulo": "M8",
     "sprint": "S9",
-    "evidencia": "modules/auditoria · CP58–CP61",
+    "evidencia": "modules/auditoria · CP58–CP61, CP78",
     "estado": "Cumple",
     "nota": ""
   },
@@ -511,7 +511,7 @@
     "prioridad": "",
     "modulo": "M8",
     "sprint": "S9",
-    "evidencia": "modules/auditoria · CP58–CP61",
+    "evidencia": "modules/auditoria · CP58–CP61, CP78",
     "estado": "Cumple",
     "nota": ""
   },
@@ -523,7 +523,7 @@
     "prioridad": "",
     "modulo": "M8",
     "sprint": "S9",
-    "evidencia": "modules/auditoria · CP58–CP61",
+    "evidencia": "modules/auditoria · CP58–CP61, CP78",
     "estado": "Cumple",
     "nota": ""
   },
@@ -535,7 +535,67 @@
     "prioridad": "",
     "modulo": "M8",
     "sprint": "S9",
-    "evidencia": "modules/auditoria · CP58–CP61",
+    "evidencia": "modules/auditoria · CP58–CP61, CP78",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RN-046",
+    "tipo": "RN",
+    "titulo": "Historial de chats",
+    "categoria": "Regla de negocio",
+    "prioridad": "",
+    "modulo": "M6",
+    "sprint": "S6",
+    "evidencia": "CP69–CP71 · modules/asistente (historial de chats)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RN-047",
+    "tipo": "RN",
+    "titulo": "Reportes anteriores al versionado",
+    "categoria": "Regla de negocio",
+    "prioridad": "",
+    "modulo": "M7",
+    "sprint": "S7",
+    "evidencia": "CP77 · modules/reportes (reportes previos al versionado)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RN-048",
+    "tipo": "RN",
+    "titulo": "Consistencia del origen al confirmar el reporte",
+    "categoria": "Regla de negocio",
+    "prioridad": "",
+    "modulo": "M7",
+    "sprint": "S7",
+    "evidencia": "CP76 · modules/reportes (consistencia del origen)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RN-049",
+    "tipo": "RN",
+    "titulo": "Anulación lógica de documentos ingestados",
+    "categoria": "Regla de negocio",
+    "prioridad": "",
+    "modulo": "M4",
+    "sprint": "S4",
+    "evidencia": "CP65 · modules/ingesta (anulación lógica)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RN-050",
+    "tipo": "RN",
+    "titulo": "Idioma de salida del asistente",
+    "categoria": "Regla de negocio",
+    "prioridad": "",
+    "modulo": "M6",
+    "sprint": "S6",
+    "evidencia": "CP68 · modules/asistente (respuesta en español)",
     "estado": "Cumple",
     "nota": ""
   },
@@ -607,7 +667,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M2",
     "sprint": "S3",
-    "evidencia": "modules/usuarios · CP01–CP19",
+    "evidencia": "modules/usuarios · CP13–CP19, CP62",
     "estado": "Cumple",
     "nota": ""
   },
@@ -619,7 +679,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M2",
     "sprint": "S3",
-    "evidencia": "modules/usuarios · CP01–CP19",
+    "evidencia": "modules/usuarios · CP13–CP19, CP62",
     "estado": "Cumple",
     "nota": ""
   },
@@ -631,7 +691,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M2",
     "sprint": "S3",
-    "evidencia": "modules/usuarios · CP01–CP19",
+    "evidencia": "modules/usuarios · CP13–CP19, CP62",
     "estado": "Cumple",
     "nota": ""
   },
@@ -643,7 +703,7 @@
     "prioridad": "NICE TO HAVE",
     "modulo": "M2",
     "sprint": "S3",
-    "evidencia": "modules/usuarios · CP01–CP19",
+    "evidencia": "modules/usuarios · CP13–CP19, CP62",
     "estado": "Cumple",
     "nota": ""
   },
@@ -655,7 +715,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M3",
     "sprint": "S4",
-    "evidencia": "modules/empresas · CP20–CP26",
+    "evidencia": "modules/empresas · CP20–CP26, CP63",
     "estado": "Cumple",
     "nota": ""
   },
@@ -667,7 +727,7 @@
     "prioridad": "NICE TO HAVE",
     "modulo": "M3",
     "sprint": "S4",
-    "evidencia": "modules/empresas · CP20–CP26",
+    "evidencia": "modules/empresas · CP20–CP26, CP63",
     "estado": "Cumple",
     "nota": ""
   },
@@ -679,7 +739,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -691,19 +751,19 @@
     "prioridad": "MUST HAVE",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
   {
     "id": "RF-014",
     "tipo": "RF",
-    "titulo": "Rechazar documentos duplicados por contenido o por empresa, año y tipo.",
+    "titulo": "Rechazar documentos duplicados por contenido o por empresa, año y tipo. cional Ne",
     "categoria": "Funcional",
     "prioridad": "MUST HAVE",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -715,7 +775,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -727,7 +787,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -739,7 +799,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -751,9 +811,9 @@
     "prioridad": "MUST HAVE",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
-    "estado": "Cumple con observaciones",
-    "nota": "CP34–CP36; #664 condición de carrera al cambiar estados."
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
+    "estado": "Cumple",
+    "nota": "CP34–CP36; condición de carrera #664 cerrada."
   },
   {
     "id": "RF-019",
@@ -763,9 +823,9 @@
     "prioridad": "MUST HAVE",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
-    "estado": "Cumple con observaciones",
-    "nota": "CP35–CP36; #664 condición de carrera."
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
+    "estado": "Cumple",
+    "nota": "CP35–CP36; condición de carrera #664 cerrada."
   },
   {
     "id": "RF-020",
@@ -775,9 +835,9 @@
     "prioridad": "MUST HAVE",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
-    "estado": "Cumple con observaciones",
-    "nota": "CP37; ACT-08 sobre lógica de sanciones."
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
+    "estado": "Cumple",
+    "nota": "CP37/CP66; lógica de sanciones cerrada (ACT-08)."
   },
   {
     "id": "RF-021",
@@ -787,7 +847,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
     "estado": "Cumple",
     "nota": ""
   },
@@ -799,7 +859,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M4",
     "sprint": "S4",
-    "evidencia": "modules/ingesta · CP27–CP33",
+    "evidencia": "modules/ingesta · CP27–CP33, CP64–CP65",
     "estado": "Cumple",
     "nota": ""
   },
@@ -811,9 +871,9 @@
     "prioridad": "MUST HAVE",
     "modulo": "M6",
     "sprint": "S6",
-    "evidencia": "modules/asistente · CP41–CP51",
-    "estado": "Cumple con observaciones",
-    "nota": "CP41–CP51; bugs de citas y respuestas RAG."
+    "evidencia": "modules/asistente · CP41–CP51, CP68–CP74",
+    "estado": "Cumple",
+    "nota": "CP41–CP51; bugs de citas y respuestas RAG cerrados."
   },
   {
     "id": "RF-024",
@@ -823,45 +883,45 @@
     "prioridad": "MUST HAVE",
     "modulo": "M6",
     "sprint": "S6",
-    "evidencia": "modules/asistente · CP41–CP51",
-    "estado": "Cumple con observaciones",
-    "nota": "CP42–CP51; #659–#663 y ACT-04/09/10."
+    "evidencia": "modules/asistente · CP41–CP51, CP68–CP74",
+    "estado": "Cumple",
+    "nota": "CP42–CP51/CP73; #659–#663 y ACT-04/09/10 cerradas."
   },
   {
     "id": "RF-025",
     "tipo": "RF",
-    "titulo": "Generar el reporte de prospección en PDF a partir de los resultados validados.",
+    "titulo": "Generar el reporte de prospección en PDF como una versión inmutable por cada validación vigente; si la validación ya tiene versión, devolver la existente sin crear otra.",
     "categoria": "Funcional",
     "prioridad": "MUST HAVE",
     "modulo": "M7",
     "sprint": "S7",
-    "evidencia": "modules/reportes · CP52–CP57",
-    "estado": "Cumple con observaciones",
-    "nota": "La implementación emite una versión por validación y reutiliza la existente; RF-025 sigue redactado como reporte único. Actualizar redacción."
+    "evidencia": "modules/reportes · CP52–CP57, CP75–CP77",
+    "estado": "Cumple",
+    "nota": "CP52–CP57; #557/#559/#636 cerrados."
   },
   {
     "id": "RF-026",
     "tipo": "RF",
-    "titulo": "Visualizar el historial de reportes de prospección.",
+    "titulo": "Visualizar el historial de versiones de los reportes de una empresa y año, con su estado de actualización (actualizado, actualización pendiente o requiere revisar/validar)",
     "categoria": "Funcional",
     "prioridad": "MUST HAVE",
     "modulo": "M7",
     "sprint": "S7",
-    "evidencia": "modules/reportes · CP52–CP57",
-    "estado": "Cumple con observaciones",
-    "nota": "El historial ya muestra versiones y estado de actualización; actualizar RF-026 para incluir ambas cosas."
+    "evidencia": "modules/reportes · CP52–CP57, CP75–CP77",
+    "estado": "Cumple",
+    "nota": "CP56/CP77; #636 y #665 cerrados."
   },
   {
     "id": "RF-027",
     "tipo": "RF",
-    "titulo": "Descargar el historial de reportes de prospección.",
+    "titulo": "Descargar la versión vigente del reporte cuando está actualizada y el PDF original almacenado de cualquier versión histórica por su identificador.",
     "categoria": "Funcional",
     "prioridad": "NICE TO HAVE",
     "modulo": "M7",
     "sprint": "S7",
-    "evidencia": "modules/reportes · CP52–CP57",
-    "estado": "Cumple con observaciones",
-    "nota": "La descarga ya distingue versión vigente (solo si está actualizada) e histórica por identificador; actualizar RF-027."
+    "evidencia": "modules/reportes · CP52–CP57, CP75–CP77",
+    "estado": "Cumple",
+    "nota": "CP57/CP75; #665 cerrado."
   },
   {
     "id": "RF-028",
@@ -871,7 +931,7 @@
     "prioridad": "MUST HAVE",
     "modulo": "M5",
     "sprint": "S5",
-    "evidencia": "modules/analisis_gri · CP34–CP40",
+    "evidencia": "modules/analisis_gri · CP34–CP40, CP66–CP67",
     "estado": "Cumple",
     "nota": ""
   },
@@ -883,7 +943,7 @@
     "prioridad": "NICE TO HAVE",
     "modulo": "M8",
     "sprint": "S9",
-    "evidencia": "modules/auditoria · CP58–CP61",
+    "evidencia": "modules/auditoria · CP58–CP61, CP78",
     "estado": "Cumple",
     "nota": ""
   },
@@ -895,7 +955,103 @@
     "prioridad": "NICE TO HAVE",
     "modulo": "M8",
     "sprint": "S9",
-    "evidencia": "modules/auditoria · CP58–CP61",
+    "evidencia": "modules/auditoria · CP58–CP61, CP78",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RF-031",
+    "tipo": "RF",
+    "titulo": "Informar visualmente al usuario cuando existe una actualización pendiente que aún no se han plasmado en un reporte",
+    "categoria": "Funcional",
+    "prioridad": "MUST HAVE",
+    "modulo": "M7",
+    "sprint": "S7",
+    "evidencia": "CP76 · modules/reportes (actualización pendiente)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RF-032",
+    "tipo": "RF",
+    "titulo": "Verificar la consistencia de los datos justo antes de confirmar el guardado de un reporte, abortando la operación si los documentos origen cambiaron.",
+    "categoria": "Funcional",
+    "prioridad": "MUST HAVE",
+    "modulo": "M7",
+    "sprint": "S7",
+    "evidencia": "CP76 · modules/reportes (aborta si cambió el origen)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RF-033",
+    "tipo": "RF",
+    "titulo": "Solicitar la confirmación del SuperAdmin (doble check) antes de publicar un documento clasificado como observado, permitiendo confirmar o cancelar la ingesta.",
+    "categoria": "Funcional",
+    "prioridad": "MUST HAVE",
+    "modulo": "M4",
+    "sprint": "S4",
+    "evidencia": "modules/ingesta (doble check) · bugs #752/#753",
+    "estado": "Cumple",
+    "nota": "Doble check implementado y probado; bugs #752/#753 cerrados."
+  },
+  {
+    "id": "RF-034",
+    "tipo": "RF",
+    "titulo": "Anular lógicamente un documento ingestado por error, retirándolo del corpus y del análisis sin borrarlo físicamente.",
+    "categoria": "Funcional",
+    "prioridad": "MUST HAVE",
+    "modulo": "M4",
+    "sprint": "S4",
+    "evidencia": "CP65 · modules/ingesta (anulación lógica)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RF-035",
+    "tipo": "RF",
+    "titulo": "Deshabilitar en el selector de tipo el documento ya cargado para la empresa y el año seleccionados.",
+    "categoria": "Funcional",
+    "prioridad": "MUST HAVE",
+    "modulo": "M4",
+    "sprint": "S4",
+    "evidencia": "CP64 · modules/ingesta (tipo ya cargado)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RF-036",
+    "tipo": "RF",
+    "titulo": "Detectar los códigos GRI presentes en tablas o matrices del documento (índice de contenidos GRI) y extraer su cita.",
+    "categoria": "Funcional",
+    "prioridad": "MUST HAVE",
+    "modulo": "M5",
+    "sprint": "S5",
+    "evidencia": "CP34–CP40 · modules/analisis_gri (tablas/matrices)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RF-037",
+    "tipo": "RF",
+    "titulo": "Guardar las consultas al asistente en el historial de chats y permitir consultarlas posteriormente.",
+    "categoria": "Funcional",
+    "prioridad": "NICE TO HAVE",
+    "modulo": "M6",
+    "sprint": "S6",
+    "evidencia": "CP69–CP70 · modules/asistente (historial)",
+    "estado": "Cumple",
+    "nota": ""
+  },
+  {
+    "id": "RF-038",
+    "tipo": "RF",
+    "titulo": "Traducir automáticamente al español las respuestas y las citas extraídas por el Asistente de IA cuando el documento de origen se encuentre en inglés u otro idioma",
+    "categoria": "Funcional",
+    "prioridad": "MUST HAVE",
+    "modulo": "M6",
+    "sprint": "S6",
+    "evidencia": "CP68 · modules/asistente (traducción al español)",
     "estado": "Cumple",
     "nota": ""
   },
@@ -1010,7 +1166,7 @@
   {
     "id": "RNF-010",
     "tipo": "RNF",
-    "titulo": "El contenido recuperado del corpus se trata como datos dentro del prompt, nunca como instrucciones (protección ante *prompt injection*).",
+    "titulo": "El contenido recuperado del corpus se trata como datos dentro del prompt, nunca como instrucciones (protección ante prompt injection).",
     "categoria": "Seguridad",
     "prioridad": "",
     "modulo": "M1–M2",
@@ -1089,7 +1245,7 @@
     "sprint": "S8–S9",
     "evidencia": "sin evidencia de prueba de carga/ingesta 50 MB",
     "estado": "No verificable",
-    "nota": "No hay evidencia de prueba de ingesta de 50 MB en 15 min."
+    "nota": "Sin evidencia de prueba de ingesta de 50 MB en 15 min."
   },
   {
     "id": "RNF-017",
@@ -1101,7 +1257,7 @@
     "sprint": "S8–S9",
     "evidencia": "sin evidencia de prueba de carga concurrente",
     "estado": "No verificable",
-    "nota": "No hay prueba de 5 usuarios concurrentes ni 4,200 fragmentos."
+    "nota": "Sin prueba de 5 usuarios concurrentes ni 4,200 fragmentos."
   },
   {
     "id": "RNF-018",
@@ -1149,12 +1305,12 @@
     "sprint": "S8–S9",
     "evidencia": "sin evidencia de monitoreo de disponibilidad 95%",
     "estado": "No verificable",
-    "nota": "No hay monitoreo de disponibilidad 95% en horario laboral."
+    "nota": "Sin evidencia de monitoreo de disponibilidad 95% en horario laboral."
   },
   {
     "id": "RNF-022",
     "tipo": "RNF",
-    "titulo": "Los registros de auditoría se almacenan en estructuras de solo inserción (*append-only*), sin actualización ni eliminación.",
+    "titulo": "Los registros de auditoría se almacenan en estructuras de solo inserción (append-only), sin actualización ni eliminación.",
     "categoria": "Trazabilidad",
     "prioridad": "",
     "modulo": "M8",
@@ -1178,7 +1334,7 @@
   {
     "id": "RNF-024",
     "tipo": "RNF",
-    "titulo": "La fecha y hora de la auditoría se almacenan en UTC y se convierten a *America/Lima* solo en la presentación.",
+    "titulo": "La fecha y hora de la auditoría se almacenan en UTC y se convierten a America/Lima solo en la presentación.",
     "categoria": "Trazabilidad",
     "prioridad": "",
     "modulo": "M8",
@@ -1202,14 +1358,14 @@
   {
     "id": "RNF-026",
     "tipo": "RNF",
-    "titulo": "El catálogo de 40 códigos GRI se carga mediante un script de inicialización versionado, garantizando el mismo catálogo en todos los ambientes.",
+    "titulo": "El catálogo de 44 códigos GRI se carga mediante un script de inicialización versionado, garantizando el mismo catálogo en todos los ambientes.",
     "categoria": "Mantenibilidad",
     "prioridad": "",
     "modulo": "M5–M6",
     "sprint": "S5–S6",
-    "evidencia": "catalogo_gri.json (48 entradas / 44 códigos; el A&D pide 40)",
-    "estado": "Brecha",
-    "nota": "El catálogo versionado tiene 48 entradas / 44 códigos, no 40."
+    "evidencia": "script de catálogo GRI versionado (44 códigos estándar)",
+    "estado": "Cumple",
+    "nota": "A&D v2 fija 44 códigos GRI con script de inicialización versionado."
   },
   {
     "id": "RNF-027",
@@ -1250,13 +1406,25 @@
   {
     "id": "RNF-030",
     "tipo": "RNF",
-    "titulo": "Se realizan copias de seguridad diarias de la base de datos (incluido el índice vectorial) y de los documentos `.md` originales.",
+    "titulo": "Se realizan copias de seguridad diarias de la base de datos (incluido el índice vectorial) y de los documentos .md originales.",
     "categoria": "Continuidad",
     "prioridad": "",
     "modulo": "Transversal",
     "sprint": "S10",
     "evidencia": "sin evidencia de backups diarios",
     "estado": "No verificable",
-    "nota": "No hay evidencia de backups diarios de BD y documentos."
+    "nota": "Sin evidencia archivada de backups diarios de BD y documentos."
+  },
+  {
+    "id": "RNF-031",
+    "tipo": "RNF",
+    "titulo": "La traducción al español generada por el proveedor de IA para las respuestas y citas debe conservar la precisión técnica de los términos de sostenibilidad y del estándar GRI, sin alterar el sentido del hallazgo original.",
+    "categoria": "Usabilidad",
+    "prioridad": "",
+    "modulo": "M6",
+    "sprint": "S6",
+    "evidencia": "modules/asistente (respuesta en español) · CP68",
+    "estado": "Cumple",
+    "nota": "CP68 aprueba. Nota: el A&D deriva de «RF-050», inexistente (debe ser RF-038)."
   }
 ]

@@ -90,6 +90,9 @@ const CAMBIO_FUERTE = [
 ];
 const CAMBIO_DEBIL = ["cambio", "cambia", "cambi", "modific", "actualiz", "ajust", "corregir el análisis", "corregir el analisis"];
 
+// A&D v2 oficial entregado el 12/11/2026: absorbe las señales de cambio anteriores.
+const AND_VIGENTE = "2026-11-12";
+
 function tieneCambio(texto) {
   const t = texto.toLowerCase();
   return {
@@ -135,8 +138,13 @@ const issues = wps.map((w) => {
     impacto = "actualizar-and";
     motivo = `Toca ${conBrecha.join(", ")}, marcados como Brecha/Parcial en el análisis.`;
   } else if (senal.includes("cambio") && (reqValidos.length || reqModulo.length)) {
-    impacto = "actualizar-and";
-    motivo = `Señal de cambio de alcance sobre requisitos de ${modulo ?? "sin módulo"}; verificar redacción en el A&D.`;
+    if ((w.actualizado ?? "") <= AND_VIGENTE) {
+      impacto = "contemplado";
+      motivo = `Señal de cambio absorbida por el A&D v2 (${AND_VIGENTE}); el análisis vigente ya cubre el alcance.`;
+    } else {
+      impacto = "actualizar-and";
+      motivo = `Señal de cambio de alcance sobre requisitos de ${modulo ?? "sin módulo"}; verificar redacción en el A&D.`;
+    }
   } else if (reqValidos.length || cpsDirectos.length || reqModulo.length) {
     impacto = "contemplado";
     motivo = reqValidos.length
@@ -291,8 +299,8 @@ const salida = {
   generadoEn: new Date().toISOString(),
   fuentes: {
     openproject: openproject.sincronizadoEn,
-    requisitos: "FASE 1/01-Analisis-y-Diseno (A&D oficial)",
-    casosDePrueba: "03-Calidad/02-Casos-de-Prueba/Plan-y-Casos-de-Prueba-v1.8",
+    requisitos: "A&D v2 oficial (analisis_y_diseno_oficial.pdf, 12/11/2026)",
+    casosDePrueba: "01-Mockups-y-Propuestas/Igualab - Casos de Prueba.pdf (CP01–CP79)",
   },
   resumen,
   issues: issues.sort((a, b) => (b.creado ?? "").localeCompare(a.creado ?? "") || b.id - a.id),
@@ -305,6 +313,6 @@ fs.writeFileSync(path.join(dataDir, "traceability.json"), JSON.stringify(salida,
 const r = resumen;
 console.log(
   `Trazabilidad: ${r.total} issues · ${r.conRefDirecta} con referencia directa · ` +
-    `${r.actualizarAnd} requieren actualizar A&D · ${r.requisitosTocados}/105 requisitos tocados · ` +
+    `${r.actualizarAnd} requieren actualizar A&D · ${r.requisitosTocados}/${requirements.length} requisitos tocados · ` +
     `${r.actualizaciones} actualizaciones pendientes`,
 );

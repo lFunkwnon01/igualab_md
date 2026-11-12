@@ -1,27 +1,22 @@
 {
-  "sincronizadoEn": "2026-11-10T18:56:17.565Z",
+  "sincronizadoEn": "2026-11-12T21:16:34.237Z",
   "proyecto": {
     "id": 9,
     "identificador": "igualab",
     "url": "https://openproject.ingsoftware.lat"
   },
   "resumen": {
-    "total": 135,
-    "cerrados": 105,
-    "abiertos": 30,
+    "total": 133,
+    "cerrados": 133,
+    "abiertos": 0,
     "porTipo": {
-      "Feature": 51,
-      "Task": 32,
+      "Feature": 50,
+      "Task": 31,
       "User story": 12,
       "Bug": 40
     },
     "porEstado": {
-      "Closed": 105,
-      "In progress": 6,
-      "New": 10,
-      "Tested": 11,
-      "Developed": 2,
-      "In testing": 1
+      "Closed": 133
     },
     "porSprint": {
       "S0 · Inicial": 6,
@@ -35,7 +30,7 @@
       "S8 · Integración": 3,
       "S9 · Auditoría + Calidad": 8,
       "S10 · Cierre": 6,
-      "Sin sprint": 64
+      "Sin sprint": 62
     },
     "bugs": [
       {
@@ -393,7 +388,7 @@
       {
         "id": 661,
         "tipo": "Bug",
-        "estado": "Tested",
+        "estado": "Closed",
         "asunto": "Fuentes citadas repetidas N veces",
         "sprint": null,
         "padre": null,
@@ -401,7 +396,7 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-10-25",
-        "actualizado": "2026-11-09",
+        "actualizado": "2026-11-10",
         "url": "/api/v3/work_packages/661",
         "descripcion": "&nbsp;Pantalla: Asistente IA. El mismo fragmento (p. ej. GRI 2-9, 2-10, 2-11… &quot;Governance Structure&quot;) se lista muchas veces seguidas.  \n Esperado: deduplicar citas idénticas.",
         "porcentaje": null
@@ -409,7 +404,7 @@
       {
         "id": 663,
         "tipo": "Bug",
-        "estado": "Tested",
+        "estado": "Closed",
         "asunto": "Inconsistencia: \"no se encontró evidencia\" para GRI 1 aunque el análisis sí lo detectó",
         "sprint": null,
         "padre": null,
@@ -417,7 +412,7 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-10-25",
-        "actualizado": "2026-11-09",
+        "actualizado": "2026-11-10",
         "url": "/api/v3/work_packages/663",
         "descripcion": "&nbsp;Pantalla: Asistente IA vs Análisis GRI. El análisis muestra GRI 1 con estado asignado, pero al preguntar por GRI 1 el asistente responde que no hay evidencia / está fuera de dominio.  \n Esperado: coherencia entre lo detectado en el análisis y lo que recupera el asistente.",
         "porcentaje": null
@@ -489,7 +484,7 @@
       {
         "id": 722,
         "tipo": "Bug",
-        "estado": "New",
+        "estado": "Closed",
         "asunto": "FE Correcion de posible vulnerabilidad por sobre exposicion de informacion en auditoria",
         "sprint": null,
         "padre": null,
@@ -497,7 +492,7 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-11-01",
-        "actualizado": "2026-11-06",
+        "actualizado": "2026-11-10",
         "url": "/api/v3/work_packages/722",
         "descripcion": "El usuario al ver el id del documento no se ponda a buscar id del documento hasta encontrarlo. Cambiarlo para que se muestre la empresa del cual era el documento y mostrar nombre del documento en lugar del id del documento. No hay necesidad de motrar el id de la operacion, en su lugar mostrar a que empresa se le ingreso el documento y el nombre del documento\n\nEn la segunda imagen por intentos fallidos, no es necesario mostrar cuantas veces se equivoco un usuario al intentar ingresar. Mostrar solamente si ingreso o fallo el ingreso y esta temporalmente bloqueado.\n\nEl la imagen de ingesta rechazada, inconsistencia por el codigo que muestra en ingles mientras que tipo del documento si muestra en español, estandarizar eso. Y hacer los cambios mencionados anteriores, no mostrar empresa id sino mostrar el nombre de la empresa y el nombre del documento que se intento ingresar.&nbsp;\n\nPor ultimo el proceso &quot;Publicacion vectorial&quot; no existe textualmente escrita en el sistema, asignarle el termino correcto del proceso. Y mostrar la empresa y documento del cual se hizo el proceso.",
         "porcentaje": null
@@ -505,7 +500,7 @@
       {
         "id": 746,
         "tipo": "Bug",
-        "estado": "Tested",
+        "estado": "Closed",
         "asunto": "El contador de fragmentos se muestra como “N/N” (redundante) en vez de “N”",
         "sprint": null,
         "padre": null,
@@ -569,7 +564,7 @@
       {
         "id": 750,
         "tipo": "Bug",
-        "estado": "New",
+        "estado": "Closed",
         "asunto": "El filtro “Estado” de Ingesta muestra estados no contemplados en el diseño",
         "sprint": null,
         "padre": null,
@@ -577,7 +572,7 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-11-02",
-        "actualizado": "2026-11-10",
+        "actualizado": "2026-11-12",
         "url": "/api/v3/work_packages/750",
         "descripcion": "El desplegable “Estado” ofrece 6 opciones (_Todos, Completado, En proceso, Publicación pendiente, Fallido, Fallido (limpieza pendiente)_). El documento de Análisis y Diseño define **solo 3 estados de documento**: `indexado` (Completado), `observado` y `rechazado` (Fallido) — glosario, CU003 y `UNIQUE … WHERE estado='indexado'`. Los estados **“En proceso”, “Publicación pendiente” y “Fallido (limpieza pendiente)”** no figuran en el diseño (0 menciones) y **contradicen RN-026** (ingesta atómica/síncrona: no deja contenido parcial, revierte ante fallo). Además, **falta “Observado”** en el filtro, siendo estado oficial (RN-025).\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/298/content\">",
         "porcentaje": null
@@ -601,7 +596,7 @@
       {
         "id": 752,
         "tipo": "Bug",
-        "estado": "New",
+        "estado": "Closed",
         "asunto": "FE implementacion de doble check",
         "sprint": null,
         "padre": null,
@@ -609,15 +604,15 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-11-02",
-        "actualizado": "2026-11-02",
+        "actualizado": "2026-11-12",
         "url": "/api/v3/work_packages/752",
-        "descripcion": "",
+        "descripcion": "ACTUALIZACIÓN 11/11 8AM\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/375/content\">",
         "porcentaje": null
       },
       {
         "id": 753,
         "tipo": "Bug",
-        "estado": "In progress",
+        "estado": "Closed",
         "asunto": "BCK Implementacion de doble check",
         "sprint": null,
         "padre": null,
@@ -625,9 +620,9 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-11-02",
-        "actualizado": "2026-11-05",
+        "actualizado": "2026-11-12",
         "url": "/api/v3/work_packages/753",
-        "descripcion": "",
+        "descripcion": "ACTUALIZACIÓN 11/11\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/377/content\">\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/378/content\">\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/379/content\">\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/380/content\">\n\n<br>",
         "porcentaje": null
       },
       {
@@ -649,7 +644,7 @@
       {
         "id": 775,
         "tipo": "Bug",
-        "estado": "Tested",
+        "estado": "Closed",
         "asunto": "FE Asistente de IA, procedimiento tedioso para empezar un chat de cero",
         "sprint": null,
         "padre": null,
@@ -665,7 +660,7 @@
       {
         "id": 776,
         "tipo": "Bug",
-        "estado": "Tested",
+        "estado": "Closed",
         "asunto": "Color VERDE en los reportes generados",
         "sprint": null,
         "padre": null,
@@ -673,7 +668,7 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-11-07",
-        "actualizado": "2026-11-09",
+        "actualizado": "2026-11-10",
         "url": "/api/v3/work_packages/776",
         "descripcion": "El PO pidio cabiar el color de la pagina en general eso incluye los reportes a color AZUL",
         "porcentaje": null
@@ -699,7 +694,7 @@
       {
         "id": 667,
         "tipo": "Feature",
-        "estado": "Tested",
+        "estado": "Closed",
         "asunto": "ACT-02 · Regla: 1 memoria + 1 reporte de sostenibilidad por empresa/año",
         "sprint": null,
         "padre": null,
@@ -715,31 +710,31 @@
       {
         "id": 669,
         "tipo": "Feature",
-        "estado": "New",
-        "asunto": "ACT-04 · Traducción al español de citas y respuestas",
+        "estado": "Closed",
+        "asunto": "ACT-04 · Citas en su idioma original y las respuestas del agente IA chatbox responde en espanol",
         "sprint": null,
         "padre": null,
         "responsable": "Fabricio Ladera",
         "inicio": null,
         "fin": null,
         "creado": "2026-10-25",
-        "actualizado": "2026-10-29",
+        "actualizado": "2026-11-10",
         "url": "/api/v3/work_packages/669",
-        "descripcion": "Módulo: Asistente IA / RAG. Aunque el documento origen esté en inglés, todo lo que ve el cliente (citas, evidencias y respuestas) debe presentarse en español. Definir estrategia de traducción.",
+        "descripcion": "Módulo: Asistente IA / RAG. Aunque el documento origen esté en inglés, Se coordino con el cliente que todo documento en su idioma original se debe mostrar como cita en su idioma original para poder hacer la busqueda de este misma referencia despues en su documento original. y claro el agente rag responde en espanol",
         "porcentaje": null
       },
       {
         "id": 670,
         "tipo": "Feature",
-        "estado": "New",
+        "estado": "Closed",
         "asunto": "ACT-05 · Botom de poder guardar el historial de consulta",
         "sprint": null,
         "padre": null,
-        "responsable": "Fabricio Ladera",
+        "responsable": "Juan Flores",
         "inicio": null,
         "fin": null,
         "creado": "2026-10-25",
-        "actualizado": "2026-10-29",
+        "actualizado": "2026-11-12",
         "url": "/api/v3/work_packages/670",
         "descripcion": "Módulo: Asistente IA. Persistir el historial de la conversación por empresa/año para que no se pierda al cambiar de pestaña o sesión. (Resuelve BUG-05; confirmar alcance con Oscar como mencionaste.)",
         "porcentaje": null
@@ -747,7 +742,7 @@
       {
         "id": 671,
         "tipo": "Feature",
-        "estado": "New",
+        "estado": "Closed",
         "asunto": "ACT-06 · Catálogo de advertencias del sistema",
         "sprint": null,
         "padre": null,
@@ -755,7 +750,7 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-10-25",
-        "actualizado": "2026-10-29",
+        "actualizado": "2026-11-10",
         "url": "/api/v3/work_packages/671",
         "descripcion": "Módulo: Documentación / Análisis GRI. Documentar y explicar en lenguaje claro cada advertencia que emite el sistema, p. ej.:\n\n*   “Estándar con varias ediciones y sin edición en el texto; se conserva como identidad ambigua; no se asumió ninguna edición” → qué significa y qué debe hacer el usuario.\n    \n*   “El documento contiene tablas Markdown con número de columnas inconsistente; se conservan como texto literal…”.  \n    Objetivo: una tabla de referencia (código de advertencia → significado → acción sugerida).",
         "porcentaje": null
@@ -777,25 +772,9 @@
         "porcentaje": null
       },
       {
-        "id": 673,
-        "tipo": "Task",
-        "estado": "New",
-        "asunto": "ACT-08 · Definir/clarificar la lógica de “Sanciones identificadas”",
-        "sprint": null,
-        "padre": null,
-        "responsable": "Juan Ferreyra",
-        "inicio": null,
-        "fin": null,
-        "creado": "2026-10-25",
-        "actualizado": "2026-10-29",
-        "url": "/api/v3/work_packages/673",
-        "descripcion": "Módulo: Análisis GRI / Reportes. Dejar escrito si las sanciones se toman literales del documento o se infieren, y en particular: ¿un GRI en el peor estado (0 / sub-reportado) implica una sanción por no reportar como debería? Definir regla y evitar doble conteo (una mención en párrafo + tabla no es sanción distinta).",
-        "porcentaje": null
-      },
-      {
         "id": 674,
         "tipo": "Feature",
-        "estado": "Developed",
+        "estado": "Closed",
         "asunto": "ACT-09 · Nivel de restricción del asistente y manejo de falsos positivos/negativos",
         "sprint": null,
         "padre": null,
@@ -811,7 +790,7 @@
       {
         "id": 675,
         "tipo": "Feature",
-        "estado": "In testing",
+        "estado": "Closed",
         "asunto": "ACT-10 · Épica: estándar de citación del RAG (agrupadora)",
         "sprint": null,
         "padre": null,
@@ -819,7 +798,7 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-10-25",
-        "actualizado": "2026-11-09",
+        "actualizado": "2026-11-11",
         "url": "/api/v3/work_packages/675",
         "descripcion": "Épica paraguas para unificar cómo el sistema presenta las citas y evidencias del RAG. Define el formato oficial de citación: limpieza de markup, deduplicación, idioma y longitud. De esta épica cuelgan los siguientes trabajos:\n\n*   **Caracteres Markdown/HTML sin renderizar en las citas** (#659)\n    \n*   **Evidencia duplicada y texto truncado en “Ver evidencia más”** (#660)\n    \n*   **Fuentes citadas repetidas N veces** (#661)\n    \n*   **Traducción al español de citas y respuestas** (ACT-04)\n    \n\n**Alcance / objetivo:**\n\n*   Definir el formato único de citación aplicable a Asistente IA y a las evidencias de Análisis GRI.\n    \n*   Limpiar/renderizar el markup crudo (`###`, `<u>`, `<br>`, `<mark>`, `--_--`, etc.).\n    \n*   Deduplicar fragmentos y evidencias idénticas.\n    \n*   Mostrar el contenido completo y sin solaparse.\n    \n*   Presentar todo en español, con una longitud de cita consistente.\n    \n\nACTUALIZACIÓN 9/11 (Prueba con un documento en ingles)\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/359/content\">",
         "porcentaje": null
@@ -827,7 +806,7 @@
       {
         "id": 676,
         "tipo": "Feature",
-        "estado": "Tested",
+        "estado": "Closed",
         "asunto": "ACT-11 · Tooltip explicativo (ícono “?”) en la etiqueta “Requiere revisión” y sus advertencias GRI",
         "sprint": null,
         "padre": null,
@@ -843,7 +822,7 @@
       {
         "id": 742,
         "tipo": "Feature",
-        "estado": "Tested",
+        "estado": "Closed",
         "asunto": "ACT-12 · Superadmin: agregar sector “Otros”",
         "sprint": null,
         "padre": null,
@@ -859,17 +838,17 @@
       {
         "id": 743,
         "tipo": "Feature",
-        "estado": "Developed",
+        "estado": "Closed",
         "asunto": "ACT-13 · Superadmin: eliminar / deshabilitar una ingesta mal subida",
         "sprint": null,
         "padre": null,
-        "responsable": "Juan Ferreyra",
+        "responsable": "Juan Flores",
         "inicio": null,
         "fin": null,
         "creado": "2026-11-02",
-        "actualizado": "2026-11-10",
+        "actualizado": "2026-11-12",
         "url": "/api/v3/work_packages/743",
-        "descripcion": "Módulo: Ingesta. Hoy no hay forma de corregir un documento mal cargado. Agregar la opción de eliminar o (preferible) **deshabilitar** la ingesta. Se conecta directo con ACT-02: “si se subió 1 reporte → se deshabilita la opción de subir otro”.",
+        "descripcion": "Módulo: Ingesta. Hoy no hay forma de corregir un documento mal cargado. Agregar la opción de eliminar o (preferible) **deshabilitar** la ingesta. Se conecta directo con ACT-02: “si se subió 1 reporte → se deshabilita la opción de subir otro”.\n\n<br>\n\nACTUALIZACIÓN (11/11) 8am\n\nACTUALIZACIÓN SE PROBO EN FE&nbsp;\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/373/content\">\n\nSe probo en BCK funciono pasa a FE\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/371/content\"> <img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/372/content\">",
         "porcentaje": null
       },
       {
@@ -891,7 +870,7 @@
       {
         "id": 745,
         "tipo": "Feature",
-        "estado": "In progress",
+        "estado": "Closed",
         "asunto": "ACT-15 · Guardar conversación del asistente con un clic",
         "sprint": null,
         "padre": null,
@@ -899,7 +878,7 @@
         "inicio": null,
         "fin": null,
         "creado": "2026-11-02",
-        "actualizado": "2026-11-09",
+        "actualizado": "2026-11-12",
         "url": "/api/v3/work_packages/745",
         "descripcion": "Módulo: Asistente IA. Botón para guardar la conversación con un clic. Va muy pegado a **ACT-05 (historial de consultas)** — puedes dejarlo como sub-tarea de ACT-05 o como WP aparte, pero que no quede duplicado.\n\n<br>\n\nACTUALIZADO 9/11 (IMPLEMENTADO A NIVEL DE BCK -&gt; PASA A FE",
         "porcentaje": null
@@ -1043,7 +1022,7 @@
       "fin": "2026-11-06",
       "estado": "open",
       "total": 8,
-      "cerrados": 7
+      "cerrados": 8
     },
     {
       "id": 24,
@@ -1052,7 +1031,7 @@
       "fin": "2026-11-20",
       "estado": "open",
       "total": 6,
-      "cerrados": 1
+      "cerrados": 6
     }
   ],
   "workPackages": [
@@ -2051,7 +2030,7 @@
     {
       "id": 214,
       "tipo": "Feature",
-      "estado": "In progress",
+      "estado": "Closed",
       "asunto": "Transversal · Calidad",
       "sprint": "S9 · Auditoría + Calidad",
       "padre": null,
@@ -2059,7 +2038,7 @@
       "inicio": "2026-11-05",
       "fin": "2026-11-06",
       "creado": "2026-09-24",
-      "actualizado": "2026-11-05",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/214",
       "descripcion": "",
       "porcentaje": null
@@ -2115,7 +2094,7 @@
     {
       "id": 218,
       "tipo": "Task",
-      "estado": "In progress",
+      "estado": "Closed",
       "asunto": "Despliegue del sistema (entornos universidad)",
       "sprint": "S10 · Cierre",
       "padre": "Transversal · Cierre",
@@ -2123,7 +2102,7 @@
       "inicio": "2026-11-09",
       "fin": "2026-11-12",
       "creado": "2026-09-24",
-      "actualizado": "2026-10-29",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/218",
       "descripcion": "",
       "porcentaje": null
@@ -2131,7 +2110,7 @@
     {
       "id": 219,
       "tipo": "Task",
-      "estado": "In progress",
+      "estado": "Closed",
       "asunto": "Validación final con el cliente (UAT)",
       "sprint": "S10 · Cierre",
       "padre": "Transversal · Cierre",
@@ -2139,7 +2118,7 @@
       "inicio": "2026-11-13",
       "fin": "2026-11-16",
       "creado": "2026-09-24",
-      "actualizado": "2026-10-29",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/219",
       "descripcion": "",
       "porcentaje": null
@@ -2147,7 +2126,7 @@
     {
       "id": 220,
       "tipo": "Task",
-      "estado": "In progress",
+      "estado": "Closed",
       "asunto": "Documentación final y manuales",
       "sprint": "S10 · Cierre",
       "padre": "Transversal · Cierre",
@@ -2155,7 +2134,7 @@
       "inicio": "2026-11-17",
       "fin": "2026-11-18",
       "creado": "2026-09-24",
-      "actualizado": "2026-10-29",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/220",
       "descripcion": "",
       "porcentaje": null
@@ -2163,7 +2142,7 @@
     {
       "id": 221,
       "tipo": "Task",
-      "estado": "New",
+      "estado": "Closed",
       "asunto": "Capacitación al equipo de Igualab",
       "sprint": "S10 · Cierre",
       "padre": "Transversal · Cierre",
@@ -2171,7 +2150,7 @@
       "inicio": "2026-11-18",
       "fin": "2026-11-19",
       "creado": "2026-09-24",
-      "actualizado": "2026-09-24",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/221",
       "descripcion": "",
       "porcentaje": null
@@ -2179,7 +2158,7 @@
     {
       "id": 222,
       "tipo": "Task",
-      "estado": "New",
+      "estado": "Closed",
       "asunto": "Entrega final y acta de conformidad",
       "sprint": "S10 · Cierre",
       "padre": "Transversal · Cierre",
@@ -2187,7 +2166,7 @@
       "inicio": "2026-11-19",
       "fin": "2026-11-20",
       "creado": "2026-09-24",
-      "actualizado": "2026-09-24",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/222",
       "descripcion": "",
       "porcentaje": null
@@ -2403,7 +2382,7 @@
     {
       "id": 558,
       "tipo": "Feature",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "Detallar la descripcion de la parte inferior de la seccion de Agente de IA",
       "sprint": null,
       "padre": null,
@@ -2627,7 +2606,7 @@
     {
       "id": 661,
       "tipo": "Bug",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "Fuentes citadas repetidas N veces",
       "sprint": null,
       "padre": null,
@@ -2635,7 +2614,7 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-10-25",
-      "actualizado": "2026-11-09",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/661",
       "descripcion": "&nbsp;Pantalla: Asistente IA. El mismo fragmento (p. ej. GRI 2-9, 2-10, 2-11… &quot;Governance Structure&quot;) se lista muchas veces seguidas.  \n Esperado: deduplicar citas idénticas.",
       "porcentaje": null
@@ -2643,7 +2622,7 @@
     {
       "id": 663,
       "tipo": "Bug",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "Inconsistencia: \"no se encontró evidencia\" para GRI 1 aunque el análisis sí lo detectó",
       "sprint": null,
       "padre": null,
@@ -2651,7 +2630,7 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-10-25",
-      "actualizado": "2026-11-09",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/663",
       "descripcion": "&nbsp;Pantalla: Asistente IA vs Análisis GRI. El análisis muestra GRI 1 con estado asignado, pero al preguntar por GRI 1 el asistente responde que no hay evidencia / está fuera de dominio.  \n Esperado: coherencia entre lo detectado en el análisis y lo que recupera el asistente.",
       "porcentaje": null
@@ -2707,7 +2686,7 @@
     {
       "id": 667,
       "tipo": "Feature",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "ACT-02 · Regla: 1 memoria + 1 reporte de sostenibilidad por empresa/año",
       "sprint": null,
       "padre": null,
@@ -2723,31 +2702,31 @@
     {
       "id": 669,
       "tipo": "Feature",
-      "estado": "New",
-      "asunto": "ACT-04 · Traducción al español de citas y respuestas",
+      "estado": "Closed",
+      "asunto": "ACT-04 · Citas en su idioma original y las respuestas del agente IA chatbox responde en espanol",
       "sprint": null,
       "padre": null,
       "responsable": "Fabricio Ladera",
       "inicio": null,
       "fin": null,
       "creado": "2026-10-25",
-      "actualizado": "2026-10-29",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/669",
-      "descripcion": "Módulo: Asistente IA / RAG. Aunque el documento origen esté en inglés, todo lo que ve el cliente (citas, evidencias y respuestas) debe presentarse en español. Definir estrategia de traducción.",
+      "descripcion": "Módulo: Asistente IA / RAG. Aunque el documento origen esté en inglés, Se coordino con el cliente que todo documento en su idioma original se debe mostrar como cita en su idioma original para poder hacer la busqueda de este misma referencia despues en su documento original. y claro el agente rag responde en espanol",
       "porcentaje": null
     },
     {
       "id": 670,
       "tipo": "Feature",
-      "estado": "New",
+      "estado": "Closed",
       "asunto": "ACT-05 · Botom de poder guardar el historial de consulta",
       "sprint": null,
       "padre": null,
-      "responsable": "Fabricio Ladera",
+      "responsable": "Juan Flores",
       "inicio": null,
       "fin": null,
       "creado": "2026-10-25",
-      "actualizado": "2026-10-29",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/670",
       "descripcion": "Módulo: Asistente IA. Persistir el historial de la conversación por empresa/año para que no se pierda al cambiar de pestaña o sesión. (Resuelve BUG-05; confirmar alcance con Oscar como mencionaste.)",
       "porcentaje": null
@@ -2755,7 +2734,7 @@
     {
       "id": 671,
       "tipo": "Feature",
-      "estado": "New",
+      "estado": "Closed",
       "asunto": "ACT-06 · Catálogo de advertencias del sistema",
       "sprint": null,
       "padre": null,
@@ -2763,7 +2742,7 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-10-25",
-      "actualizado": "2026-10-29",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/671",
       "descripcion": "Módulo: Documentación / Análisis GRI. Documentar y explicar en lenguaje claro cada advertencia que emite el sistema, p. ej.:\n\n*   “Estándar con varias ediciones y sin edición en el texto; se conserva como identidad ambigua; no se asumió ninguna edición” → qué significa y qué debe hacer el usuario.\n    \n*   “El documento contiene tablas Markdown con número de columnas inconsistente; se conservan como texto literal…”.  \n    Objetivo: una tabla de referencia (código de advertencia → significado → acción sugerida).",
       "porcentaje": null
@@ -2785,25 +2764,9 @@
       "porcentaje": null
     },
     {
-      "id": 673,
-      "tipo": "Task",
-      "estado": "New",
-      "asunto": "ACT-08 · Definir/clarificar la lógica de “Sanciones identificadas”",
-      "sprint": null,
-      "padre": null,
-      "responsable": "Juan Ferreyra",
-      "inicio": null,
-      "fin": null,
-      "creado": "2026-10-25",
-      "actualizado": "2026-10-29",
-      "url": "/api/v3/work_packages/673",
-      "descripcion": "Módulo: Análisis GRI / Reportes. Dejar escrito si las sanciones se toman literales del documento o se infieren, y en particular: ¿un GRI en el peor estado (0 / sub-reportado) implica una sanción por no reportar como debería? Definir regla y evitar doble conteo (una mención en párrafo + tabla no es sanción distinta).",
-      "porcentaje": null
-    },
-    {
       "id": 674,
       "tipo": "Feature",
-      "estado": "Developed",
+      "estado": "Closed",
       "asunto": "ACT-09 · Nivel de restricción del asistente y manejo de falsos positivos/negativos",
       "sprint": null,
       "padre": null,
@@ -2819,7 +2782,7 @@
     {
       "id": 675,
       "tipo": "Feature",
-      "estado": "In testing",
+      "estado": "Closed",
       "asunto": "ACT-10 · Épica: estándar de citación del RAG (agrupadora)",
       "sprint": null,
       "padre": null,
@@ -2827,7 +2790,7 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-10-25",
-      "actualizado": "2026-11-09",
+      "actualizado": "2026-11-11",
       "url": "/api/v3/work_packages/675",
       "descripcion": "Épica paraguas para unificar cómo el sistema presenta las citas y evidencias del RAG. Define el formato oficial de citación: limpieza de markup, deduplicación, idioma y longitud. De esta épica cuelgan los siguientes trabajos:\n\n*   **Caracteres Markdown/HTML sin renderizar en las citas** (#659)\n    \n*   **Evidencia duplicada y texto truncado en “Ver evidencia más”** (#660)\n    \n*   **Fuentes citadas repetidas N veces** (#661)\n    \n*   **Traducción al español de citas y respuestas** (ACT-04)\n    \n\n**Alcance / objetivo:**\n\n*   Definir el formato único de citación aplicable a Asistente IA y a las evidencias de Análisis GRI.\n    \n*   Limpiar/renderizar el markup crudo (`###`, `<u>`, `<br>`, `<mark>`, `--_--`, etc.).\n    \n*   Deduplicar fragmentos y evidencias idénticas.\n    \n*   Mostrar el contenido completo y sin solaparse.\n    \n*   Presentar todo en español, con una longitud de cita consistente.\n    \n\nACTUALIZACIÓN 9/11 (Prueba con un documento en ingles)\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/359/content\">",
       "porcentaje": null
@@ -2835,7 +2798,7 @@
     {
       "id": 676,
       "tipo": "Feature",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "ACT-11 · Tooltip explicativo (ícono “?”) en la etiqueta “Requiere revisión” y sus advertencias GRI",
       "sprint": null,
       "padre": null,
@@ -2867,7 +2830,7 @@
     {
       "id": 720,
       "tipo": "Feature",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "Feature criterio - Catalogo de empresas, agregar un buscador",
       "sprint": null,
       "padre": null,
@@ -2899,7 +2862,7 @@
     {
       "id": 722,
       "tipo": "Bug",
-      "estado": "New",
+      "estado": "Closed",
       "asunto": "FE Correcion de posible vulnerabilidad por sobre exposicion de informacion en auditoria",
       "sprint": null,
       "padre": null,
@@ -2907,7 +2870,7 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-11-01",
-      "actualizado": "2026-11-06",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/722",
       "descripcion": "El usuario al ver el id del documento no se ponda a buscar id del documento hasta encontrarlo. Cambiarlo para que se muestre la empresa del cual era el documento y mostrar nombre del documento en lugar del id del documento. No hay necesidad de motrar el id de la operacion, en su lugar mostrar a que empresa se le ingreso el documento y el nombre del documento\n\nEn la segunda imagen por intentos fallidos, no es necesario mostrar cuantas veces se equivoco un usuario al intentar ingresar. Mostrar solamente si ingreso o fallo el ingreso y esta temporalmente bloqueado.\n\nEl la imagen de ingesta rechazada, inconsistencia por el codigo que muestra en ingles mientras que tipo del documento si muestra en español, estandarizar eso. Y hacer los cambios mencionados anteriores, no mostrar empresa id sino mostrar el nombre de la empresa y el nombre del documento que se intento ingresar.&nbsp;\n\nPor ultimo el proceso &quot;Publicacion vectorial&quot; no existe textualmente escrita en el sistema, asignarle el termino correcto del proceso. Y mostrar la empresa y documento del cual se hizo el proceso.",
       "porcentaje": null
@@ -2915,7 +2878,7 @@
     {
       "id": 723,
       "tipo": "Feature",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "En asistente RAG chat box, cambiar el icono de la segunda pregunta determinada \"CO2\"",
       "sprint": null,
       "padre": null,
@@ -2929,25 +2892,9 @@
       "porcentaje": null
     },
     {
-      "id": 724,
-      "tipo": "Feature",
-      "estado": "New",
-      "asunto": "Reporte de prospeccion, cambiar la descripcion de sanciones totales",
-      "sprint": null,
-      "padre": null,
-      "responsable": "Fabricio Ladera",
-      "inicio": null,
-      "fin": null,
-      "creado": "2026-11-01",
-      "actualizado": "2026-11-10",
-      "url": "/api/v3/work_packages/724",
-      "descripcion": "Al inicio del documento, en las tres casillas iniciales de Puntaje ESG, Referencia de sanciones y Casos a revisar. Solo Referencia de sanciones tiene una descripcion, mientras los otros 2 no. Por lo tanto, o quitar la descripcion o agregar descripcion para cada uno.&nbsp;  \n  \nSugerencia eliminar la descripcion y cambiar el titulo de &quot;Referencia de sanciones&quot; a &quot;Sanciones totales encontradas&quot;",
-      "porcentaje": null
-    },
-    {
       "id": 742,
       "tipo": "Feature",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "ACT-12 · Superadmin: agregar sector “Otros”",
       "sprint": null,
       "padre": null,
@@ -2963,17 +2910,17 @@
     {
       "id": 743,
       "tipo": "Feature",
-      "estado": "Developed",
+      "estado": "Closed",
       "asunto": "ACT-13 · Superadmin: eliminar / deshabilitar una ingesta mal subida",
       "sprint": null,
       "padre": null,
-      "responsable": "Juan Ferreyra",
+      "responsable": "Juan Flores",
       "inicio": null,
       "fin": null,
       "creado": "2026-11-02",
-      "actualizado": "2026-11-10",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/743",
-      "descripcion": "Módulo: Ingesta. Hoy no hay forma de corregir un documento mal cargado. Agregar la opción de eliminar o (preferible) **deshabilitar** la ingesta. Se conecta directo con ACT-02: “si se subió 1 reporte → se deshabilita la opción de subir otro”.",
+      "descripcion": "Módulo: Ingesta. Hoy no hay forma de corregir un documento mal cargado. Agregar la opción de eliminar o (preferible) **deshabilitar** la ingesta. Se conecta directo con ACT-02: “si se subió 1 reporte → se deshabilita la opción de subir otro”.\n\n<br>\n\nACTUALIZACIÓN (11/11) 8am\n\nACTUALIZACIÓN SE PROBO EN FE&nbsp;\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/373/content\">\n\nSe probo en BCK funciono pasa a FE\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/371/content\"> <img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/372/content\">",
       "porcentaje": null
     },
     {
@@ -2995,7 +2942,7 @@
     {
       "id": 745,
       "tipo": "Feature",
-      "estado": "In progress",
+      "estado": "Closed",
       "asunto": "ACT-15 · Guardar conversación del asistente con un clic",
       "sprint": null,
       "padre": null,
@@ -3003,7 +2950,7 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-11-02",
-      "actualizado": "2026-11-09",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/745",
       "descripcion": "Módulo: Asistente IA. Botón para guardar la conversación con un clic. Va muy pegado a **ACT-05 (historial de consultas)** — puedes dejarlo como sub-tarea de ACT-05 o como WP aparte, pero que no quede duplicado.\n\n<br>\n\nACTUALIZADO 9/11 (IMPLEMENTADO A NIVEL DE BCK -&gt; PASA A FE",
       "porcentaje": null
@@ -3011,7 +2958,7 @@
     {
       "id": 746,
       "tipo": "Bug",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "El contador de fragmentos se muestra como “N/N” (redundante) en vez de “N”",
       "sprint": null,
       "padre": null,
@@ -3075,7 +3022,7 @@
     {
       "id": 750,
       "tipo": "Bug",
-      "estado": "New",
+      "estado": "Closed",
       "asunto": "El filtro “Estado” de Ingesta muestra estados no contemplados en el diseño",
       "sprint": null,
       "padre": null,
@@ -3083,7 +3030,7 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-11-02",
-      "actualizado": "2026-11-10",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/750",
       "descripcion": "El desplegable “Estado” ofrece 6 opciones (_Todos, Completado, En proceso, Publicación pendiente, Fallido, Fallido (limpieza pendiente)_). El documento de Análisis y Diseño define **solo 3 estados de documento**: `indexado` (Completado), `observado` y `rechazado` (Fallido) — glosario, CU003 y `UNIQUE … WHERE estado='indexado'`. Los estados **“En proceso”, “Publicación pendiente” y “Fallido (limpieza pendiente)”** no figuran en el diseño (0 menciones) y **contradicen RN-026** (ingesta atómica/síncrona: no deja contenido parcial, revierte ante fallo). Además, **falta “Observado”** en el filtro, siendo estado oficial (RN-025).\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/298/content\">",
       "porcentaje": null
@@ -3107,7 +3054,7 @@
     {
       "id": 752,
       "tipo": "Bug",
-      "estado": "New",
+      "estado": "Closed",
       "asunto": "FE implementacion de doble check",
       "sprint": null,
       "padre": null,
@@ -3115,15 +3062,15 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-11-02",
-      "actualizado": "2026-11-02",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/752",
-      "descripcion": "",
+      "descripcion": "ACTUALIZACIÓN 11/11 8AM\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/375/content\">",
       "porcentaje": null
     },
     {
       "id": 753,
       "tipo": "Bug",
-      "estado": "In progress",
+      "estado": "Closed",
       "asunto": "BCK Implementacion de doble check",
       "sprint": null,
       "padre": null,
@@ -3131,9 +3078,9 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-11-02",
-      "actualizado": "2026-11-05",
+      "actualizado": "2026-11-12",
       "url": "/api/v3/work_packages/753",
-      "descripcion": "",
+      "descripcion": "ACTUALIZACIÓN 11/11\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/377/content\">\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/378/content\">\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/379/content\">\n\n<img class=\"op-uc-image op-uc-image_inline\" src=\"/api/v3/attachments/380/content\">\n\n<br>",
       "porcentaje": null
     },
     {
@@ -3187,7 +3134,7 @@
     {
       "id": 775,
       "tipo": "Bug",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "FE Asistente de IA, procedimiento tedioso para empezar un chat de cero",
       "sprint": null,
       "padre": null,
@@ -3203,7 +3150,7 @@
     {
       "id": 776,
       "tipo": "Bug",
-      "estado": "Tested",
+      "estado": "Closed",
       "asunto": "Color VERDE en los reportes generados",
       "sprint": null,
       "padre": null,
@@ -3211,7 +3158,7 @@
       "inicio": null,
       "fin": null,
       "creado": "2026-11-07",
-      "actualizado": "2026-11-09",
+      "actualizado": "2026-11-10",
       "url": "/api/v3/work_packages/776",
       "descripcion": "El PO pidio cabiar el color de la pagina en general eso incluye los reportes a color AZUL",
       "porcentaje": null

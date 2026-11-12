@@ -10,7 +10,10 @@
     "sync": "node scripts/sync-openproject.mjs",
     "sync:evidence": "node scripts/sync-evidence.mjs",
     "trace": "node scripts/build-traceability.mjs",
-    "sync:all": "npm run sync && npm run trace && npm run sync:evidence"
+    "testcases": "python3 scripts/build-testcases.py",
+    "requirements": "python3 scripts/build-requirements.py",
+    "curated": "python3 scripts/build-curated.py",
+    "sync:all": "npm run sync && npm run curated && npm run trace && npm run sync:evidence"
   },
   "dependencies": {
     "next": "16.4.3",

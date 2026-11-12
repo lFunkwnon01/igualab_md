@@ -14,6 +14,16 @@ import { Icon, type IconName } from "./icons";
 type WP = (typeof openproject.workPackages)[number];
 type CP = (typeof testcases)[number];
 type Req = (typeof requirements)[number];
+type CambioAnd = {
+  id: string;
+  artefacto: string;
+  tipo: string;
+  analisis: string;
+  implementacion: string;
+  concordancia: string;
+  accion: string;
+  evidencia?: string;
+};
 type View =
   | "overview"
   | "tasks"
@@ -95,21 +105,21 @@ const FLOWS = [
   { id: "F2", flujo: "Reporte PDF real desde análisis validado", modulo: "M7", estado: "Pendiente" },
   { id: "F3", flujo: "Asistente RAG con corpus real y citas", modulo: "M6", estado: "Parcial" },
   { id: "F4", flujo: "Recuperación de contraseña con Gmail real", modulo: "M1", estado: "Pendiente" },
-  { id: "F5", flujo: "UAT del PO: empresa → ingesta → análisis → reporte", modulo: "M3–M7", estado: "Parcial" },
+  { id: "F5", flujo: "UAT del PO: empresa → ingesta → análisis → reporte", modulo: "M3–M7", estado: "Completado (12/11)" },
   { id: "F6", flujo: "Roles y permisos en la UI", modulo: "M1/M2", estado: "Pendiente" },
-  { id: "F7", flujo: "Observar/anular una ingesta mal subida", modulo: "M4", estado: "Por definir" },
-  { id: "F8", flujo: "Sector “Otros”", modulo: "M3/M5", estado: "Por definir" },
+  { id: "F7", flujo: "Observar/anular una ingesta mal subida", modulo: "M4", estado: "Resuelto (CP65)" },
+  { id: "F8", flujo: "Sector “Otros”", modulo: "M3/M5", estado: "Resuelto (CP63)" },
   { id: "F9", flujo: "Comparación análisis manual vs IA", modulo: "M5–M7", estado: "No iniciado" },
   { id: "F10", flujo: "Evaluación RAG con set dorado", modulo: "M6", estado: "Parcial" },
-  { id: "F11", flujo: "Condición de carrera al cambiar estados GRI", modulo: "M5", estado: "Bug #664" },
-  { id: "F12", flujo: "Citas con Markdown y duplicados", modulo: "M6", estado: "Bugs #659–#662" },
+  { id: "F11", flujo: "Condición de carrera al cambiar estados GRI", modulo: "M5", estado: "Cerrado (#664)" },
+  { id: "F12", flujo: "Citas con Markdown y duplicados", modulo: "M6", estado: "Cerrado (#659–#662)" },
 ];
 
 const EVIDENCE_FOLDERS = [
-  { carpeta: "PDF v1.8", uso: "Capturas de CP01–CP61 incluidas en el documento", pendientes: 0 },
+  { carpeta: "PDF vigente", uso: "Capturas de CP01–CP79 incluidas en el documento (12/11)", pendientes: 0 },
   { carpeta: "01-Pruebas-Manuales", uso: "Capturas adicionales o complementarias", pendientes: 0 },
   { carpeta: "02-API-Postman", uso: "Exports y capturas de Newman", pendientes: 0 },
-  { carpeta: "03-UAT", uso: "Observaciones y evidencias del PO", pendientes: 1 },
+  { carpeta: "03-UAT", uso: "Acta de conformidad y evidencias del PO", pendientes: 0 },
   { carpeta: "04-Jenkins", uso: "Builds, stages, JUnit", pendientes: 0 },
   { carpeta: "05-OWASP-ZAP", uso: "Reportes ZAP", pendientes: 0 },
   { carpeta: "06-Demo", uso: "Capturas de demo y reportes", pendientes: 0 },
@@ -543,8 +553,8 @@ function Overview({
         <Stat label="Por testear" value={porTestear} hint="Developed + In testing" tone="blue" />
         <Stat label="Bugs abiertos" value={bugsAbiertos} hint="Defectos reales" tone="rose" />
         <Stat label="ACT abiertas" value={actsAbiertas} hint="Feedback / alcance extra" tone="violet" />
-        <Stat label="CPs documentados" value={cps} hint="v1.8 · CP01–CP61" tone="emerald" />
-        <Stat label="Evidencias aprobadas" value={evidencias} hint="61/61 en el PDF v1.8" tone="amber" />
+        <Stat label="CPs documentados" value={cps} hint="Vigente · CP01–CP79" tone="emerald" />
+        <Stat label="Evidencias aprobadas" value={evidencias} hint="79/79 en el PDF vigente" tone="amber" />
       </div>
 
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -904,7 +914,7 @@ function TeamView({
   const max = Math.max(1, ...team.map((t) => t.abiertos));
   return (
     <>
-      <PageHeader eyebrow="Carga de trabajo" title="Equipo" description="Tareas abiertas por responsable. Sirve para ver dónde se concentra el trabajo y quién tiene cosas por testear." />
+      <PageHeader eyebrow="Carga de trabajo" title="Equipo" description="Sin carga abierta: los 133 WPs están cerrados. La tabla queda como registro de quién tenía responsabilidades al cierre del 12/11/2026." />
       <Card>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-left text-[12px]">
@@ -1051,7 +1061,7 @@ function BugsView({
               <p className="text-[11px] text-slate-500">
                 {anterior.actAbiertas} → <span className="font-semibold text-slate-800">{actAhora}</span>{" "}
                 <span className={actAhora <= anterior.actAbiertas ? "text-emerald-600" : "text-violet-600"}>
-                  (+{actAhora - anterior.actAbiertas})
+                  ({actAhora - anterior.actAbiertas > 0 ? "+" : ""}{actAhora - anterior.actAbiertas})
                 </span>
               </p>
             </div>
@@ -1087,13 +1097,13 @@ function BugsView({
                 <td className="px-3 py-2 text-amber-600">+{actNuevas}</td>
                 <td className="px-3 py-2 text-emerald-600">−{actCerradas}</td>
                 <td className="px-3 py-2 font-semibold text-slate-800">{actAhora}</td>
-                <td className="px-3 py-2 font-semibold text-violet-600">+{actAhora - anterior.actAbiertas}</td>
+                <td className="px-3 py-2 font-semibold text-violet-600">{actAhora - anterior.actAbiertas > 0 ? "+" : ""}{actAhora - anterior.actAbiertas}</td>
               </tr>
               <tr>
                 <td className="px-4 py-2 font-medium text-slate-700">WPs totales</td>
                 <td className="px-3 py-2 text-slate-600">{anterior.wps}</td>
                 <td className="px-3 py-2 text-amber-600">+{wpsNuevos}</td>
-                <td className="px-3 py-2 text-slate-500">−{wpsEliminados} eliminados</td>
+                <td className="px-3 py-2 text-slate-500">{wpsEliminados ? `−${wpsEliminados} eliminados` : "—"}</td>
                 <td className="px-3 py-2 font-semibold text-slate-800">{openproject.resumen.total}</td>
                 <td className="px-3 py-2 font-semibold text-slate-700">+{openproject.resumen.total - anterior.wps}</td>
               </tr>
@@ -1192,13 +1202,14 @@ function TestCasesView({
   evidencias: number;
   onSelect: (cp: CP) => void;
 }) {
-  const mods = ["all", "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8"];
+  const ordenMod = (m: string) => (m.startsWith("M") ? Number(m.slice(1)) : 100 + m.charCodeAt(0));
+  const mods = ["all", ...Array.from(new Set(testcases.map((c) => c.modulo))).sort((a, b) => ordenMod(a) - ordenMod(b) || a.localeCompare(b))];
   return (
     <>
       <PageHeader
         eyebrow="Calidad"
         title="Casos de prueba"
-        description={`Documento v1.8 (21/10/2026) · ${total} CPs para M1–M8 · ${evidencias}/${total} con evidencia aprobada.${evidencias === total ? " Todos los CPs están aprobados." : ` Quedan ${total - evidencias} pendientes.`}`}
+        description={`Documento vigente (12/11/2026) · ${total} CPs de M1–M8 + transversales · ${evidencias}/${total} con evidencia aprobada.${evidencias === total ? " Todos los CPs están aprobados." : ` Quedan ${total - evidencias} pendientes.`}`}
       />
       <div className="mb-3 flex flex-wrap items-center gap-1.5">
         {mods.map((m) => (
@@ -1233,7 +1244,7 @@ function TestCasesView({
                     <Pill tone={c.evidencia ? "emerald" : "amber"} className={c.evidencia ? "cursor-help" : ""}>
                       <span title={c.evidencia ?? undefined}>{c.evidencia ? "Archivada" : "Pendiente"}</span>
                     </Pill>
-                    {c.evidencia && <p className="mt-0.5 text-[10px] text-slate-400">{c.evidencia.replace("PDF v1.8, ", "")}</p>}
+                    {c.evidencia && <p className="mt-0.5 text-[10px] text-slate-400">{c.evidencia.replace("PDF vigente, ", "")}</p>}
                   </td>
                   <td className="px-3 py-2 text-slate-400">{c.entorno ?? "—"}</td>
                   <td className="px-3 py-2 font-medium text-emerald-600">{c.resultado ?? "—"}</td>
@@ -1255,7 +1266,7 @@ function EvidenceView({ cps, onOpenCp }: { cps: CP[]; onOpenCp: (cp: CP) => void
       <PageHeader
         eyebrow="Calidad"
         title="Evidencias"
-        description="La evidencia principal está incluida en el PDF v1.8. Este apartado registra capturas adicionales y observaciones del PO."
+        description="La evidencia principal está incluida en el PDF vigente (CP01–CP79, 12/11/2026). Este apartado registra capturas adicionales y la evidencia del PO."
       />
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {EVIDENCE_FOLDERS.map((f) => (
@@ -1273,7 +1284,7 @@ function EvidenceView({ cps, onOpenCp }: { cps: CP[]; onOpenCp: (cp: CP) => void
       <Card className="mt-4">
         <div className="border-b border-slate-100 px-4 py-3">
           <h2 className="text-sm font-semibold text-slate-800">Evidencias registradas</h2>
-          <p className="text-[11px] text-slate-400">Cada CP aprobado con la página del PDF v1.8 donde está su captura.</p>
+          <p className="text-[11px] text-slate-400">Cada CP aprobado con la página del PDF vigente donde está su captura.</p>
         </div>
         <div className="grid gap-1 p-3 sm:grid-cols-2 lg:grid-cols-3">
           {cps.map((c) => (
@@ -1292,6 +1303,11 @@ function AnalysisView({ gaps, flows }: { gaps: typeof curated.analysisGaps; flow
   return (
     <>
       <PageHeader eyebrow="Documentación" title="Brechas A&D" description="Lo que el análisis debe reflejar del desarrollo real y de las observaciones del PO." />
+      {gaps.length === 0 && (
+        <Card className="p-4">
+          <p className="text-[12px] leading-relaxed text-slate-500">Sin brechas de formalización: el A&D v2 (12/11/2026) cubre doble check, anulación lógica, sector «Otros», matrices y versionado de reportes.</p>
+        </Card>
+      )}
       <div className="grid gap-3 lg:grid-cols-2">
         {gaps.map((g) => (
           <Card key={g.tema} className="p-4">
@@ -1335,7 +1351,7 @@ function AnalysisView({ gaps, flows }: { gaps: typeof curated.analysisGaps; flow
   );
 }
 
-function ChangesView({ changes }: { changes: typeof curated["cambiosA&D"] }) {
+function ChangesView({ changes }: { changes: CambioAnd[] }) {
   const [estado, setEstado] = useState("all");
   const [q, setQ] = useState("");
   const filtrados = changes.filter((c) => {
@@ -1406,7 +1422,13 @@ function ChangesView({ changes }: { changes: typeof curated["cambiosA&D"] }) {
             </tbody>
           </table>
         </div>
-        {filtrados.length === 0 && <Empty>No hay artefactos con ese filtro.</Empty>}
+        {filtrados.length === 0 && (
+          <Empty>
+            {changes.length === 0
+              ? "Sin no concordancias pendientes: el A&D v2 (12/11/2026) ya refleja lo implementado."
+              : "No hay artefactos con ese filtro."}
+          </Empty>
+        )}
       </Card>
     </>
   );
@@ -1459,57 +1481,57 @@ function SlidesGuideView({ onGoSlide }: { onGoSlide: (id: string) => void }) {
     {
       n: "00",
       target: "slide-00",
-      preview: "/slides/slide-00-20261029.png",
+      preview: "/slides/slide-00-20261112.png",
       ppt: "Porcentaje de avances",
       title: "Porcentaje de avances",
       grafica: "Donut de total + barras desarrollo/testeo/total/falta",
-      datos: "Desarrollo 100% · Testeo 73% · Total 87% · Falta 13% · OpenProject 76% (sin ACT 89%)",
-      regla: "Total = promedio simple; testeo incluye correcciones abiertas.",
+      datos: "Desarrollo 100% · Testeo 100% · Total 100% · Falta 0% · OpenProject 100%",
+      regla: "Total = promedio simple de desarrollo y testeo (ambos al 100%).",
     },
     {
       n: "01",
       target: "slide-01",
-      preview: "/slides/slide-01-20261029.png",
+      preview: "/slides/slide-01-20261112.png",
       ppt: "Avance por módulo",
       title: "Avance por módulo",
       grafica: "Tabla módulo / desarrollo / CPs / evidencia / bugs / ACT",
-      datos: "M1–M8 con 100% desarrollo y evidencia 61/61",
+      datos: "M1–M8 con 100% desarrollo, 0 bugs y 0 ACT abiertos, evidencia 79/79",
       regla: "Aquí sí se ve el detalle por módulo.",
     },
     {
       n: "02",
       target: "slide-02",
-      preview: "/slides/slide-02-20261029.png",
+      preview: "/slides/slide-02-20261112.png",
       ppt: "Casos de prueba por módulo",
       title: "Casos de prueba por módulo",
       grafica: "Tabla CPs/documentados/evidencia/bugs/ACT + barra de casos",
-      datos: "M1 12 · M2 7 · M3 7 · M4 7 · M5 7 · M6 11 · M7 6 · M8 4 · evidencia 61/61",
-      regla: "61 documentados; 61/61 con evidencia en el PDF y resultado OK.",
+      datos: "M1 12 · M2 8 · M3 8 · M4 9 · M5 9 · M6 18 · M7 9 · M8 4 · transversal/docs 2 · evidencia 79/79",
+      regla: "79 documentados; 79/79 con evidencia en el PDF y resultado OK.",
     },
     {
       n: "03",
       target: "slide-03",
-      preview: "/slides/slide-03-20261029.png",
+      preview: "/slides/slide-03-20261112.png",
       ppt: "Avance por sprint",
       title: "Avance por sprint",
       grafica: "Tabla S0–S10 + barra de cierre",
-      datos: "101/133 WPs (76%) · S2 100% · S8 100% · S9 88% · S10 17%",
+      datos: "133/133 WPs (100%) · S0–S10 y backlog sin sprint al 100%",
       regla: "Este porcentaje es administrativo de OpenProject, no de código.",
     },
     {
       n: "04",
       target: "slide-04",
-      preview: "/slides/slide-04-20261029.png",
+      preview: "/slides/slide-04-20261112.png",
       ppt: "Sprints Testers",
       title: "Fases de prueba · testers",
       grafica: "Tabla P01–P08 + barra de avance plan",
-      datos: "P01–P06 100% · P07 0% · P08 60% · evidencia en PDF v1.8",
-      regla: "El avance plan viene del cronograma de pruebas v1.8.",
+      datos: "P01–P06 100% · P07 100% (UAT del PO, acta 12/11) · evidencia archivada",
+      regla: "El avance plan viene del cronograma del plan de pruebas.",
     },
     {
       n: "05",
       target: "slide-05",
-      preview: "/slides/slide-05-20261029.png",
+      preview: "/slides/slide-05-20261112.png",
       ppt: "Security",
       title: "Security & Quality",
       grafica: "Tarjetas ZAP / Trivy / CSP + tabla de controles",
@@ -1519,7 +1541,7 @@ function SlidesGuideView({ onGoSlide }: { onGoSlide: (id: string) => void }) {
     {
       n: "06",
       target: "slide-06",
-      preview: "/slides/slide-06-20261029.png",
+      preview: "/slides/slide-06-20261112.png",
       ppt: "E2E e integración",
       title: "E2E & Integration",
       grafica: "4 métricas + tabla por nivel",
@@ -1529,12 +1551,12 @@ function SlidesGuideView({ onGoSlide }: { onGoSlide: (id: string) => void }) {
     {
       n: "07",
       target: "slide-07",
-      preview: "/slides/slide-07-20261029.png",
+      preview: "/slides/slide-07-20261112.png",
       ppt: "Cumplimiento de requisitos",
       title: "Cumplimiento de requisitos",
       grafica: "3 tarjetas + tabla de brechas",
-      datos: "105 requisitos · 82 cumple · 15 observaciones · 4 parcial/brecha · 4 no verificable",
-      regla: "No marcar “cumple” si no hay evidencia.",
+      datos: "119 requisitos · 115 cumple · 0 observaciones · 0 parcial/brecha · 4 no verificable (RNF de carga/monitoreo/backups)",
+      regla: "No marcar “cumple” si no hay evidencia: los 4 RNF sin evidencia quedan como no verificables.",
     },
   ];
   return (
@@ -1587,11 +1609,11 @@ function SlidesGuideView({ onGoSlide }: { onGoSlide: (id: string) => void }) {
           <h2 className="text-sm font-semibold text-slate-800">Reglas para no confundir porcentajes</h2>
           <ul className="mt-2 space-y-1.5 text-[12px] leading-relaxed text-slate-500">
             <li><strong className="text-slate-700">Desarrollo</strong> = código implementado. Hoy 100% en M1–M8.</li>
-            <li><strong className="text-slate-700">Sprint</strong> = WPs cerrados / total en OpenProject. Hoy 101/133 (76%).</li>
-            <li><strong className="text-slate-700">Bugs y ACT</strong> = 36/62 cerrados (58%) en el backlog sin sprint.</li>
-            <li><strong className="text-slate-700">CP documentado</strong> = caso escrito y aprobado. Hoy 61/61.</li>
-            <li><strong className="text-slate-700">Evidencia</strong> = captura dentro del PDF v1.8 o archivo adicional.</li>
-            <li><strong className="text-slate-700">Bug</strong> = defecto real (6 abiertos). <strong className="text-slate-700">ACT</strong> = feedback del cliente o alcance extra (20 abiertas); no son fallos de CP.</li>
+            <li><strong className="text-slate-700">Sprint</strong> = WPs cerrados / total en OpenProject. Hoy 133/133 (100%).</li>
+            <li><strong className="text-slate-700">Bugs y ACT</strong> = 62/62 cerrados (100%) en el backlog sin sprint.</li>
+            <li><strong className="text-slate-700">CP documentado</strong> = caso escrito y aprobado. Hoy 79/79.</li>
+            <li><strong className="text-slate-700">Evidencia</strong> = captura dentro del PDF vigente o archivo adicional.</li>
+            <li><strong className="text-slate-700">Bug</strong> = defecto real (0 abiertos). <strong className="text-slate-700">ACT</strong> = feedback del cliente o alcance extra (0 abiertas); no son fallos de CP.</li>
           </ul>
         </Card>
         <Card className="p-4">
@@ -1625,13 +1647,54 @@ function SlidesView() {
     const conCaptura = cps.filter((c) => c.evidencia).length;
     return { ...m, cps: cps.length, conCaptura };
   });
-  const maxCps = Math.max(1, ...modulos.map((m) => m.cps));
+  const idsMod = new Set(modulos.map((m) => m.id));
+  const otros = Array.from(
+    new Set(testcases.filter((c) => !idsMod.has(c.modulo)).map((c) => c.modulo)),
+  ).map((id) => {
+    const cps = testcases.filter((c) => c.modulo === id);
+    return {
+      id,
+      nombre: id === "Transversal" ? "Transversal (interfaz)" : id,
+      sprint: "—",
+      bugsOpen: 0,
+      act: 0,
+      cps: cps.length,
+      conCaptura: cps.filter((c) => c.evidencia).length,
+    };
+  });
+  const filasMod = [...modulos, ...otros];
+  const totalCps = testcases.length;
+  const totalCapturas = testcases.filter((c) => c.evidencia).length;
+  const totalAprobados = testcases.filter((c) => c.estado === "Aprobado").length;
+  const maxCps = Math.max(1, ...filasMod.map((m) => m.cps));
   const reqTotal = requirements.length;
   const reqCumple = requirements.filter((r) => r.estado === "Cumple").length;
   const reqObs = requirements.filter((r) => r.estado === "Cumple con observaciones").length;
   const reqParcial = requirements.filter((r) => r.estado === "Parcial" || r.estado === "Brecha").length;
   const reqNoVer = requirements.filter((r) => r.estado === "No verificable").length;
   const reqCriticos = requirements.filter((r) => ["Parcial", "Brecha", "No verificable"].includes(r.estado));
+  const tarjetasReq = (
+    [
+      { tipo: "RF", color: "blue" },
+      { tipo: "RN", color: "violet" },
+      { tipo: "RNF", color: "amber" },
+    ] as const
+  ).map(({ tipo, color }) => {
+    const items = requirements.filter((r) => r.tipo === tipo);
+    const n = (estados: string[]) => items.filter((r) => estados.includes(r.estado)).length;
+    const partes = [
+      `${n(["Cumple con observaciones"])} con observaciones`,
+      `${n(["Parcial", "Brecha"])} parcial/brecha`,
+      `${n(["No verificable"])} no verificables`,
+    ].filter((p) => !p.startsWith("0 "));
+    return {
+      tipo,
+      color,
+      total: items.length,
+      cumple: n(["Cumple"]),
+      detalle: partes.length ? partes.join(" · ") : "sin pendientes",
+    };
+  });
   const sprintRows = curated.sprints
     .filter((s) => s.id !== "—")
     .map((s) => {
@@ -1660,22 +1723,21 @@ function SlidesView() {
           <Donut value={Math.round((100 + curated.global.testeo) / 2)} label="Total" sublabel="Desarrollo + testeo" />
           <div className="space-y-4">
             <ChartBar label="Desarrollo" value={100} tone="emerald" note="M1–M8 implementados" />
-            <ChartBar label="Testeo" value={curated.global.testeo} tone="blue" note="Automatización 85 · Manual/API 95 · UAT 50 · RAG 60 · 6 bugs + 20 ACT abiertas" />
+            <ChartBar label="Testeo" value={curated.global.testeo} tone="blue" note="Automatización 100 · Manual/API 100 · UAT 100 · RAG 100 · 0 bugs y 0 ACT abiertos" />
             <ChartBar label="Total completado" value={Math.round((100 + curated.global.testeo) / 2)} tone="violet" note="Promedio simple de desarrollo y testeo" />
-            <ChartBar label="Falta" value={100 - Math.round((100 + curated.global.testeo) / 2)} tone="slate" note="Cierre de bugs/ACT, UAT y evidencias" />
+            <ChartBar label="Falta" value={100 - Math.round((100 + curated.global.testeo) / 2)} tone="slate" note="Sin pendientes" />
           </div>
         </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-5">
           <Mini label="OpenProject con ACT" value={`${opPct}%`} />
           <Mini label="OpenProject sin ACT" value={`${opPctSinAct}%`} />
-          <Mini label="Evidencia en PDF" value="61/61" />
+          <Mini label="Evidencia en PDF" value={`${capturas}/${testcases.length}`} />
           <Mini label="Bugs abiertos" value={String(bugsAbiertos)} />
           <Mini label="ACT abiertas" value={String(actsAbiertas)} />
         </div>
         <p className="mt-4 text-xs leading-relaxed text-slate-400">
           Total = promedio simple de desarrollo (100%) y testeo ({curated.global.testeo}%). Falta = 100 − total.
-          Testeo incluye automatización, manual/API, UAT, RAG y corrección de bugs/ACT. Si se excluye el alcance ACT/feedback,
-          OpenProject queda en {opPctSinAct}% ({sinActClosed}/{sinActTotal} WPs).
+          El alcance está cerrado: OpenProject en {opPctSinAct}% ({sinActClosed}/{sinActTotal} WPs sin ACT) y sin bugs ni ACT abiertos.
         </p>
       </section>
 
@@ -1696,11 +1758,11 @@ function SlidesView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {modulos.map((m) => (
+              {filasMod.map((m) => (
                 <tr key={m.id}>
                   <td className="py-2.5 pr-3 font-medium text-slate-700">{m.id} · {m.nombre}</td>
                   <td className="px-3 py-2.5"><span className="font-semibold text-emerald-600">100%</span></td>
-                  <td className="px-3 py-2.5 text-slate-600">{m.cps}/{m.cps} <span className="text-slate-400">(v1.8)</span></td>
+                  <td className="px-3 py-2.5 text-slate-600">{m.cps}/{m.cps} <span className="text-slate-400">(vigente)</span></td>
                   <td className="px-3 py-2.5"><span className="text-emerald-600">{m.conCaptura}/{m.cps}</span></td>
                   <td className="px-3 py-2.5 font-semibold text-emerald-600">OK</td>
                   <td className="px-3 py-2.5 text-rose-600">{m.bugsOpen}</td>
@@ -1712,12 +1774,12 @@ function SlidesView() {
           </table>
         </div>
         <p className="mt-4 text-xs leading-relaxed text-slate-400">
-          “Desarrollo” es código implementado. “CPs documentados” es el documento de pruebas v1.8. “Evidencia” son las capturas incluidas en el PDF (61/61); “Resultado” son los CP aprobados (61/61).
+          “Desarrollo” es código implementado. “CPs documentados” es el documento de pruebas vigente (CP01–CP79, 12/11/2026). “Evidencia” son las capturas incluidas en el PDF ({totalCapturas}/{totalCps}); “Resultado” son los CP aprobados ({totalAprobados}/{totalCps}).
         </p>
       </section>
 
       <section id="slide-02" className="mx-auto w-full max-w-[1180px] rounded-2xl border border-slate-200 bg-white p-8 shadow-sm print:break-after-page scroll-mt-24">
-        <SlideHead n="02" title="Casos de prueba por módulo" subtitle="61 CPs documentados · 61/61 con evidencia en el PDF v1.8 · 61/61 con resultado OK." />
+        <SlideHead n="02" title="Casos de prueba por módulo" subtitle={`${totalCps} CPs documentados · ${totalCapturas}/${totalCps} con evidencia en el PDF vigente · ${totalAprobados}/${totalCps} con resultado OK.`} />
         <div className="mt-6 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
           <table className="w-full text-left text-[13px]">
             <thead className="border-b border-slate-200 text-[10px] uppercase tracking-[0.14em] text-slate-400">
@@ -1732,7 +1794,7 @@ function SlidesView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {modulos.map((m) => (
+              {filasMod.map((m) => (
                 <tr key={m.id}>
                   <td className="py-2.5 pr-3 text-slate-700">{m.id}</td>
                   <td className="px-3 py-2.5 font-semibold text-slate-800">{m.cps}</td>
@@ -1745,10 +1807,10 @@ function SlidesView() {
               ))}
               <tr className="bg-slate-50 font-semibold text-slate-800">
                 <td className="py-2.5 pr-3">Total</td>
-                <td className="px-3 py-2.5">61</td>
-                <td className="px-3 py-2.5 text-emerald-700">61/61</td>
-                <td className="px-3 py-2.5 text-amber-700">{capturas}/61</td>
-                <td className="px-3 py-2.5 font-semibold text-emerald-700">{aprobados}/61</td>
+                <td className="px-3 py-2.5">{totalCps}</td>
+                <td className="px-3 py-2.5 text-emerald-700">{totalCps}/{totalCps}</td>
+                <td className="px-3 py-2.5 text-amber-700">{capturas}/{totalCps}</td>
+                <td className="px-3 py-2.5 font-semibold text-emerald-700">{aprobados}/{totalCps}</td>
                 <td className="px-3 py-2.5 text-rose-700">{bugsAbiertos}</td>
                 <td className="px-3 py-2.5 text-violet-700">{actsAbiertas}</td>
               </tr>
@@ -1756,7 +1818,7 @@ function SlidesView() {
           </table>
           <div className="space-y-2.5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Casos por módulo</p>
-            {modulos.map((m) => (
+            {filasMod.map((m) => (
               <div key={m.id} className="grid grid-cols-[28px_1fr_32px] items-center gap-2">
                 <span className="text-[11px] font-semibold text-slate-500">{m.id}</span>
                 <div className="h-2 overflow-hidden rounded-full bg-slate-100">
@@ -1768,7 +1830,7 @@ function SlidesView() {
           </div>
         </div>
         <p className="mt-4 text-xs leading-relaxed text-slate-400">
-          La barra muestra casos documentados. La columna “Captura PDF” cuenta evidencia incluida en el PDF (61/61); “Resultado” cuenta CP aprobados (61/61).
+          La barra muestra casos documentados. La columna “Captura PDF” cuenta evidencia incluida en el PDF ({capturas}/{totalCps}); “Resultado” cuenta CP aprobados ({aprobados}/{totalCps}).
         </p>
       </section>
 
@@ -1806,7 +1868,7 @@ function SlidesView() {
       </section>
 
       <section id="slide-04" className="mx-auto w-full max-w-[1180px] rounded-2xl border border-slate-200 bg-white p-8 shadow-sm print:break-after-page scroll-mt-24">
-        <SlideHead n="04" title="Fases de prueba · testers" subtitle="Plan de pruebas v1.8. La evidencia está en el PDF; las observaciones del PO siguen en bugs/ACT." />
+        <SlideHead n="04" title="Fases de prueba · testers" subtitle="Plan de pruebas vigente. UAT del PO completada el 12/11 con acta de conformidad." />
         <div className="mt-6 overflow-x-auto">
           <table className="w-full min-w-[820px] text-left text-[13px]">
             <thead className="border-b border-slate-200 text-[10px] uppercase tracking-[0.14em] text-slate-400">
@@ -1829,14 +1891,14 @@ function SlidesView() {
                   <td className="px-3 py-2.5 text-slate-500">{fecha(f.inicio)}</td>
                   <td className="px-3 py-2.5 text-slate-500">{fecha(f.fin)}</td>
                   <td className="px-3 py-2.5"><div className="flex items-center gap-2"><Progress value={f.avance} tone={f.avance === 100 ? "emerald" : "amber"} className="w-16" /><span className={f.avance === 100 ? "font-semibold text-emerald-600" : "font-semibold text-amber-600"}>{f.avance}%</span></div></td>
-                  <td className="px-3 py-2.5"><span className={f.avance === 100 ? "text-emerald-600" : "text-amber-600"}>{f.avance === 100 ? "En PDF v1.8" : f.avance > 0 ? "Parcial" : "Pendiente"}</span></td>
+                  <td className="px-3 py-2.5"><span className={f.avance === 100 ? "text-emerald-600" : "text-amber-600"}>{f.avance === 100 ? "Archivada" : f.avance > 0 ? "Parcial" : "Pendiente"}</span></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <p className="mt-4 text-xs leading-relaxed text-slate-400">
-          “Avance plan” viene del cronograma de pruebas v1.8. “Evidencia” está incluida en el PDF v1.8; las observaciones del PO se siguen en bugs/ACT.
+          “Avance plan” viene del cronograma del plan de pruebas. “Evidencia” está archivada (PDF de CPs y acta de conformidad).
         </p>
       </section>
 
@@ -1926,21 +1988,21 @@ function SlidesView() {
           subtitle={`${reqTotal} requisitos · ${reqCumple} cumplen · ${reqObs} con observaciones · ${reqParcial} parcial/brecha · ${reqNoVer} no verificable.`}
         />
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-600">RF · 30</p>
-            <p className="mt-1 text-2xl font-semibold text-blue-700">22 cumple</p>
-            <p className="text-[11px] text-blue-600/80">8 con observaciones</p>
-          </div>
-          <div className="rounded-xl border border-violet-200 bg-violet-50 p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-violet-600">RN · 45</p>
-            <p className="mt-1 text-2xl font-semibold text-violet-700">35 cumple</p>
-            <p className="text-[11px] text-violet-600/80">7 observaciones · 1 parcial · 2 brechas</p>
-          </div>
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-600">RNF · 30</p>
-            <p className="mt-1 text-2xl font-semibold text-amber-700">25 cumple</p>
-            <p className="text-[11px] text-amber-600/80">1 brecha · 4 no verificables</p>
-          </div>
+          {tarjetasReq.map((t) => {
+            const tone =
+              t.color === "blue"
+                ? { box: "border-blue-200 bg-blue-50", label: "text-blue-600", num: "text-blue-700", det: "text-blue-600/80" }
+                : t.color === "violet"
+                  ? { box: "border-violet-200 bg-violet-50", label: "text-violet-600", num: "text-violet-700", det: "text-violet-600/80" }
+                  : { box: "border-amber-200 bg-amber-50", label: "text-amber-600", num: "text-amber-700", det: "text-amber-600/80" };
+            return (
+              <div key={t.tipo} className={`rounded-xl border p-4 ${tone.box}`}>
+                <p className={`text-[10px] font-semibold uppercase tracking-[0.14em] ${tone.label}`}>{t.tipo} · {t.total}</p>
+                <p className={`mt-1 text-2xl font-semibold ${tone.num}`}>{t.cumple} cumple</p>
+                <p className={`text-[11px] ${tone.det}`}>{t.detalle}</p>
+              </div>
+            );
+          })}
         </div>
         <div className="mt-5 overflow-x-auto">
           <table className="w-full min-w-[860px] text-left text-[12px]">
@@ -1965,7 +2027,7 @@ function SlidesView() {
           </table>
         </div>
         <p className="mt-4 text-xs leading-relaxed text-slate-400">
-          Los 15 requisitos con observaciones están abiertos por bugs/ACT. Detalle completo en el apartado Requisitos y en TRAZABILIDAD-REQUISITOS-2026-10-29.md.
+          Los 4 requisitos pendientes son RNF sin evidencia de rendimiento/monitoreo/backups; los bugs y ACT que originaron observaciones están cerrados. Detalle completo en el apartado Requisitos y en TRAZABILIDAD-REQUISITOS-2026-11-12.md.
         </p>
       </section>
     </div>
@@ -2445,7 +2507,7 @@ function TraceView({
         description="Todos los issues de OpenProject con su fecha de creación y estado, y la comparación contra los RN/RF/RNF y casos de prueba del análisis. Las filas en rojo son cambios que el A&D aún debe reflejar."
         actions={
           <span className="rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] text-slate-500">
-            A&D: analisis_y_diseno_oficial.pdf · CP: Plan v1.8 · Sync:{" "}
+            A&D v2: analisis_y_diseno_oficial.pdf · CP: CP01–CP79 · Sync:{" "}
             {new Date(traceData.generadoEn).toLocaleString("es-PE", { timeZone: "America/Lima" })}
           </span>
         }
@@ -2881,7 +2943,7 @@ function ReqDrawer({ req, onClose }: { req: Req; onClose: () => void }) {
           <p className="text-[12px] leading-relaxed text-slate-600">{req.nota || "Sin observaciones."}</p>
         </div>
         <div className="border-t border-slate-100 px-5 py-4 text-[11px] leading-relaxed text-slate-400">
-          Fuente: A&D vigente + código `BCK@8bcbabe`/`FE@1d36b8a` + casos de prueba v1.8 + OpenProject.
+          Fuente: A&D v2 vigente + código `BCK@fbda867`/`FE@596b0fd` + casos de prueba CP01–CP79 + OpenProject (133/133 cerrados).
         </div>
       </div>
     </div>
@@ -2954,9 +3016,9 @@ function CpDrawer({ cp, onClose }: { cp: CP; onClose: () => void }) {
         </div>
         <div className="border-t border-slate-100 px-5 py-4 text-[12px] leading-relaxed text-slate-600">
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Cómo archivar la evidencia</p>
-          <p>1. La evidencia principal ya está en el PDF v1.8; si agregas una captura, guárdala en la carpeta indicada.</p>
+          <p>1. La evidencia principal ya está en el PDF vigente (CP01–CP79); si agregas una captura, guárdala en la carpeta indicada.</p>
           <p>2. Guarda la captura en <code className="rounded bg-slate-100 px-1">03-Calidad/03-Evidencias/01-Pruebas-Manuales/</code>.</p>
-          <p>3. Nombra: <code className="rounded bg-slate-100 px-1">{cp.cp}_{cp.modulo}_uat_2026-10-29_pass.png</code>.</p>
+          <p>3. Nombra: <code className="rounded bg-slate-100 px-1">{cp.cp}_{cp.modulo}_uat_2026-11-12_pass.png</code>.</p>
           <p>4. Actualiza <code className="rounded bg-slate-100 px-1">00-REGISTRO-EVIDENCIAS.md</code>.</p>
         </div>
       </div>
